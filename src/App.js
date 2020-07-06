@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from "react-redux";
-import Login from './components/login'
-import Logout from './components/logout'
+import Login from './components/auth/login'
+import Logout from './components/auth/logout'
 import ErrorPage404 from './components/error404'
 import Home from './components/home'
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";

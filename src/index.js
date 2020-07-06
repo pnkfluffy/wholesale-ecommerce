@@ -1,17 +1,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
-import * as serviceWorker from './serviceWorker';
+import './styles/index.css'
+import store from './redux/store'
+import { Provider } from 'react-redux';
+import axios from 'axios'
+
+axios.get('/auth/user')
+.then(res => {
+  store.dispatch({ type: 'GET_USER', payload: res.data })
+  store.dispatch({ type: 'GET_ALL_TILES', payload: res.data.tileIDs })
+  store.dispatch({ type: 'APP_LOADED' })
+})
+.catch(err => {
+  store.dispatch({ type: 'APP_LOADED' })
+  console.log(err);
+})
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();

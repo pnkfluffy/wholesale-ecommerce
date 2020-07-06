@@ -27,7 +27,6 @@ app.use(express.static('build'))
 app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
-app.use('/tile', tileRouter)
 app.use('/auth', userRouter)
   
 server.listen(PORT, () => {

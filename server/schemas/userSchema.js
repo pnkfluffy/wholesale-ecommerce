@@ -7,13 +7,7 @@ const UserSchema = new Schema({
 	},
 	name: {
 		type: String
-	},
-	tileIDs: [
-		{
-			type: Schema.Types.ObjectId,
-			ref: "tile"
-		}
-	]
+	}
 });
 
 module.exports = User = mongoose.model("user", UserSchema);

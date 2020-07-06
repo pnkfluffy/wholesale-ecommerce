@@ -39,20 +39,12 @@ class App extends React.Component {
       </Switch>
     )
 
-    // let content = this.props.state.tiles.map((tileID, index) => {
-    //   return (
-    //     <DragTile key={index} tileID={tileID} />
-    //   )
-    // })
-
     let routes = this.props.state.user.name ? loggedInRoutes : loggedOutRoutes
 
     return (
       <div className="App" >
         <Router>
           {routes}
-          {/* <NewTileButton />
-          {content} */}
         </Router>
       </div>
     );

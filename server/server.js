@@ -18,8 +18,6 @@ connectDB();
 
 app.use(helmet())
 
-
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser())
@@ -28,6 +26,14 @@ app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
 app.use('/auth', userRouter)
+
+app.get('/*', function(req, res) {
+	res.sendFile(path.join(__dirname, '../build/index.html'), function(err) {
+	  if (err) {
+		res.status(500).send(err)
+	  }
+	})
+})
   
 server.listen(PORT, () => {
 	console.log(`listening on port: ${PORT}`);

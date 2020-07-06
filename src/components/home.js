@@ -15,7 +15,7 @@ class Homepage extends React.Component {
 	render() {
 		return (
 			<div>
-				{this.props.state.user.googleID ? 'LOGGED IN' : 'NOT LOGGED IN'}
+				{this.props.state.user.name ? 'LOGGED IN' : 'NOT LOGGED IN'}
 				<div>
 					<Link to="/login" >
 						Login

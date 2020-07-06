@@ -13,7 +13,10 @@ router.get('/login/google', passport.authenticate('google', {
 }));
 
 router.get('/user', rejectUnauthenticated, (req, res) => {
-	res.send(req.user)
+	let user = {
+		name: req.user.name
+	}
+	res.send(user)
 })
 
 router.post('/update-user', rejectUnauthenticated, async (req, res) => {	

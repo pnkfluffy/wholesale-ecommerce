@@ -1,8 +1,6 @@
 import { combineReducers } from "redux";
 
 const initialUser = {
-	_id: "",
-	googleID: "",
 	name: "",
 }
 

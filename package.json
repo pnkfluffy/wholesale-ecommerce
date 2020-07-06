@@ -26,10 +26,10 @@
     "redux-logger": "^3.0.6"
   },
   "scripts": {
-    "server": "nodemon --watch server server/server.js",
+    "server": "env NODE_ENV=dev nodemon --watch server server/server.js",
     "client": "react-scripts start",
     "build": "react-scripts build",
-    "start": "react-scripts build && node server/server.js",
+    "start": "env NODE_ENV=prod && react-scripts build && node server/server.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

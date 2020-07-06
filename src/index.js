@@ -9,7 +9,6 @@ import axios from 'axios'
 axios.get('/auth/user')
 .then(res => {
   store.dispatch({ type: 'GET_USER', payload: res.data })
-  store.dispatch({ type: 'GET_ALL_TILES', payload: res.data.tileIDs })
   store.dispatch({ type: 'APP_LOADED' })
 })
 .catch(err => {

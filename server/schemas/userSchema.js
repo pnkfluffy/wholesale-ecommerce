@@ -7,6 +7,10 @@ const UserSchema = new Schema({
 	},
 	name: {
 		type: String
+	},
+	paymentVerified: {
+		type: Boolean,
+		default: false
 	}
 });
 

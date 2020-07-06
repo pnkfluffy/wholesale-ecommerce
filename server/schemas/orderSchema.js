@@ -19,3 +19,4 @@ const OrderSchema = new Schema({
         default: Date.now
     }
 })
+module.exports = Order = mongoose.model("order", OrderSchema);

@@ -24,6 +24,9 @@ const OrderSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  paymentID: {
+    type: "string",
+  }
 });
 
 module.exports = Order = mongoose.model("order", OrderSchema);

@@ -32,6 +32,9 @@ const UserSchema = new Schema({
   goCardlessID: {
     type: String,
   },
+  goCardlessMandate: {
+    type: String
+  }
 });
 
 module.exports = User = mongoose.model("user", UserSchema);

@@ -12,9 +12,13 @@
     "cookie-session": "^1.4.0",
     "helmet": "^3.23.3",
     "mongoose": "^5.9.20",
+    "nodemon": "^2.0.4",
     "passport": "^0.4.1",
     "passport-google-oauth2": "^0.2.0",
+    "prop-types": "^15.7.2",
+    "ra-data-json-server": "^3.7.0",
     "react": "^16.13.1",
+    "react-admin": "^3.7.0",
     "react-dom": "^16.13.1",
     "react-draggable": "^4.4.3",
     "react-redux": "^7.2.0",
@@ -26,10 +30,10 @@
     "redux-logger": "^3.0.6"
   },
   "scripts": {
-    "server": "nodemon --watch server server/server.js",
-    "client": "react-scripts start",
+    "server": "nodemon server server/server.js",
+    "start": "react-scripts start",
     "build": "react-scripts build",
-    "start": "NODE_ENV=prod && react-scripts build && node server/server.js",
+    "client": "NODE_ENV=prod && react-scripts build && node server/server.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

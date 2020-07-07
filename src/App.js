@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from "react-redux";
 import Login from './components/login'
 import Logout from './components/logout'
+import Admin from './components/AdminSetup/Setup'
 import ErrorPage404 from './components/error404'
 import Home from './components/home'
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
@@ -45,6 +46,9 @@ class App extends React.Component {
       <div className="App" >
         <Router>
           {routes}
+          <Switch>
+          <Route exact path="/admin" component={Admin}/>
+          </Switch>
         </Router>
       </div>
     );

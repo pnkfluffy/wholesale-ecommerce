@@ -26,6 +26,11 @@ class Homepage extends React.Component {
 						Logout
 					</Link>
 				</div>
+				<div>
+					<Link to="/admin">
+						Admin
+					</Link>
+				</div>
 			</div>
 		)
 	}

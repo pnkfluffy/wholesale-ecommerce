@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 5000
 const passport = require('./modules/passport')
 const sessionMiddleware = require('./modules/session-middleware')
 const userRouter = require('./routes/user.router')
-
+const gcRouter = require('./routes/goCardless.router')
 dotenv.config();
 
 connectDB();
@@ -25,7 +25,10 @@ app.use(express.static('build'))
 app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
-app.use('/auth', userRouter)
+
+/*Routers*/
+app.use('/auth', userRouter);
+app.use('/gc', gcRouter);
 
 app.get('/*', function(req, res) {
 	res.sendFile(path.join(__dirname, '../build/index.html'), function(err) {

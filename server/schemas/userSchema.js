@@ -25,10 +25,10 @@ const UserSchema = new Schema({
     type: Boolean,
     default: false,
   },
-  paymentVerified: {
+/*  paymentVerified: {
     type: Boolean,
     default: false,
-  },
+  },*/
   goCardlessID: {
     type: String,
   },

@@ -14,11 +14,11 @@ const history = createHistory();
 
 const dataProvider = jsonServerProvider('https://jsonplaceholder.typicode.com');
 
-const AdminSetup = () =>( 
-<Admin dashboard={Dashboard} authProvider={authProvider} dataProvider={dataProvider} history={history}>
-  <Resource name="users" list={UserList} icon={UserIcon}/>
-  <Resource name="posts" list={PostList} edit={PostEdit}  create={PostCreate} icon={PostIcon}/>
-    </Admin>
-    );
+const AdminSetup = () => (
+  <Admin dashboard={Dashboard} authProvider={authProvider} dataProvider={dataProvider} history={history}>
+    <Resource name="users" list={UserList} icon={UserIcon} />
+    <Resource name="posts" list={PostList} edit={PostEdit} create={PostCreate} icon={PostIcon} />
+  </Admin>
+);
 
 export default AdminSetup;

@@ -6,18 +6,24 @@ const OrderSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "user",
   },
-  product: [
+  products: [
     {
-      type: Schema.Types.ObjectId,
-      ref: "product",
+      product: {
+        type: Schema.Types.ObjectId,
+        ref: "product",
+      },
+      quantity: {
+        type: Number,
+      },
     },
   ],
-  shipment_address: {
+  address: {
     type: String,
-    required: true,
   },
-  order_date: {
+  date: {
     type: Date,
     default: Date.now,
   },
 });
+
+module.exports = Order = mongoose.model("order", OrderSchema);

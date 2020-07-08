@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
-
+// {!} ADD REJECTUNAUTHENTICATED MIDDLEWARE TO ALL PRIVATE ROUTES
+const { rejectUnauthenticated } = require('../modules/authentication-middleware');
 const Order = require("../schemas/orderSchema");
 
 //  {!} PAGINATE

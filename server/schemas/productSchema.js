@@ -14,22 +14,22 @@ const ProductSchema = new Schema({
     type: Number,
     required: true,
   },
-  // priceTiers: {
-  //   default: {
-  //     type: Boolean,
-  //     default: true,
-  //   },
-  //   tiers: [
-  //     {
-  //       price: {
-  //         type: Number,
-  //       },
-  //       ratio: {
-  //         type: Number,
-  //       },
-  //     },
-  //   ],
-  // },
+  priceTiers: {
+    default: {
+      type: Boolean,
+      default: true,
+    },
+    tiers: [
+      {
+        price: {
+          type: Number,
+        },
+        ratio: {
+          type: Number,
+        },
+      },
+    ],
+  },
   metaData: {
     cbd: {
       type: Number,

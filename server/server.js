@@ -13,6 +13,7 @@ const sessionMiddleware = require('./modules/session-middleware');
 const userRouter = require('./routes/user.router');
 const gcRouter = require('./routes/goCardless.router');
 const orderRouter = require('./routes/order.router');
+const productRouter = require('./routes/product.router');
 dotenv.config();
 
 connectDB();
@@ -31,6 +32,7 @@ app.use(passport.session());
 app.use('/auth', userRouter);
 app.use('/gc', gcRouter);
 app.use('/orders', orderRouter)
+app.use('/products', productRouter)
 
 
 app.get('/*', function(req, res) {

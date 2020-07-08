@@ -1,65 +1,42 @@
 const express = require("express");
 const router = express.Router();
 
-const Order = require("../schemas/orderSchema");
+const Product = require("../schemas/productSchema");
 
 //  {!} PAGINATE
-// @route   GET /orders/all
-// @desc    Returns all orders
+// @route   GET /products/all
+// @desc    Returns all products
 // @access  Private
 router.get("/all", (req, res) => {
-  Order.find()
+  Product.find()
     .then((orders) => res.json(orders))
     .catch((error) => {
       console.log(error);
-      res.status(500).send("no orders found");
+      res.status(500).send("no products found");
     });
 });
 
-// @route   GET /orders/:id
+// @route   GET /productss/:id
 // @:id     id of order to get
 // @desc    Returns the order
 // @access  Private
 router.get("/:id", (req, res) => {
-  Order.findById(req.params.id)
-    .then((order) => res.json(order))
+  Product.findById(req.params.id)
+    .then((product) => res.json(product))
     .catch((error) => {
       console.log(error);
-      res.status(500).send("order not found");
+      res.status(500).send("product not found");
     });
 });
 
-//  {!} PAGINATE
-// @route   GET /orders/from/:id
-// @:id     id of User to get all orders from
-// @desc    Returns all users
-// @access  Private
-router.get("/from/:id", (req, res) => {
-  Order.find()
-    .then((orders) => {
-      const ordersWithId = orders.filter((order) => {
-        return order.user.toString() === req.params.id;
-      });
-
-      res.json({
-        success: true,
-        orders: ordersWithId,
-      });
-    })
-    .catch((error) => {
-      console.log(error);
-      res.status(500).send("Error finding orders");
-    });
-});
-
-// @route   POST /orders/newOrder/:userid
+// @route   POST /products
 // @:id     id of user that's creating the order
 // @req     {productID: string}
 // @desc    Returns all users
 // @access  Private
-router.post("/newOrder/:userid", (req, res) => {
+router.post("/", (req, res) => {
   const newOrder = new Order({
-    user: req.params.userid,
+    user: req.params.id,
     products: [
       {
         product: req.body.productID,

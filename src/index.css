@@ -1,0 +1,44 @@
+* {
+  box-sizing: border-box;
+}
+
+body,
+html {
+  height: 100%;
+  margin: 0px;
+  overflow: hidden;
+}
+
+html {
+  background-color: #17181d;
+  color: #808183;
+}
+
+body {
+  box-shadow: 0 2px 10px rgba(14, 14, 14, 0.5);
+  border-radius: 5px;
+}
+
+.background {
+  display: flex;
+  width: 100vw;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+.body {
+  background-color: #1f2025;
+  width: 90%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+@import "./components/sidebar/sidebar.css";
+@import "./components/header/header.css";
+@import "./components/home/home.css";
+@import "./components/account/account.css";
+@import "./components/auth/auth.css";
+@import "./components/cart/cart.css";
+@import "./components/settings/settings.css";
+@import "./components/error/error.css";

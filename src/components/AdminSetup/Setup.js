@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Provider } from "react-redux";
 import { createHashHistory } from "history";
-import { Admin, Resource } from "react-admin";
+import { simpleClient, Admin, Resource } from "react-admin";
 import restProvider from "ra-data-simple-rest";
 import defaultMessages from "ra-language-english";
 import polyglotI18nProvider from "ra-i18n-polyglot";
@@ -18,7 +18,7 @@ import createHistory from "history/createBrowserHistory";
 import PostIcon from "@material-ui/icons/Book";
 import UserIcon from "@material-ui/icons/Group";
 
-const dataProvider = jsonServerProvider("https://jsonplaceholder.typicode.com");
+const dataProvider = jsonServerProvider("http://localhost:5000");
 // const authProvider = () => Promise.resolve();
 const i18nProvider = polyglotI18nProvider((locale) => {
   return defaultMessages;
@@ -36,7 +36,8 @@ const AdminSetup = () => (
   >
     <Admin
       authProvider={authProvider}
-      dataProvider={dataProvider}
+      restClient={simpleClient("http://localhost:5000")}
+      //dataProvider={dataProvider}
       history={history}
       title="My Admin"
     >

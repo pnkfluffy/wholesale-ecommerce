@@ -9,7 +9,7 @@ const mapStateToProps = (state) => ({
 class Logout extends React.Component {
   componentDidMount() {
     axios.get("/auth/logout").then((res) => {
-      window.location.href = '/'
+      window.location.href = "/";
     });
   }
 

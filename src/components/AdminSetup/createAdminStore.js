@@ -4,7 +4,7 @@ import createSagaMiddleware from "redux-saga";
 import { all, fork } from "redux-saga/effects";
 import { adminReducer, adminSaga, USER_LOGOUT } from "react-admin";
 
-export default ({ authProvider, dataProvider, history }) => {
+export default ({ authProvider, userProvider, history }) => {
   const reducer = combineReducers({
     admin: adminReducer,
     router: connectRouter(history),
@@ -16,7 +16,7 @@ export default ({ authProvider, dataProvider, history }) => {
   const saga = function* rootSaga() {
     yield all(
       [
-        adminSaga(dataProvider, authProvider),
+        adminSaga(userProvider, authProvider),
         // add your own sagas here
       ].map(fork)
     );

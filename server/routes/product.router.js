@@ -1,9 +1,7 @@
 const express = require("express");
 const router = express.Router();
 // {!} ADD REJECTUNAUTHENTICATED MIDDLEWARE TO ALL PRIVATE ROUTES
-const {
-  rejectUnauthenticated,
-} = require("../modules/authentication-middleware");
+const { rejectUnauthenticated } = require('../modules/authentication-middleware')
 
 const Product = require("../schemas/productSchema");
 
@@ -31,6 +29,6 @@ router.get("/:id", (req, res) => {
       console.log(error);
       res.status(500).send("product not found");
     });
-});
+})
 
 module.exports = router;

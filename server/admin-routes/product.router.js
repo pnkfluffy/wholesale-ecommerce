@@ -24,11 +24,10 @@ router.post("/", (req, res) => {
 });
 
 // @route   POST /admin-products/edit/:id
-// @id      id of product
 // @desc    Edit a product
 // @access  Private
 router.post("/edit/:id", (req, res) => {
-  Product.updateOne({_id: req.params.id}, req.body)
+  Product.updateOne({_id: req.user.id}, req.body)
   .then((product) => res.json(product))
   .catch((error) => {
     console.log(error);
@@ -41,7 +40,7 @@ router.post("/edit/:id", (req, res) => {
 // @desc    Delete a Product
 // @access  Private
 router.delete("/:id", (req, res) => {
-  Product.findById(req.params.id)
+  Product.findById(req.user.id)
     .then((product) => product.remove().then(() => res.status(200).send("Product sucessfully deleted")))
     // .then((product) => product.remove().then(() => res.json({ success: true })))
     .catch((err) => {

@@ -17,12 +17,11 @@ router.get("/all", (req, res) => {
     });
 });
 
-// @route   GET /orders/:id
-// @:id     id of order to get
+// @route   GET /orders/
 // @desc    Returns the order
 // @access  Private
-router.get("/:id", (req, res) => {
-  Order.findById(req.params.id)
+router.get("/", (req, res) => {
+  Order.findById(req.user.id)
     .then((order) => res.json(order))
     .catch((error) => {
       console.log(error);
@@ -31,15 +30,14 @@ router.get("/:id", (req, res) => {
 });
 
 //  {!} PAGINATE
-// @route   GET /orders/from/:id
-// @:id     id of User to get all orders from
+// @route   GET /orders/from/
 // @desc    Returns all users
 // @access  Private
 router.get("/from/:id", (req, res) => {
   Order.find()
     .then((orders) => {
       const ordersWithId = orders.filter((order) => {
-        return order.user.toString() === req.params.id;
+        return order.user.toString() === req.user.id;
       });
 
       res.json({
@@ -53,14 +51,12 @@ router.get("/from/:id", (req, res) => {
     });
 });
 
-// @route   POST /orders/newOrder/:userid
-// @:id     id of user that's creating the order
-// @req     {productID: string}
+// @route   POST /orders/newOrder/
 // @desc    Returns all users
 // @access  Private
-router.post("/newOrder/:userid", (req, res) => {
+router.post("/newOrder/", (req, res) => {
   const newOrder = new Order({
-    user: req.params.userid,
+    user: req.user.id,
     products: [
       {
         product: req.body.productID,
@@ -74,13 +70,11 @@ router.post("/newOrder/:userid", (req, res) => {
     .catch((err) => console.log(err));
 });
 
-// @route   POST /orders/addProduct/:id
-// @:id     order ID
-// @req     {productID: string}
+// @route   POST /orders/addProduct/
 // @desc    Returns all users
 // @access  Private
-router.post("/addProduct/:id", (req, res) => {
-  Order.findById(req.params.id).then((order) => {
+router.post("/addProduct/", (req, res) => {
+  Order.findById(req.user.id).then((order) => {
     let products = order.products;
     //check if product is already in the order
     const alreadyInOrder = products.findIndex(
@@ -104,12 +98,11 @@ router.post("/addProduct/:id", (req, res) => {
   });
 });
 
-// @route   DELETE /orders/:id
-// @id      id of order
+// @route   DELETE /orders/
 // @desc    Delete an Order
 // @access  Private
-router.delete("/:id", (req, res) => {
-  Order.findById(req.params.id)
+router.delete("/", (req, res) => {
+  Order.findById(req.user.id)
     .then((order) => order.remove().then(() => res.json({ success: true })))
     .catch((err) => {
       console.log(err);
@@ -117,13 +110,11 @@ router.delete("/:id", (req, res) => {
     });
 });
 
-// @route   DELETE /orders/deleteInQuantity/:id
-// @id      id of order
-// @req     {productID: product ID}
+// @route   DELETE /orders/deleteInQuantity/
 // @desc    Decreases the quantity of a product in the order
 // @access  Private
-router.delete("/deleteInQuantity/:id", (req, res) => {
-  Order.findById(req.params.id)
+router.delete("/deleteInQuantity/", (req, res) => {
+  Order.findById(req.user.id)
     .then((order) => {
       let products = order.products;
       console.log(products);
@@ -162,13 +153,12 @@ router.delete("/deleteInQuantity/:id", (req, res) => {
     });
 });
 
-// @route   DELETE /orders/deleteWholeProduct/:id
-// @id      id of order
+// @route   DELETE /orders/deleteWholeProduct/
 // @req     {productID: product ID}
 // @desc    Removes all itens from that type from order
 // @access  Private
-router.delete("/deleteWholeProduct/:id", (req, res) => {
-  Order.findById(req.params.id).then((order) => {
+router.delete("/deleteWholeProduct/", (req, res) => {
+  Order.findById(req.user.id).then((order) => {
     let products = order.products;
 
     products = products.filter((product) => {

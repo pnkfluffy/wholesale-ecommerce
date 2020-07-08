@@ -54,7 +54,7 @@ router.get('/clients/:id', async (req, res) => {
 		});
 	} catch (error) {
 		console.log(error);
-		res.status(500).send('user not found')
+		res.status(500).send('no payment not found')
 	}
 });
 
@@ -80,13 +80,13 @@ router.get('/payments/:date', async (req, res) => {
 		});
 	} catch (error) {
 		console.log(error);
-		res.status(500).send('user not found')
+		res.status(500).send('payment not found')
 	}
 });
 
 // @route   POST gc/addClient
 // @:id		Active User ID
-// @desc    Create a new user
+// @desc    Returns URL to confirm client creation
 // @access  Private
 router.post('/addClient/:id', async (req, res) => {
 	const name = req.body.newClientName;
@@ -131,6 +131,7 @@ router.post('/addClient/:id', async (req, res) => {
 											res.status(500).send('no user with this id')
 										} else {
 											user.updateOne({
+												//may need to get this after confirmation
 												goCardlessID: redirectFlow.id
 											})
 										}

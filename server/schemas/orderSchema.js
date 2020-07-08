@@ -9,7 +9,7 @@ const OrderSchema = new Schema({
   products: [
     {
       product: {
-        type: Schema.Types.ObjectId,
+        type: String,
         ref: "product",
       },
       quantity: {

@@ -5,13 +5,14 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser')
 const path = require('path');
 const connectDB = require('./modules/db');
-const helmet = require('helmet')
-const dotenv = require('dotenv')
-const PORT = process.env.PORT || 5000
-const passport = require('./modules/passport')
-const sessionMiddleware = require('./modules/session-middleware')
-const userRouter = require('./routes/user.router')
-
+const helmet = require('helmet');
+const dotenv = require('dotenv');
+const PORT = process.env.PORT || 5000;
+const passport = require('./modules/passport');
+const sessionMiddleware = require('./modules/session-middleware');
+const userRouter = require('./routes/user.router');
+const gcRouter = require('./routes/goCardless.router');
+const orderRouter = require('./routes/order.router');
 dotenv.config();
 
 connectDB();
@@ -25,7 +26,12 @@ app.use(express.static('build'))
 app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
-app.use('/auth', userRouter)
+
+/*Routers*/
+app.use('/auth', userRouter);
+app.use('/gc', gcRouter);
+app.use('/orders', orderRouter)
+
 
 app.get('/*', function(req, res) {
 	res.sendFile(path.join(__dirname, '../build/index.html'), function(err) {

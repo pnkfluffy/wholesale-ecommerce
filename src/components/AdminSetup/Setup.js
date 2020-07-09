@@ -18,7 +18,7 @@ import createHistory from "history/createBrowserHistory";
 import PostIcon from "@material-ui/icons/Book";
 import UserIcon from "@material-ui/icons/Group";
 
-const myDataProvider = "./dataProvider";
+import myDataProvider from "./dataProvider";
 const dataProvider = jsonServerProvider("http:localhost:5000");
 // const authProvider = () => Promise.resolve();
 const i18nProvider = polyglotI18nProvider((locale) => {
@@ -37,7 +37,7 @@ const AdminSetup = () => (
   >
     <Admin
       authProvider={authProvider}
-      dataProvider={dataProvider}
+      dataProvider={myDataProvider}
       history={history}
       title="My Admin"
     >

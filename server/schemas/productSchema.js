@@ -8,11 +8,9 @@ const ProductSchema = new Schema({
   },
   description: {
     type: String,
-    required: true,
   },
   price: {
     type: Number,
-    required: true,
   },
   priceTiers: {
     default: {
@@ -49,26 +47,27 @@ const ProductSchema = new Schema({
       type: Number,
     },
   },
-  creation_date: {
-    type: Date,
-    default: Date.now,
-  },
   imageData: [
     {
       bucket: {
         type: String,
-        required: true,
       },
       key: {
         type: String,
-        required: true,
       },
       url: {
         type: String,
-        required: true,
       },
     },
   ],
+  draft: {
+    type: Boolean,
+    default: true,
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 module.exports = Product = mongoose.model("product", ProductSchema);

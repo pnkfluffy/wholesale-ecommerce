@@ -53,3 +53,4 @@ const AdminSetup = () => (
 );
 
 export default AdminSetup;
+

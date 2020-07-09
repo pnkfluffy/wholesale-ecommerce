@@ -47,7 +47,7 @@ router.get('/clients/:id', async (req, res) => {
 		);
 		const listResponse = await allClients.customers.list();
 		const customers = listResponse.customers;
-		const theClient = customers.find(id => id.id === req.params.id);
+		const theClient = customers.find(id => id.id === req.user.id);
 		res.json({
 			success:true,
 			customers: theClient
@@ -124,6 +124,7 @@ router.post('/addClient/:id', async (req, res) => {
 		// The clientId will be saved in the database so It can
 		// be used to confirm the changes and
 		// be used to get the client information later
+<<<<<<< HEAD
 		const activeUser = await User.findById(req.params.id)
 		.then(user => {
 		if (!user) {
@@ -136,6 +137,20 @@ router.post('/addClient/:id', async (req, res) => {
 			})
 		}
 		});
+=======
+		const activeUser = await User.findById(req.user.id)
+			  						 .then(user => {
+										if (!user) {
+											console.log("no user with this id");
+											res.status(500).send('no user with this id')
+										} else {
+											user.updateOne({
+												//may need to get this after confirmation
+												goCardlessID: redirectFlow.id
+											})
+										}
+										});
+>>>>>>> cf937e8e72b22741158af3e417fbe43e7637caad
 		res.json({
 			success:true,
 			url: redirectFlow.redirect_url
@@ -160,7 +175,7 @@ router.post('/completeRedirect/:id', async (req, res) => {
 		);
 
 		//get activeUser from database
-		const activeUser = await User.findById(req.params.id)
+		const activeUser = await User.findById(req.user.id)
 									 .then(user => {
 										if (!user) {
 											console.log("no user with this id");

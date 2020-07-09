@@ -125,17 +125,17 @@ router.post('/addClient/:id', async (req, res) => {
 		// be used to confirm the changes and
 		// be used to get the client information later
 		const activeUser = await User.findById(req.params.id)
-			  						 .then(user => {
-										if (!user) {
-											console.log("no user with this id");
-											res.status(500).send('no user with this id')
-										} else {
-											user.updateOne({
-												//may need to get this after confirmation
-												goCardlessID: redirectFlow.id
-											})
-										}
-										});
+		.then(user => {
+		if (!user) {
+			console.log("no user with this id");
+			res.status(500).send('no user with this id')
+		} else {
+			user.updateOne({
+				//may need to get this after confirmation
+				goCardlessID: redirectFlow.id
+			})
+		}
+		});
 		res.json({
 			success:true,
 			url: redirectFlow.redirect_url

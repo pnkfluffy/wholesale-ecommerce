@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Provider } from "react-redux";
 import { createHashHistory } from "history";
-import { simpleClient, Admin, Resource } from "react-admin";
+import { Admin, Resource } from "react-admin";
 import restProvider from "ra-data-simple-rest";
 import defaultMessages from "ra-language-english";
 import polyglotI18nProvider from "ra-i18n-polyglot";
@@ -36,8 +36,7 @@ const AdminSetup = () => (
   >
     <Admin
       authProvider={authProvider}
-      restClient={simpleClient("http://localhost:5000")}
-      //dataProvider={dataProvider}
+      dataProvider={dataProvider}
       history={history}
       title="My Admin"
     >

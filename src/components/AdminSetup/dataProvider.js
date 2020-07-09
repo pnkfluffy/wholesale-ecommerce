@@ -6,6 +6,8 @@ const httpClient = fetchUtils.fetchJson;
 
 export default {
     getList: (resource, params) => {
+        console.log("getList resource", resource)
+
         const { page, perPage } = params.pagination;
         const { field, order } = params.sort;
         const query = {
@@ -13,7 +15,7 @@ export default {
             range: JSON.stringify([(page - 1) * perPage, page * perPage - 1]),
             filter: JSON.stringify(params.filter),
         };
-        const url = `${apiUrl}/${resource}?${stringify(query)}`;
+        const url = `${resource}?${stringify(query)}`;
 
         return httpClient(url).then(({ headers, json }) => ({
             data: json,
@@ -21,10 +23,12 @@ export default {
         }));
     },
 
-    getOne: (resource, params) =>
+    getOne: (resource, params) => {
+        console.log("getOne resource", resource)
+
         httpClient(`${apiUrl}/${resource}/${params.id}`).then(({ json }) => ({
             data: json,
-        })),
+        }))},
 
     getMany: (resource, params) => {
         const query = {

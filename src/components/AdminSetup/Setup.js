@@ -5,21 +5,18 @@ import { Admin, Resource } from "react-admin";
 import restProvider from "ra-data-simple-rest";
 import defaultMessages from "ra-language-english";
 import polyglotI18nProvider from "ra-i18n-polyglot";
-
 import createAdminStore from "./createAdminStore";
-import jsonServerProvider from "ra-data-json-server";
 
 import { UserList } from "./MenuItems/Users";
 import { PostList, PostEdit, PostCreate } from "./MenuItems/Posts";
 import Dashboard from "./MenuItems/Dashboard";
-import authProvider from './authProvider';
+import authProvider from "./authProvider";
 import createHistory from "history/createBrowserHistory";
 
 import PostIcon from "@material-ui/icons/Book";
 import UserIcon from "@material-ui/icons/Group";
 
 import myDataProvider from "./dataProvider";
-const dataProvider = jsonServerProvider("http:localhost:5000");
 // const authProvider = () => Promise.resolve();
 const i18nProvider = polyglotI18nProvider((locale) => {
   return defaultMessages;
@@ -54,4 +51,3 @@ const AdminSetup = () => (
 );
 
 export default AdminSetup;
-

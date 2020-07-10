@@ -22,11 +22,10 @@ export default {
     console.log("url", url);
     return httpClient(url).then(({ headers, json }) => {
       console.log("headers", headers);
-      return ({
+      return {
         data: json,
-        // total: 4,
         total: parseInt(headers.get("content-range").split("/").pop(), 10),
-      });
+      };
     });
   },
 
@@ -39,6 +38,7 @@ export default {
   },
 
   getMany: (resource, params) => {
+    console.log("getMany");
     const query = {
       filter: JSON.stringify({ id: params.ids }),
     };
@@ -47,6 +47,8 @@ export default {
   },
 
   getManyReference: (resource, params) => {
+    console.log("getManyReference");
+
     const { page, perPage } = params.pagination;
     const { field, order } = params.sort;
     const query = {
@@ -65,13 +67,18 @@ export default {
     }));
   },
 
-  update: (resource, params) =>
+  update: (resource, params) => {
+    console.log("update");
+
     httpClient(`${apiUrl}/${resource}/${params.id}`, {
       method: "PUT",
       body: JSON.stringify(params.data),
-    }).then(({ json }) => ({ data: json })),
+    }).then(({ json }) => ({ data: json }));
+  },
 
   updateMany: (resource, params) => {
+    console.log("updateMany");
+
     const query = {
       filter: JSON.stringify({ id: params.ids }),
     };
@@ -81,20 +88,28 @@ export default {
     }).then(({ json }) => ({ data: json }));
   },
 
-  create: (resource, params) =>
+  create: (resource, params) => {
+    console.log("create");
+
     httpClient(`${apiUrl}/${resource}`, {
       method: "POST",
       body: JSON.stringify(params.data),
     }).then(({ json }) => ({
       data: { ...params.data, id: json.id },
-    })),
+    }));
+  },
 
-  delete: (resource, params) =>
+  delete: (resource, params) => {
+    console.log("delete");
+
     httpClient(`${apiUrl}/${resource}/${params.id}`, {
       method: "DELETE",
-    }).then(({ json }) => ({ data: json })),
+    }).then(({ json }) => ({ data: json }));
+  },
 
   deleteMany: (resource, params) => {
+    console.log("deleteMany");
+
     const query = {
       filter: JSON.stringify({ id: params.ids }),
     };

@@ -47,7 +47,7 @@ router.get('/clients/:id', async (req, res) => {
 		);
 		const listResponse = await allClients.customers.list();
 		const customers = listResponse.customers;
-		const theClient = customers.find(id => id.id === req.user.id);
+		const theClient = customers.find(id => id.id === req.params.id);
 		res.json({
 			success:true,
 			customers: theClient
@@ -124,22 +124,28 @@ router.post('/addClient/:id', async (req, res) => {
 		// The clientId will be saved in the database so It can
 		// be used to confirm the changes and
 		// be used to get the client information later
-		const activeUser = await User.findById(req.user.id)
-			  						 .then(user => {
-										if (!user) {
-											console.log("no user with this id");
-											res.status(500).send('no user with this id')
-										} else {
-											user.updateOne({
-												//may need to get this after confirmation
-												goCardlessID: redirectFlow.id
-											})
-										}
-										});
-		res.json({
-			success:true,
-			url: redirectFlow.redirect_url
-		});
+		User.findById(req.params.id)
+			.then(user => {
+				console.log(user);
+				if (!user) {
+					console.log("no user with this id");
+					res.status(500).send('no user with this id')
+				} else {
+					user.updateOne({
+						$set: {"goCardlessID": redirectFlow.id}
+					})
+						.then(
+								res.json({
+									success:true,
+									url: redirectFlow.redirect_url
+								})
+						)
+				}
+			})
+			.catch(err => {
+							console.log(err);
+							res.status(500).send("error updating database")}
+							);
 	} catch (error) {
 		console.log(error);
 		res.status(500).send('error creating client')
@@ -160,44 +166,47 @@ router.post('/completeRedirect/:id', async (req, res) => {
 		);
 
 		//get activeUser from database
-		const activeUser = await User.findById(req.user.id)
-									 .then(user => {
-										if (!user) {
-											console.log("no user with this id");
-											res.status(500).send('no user with this id')
-										} else {
-											return (user)
-										}
-									 });
+		const activeUser = await User.findById(req.params.id)
+			.then(user => {
+				if (!user) {
+					console.log("no user with this id");
+					res.status(500).send('no user with this id')
+				} else {
+					return (user)
+				}
+			});
 		const redirectFlow = await allClients.redirectFlows.complete(
 			activeUser.goCardlessID,
 			{
 				session_token: "dummy_session_token"
 			}
 		);
-/*
-		// Display a confirmation page to the customer, telling them their Direct Debit has been
-		// set up. You could build your own, or use ours, which shows all the relevant
-		// information and is translated into all the languages we support.
-		const confirmationURL = redirectFlow.confirmation_url
-		console.log(`Confirmation URL: ${confirmationURL}`);
-*/
+		/*
+                // Display a confirmation page to the customer, telling them their Direct Debit has been
+                // set up. You could build your own, or use ours, which shows all the relevant
+                // information and is translated into all the languages we support.
+                const confirmationURL = redirectFlow.confirmation_url
+                console.log(`Confirmation URL: ${confirmationURL}`);
+        */
 
 		/*save mandate to database*/
-		activeUser.updateOne({
-			goCardlessMandate: redirectFlow.links.mandate
-		});
-
-		res.json({
-			success:true,
-		});
+		console.log(redirectFlow);
+		activeUser
+			.updateOne({
+				$set: {"goCardlessMandate": redirectFlow.links.mandate,
+						"goCardlessID": redirectFlow.links.customer}
+			})
+			.then(
+				res.json({
+				success:true,
+			}));
 	} catch (error) {
 		console.log(error);
 		res.status(500).send('error completing client')
 	}
 });
 
-// @route   POST gc/collectPayment
+// @route   POST gc/collectPayment/:orderID
 // @desc    Collect Payment of active user
 // @access  Private
 router.post('/collectPayment/:orderID', async (req, res) => {
@@ -213,15 +222,15 @@ router.post('/collectPayment/:orderID', async (req, res) => {
 				}
 			})
 
-		const activeUser = await Client.findById(order.user)
-										 .then(user => {
-			  								if (!user) {
-			  									console.log("no user with this id");
-												res.status(500).send('no user with this id')
-											} else {
-			  									return (user)
-											}
-										 });
+		const activeUser = await User.findById(order.user)
+			.then(user => {
+				if (!user) {
+					console.log("no user with this id");
+					res.status(500).send('no user with this id')
+				} else {
+					return (user)
+				}
+			});
 
 		const allClients = await gocardless(
 			process.env.GC_ACCESS_TOKEN,
@@ -244,24 +253,33 @@ router.post('/collectPayment/:orderID', async (req, res) => {
 			currency = "GBP";
 
 		const payment = await allClients.payments.create(
-		{
-			amount: order.total,
-			currency: currency,
-			links: {
-				//getting the mandate from database
-				mandate: activeClient.mandate
+			{
+				amount: order.total,
+				currency: currency,
+				links: {
+					//getting the mandate from database
+					mandate: activeUser.goCardlessMandate
+				},
+				metadata: {
+					invoice_number: "001"
+				}
 			},
-			metadata: {
-				invoice_number: "001"
-			}
-		},
-		//Idempotency-Key is going to be the order _id generated by mongoDB
-		//This guarantees that the order won't be charged twice
-		order._id.toString()
-		);
-		res.json({
-			success: true,
-			payment: payment.id
+			//Idempotency-Key is going to be the order _id generated by mongoDB
+			//This guarantees that the order won't be charged twice
+			order._id.toString()
+		) .then (payment => {
+			order.updateOne({$set: {"paymentID": payment.id}})
+				 .then(res.json({
+					 success: true,
+					 payment: payment.id
+				 }))
+				 .catch(err=>{
+				 	console.log(`Can't Update Database: ${err}`);
+				 })
+
+		}) .catch(err => {
+			console.log(err);
+			res.status(500).send("Couldn't make payment")
 		})
 	} catch (error) {
 		console.log(error);
@@ -269,11 +287,11 @@ router.post('/collectPayment/:orderID', async (req, res) => {
 	}
 });
 
-// @route   POST gc/editPayment
+// @route   POST gc/editPayment/:orderID
 // @desc    Cancel or Retry payment
 // @req		{type: "cancel"} or {type: "retry"}
 // @access  Private
-router.post('/cancelPayment/:orderID', async (req, res) => {
+router.post('/changePayment/:orderID', async (req, res) => {
 	try {
 		const allClients = await gocardless(
 			process.env.GC_ACCESS_TOKEN,
@@ -292,7 +310,8 @@ router.post('/cancelPayment/:orderID', async (req, res) => {
 					return (order)
 				}
 			})
-		if (this.body.type === "cancel")
+
+		if (req.body.type === "cancel")
 		{
 			const cancelPayment = await allClients.payments.cancel(order.paymentID);
 			console.log(`Cancel Payment Status: ${cancelPayment.status}`);
@@ -305,7 +324,7 @@ router.post('/cancelPayment/:orderID', async (req, res) => {
 		});
 	} catch (error) {
 		console.log(error);
-		res.status(500).send('error cancelling payment');
+		res.status(500).send('error editing payment');
 	}
 });
 

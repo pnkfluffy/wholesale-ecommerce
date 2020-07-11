@@ -1,6 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import axios from "axios";
+import logo from "../../resources/images/cbddy_logo_small.png";
+import { GreenButton } from "../reuseable/materialButtons";
 
 const mapStateToProps = (state) => ({
   state: state.reducer,
@@ -39,19 +41,26 @@ class Login extends React.Component {
 
   render() {
     if (!this.state.loaded) {
-      return <div>Log In with Google</div>;
+      return <div>AHHHH NOT LOADED FUCK, SHIT, FUCK</div>;
     }
 
     return (
-      <div>
-        <div>
-          WHEN YOU LOG IN WITH GOOGLE, YOU WILL BE REDIRECTED TO LOCALHOST:5000,
-          MAKE SURE YOUR LATEST CHANGES ARE BUILT OR THEY WILL ONLY SHOW UP
-          UNDER LOCALHOST:3000, and NOT 5000
+      <div className="login">
+        <div className="decoration decoration_left" />
+        <div className="decoration decoration_right" />
+        <div className="login_center"></div>
+        <div className="login_logo">
+          <img src={logo} />
         </div>
-        <a href={`${this.state.devURI}/auth/login/google`}>
-          Log In with Google
-        </a>
+        <div className="login_fields">
+          <a href={`${this.state.devURI}/auth/login/google`}>
+            <GreenButton variant="contained">Login with Google</GreenButton>
+          </a>
+        </div>
+        <div className="login_footer">
+          customer support, privacy policy, terms and conditions, 2020 &#169;
+          Cbddy, All rights reserved.
+        </div>
       </div>
     );
   }

@@ -64,7 +64,11 @@ class Login extends React.Component {
           <div className="decor_green decor_fourteen" />
         </div>
         <div className="login_body">
+          <div className="login_header">
+
           <img className="login_logo" src={logo} />
+            <div className="login_wholesale">WHOLESALE</div>
+          </div>
           <div className="login_fields">
             <a
               href={`${this.state.devURI}/auth/login/google`}

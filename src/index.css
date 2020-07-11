@@ -52,6 +52,7 @@ input::-webkit-inner-spin-button {
 }
 
 @import url(//db.onlinewebfonts.com/c/d4f20dfedfdf197ed0ac52b09bf25551?family=GT+Walsheim+Pro+Medium);
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
 @import "./components/sidebar/sidebar.css";
 @import "./components/header/header.css";

@@ -128,6 +128,15 @@
   width: 240px;
 }
 
+.login_wholesale {
+    font-family: 'Bebas Neue';
+    width: 100%;
+    text-align: center;
+    font-size: 30px;
+    letter-spacing: 3px;
+    align-items: center;
+}
+
 .login_fields {
   margin-bottom: 20vh;
 }

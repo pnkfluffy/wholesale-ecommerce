@@ -2,12 +2,11 @@ import React from "react";
 import { connect } from "react-redux";
 import axios from "axios";
 import logo from "../../resources/images/cbddy_logo_small.png";
-import { GreenButton } from "../reuseable/materialButtons";
+import googleIcon from "../../resources/images/google_button_icon.png";
 
 const mapStateToProps = (state) => ({
   state: state.reducer,
 });
-
 class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -46,16 +45,35 @@ class Login extends React.Component {
 
     return (
       <div className="login">
-        <div className="decoration decoration_left" />
-        <div className="decoration decoration_right" />
-        <div className="login_center"></div>
-        <div className="login_logo">
-          <img src={logo} />
+        <div className="login_decoration decoration_left">
+          <div className="decor_green decor_one" />
+          <div className="decor_black decor_two" />
+          <div className="decor_green decor_three" />
+          <div className="decor_black decor_four" />
+          <div className="decor_container">
+            <div className="decor_black decor_five" />
+            <div className="decor_black decor_six" />
+          </div>
+          <div className="decor_green decor_seven" />
         </div>
-        <div className="login_fields">
-          <a href={`${this.state.devURI}/auth/login/google`}>
-            <GreenButton variant="contained">Login with Google</GreenButton>
-          </a>
+        <div className="login_decoration decoration_right">
+          <div className="decor_black decor_ten" />
+          <div className="decor_green decor_eleven" />
+          <div className="decor_white decor_twelve" />
+          <div className="decor_black decor_thirteen" />
+          <div className="decor_green decor_fourteen" />
+        </div>
+        <div className="login_body">
+          <img className="login_logo" src={logo} />
+          <div className="login_fields">
+            <a
+              href={`${this.state.devURI}/auth/login/google`}
+              className="google_login_button"
+            >
+              <img src={googleIcon} className="google_icon" />
+              Sign In with Google
+            </a>
+          </div>
         </div>
         <div className="login_footer">
           customer support, privacy policy, terms and conditions, 2020 &#169;

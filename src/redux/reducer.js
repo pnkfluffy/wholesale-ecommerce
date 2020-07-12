@@ -22,7 +22,20 @@ const loaded = (state = false, action) => {
   }
 };
 
+const products = (state = [], action) => {
+  switch (action.type) {
+    case "GET_ALL_PRODUCTS":
+      state = action.payload
+      return state;
+    case "UPDATE_PRODUCTS":
+      state = action.payload
+      return state;
+    default:
+      return state;
+  }
+}
 export default combineReducers({
   user,
+  products,
   loaded,
 });

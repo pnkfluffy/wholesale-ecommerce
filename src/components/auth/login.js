@@ -7,6 +7,7 @@ import googleIcon from "../../resources/images/google_button_icon.png";
 const mapStateToProps = (state) => ({
   state: state.reducer,
 });
+
 class Login extends React.Component {
   constructor(props) {
     super(props);

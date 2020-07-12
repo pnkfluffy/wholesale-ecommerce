@@ -12,6 +12,7 @@ router.post("/", (req, res) => {
     name: req.body.name,
     description: req.body.description,
     price: req.body.price,
+    category: req.body.category,
     priceTiers: req.body.priceTiers,
     metaData: req.body.metaData,
     imageData: req.body.imageData,
@@ -40,7 +41,7 @@ router.post("/edit/:id", (req, res) => {
 // @desc    Delete a Product
 // @access  Private
 router.delete("/:id", (req, res) => {
-  Product.findById(req.user.id)
+  Product.findById(req.params.id)
     .then((product) => product.remove().then(() => res.status(200).send("Product sucessfully deleted")))
     // .then((product) => product.remove().then(() => res.json({ success: true })))
     .catch((err) => {

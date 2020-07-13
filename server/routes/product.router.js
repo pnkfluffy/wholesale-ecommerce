@@ -11,7 +11,7 @@ const Product = require("../schemas/productSchema");
 // @access  Private
 router.get("/all", (req, res) => {
   Product.find()
-    .then((orders) => res.json(orders))
+    .then((products) => res.json(products))
     .catch((error) => {
       console.log(error);
       res.status(500).send("no products found");
@@ -19,7 +19,7 @@ router.get("/all", (req, res) => {
 });
 
 // @route   GET /products/:id
-// @:id     id of order to get
+// @:id     id of product to get
 // @desc    Returns the order
 // @access  Private
 router.get("/:id", (req, res) => {

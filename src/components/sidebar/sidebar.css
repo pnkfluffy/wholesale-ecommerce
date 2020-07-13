@@ -1,5 +1,24 @@
 .sidebar {
+    padding-top: 5%;
     width: 10%;
     display: flex;
     flex-direction: column;
+    align-items: center;
+}
+
+.logo_sidebar {
+    width: 80%;
+    margin-bottom: 50%;
+}
+
+.menu_sidebar {
+    margin-bottom: 50%;
+}
+
+.categories_sidebar  {
+    margin-bottom: 50%;
+}
+
+.categories_sidebar_link {
+    width: 100%;
 }

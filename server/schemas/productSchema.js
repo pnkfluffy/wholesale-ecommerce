@@ -8,28 +8,29 @@ const ProductSchema = new Schema({
   },
   description: {
     type: String,
-    required: true,
+  },
+  category: {
+    type: String,
   },
   price: {
     type: Number,
-    required: true,
   },
-  // priceTiers: {
-  //   default: {
-  //     type: Boolean,
-  //     default: true,
-  //   },
-  //   tiers: [
-  //     {
-  //       price: {
-  //         type: Number,
-  //       },
-  //       ratio: {
-  //         type: Number,
-  //       },
-  //     },
-  //   ],
-  // },
+  priceTiers: {
+    default: {
+      type: Boolean,
+      default: true,
+    },
+    tiers: [
+      {
+        price: {
+          type: Number,
+        },
+        ratio: {
+          type: Number,
+        },
+      },
+    ],
+  },
   metaData: {
     cbd: {
       type: Number,
@@ -49,26 +50,27 @@ const ProductSchema = new Schema({
       type: Number,
     },
   },
-  creation_date: {
-    type: Date,
-    default: Date.now,
-  },
   imageData: [
     {
       bucket: {
         type: String,
-        required: true,
       },
       key: {
         type: String,
-        required: true,
       },
       url: {
         type: String,
-        required: true,
       },
     },
   ],
+  draft: {
+    type: Boolean,
+    default: true,
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 module.exports = Product = mongoose.model("product", ProductSchema);

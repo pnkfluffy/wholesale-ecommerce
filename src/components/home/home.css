@@ -1,0 +1,36 @@
+.home {
+    display: flex;
+    flex-display: row;
+}
+
+.products {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+}
+
+.products_area {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    overflow-y: auto;
+}
+.product_card {
+    display: flex;
+    flex-direction: column;
+    width: 26%;
+    height: 50vh;
+    padding:2%;
+    margin-bottom: 5%;
+    border: 2px #28282F solid;
+    border-radius: 8px;
+}
+
+.product_card:last-child {
+    margin-right: 0%;
+}
+
+.userReviews {
+    width: 30%;
+}

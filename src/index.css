@@ -1,12 +1,9 @@
-* {
-  box-sizing: border-box;
-}
-
 body,
 html {
   height: 100%;
   margin: 0px;
   overflow: hidden;
+  font-family: "GT Walsheim Pro Medium";
 }
 
 html {
@@ -28,11 +25,36 @@ body {
 
 .body {
   background-color: #1f2025;
-  width: 90%;
+  width: 95%;
+  padding-left: 5%;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  border-radius: 25px 0px 0px 25px;
 }
+
+*:focus {
+  outline: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* materialUI buttons */
+.MuiButton-root {
+  text-transform: none !important;
+  border-radius: 8px !important;
+}
+
+@import url(//db.onlinewebfonts.com/c/d4f20dfedfdf197ed0ac52b09bf25551?family=GT+Walsheim+Pro+Medium);
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
 @import "./components/sidebar/sidebar.css";
 @import "./components/header/header.css";

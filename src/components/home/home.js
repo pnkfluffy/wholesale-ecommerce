@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import Products from "./products";
+import UserReviews from "./userReviews";
 
 class Home extends React.Component {
   constructor(props) {
@@ -8,8 +10,9 @@ class Home extends React.Component {
   }
   render() {
     return (
-      <div className="header">
-        <h1>HOME</h1>
+      <div className="home">
+        <Products />
+        <UserReviews />
       </div>
     );
   }

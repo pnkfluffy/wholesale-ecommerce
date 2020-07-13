@@ -18,21 +18,6 @@ router.get("/all", (req, res) => {
     });
 });
 
-// @route   GET /products/from/:category
-// @desc    Returns all itens from a category
-// @access  Private
-router.get("/products/from/:category", (req, res) => {
-    Product.find({category: this.params.category})
-        .then(items => {
-            console.log(items);
-            res.json(items);
-        })
-        .catch((error) => {
-            console.log(error);
-            res.status(500).send("can't find any items in category");
-        });
-})
-
 // @route   GET /products/categories
 // @desc    Returns all types of categories
 // @access  Private

@@ -22,13 +22,27 @@ const loaded = (state = false, action) => {
   }
 };
 
-const products = (state = [], action) => {
+const initialProducts = {
+  products: [],
+  category: "All"
+}
+const products = (state = initialProducts, action) => {
   switch (action.type) {
-    case "GET_ALL_PRODUCTS":
-      state = action.payload
-      return state;
+    case "ADD_ALL_PRODUCTS":
+      return Object.assign({}, state, {
+        products: action.payload
+      })
+    case "UPDATE_CATEGORY":
+      return Object.assign({}, state, {
+      category: action.payload
+    })
     case "UPDATE_PRODUCTS":
-      state = action.payload
+      return Object.assign({}, state, {
+        products: [
+            ...state.products,
+            action.payload
+            ]
+      })
       return state;
     default:
       return state;

@@ -12,20 +12,24 @@ class Products extends React.Component {
         super(props);
     }
     print_products = () => {
-        let products = this.props.state.products;
+        let products = this.props.state.products.products;
         if (!products[0])
         {
             axios
                 .get("products/all")
                 .then(res => {
-                    this.props.dispatch({ type: 'UPDATE_PRODUCTS', payload: res.data })
+                    this.props.dispatch({ type: 'ADD_ALL_PRODUCTS', payload: res.data })
                 })
                 .catch((err) => {
                     console.log(err);
                 });
-            products = this.props.state.products
+            products = this.props.state.products.products
         }
+        console.log(products);
         return products.map(product => {
+            if (this.props.state.products.category === "All")
+                return <ProductCard product = {product}/>;
+            else if (this.props.state.products.category === product.category)
                 return <ProductCard product = {product}/>;
             })
     }

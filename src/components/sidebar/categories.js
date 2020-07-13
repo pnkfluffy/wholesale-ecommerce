@@ -15,26 +15,8 @@ class Categories extends React.Component {
         }
     }
 
-    getAllProducts = () => {
-        axios
-            .get("products/all")
-            .then(res => {
-                this.props.dispatch({ type: 'UPDATE_PRODUCTS', payload: res.data })
-            })
-            .catch((err) => {
-                console.log(err);
-            })
-    }
-
-    getProductsFromCategory = category => {
-        axios
-            .get("products/from/" + category)
-            .then(res => {
-                this.props.dispatch({ type: 'UPDATE_PRODUCTS', payload: res.data })
-            })
-            .catch((err) => {
-                console.log(err);
-            })
+    setCategory = category => {
+        this.props.dispatch({ type: 'UPDATE_CATEGORY', payload: category });
     }
 
     getAllCategories = () => {
@@ -55,7 +37,7 @@ class Categories extends React.Component {
         return this.state.categories.map(category => {
             return (
                     <div className="categories_sidebar_link"
-                         onClick= {e => this.getProductsFromCategory(category)}>
+                         onClick= {e => this.setCategory(category)}>
                         { category }
                     </div>
             )
@@ -66,7 +48,7 @@ class Categories extends React.Component {
         return (
                 <div className="categories_sidebar">
                     Categories<br/>
-                    <div className="categories_sidebar_link">
+                    <div className="categories_sidebar_link" onClick= {e => this.setCategory("All")}>
                         All
                     </div>
                     { this.getAllCategories() }

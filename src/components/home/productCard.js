@@ -20,7 +20,7 @@ class ProductCard extends React.Component {
                 <div className="products_metadata">
                     CBD | THC | CT
                 </div>
-                <BuyNowButton/>
+                <BuyNowButton product = {this.props.product}/>
             </div>
         );
     }

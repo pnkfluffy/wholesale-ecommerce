@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
 import productImg from "../../resources/images/product_1.png"
+import BuyNowButton from "./buyNowButton";
 
 class ProductCard extends React.Component {
     constructor(props) {
@@ -19,9 +20,7 @@ class ProductCard extends React.Component {
                 <div className="products_metadata">
                     CBD | THC | CT
                 </div>
-                <div className="product_buy">
-                    Buy Now {this.props.product.price}
-                </div>
+                <BuyNowButton/>
             </div>
         );
     }

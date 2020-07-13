@@ -38,6 +38,7 @@ export default {
   },
 
   getMany: (resource, params) => {
+    //I think an array of ids is expected in params.
     console.log("getMany");
     const query = {
       filter: JSON.stringify({ id: params.ids }),

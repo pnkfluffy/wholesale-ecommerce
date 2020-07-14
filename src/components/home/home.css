@@ -62,6 +62,10 @@
     margin-right: 0%;
 }
 
+.product_buy {
+    width: 80%;
+    background-color: #59ba47;
+}
 .userReviews {
     width: 10vw;
 }

@@ -21,24 +21,48 @@ const updateTotal = async products => {
     return (total);
 }
 
-//  {!} PAGINATE
-// @route   GET /orders/all
+// @route   GET /orders/all/:page_size/:page_num
+// @:page_size size of return
+// @:page_num number of return
 // @desc    Returns all orders
 // @access  Private
-router.get("/all", (req, res) => {
-  Order.find()
-    .then((orders) => res.json(orders))
-    .catch((error) => {
-      console.log(error);
-      res.status(500).send("no orders found");
-    });
+router.get("/all/:page_size/:page_num/", (req, res) => {
+    const skips = req.params.page_size * (req.params.page_num - 1);
+    console.log(req.params.page_size);
+
+    Order.find().skip(skips).limit(parseInt(req.params.page_size, 10))
+          .then((orders) => res.json(orders))
+          .catch((error) => {
+            console.log(error);
+            res.status(500).send("no orders found");
+     });
 });
 
-// @route   GET /orders/:id
+// @route   GET /orders/openOrder/
+// @desc    Returns the open order from user id
+// @access  Private
+router.get("/openOrder", (req, res) => {
+    Order.find({user: req.user._id})
+        .then(orders => {
+            let openOrder = orders.filter(order => {
+                                            return !order.paymentID;
+                                        })
+            res.json({
+                success: true,
+                order: openOrder[0]
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).send("");
+        });
+});
+
+// @route   GET /orders/:orderId
 // @desc    Returns the order
 // @access  Private
-router.get("/:id", (req, res) => {
-  Order.findById(req.params.id)
+router.get("/oneOrder/:orderId", (req, res) => {
+  Order.findById(req.params.orderId)
     .then((order) => res.json(order))
     .catch((error) => {
       console.log(error);
@@ -46,34 +70,32 @@ router.get("/:id", (req, res) => {
     });
 });
 
-//  {!} PAGINATE
 // @route   GET /orders/from/
-// @desc    Returns all users
+// @desc    Returns all orders from user
 // @access  Private
-router.get("/from/:id", (req, res) => {
-  Order.find()
-    .then((orders) => {
-      const ordersWithId = orders.filter((order) => {
-        return order.user.toString() === req.params.id;
-      });
+router.get("/from/:id/:page_size/:page_num", (req, res) => {
+    const skips = req.params.page_size * (req.params.page_num - 1);
 
-      res.json({
-        success: true,
-        orders: ordersWithId,
-      });
-    })
-    .catch((error) => {
-      console.log(error);
-      res.status(500).send("Error finding orders");
-    });
+    Order.find({user: req.params.id}).skip(skips).limit(parseInt(req.params.page_size, 10))
+         .then(orders => {
+             res.json({
+                 success: true,
+                 orders: orders,
+             });
+         })
+        .catch((error) => {
+          console.log(error);
+          res.status(500).send("Error finding orders");
+        });
 });
 
 // @route   POST /orders/newOrder/
-// @desc    Returns all users
+// @desc    Returns a new Order with selected product
 // @access  Private
-router.post("/newOrder/:id", async (req, res) => {
+router.post("/newOrder/:productID", async (req, res) => {
+    const userID = req.user._id
     const products = [{
-        product: req.body.productID,
+        product: req.params.productID,
         quantity: 1
     }];
 
@@ -83,7 +105,7 @@ router.post("/newOrder/:id", async (req, res) => {
                         .catch(err => console.log(err));
 
     const newOrder = new Order({
-        user: req.params.id,
+        user: userID,
         products: products,
         total: total
       });
@@ -97,7 +119,7 @@ router.post("/newOrder/:id", async (req, res) => {
 // @desc    Returns all users
 // @access  Private
 router.post("/addProduct/:orderID", (req, res) => {
-  Order.findById(req.params.orderID).then(async (order) => {
+    Order.findById(req.params.orderID).then(async (order) => {
     let products = order.products;
     //check if product is already in the order
     const alreadyInOrder = products.findIndex(

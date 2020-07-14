@@ -26,6 +26,7 @@ const initialProducts = {
   products: [],
   category: "All"
 }
+
 const products = (state = initialProducts, action) => {
   switch (action.type) {
     case "ADD_ALL_PRODUCTS":
@@ -48,8 +49,20 @@ const products = (state = initialProducts, action) => {
       return state;
   }
 }
+
+const order = (state = "", action) => {
+  switch (action.type) {
+    case "ADD_ORDER":
+      state = action.payload
+      return state;
+    default:
+      return state;
+  }
+}
+
 export default combineReducers({
   user,
   products,
+  order,
   loaded,
 });

@@ -26,6 +26,7 @@ class Categories extends React.Component {
             axios
                 .get("products/categories")
                 .then(res => {
+                    console.log(res)
                     this.setState({
                         categories: res.data,
                     })

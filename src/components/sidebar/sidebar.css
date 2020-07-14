@@ -1,6 +1,6 @@
 .sidebar {
     padding-top: 5%;
-    width: 10%;
+    width: 11%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -21,4 +21,16 @@
 
 .categories_sidebar_link {
     width: 100%;
+}
+
+.sidebar_footer{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-size: 0.4em;
+    width: 73%;
+    height: 11%;
+}
+.sidebar_footer a {
+    color: #59BA47;
 }

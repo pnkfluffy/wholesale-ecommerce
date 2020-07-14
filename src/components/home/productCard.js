@@ -17,7 +17,24 @@ class ProductCard extends React.Component {
                     {this.props.product.name}
                 </div>
                 <div className="products_metadata">
-                    CBD | THC | CT
+                    <span>
+                        CBD<br/>
+                        <sub>
+                            92.3%
+                        </sub>
+                    </span> | 
+                    <span>
+                        THC<br/>
+                        <sub>
+                            12.34%
+                        </sub>
+                    </span> | 
+                    <span>
+                        CT<br/>
+                        <sub>
+                            18%
+                        </sub>
+                    </span>
                 </div>
                 <div className="product_buy">
                     Buy Now {this.props.product.price}

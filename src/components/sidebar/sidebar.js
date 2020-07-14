@@ -45,6 +45,17 @@ class Sidebar extends React.Component {
             <Link to="/account"><AccountCircleOutlinedIcon/> Account</Link>
         </div>
         <Categories />
+        <div className="sidebar_footer">
+          <p>
+            all products contain -0.3% thc in accordance with the farm bill
+          </p>
+          <p>
+            <a>customer support</a>,
+            <a>privacy policy</a>, 
+            <a>terms and conditions</a>,
+            2020 Cbddy, All rights reserved
+          </p>
+        </div>
       </div>
     );
   }

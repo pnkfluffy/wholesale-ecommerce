@@ -27,7 +27,7 @@ const initialProducts = {
   category: "All"
 }
 
-const products = (state = initialProducts, action) => {
+const products = (state = initialProducts, action) => { // using Object.assign causes problems with react rerenders. simpler to just return action.payload
   switch (action.type) {
     case "ADD_ALL_PRODUCTS":
       return Object.assign({}, state, {

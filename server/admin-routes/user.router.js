@@ -7,9 +7,18 @@ router.get("/", (req, res) => {
   console.log("query: ", req.query, " end query");
   //  {!} WRITE IN A WAY THAT USES URL QUERY PARAMETERS
   //  TO FILTER, SORT RANGE, AND SORT BY FIELDS
+  
+  const sortQuery = JSON.parse(req.query.sort);
+  console.log(sortQuery);
+
+  let sort = {};
+  sort[sortQuery[0]] = sortQuery[1] === "ASC" ? 1 : -1;
+  console.log("sort", sort);
+
   User.find()
+    .sort(sort)
     .then((users) => {
-      console.log(users);
+      // console.log(users);
       res.set("content-range", JSON.stringify(users.length));
       //  each object needs to have an 'id' field in order for
       //  reactAdmin to parse

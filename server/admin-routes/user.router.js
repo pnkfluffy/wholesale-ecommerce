@@ -28,12 +28,14 @@ router.get("/", (req, res) => {
 
 //getOne
 router.get("/:id", async (req, res) => {
+  console.log("getOne hit. Id: ", req.params.id)
   User.findOne({_id: req.params.id})
   .then((user) => {
     user = JSON.parse(JSON.stringify(user).split('"_id":').join('"id":'));
+    console.log("parsed user: ", user)
     res.json(user)
   }).catch(err => {
-    console.log(err)
+    console.log("error: ", err)
     res.status(500).send("user not found.")
   })
 })

@@ -13,8 +13,23 @@ import {
   Datagrid,
   TextField,
   DateField,
-  EditButton
+  EditButton,
+  Show,
+  SimpleShowLayout,
+  RichTextField,
+  ShowButton
 } from 'react-admin'
+
+export const UserShow = (props) => (
+  <Show {...props}>
+      <SimpleShowLayout>
+          <TextField source="title" />
+          <TextField source="teaser" />
+          <RichTextField source="body" />
+          <DateField label="Publication date" source="created_at" />
+      </SimpleShowLayout>
+  </Show>
+);
 
 export const UserList = props => (
   <List {...props}>
@@ -25,6 +40,7 @@ export const UserList = props => (
       <TextField label='goCardless Verified' source='Verified' />
       <TextField label='goCardless ID' source='goCardlessID' />
       <TextField label='docusign Verified' source='docusignVerified' />
+      < ShowButton />
     </Datagrid>
   </List>
 )

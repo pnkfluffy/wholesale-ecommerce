@@ -16,34 +16,33 @@ class Cart extends React.Component {
   }
 
   isEmpty = (obj) => {
-    for(var key in obj) {
-      if(obj.hasOwnProperty(key))
-        return false;
-    }
-    return true;
+        for(var key in obj) {
+            if(obj.hasOwnProperty(key))
+                return false;
+        }
+        return true;
   }
 
   componentDidMount() {
-    //get last open cart from db
-    axios
-        .get("orders/openOrder")
-        .then(res => {
-          if (res.data.order)
-          {
-            this.props.dispatch({ type: 'ADD_ORDER', payload: res.data.order });
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      //get last open cart from db
+      axios
+          .get("orders/openOrder")
+          .then(res => {
+            if (res.data.order)
+            {
+              this.props.dispatch({ type: 'ADD_ORDER', payload: res.data.order });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
   }
 
-  displayProducts = () => {
+    displayProducts = () => {
     const products = this.props.state.order.products;
-    console.log(products);
     return products.map(product => {
-      return <OrderCard product = {product}/>
-    })
+        return <OrderCard product = {product}/>
+   })
   }
 
   render() {
@@ -68,4 +67,5 @@ class Cart extends React.Component {
     );
   }
 }
+
 export default connect(mapStateToProps)(Cart);

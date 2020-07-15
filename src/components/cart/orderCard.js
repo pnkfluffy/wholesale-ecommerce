@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import axios from "axios";
+import Header from "../header/header";
 
 import productImg from "../../resources/images/product_1.png"
 import loading from "../../resources/images/loading.svg"
@@ -91,8 +92,8 @@ class OrderCard extends React.Component {
                 productID: this.props.product.product
             }
         }).then(res => {
-            this.props.dispatch({ type: 'ADD_ORDER', payload: res.data });
-        })
+                this.props.dispatch({ type: 'ADD_ORDER', payload: res.data });
+            })
             .catch((err) => {
                 console.log(err)
             });
@@ -118,45 +119,45 @@ class OrderCard extends React.Component {
             });
     }
     render() {
-        return (
-            <div className="order_card">
-                <img src = {productImg}/>
-                <div className="order_content">
-                    <h2>{this.state.name}</h2>
-                    <div className="manage_quantity">
-                        <div className="order_quantity_button" onClick={this.decreaseQuantity}>
-                            -
+            return (
+                <div className="order_card">
+                    <img src = {productImg}/>
+                    <div className="order_content">
+                        <h2>{this.state.name}</h2>
+                        <div className="manage_quantity">
+                            <div className="order_quantity_button" onClick={this.decreaseQuantity}>
+                                -
+                            </div>
+                            <b>quantity</b>
+                            {(() => {
+                                if(this.state.loading)
+                                {
+                                    return <img src = {loading}/>
+                                }
+                                else
+                                {
+                                    return (
+                                        <b>{this.state.quantity}</b>
+                                        );
+                                }
+                            })()}
+                            <div className="order_quantity_button" onClick={this.increaseQuantity}>
+                                +
+                            </div>
                         </div>
-                        <b>quantity</b>
+                        <b>price {this.state.price}</b>
                         {(() => {
-                            if(this.state.loading)
-                            {
+                            if(this.state.loadingDelete) {
                                 return <img src = {loading}/>
                             }
-                            else
-                            {
-                                return (
-                                    <b>{this.state.quantity}</b>
-                                );
+                            else {
+                                return <div className="delete_product_button" onClick={this.deleteProduct}>Delete</div>
                             }
                         })()}
-                        <div className="order_quantity_button" onClick={this.increaseQuantity}>
-                            +
-                        </div>
                     </div>
-                    <b>price {this.state.price}</b>
-                    {(() => {
-                        if(this.state.loadingDelete) {
-                            return <img src = {loading}/>
-                        }
-                        else {
-                            return <div className="delete_product_button" onClick={this.deleteProduct}>Delete</div>
-                        }
-                    })()}
                 </div>
-            </div>
-        );
-    }
+            );
+        }
 }
 
 export default connect(mapStateToProps)(OrderCard);

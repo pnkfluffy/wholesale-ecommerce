@@ -17,30 +17,33 @@ class BuyNowButton extends React.Component {
 
     isEmpty = (obj) => {
         console.log("checking if is empty")
-        for(var key in obj) {
-            if(obj.hasOwnProperty(key))
+        for (var key in obj) {
+            if (obj.hasOwnProperty(key))
                 return false;
         }
         return true;
     }
 
     createNewOrder = () => {
-        console.log("create new order");
-        const data = {
-            productID: this.props.product._id
-        }
+        console.log("new order");
         axios
             .post("orders/newOrder/" + this.props.product._id)
             .then(res => {
+                this.setState({
+                    loading: false
+                })
                 this.props.dispatch({ type: 'ADD_ORDER', payload: res.data });
             })
             .catch((err) => {
+                this.setState({
+                    loading: false
+                })
                 console.log(err);
             });
     }
 
     addToOrder = () => {
-        console.log("add to order")
+        console.log("add order");
         const data = {
             productID: this.props.product._id
         }
@@ -50,7 +53,7 @@ class BuyNowButton extends React.Component {
                 this.setState({
                     loading: false
                 })
-                this.props.dispatch({ type: 'ADD_ORDER', payload: res.data });
+                this.props.dispatch({type: 'ADD_ORDER', payload: res.data});
             })
             .catch((err) => {
                 this.setState({
@@ -65,7 +68,6 @@ class BuyNowButton extends React.Component {
             loading: true
         })
         //if there isn't an open cart, create one with the new item
-        console.log("order: " + this.props.state.order);
         if (this.isEmpty(this.props.state.order))
             this.createNewOrder();
         else {
@@ -75,9 +77,8 @@ class BuyNowButton extends React.Component {
 
     render() {
         if (this.state.loading) {
-            return <img src = {loading}/>
-        }
-        else {
+            return <img src={loading}/>
+        } else {
             return (
                 <div className="product_buy"
                      onClick={this.addToCart}>

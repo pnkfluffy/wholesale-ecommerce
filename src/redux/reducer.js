@@ -27,24 +27,27 @@ const initialProducts = {
   category: "All"
 }
 
-const products = (state = initialProducts, action) => { // using Object.assign causes problems with react rerenders. simpler to just return action.payload
+const products = (state = initialProducts, action) => {
   switch (action.type) {
     case "ADD_ALL_PRODUCTS":
-      return Object.assign({}, state, {
+      return {
+        ...state,
         products: action.payload
-      })
+      }
     case "UPDATE_CATEGORY":
-      return Object.assign({}, state, {
+      return {
+        ...state,
         category: action.payload
-      })
+      }
     case "UPDATE_PRODUCTS":
-      return Object.assign({}, state, {
+      state = {
+        ...state,
         products: [
-          ...state.products,
-          action.payload
-        ]
-      })
-      return state;
+            ...state.products,
+            action.payload
+            ]
+      }
+      return state
     default:
       return state;
   }
@@ -53,7 +56,7 @@ const products = (state = initialProducts, action) => { // using Object.assign c
 const order = (state = "", action) => {
   switch (action.type) {
     case "ADD_ORDER":
-      return Object.assign({}, state, action.payload)
+      return action.payload
     default:
       return state;
   }

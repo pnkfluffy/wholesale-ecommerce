@@ -34,7 +34,7 @@ router.get("/categories", (req, res) => {
 })
 
 // @route   GET /products/:id
-// @:id     id of order to get
+// @:id     id of product to get
 // @desc    Returns the order
 // @access  Private
 router.get("/:id", (req, res) => {

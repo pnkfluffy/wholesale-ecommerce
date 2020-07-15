@@ -25,13 +25,16 @@ const UserSchema = new Schema({
     type: Boolean,
     default: false,
   },
-  paymentVerified: {
-    type: Boolean,
-    default: false,
-  },
   goCardlessID: {
     type: String,
   },
+  goCardlessMandate: {
+    type: String
+  },
+  /*  paymentVerified: {
+    type: Boolean,
+    default: false,
+  },*/
 });
 
 module.exports = User = mongoose.model("user", UserSchema);

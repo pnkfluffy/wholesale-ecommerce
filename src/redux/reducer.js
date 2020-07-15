@@ -22,7 +22,47 @@ const loaded = (state = false, action) => {
   }
 };
 
+const initialProducts = {
+  products: [],
+  category: "All"
+}
+
+const products = (state = initialProducts, action) => {
+  switch (action.type) {
+    case "ADD_ALL_PRODUCTS":
+      return Object.assign({}, state, {
+        products: action.payload
+      })
+    case "UPDATE_CATEGORY":
+      return Object.assign({}, state, {
+      category: action.payload
+    })
+    case "UPDATE_PRODUCTS":
+      return Object.assign({}, state, {
+        products: [
+            ...state.products,
+            action.payload
+            ]
+      })
+      return state;
+    default:
+      return state;
+  }
+}
+
+const order = (state = "", action) => {
+  switch (action.type) {
+    case "ADD_ORDER":
+      state = action.payload
+      return state;
+    default:
+      return state;
+  }
+}
+
 export default combineReducers({
   user,
+  products,
+  order,
   loaded,
 });

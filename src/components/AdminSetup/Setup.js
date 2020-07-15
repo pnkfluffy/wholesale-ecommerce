@@ -7,7 +7,7 @@ import defaultMessages from "ra-language-english";
 import polyglotI18nProvider from "ra-i18n-polyglot";
 import createAdminStore from "./createAdminStore";
 
-import { UserList } from "./MenuItems/Users";
+import { UserList, UserEdit } from "./MenuItems/Users";
 import { PostList, PostEdit, PostCreate } from "./MenuItems/Posts";
 import Dashboard from "./MenuItems/Dashboard";
 import authProvider from "./authProvider";
@@ -38,7 +38,7 @@ const AdminSetup = () => (
       history={history}
       title="My Admin"
     >
-      <Resource name="users" list={UserList} icon={UserIcon} />
+      <Resource name="users" list={UserList} edit={UserEdit} icon={UserIcon} />
       <Resource
         name="posts"
         list={PostList}

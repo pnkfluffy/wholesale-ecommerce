@@ -1,6 +1,6 @@
 .home {
     display: flex;
-    flex-display: row;
+    flex-direction: row;
 }
 
 .products {
@@ -17,6 +17,7 @@
     overflow-y: auto;
     width: 68vw;
 }
+
 .product_card {
     display: flex;
     flex-direction: column;
@@ -64,8 +65,6 @@
     margin-right: 0%;
 }
 
-.product_buy {
-}
 .userReviews {
     width: 10vw;
 }

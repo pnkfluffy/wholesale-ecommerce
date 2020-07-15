@@ -1,40 +1,36 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 const UserSchema = new Schema({
   googleID: {
-    type: String,
+    type: String
   },
-//   isGoogle: {
-//     type: Boolean,
-//   },
-//   email: {
-//     type: String,
-//   },
-//   password: {
-//     type: String,
-//   },
+  //   isGoogle: {
+  //     type: Boolean,
+  //   },
+  //   email: {
+  //     type: String,
+  //   },
+  //   password: {
+  //     type: String,
+  //   },
   name: {
-    type: String,
+    type: String
   },
-  Verified: {
+  paymentVerified: {
     type: Boolean,
-    default: false,
+    default: false
   },
   docusignVerified: {
     type: Boolean,
-    default: false,
+    default: false
   },
   goCardlessID: {
-    type: String,
+    type: String
   },
   goCardlessMandate: {
     type: String
-  },
-  /*  paymentVerified: {
-    type: Boolean,
-    default: false,
-  },*/
-});
+  }
+})
 
-module.exports = User = mongoose.model("user", UserSchema);
+module.exports = User = mongoose.model('user', UserSchema)

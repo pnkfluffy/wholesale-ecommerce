@@ -35,14 +35,14 @@ const products = (state = initialProducts, action) => { // using Object.assign c
       })
     case "UPDATE_CATEGORY":
       return Object.assign({}, state, {
-      category: action.payload
-    })
+        category: action.payload
+      })
     case "UPDATE_PRODUCTS":
       return Object.assign({}, state, {
         products: [
-            ...state.products,
-            action.payload
-            ]
+          ...state.products,
+          action.payload
+        ]
       })
       return state;
     default:
@@ -53,8 +53,7 @@ const products = (state = initialProducts, action) => { // using Object.assign c
 const order = (state = "", action) => {
   switch (action.type) {
     case "ADD_ORDER":
-      state = action.payload
-      return state;
+      return Object.assign({}, state, action.payload)
     default:
       return state;
   }

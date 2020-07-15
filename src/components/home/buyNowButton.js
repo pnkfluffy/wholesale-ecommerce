@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import axios from "axios";
+import loading from "../../resources/images/loading.svg"
 
 const mapStateToProps = (state) => ({
     state: state.reducer,
@@ -10,29 +11,17 @@ class BuyNowButton extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            cartReadyToUse: false,
+            loading: false,
         }
     }
 
-    componentDidMount() {
-        //check if already has a cart not closed (this is not going to be here,
-        // should have another component to do that on login
-        if (this.props.state.order.length === 0)
-        {
-            //get last open cart from db (should be taken away once we have a little cart icon
-            axios
-                .get("orders/openOrder")
-                .then(res => {
-                    if (res.data.order)
-                    {
-                        this.props.dispatch({ type: 'ADD_ORDER', payload: res.data.order._id });
-                        console.log(this.props.state.order)
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
+    isEmpty = (obj) => {
+        console.log("checking if is empty")
+        for(var key in obj) {
+            if(obj.hasOwnProperty(key))
+                return false;
         }
+        return true;
     }
 
     createNewOrder = () => {
@@ -43,15 +32,11 @@ class BuyNowButton extends React.Component {
         axios
             .post("orders/newOrder/" + this.props.product._id)
             .then(res => {
-                this.props.dispatch({ type: 'ADD_ORDER', payload: res.data.order._id });
-                this.setState({
-                    cartReadyToUse: true,
-                })
+                this.props.dispatch({ type: 'ADD_ORDER', payload: res.data });
             })
             .catch((err) => {
                 console.log(err);
             });
-        console.log(this.props.state.order);
     }
 
     addToOrder = () => {
@@ -60,18 +45,28 @@ class BuyNowButton extends React.Component {
             productID: this.props.product._id
         }
         axios
-            .post("orders/addProduct/" + this.props.state.order, data)
+            .post("orders/addProduct/" + this.props.state.order._id, data)
             .then(res => {
-                console.log(res.data)
+                this.setState({
+                    loading: false
+                })
+                this.props.dispatch({ type: 'ADD_ORDER', payload: res.data });
             })
             .catch((err) => {
-                console.log(err);
+                this.setState({
+                    loading: false
+                })
+                console.log("error" + err);
             });
     }
 
     addToCart = () => {
+        this.setState({
+            loading: true
+        })
         //if there isn't an open cart, create one with the new item
-        if (this.props.state.order.length === 0)
+        console.log("order: " + this.props.state.order);
+        if (this.isEmpty(this.props.state.order))
             this.createNewOrder();
         else {
             this.addToOrder();
@@ -79,12 +74,17 @@ class BuyNowButton extends React.Component {
     }
 
     render() {
-        return (
+        if (this.state.loading) {
+            return <img src = {loading}/>
+        }
+        else {
+            return (
                 <div className="product_buy"
                      onClick={this.addToCart}>
                     Buy Now {this.props.product.price}
                 </div>
-        );
+            );
+        }
     }
 }
 export default connect(mapStateToProps)(BuyNowButton);

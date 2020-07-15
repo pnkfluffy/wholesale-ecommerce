@@ -10,6 +10,7 @@ import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined'
 /*images*/
 import logo from "../../resources/images/cbddy_logo_small.png";
 import Categories from "./categories";
+import { grey } from "@material-ui/core/colors";
 
 const mapStateToProps = (state) => ({
     state: state.reducer,
@@ -41,8 +42,8 @@ class Sidebar extends React.Component {
         <img src={logo} className="logo_sidebar"/>
         <div className="menu_sidebar">
             Menu<br/>
-            <Link to="/"><HomeOutlinedIcon/> Home</Link><br/>
-            <Link to="/account"><AccountCircleOutlinedIcon/> Account</Link>
+            <Link className="menu_link" to="/"><HomeOutlinedIcon/> Home</Link><br/>
+            <Link className="menu_link" to="/account"><AccountCircleOutlinedIcon/> Account</Link>
         </div>
         <Categories />
         <div className="sidebar_footer">

@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import axios from 'axios'
+import { withRouter } from "react-router-dom";
 
 /*icons*/
 import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined'
@@ -29,24 +30,36 @@ class Sidebar extends React.Component {
   }
 
   render () {
+    const location = window.location.pathname
+    console.log('location', location)
+
     return (
       <div className='sidebar'>
         <img src={logo} alt='cbddy_logo' className='logo_sidebar' />
         <div className='menu_sidebar'>
           <div className='sidebar_section_header'>Menu</div>
-          <Link className='menu_link' to='/'>
+          <Link
+            className={`menu_link + ${location === '/' && 'menu_active'}`}
+            to='/'
+          >
             <HomeOutlinedIcon /> Home
           </Link>
-          <Link className='menu_link' to='/account'>
+          <Link
+            className={`menu_link + ${location === '/account' &&
+              'menu_active'}`}
+            to='/account'
+          >
             <AccountCircleOutlinedIcon /> Account
           </Link>
         </div>
         <Categories />
         <div className='sidebar_footer'>
-          <p>all products contain &#60;0.3% thc in accordance with the farm bill</p>
           <p>
-            <a>customer support</a>,<a>privacy policy</a>,
-            <a>terms and conditions</a>, 2020 Cbddy, All rights reserved
+            all products contain <a>&#60;0.3%</a> thc in accordance with the farm bill
+          </p>
+          <p>
+            <a>customer support</a>, <a>privacy policy</a>, 
+            <a> terms and conditions</a>, 2020 Cbddy, All rights reserved
           </p>
         </div>
       </div>
@@ -54,4 +67,4 @@ class Sidebar extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(Sidebar)
+export default connect(mapStateToProps)(withRouter(Sidebar))

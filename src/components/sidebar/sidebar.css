@@ -9,6 +9,7 @@
     padding-bottom: 2vh;
     width: 8%;
     display: flex;
+    font-size: 14px;
     flex-direction: column;
     justify-content: space-between;
 }
@@ -19,13 +20,11 @@
 }
 
 .sidebar_section_header {
-    font-size: 14px;
     font-weight: bolder;
 }
 
 .menu_sidebar {
     width: 90%;
-    font-size: 16px;
     height: 14vh;
     display: flex;
     flex-direction: column;
@@ -39,10 +38,18 @@
 
 .menu_link{
     color: grey;
-    width: 6vw;
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.menu_link > svg {
+    margin-right: 15%;
+    margin-top: -5px;
+}
+
+.menu_active {
+    color: #cccccc;
 }
 
 .categories_sidebar {
@@ -50,13 +57,13 @@
     flex-direction: column;
     height: 30%;
     justify-content: space-between;
-    font-size: 14px;
     font-weight: 300;
 }
 
 .category {
     display: flex;
     align-items: center;
+    cursor: pointer;
 }
 
 .category_active {

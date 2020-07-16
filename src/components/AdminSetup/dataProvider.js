@@ -31,11 +31,10 @@ export default {
   },
 
   getOne: (resource, params) => {
-    console.log("getOne resource", resource);
-
+    console.log("getOne resource: ", resource);
+    console.log("getONe params: ", params)
    httpClient(`${apiUrl}/${resource}/${params.id}`).then(({ json }) => (
-     {
-       data: json,
+     {data: json,
     }));
   },
 

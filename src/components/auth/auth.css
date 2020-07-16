@@ -1,11 +1,17 @@
 .login {
   display: flex;
+  position: relative;
+  overflow: hidden;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   height: 100vh;
   width: 100vw;
   background-color: #1e2026;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 .login_decoration {

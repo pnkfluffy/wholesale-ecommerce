@@ -11,9 +11,7 @@ const mapStateToProps = (state) => ({
 });
 
 class Cart extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+
 
   isEmpty = (obj) => {
         for(var key in obj) {
@@ -23,20 +21,7 @@ class Cart extends React.Component {
         return true;
   }
 
-  componentDidMount() {
-      //get last open cart from db
-      axios
-          .get("orders/openOrder")
-          .then(res => {
-            if (res.data.order)
-            {
-              this.props.dispatch({ type: 'ADD_ORDER', payload: res.data.order });
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-  }
+
 
     displayProducts = () => {
     const products = this.props.state.order.products;

@@ -4,12 +4,17 @@ const User = require("../schemas/userSchema");
 
 //getList
 router.get("/", (req, res) => {
+  console.log("list backend hit")
+  const sortQuery = JSON.parse(req.query.sort);
+  let sort = {};
+  sort[sortQuery[0]] = sortQuery[1] === "ASC" ? 1 : -1;
   console.log("query: ", req.query, " end query");
-  //  {!} WRITE IN A WAY THAT USES URL QUERY PARAMETERS
-  //  TO FILTER, SORT RANGE, AND SORT BY FIELDS
+  console.log(sortQuery);
+  console.log("sort", sort);
+
   User.find()
+    .sort(sort)
     .then((users) => {
-      console.log(users);
       res.set("content-range", JSON.stringify(users.length));
       //  each object needs to have an 'id' field in order for
       //  reactAdmin to parse
@@ -23,17 +28,21 @@ router.get("/", (req, res) => {
 });
 
 //getOne
-router.get("/:id", async (req, res) => {
+router.get("/:id", (req, res) => {
+  console.log("getOne hit. Id: ", req.params.id)
   User.findOne({_id: req.params.id})
   .then((user) => {
     user = JSON.parse(JSON.stringify(user).split('"_id":').join('"id":'));
+    console.log("parsed user: ", user)
     res.json(user)
   }).catch(err => {
-    console.log(err)
+    console.log("error: ", err)
     res.status(500).send("user not found.")
   })
 })
 
+
+//https://marmelab.com/react-admin/doc/2.8/DataProviders.html
 //getMany
 
 //getManyReference

@@ -18,9 +18,6 @@ const mapStateToProps = (state) => ({
 });
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     if (!this.props.state.loaded) {
@@ -56,7 +53,7 @@ class App extends React.Component {
         <Router>
           {routes}
           <Switch>
-          <Route exact path="/admin" component={Admin}/>
+          <Route exact path="/admin" render={(props) => <Admin history={this.props.history} {...props} />}/>
           </Switch>
         </Router>
       </div>

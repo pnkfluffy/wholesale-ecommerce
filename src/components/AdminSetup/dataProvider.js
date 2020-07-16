@@ -21,7 +21,8 @@ export default {
     console.log("query", query);
     console.log("url", url);
     return httpClient(url).then(({ headers, json }) => {
-      console.log("headers", headers);
+      console.log("getList dataprovider method hit")
+      // console.log("headers", headers);
       return {
         data: json,
         total: parseInt(headers.get("content-range").split("/").pop(), 10),
@@ -32,9 +33,12 @@ export default {
   getOne: (resource, params) => {
     console.log("getOne resource", resource);
 
-    httpClient(`${apiUrl}/${resource}/${params.id}`).then(({ json }) => ({
-      data: json,
-    }));
+    return httpClient(`${apiUrl}/${resource}/${params.id}`)
+    .then(({ json }) => {
+      console.log(json);
+      return { data: json };
+    })
+
   },
 
   getMany: (resource, params) => {
@@ -62,7 +66,7 @@ export default {
     };
     const url = `${apiUrl}/${resource}?${stringify(query)}`;
 
-    return httpClient(url).then(({ headers, json }) => ({
+    httpClient(url).then(({ headers, json }) => ({
       data: json,
       total: parseInt(headers.get("content-range").split("/").pop(), 10),
     }));
@@ -71,10 +75,12 @@ export default {
   update: (resource, params) => {
     console.log("update");
 
-    httpClient(`${apiUrl}/${resource}/${params.id}`, {
+   return httpClient(`${apiUrl}/${resource}/${params.id}`, {
       method: "PUT",
       body: JSON.stringify(params.data),
-    }).then(({ json }) => ({ data: json }));
+    }).then(({ json }) => {
+      return { data: json }
+    });
   },
 
   updateMany: (resource, params) => {
@@ -86,18 +92,21 @@ export default {
     return httpClient(`${apiUrl}/${resource}?${stringify(query)}`, {
       method: "PUT",
       body: JSON.stringify(params.data),
-    }).then(({ json }) => ({ data: json }));
+    }).then(({ json }) => {
+     return { data: json }
+    });
   },
 
   create: (resource, params) => {
     console.log("create");
 
-    httpClient(`${apiUrl}/${resource}`, {
+    return httpClient(`${apiUrl}/${resource}`, {
       method: "POST",
       body: JSON.stringify(params.data),
-    }).then(({ json }) => ({
-      data: { ...params.data, id: json.id },
-    }));
+    }).then(({ json }) => {
+      json = { ...params.data, id: json.id }
+      return { data: json }
+    })
   },
 
   delete: (resource, params) => {

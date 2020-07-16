@@ -27,11 +27,11 @@ body {
 .body {
   background-color: #1f2025;
   width: 95%;
-  padding-left: 5%;
+  padding: 55px 55px 55px 80px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  border-radius: 25px 0px 0px 25px;
+  border-radius: 50px 0px 0px 50px;
 }
 
 *:focus {

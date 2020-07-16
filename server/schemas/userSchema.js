@@ -3,11 +3,9 @@ const Schema = mongoose.Schema
 
 const UserSchema = new Schema({
   googleID: {
-    type: String
+    type: String,
+    default: null
   },
-  //   isGoogle: {
-  //     type: Boolean,
-  //   },
   //   email: {
   //     type: String,
   //   },

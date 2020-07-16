@@ -9,7 +9,8 @@
     padding-bottom: 2vh;
     width: 8%;
     display: flex;
-    font-size: 14px;
+    /* font-size: 14px; */
+    font-size: 0.8vw;
     flex-direction: column;
     justify-content: space-between;
 }
@@ -25,7 +26,7 @@
 
 .menu_sidebar {
     width: 90%;
-    height: 14vh;
+    height: 18vh;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -82,7 +83,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    font-size: 10px;
+    font-size: 0.6vw;
 }
 .sidebar_footer a {
     color: #59BA47;

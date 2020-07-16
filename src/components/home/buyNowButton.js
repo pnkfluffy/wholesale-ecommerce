@@ -45,7 +45,7 @@ class BuyNowButton extends React.Component {
     addToOrder = () => {
         console.log("add order");
         const data = {
-            productID: this.props.product._id
+            productID: this.props.product._id,
         }
         axios
             .post("orders/addProduct/" + this.props.state.order._id, data)

@@ -22,7 +22,6 @@ class OrderCard extends React.Component {
             loadingDelete: false
         }
     }
-
     componentDidMount() {
         axios
             .get("products/" + this.props.product.product)
@@ -32,6 +31,8 @@ class OrderCard extends React.Component {
                     productPrice: res.data.price,
                     price: res.data.price * this.props.product.quantity,
                     quantity: this.props.product.quantity,
+                    loading: false,
+                    loadingDelete: false
                 })
             })
             .catch((err) => {
@@ -61,14 +62,13 @@ class OrderCard extends React.Component {
     }
 
     increaseQuantity = () => {
-        const data = {
-            productID: this.props.product.product
-        }
-
         this.setState({
             loading: true
         });
 
+        const data = {
+            productID: this.props.product.product,
+        }
         axios
             .post("orders/addProduct/" + this.props.state.order._id, data)
             .then(res => {
@@ -99,6 +99,26 @@ class OrderCard extends React.Component {
             });
     }
 
+    changeQuantity = () => {
+        this.setState({
+            loading: true
+        });
+
+        const data = {
+            productID: this.props.product.product,
+            quantity: this.state.quantity
+        }
+        console.log(data);
+        axios
+            .post("orders/changeQuantity/" + this.props.state.order._id, data)
+            .then(res => {
+                this.props.dispatch({ type: 'ADD_ORDER', payload: res.data });
+            })
+            .catch((err) => {
+                console.log("error" + err);
+            });
+    }
+
     deleteProduct = () => {
         this.setState({
             loadingDelete: true
@@ -113,10 +133,23 @@ class OrderCard extends React.Component {
             }
         }).then(res => {
             this.props.dispatch({ type: 'ADD_ORDER', payload: res.data });
-        })
-            .catch((err) => {
+        }).catch((err) => {
                 console.log(err)
             });
+    }
+
+    onSubmit = e => {
+        e.preventDefault();
+        if (this.state.quantity === "0")
+            this.deleteProduct();
+        else
+            this.changeQuantity();
+    };
+
+    onChange = e => {
+        this.setState({
+            quantity: e.target.value
+        })
     }
     render() {
             return (
@@ -137,7 +170,12 @@ class OrderCard extends React.Component {
                                 else
                                 {
                                     return (
-                                        <b>{this.state.quantity}</b>
+                                        <form noValidate onSubmit={this.onSubmit}>
+                                            <input onChange={this.onChange}
+                                                   className="order_card_input"
+                                                   value={this.state.quantity}
+                                                   type="number" />
+                                        </form>
                                         );
                                 }
                             })()}

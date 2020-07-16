@@ -8,18 +8,48 @@ const Order = require('../schemas/orderSchema');
 const gocardless = require("gocardless-nodejs");
 const constants = require("gocardless-nodejs/constants");
 
+const initializeGoCardless = async () => {
+	const allClients = await gocardless(
+		process.env.GC_ACCESS_TOKEN,
+		// Change this to constants.Environments.Live when you're ready to go live
+		constants.Environments.Sandbox,
+		{ raiseOnIdempotencyConflict: true },
+	);
+
+	return (allClients);
+}
+
+// @route   GET /gc/checkClient
+// @desc    Returns all clients
+// @access  Private
+router.get('/checkClientID', async (req, res) => {
+	if (req.user.goCardlessID)
+	{
+		res.send(true)
+	}
+	else
+		res.send(false)
+});
+
+// @route   GET /gc/checkClient
+// @desc    Returns all clients
+// @access  Private
+router.get('/checkClientMandate', async (req, res) => {
+	if (req.user.goCardlessMandate)
+	{
+		res.send(true)
+	}
+	else
+		res.send(false)
+});
+
 // @route   GET /gc/clients
 // @desc    Returns all clients
 // @access  Private
 router.get('/clients', async (req, res) => {
 	try {
 		// Initialize the GoCardLess client.
-		const allClients = await gocardless(
-			process.env.GC_ACCESS_TOKEN,
-			// Change this to constants.Environments.Live when you're ready to go live
-			constants.Environments.Sandbox,
-			{ raiseOnIdempotencyConflict: true },
-		);
+		const allClients = await initializeGoCardless()
 		const listResponse = await allClients.customers.list();
 		const customers = listResponse.customers;
 		res.json({
@@ -32,29 +62,22 @@ router.get('/clients', async (req, res) => {
 	}
 });
 
-// @route   GET /gc/clients/:id
-// @:id		User ID that you want to find
+// @route   GET /gc/oneClient
 // @desc    Returns client by id
 // @access  Private
-router.get('/clients/:id', async (req, res) => {
+router.get('/oneClient', async (req, res) => {
 	try {
-		// Initialize the GoCardLess client.
-		const allClients = await gocardless(
+		const allClients =  await gocardless(
 			process.env.GC_ACCESS_TOKEN,
 			// Change this to constants.Environments.Live when you're ready to go live
 			constants.Environments.Sandbox,
 			{ raiseOnIdempotencyConflict: true },
 		);
-		const listResponse = await allClients.customers.list();
-		const customers = listResponse.customers;
-		const theClient = customers.find(id => id.id === req.params.id);
-		res.json({
-			success:true,
-			customers: theClient
-		});
+		const theClient = await allClients.customers.find(req.user.goCardlessID)
+		res.send(theClient);
 	} catch (error) {
 		console.log(error);
-		res.status(500).send('no payment not found')
+		res.status(500).send('client not found')
 	}
 });
 
@@ -65,12 +88,7 @@ router.get('/clients/:id', async (req, res) => {
 router.get('/payments/:date', async (req, res) => {
 	try {
 		// Initialize the GoCardLess client.
-		const allClients = await gocardless(
-			process.env.GC_ACCESS_TOKEN,
-			// Change this to constants.Environments.Live when you're ready to go live
-			constants.Environments.Sandbox,
-			{ raiseOnIdempotencyConflict: true },
-		);
+		const allClients = await initializeGoCardless()
 
 		// List all payments past a certain date.
 		const payments = await allClients.payments.list({
@@ -88,7 +106,7 @@ router.get('/payments/:date', async (req, res) => {
 // @:id		Active User ID
 // @desc    Returns URL to confirm client creation
 // @access  Private
-router.post('/addClient/:id', async (req, res) => {
+router.post('/addClient', async (req, res) => {
 	const name = req.body.newClientName;
 	const lastName = req.body.newClientLastName;
 	const email = req.body.newClientEmail;
@@ -98,18 +116,13 @@ router.post('/addClient/:id', async (req, res) => {
 
 	try {
 		// Initialize the GoCardLess allClients.
-		const allClients = await gocardless(
-			process.env.GC_ACCESS_TOKEN,
-			// Change this to constants.Environments.Live when you're ready to go live
-			constants.Environments.Sandbox,
-			{ raiseOnIdempotencyConflict: true },
-		);
+		const allClients = await initializeGoCardless()
 
 		const redirectFlow = await allClients.redirectFlows.create({
 			description: "Cider Barrels",
 			//to go live we need to have a token generator for each client
-			session_token: "dummy_session_token",
-			success_redirect_url: "https://developer.gocardless.com/example-redirect-uri/",
+			session_token: req.user._id.toString(),
+			success_redirect_url: "http://localhost:3000/buy",
 
 			prefilled_customer: {
 				given_name: name,
@@ -124,7 +137,7 @@ router.post('/addClient/:id', async (req, res) => {
 		// The clientId will be saved in the database so It can
 		// be used to confirm the changes and
 		// be used to get the client information later
-		User.findById(req.params.id)
+		User.findById(req.user._id)
 			.then(user => {
 				console.log(user);
 				if (!user) {
@@ -156,17 +169,12 @@ router.post('/addClient/:id', async (req, res) => {
 // @:id		Active User ID
 // @desc    Completes the redirect flow from the addUser and adds payment confirmed to database
 // @access  Private
-router.post('/completeRedirect/:id', async (req, res) => {
+router.post('/completeRedirect/', async (req, res) => {
 	try {
-		const allClients = await gocardless(
-			process.env.GC_ACCESS_TOKEN,
-			// Change this to constants.Environments.Live when you're ready to go live
-			constants.Environments.Sandbox,
-			{ raiseOnIdempotencyConflict: true },
-		);
+		const allClients = await initializeGoCardless()
 
 		//get activeUser from database
-		const activeUser = await User.findById(req.params.id)
+		const activeUser = await User.findById(req.user._id)
 			.then(user => {
 				if (!user) {
 					console.log("no user with this id");
@@ -178,7 +186,7 @@ router.post('/completeRedirect/:id', async (req, res) => {
 		const redirectFlow = await allClients.redirectFlows.complete(
 			activeUser.goCardlessID,
 			{
-				session_token: "dummy_session_token"
+				session_token: req.user._id.toString()
 			}
 		);
 		/*
@@ -232,16 +240,13 @@ router.post('/collectPayment/:orderID', async (req, res) => {
 				}
 			});
 
-		const allClients = await gocardless(
+		const allClients =  await gocardless(
 			process.env.GC_ACCESS_TOKEN,
 			// Change this to constants.Environments.Live when you're ready to go live
 			constants.Environments.Sandbox,
-			{raiseOnIdempotencyConflict: true},
+			{ raiseOnIdempotencyConflict: true },
 		);
-
-		const listResponse = await allClients.customers.list();
-		const customers = listResponse.customers;
-		const theClient = customers.find(id => id.id === activeUser.goCardlessID);
+		const theClient = await allClients.customers.find(req.user.goCardlessID);
 
 		//set proper client currency to payment
 		//to go live needs to add other currencies
@@ -293,12 +298,7 @@ router.post('/collectPayment/:orderID', async (req, res) => {
 // @access  Private
 router.post('/changePayment/:orderID', async (req, res) => {
 	try {
-		const allClients = await gocardless(
-			process.env.GC_ACCESS_TOKEN,
-			// Change this to constants.Environments.Live when you're ready to go live
-			constants.Environments.Sandbox,
-			{raiseOnIdempotencyConflict: true},
-		);
+		const allClients = await initializeGoCardless();
 
 		//get all the order information from DB
 		const order = await Order.findById(req.params.orderID)

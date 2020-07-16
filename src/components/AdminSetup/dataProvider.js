@@ -31,11 +31,14 @@ export default {
   },
 
   getOne: (resource, params) => {
-    console.log("getOne resource: ", resource);
-    console.log("getONe params: ", params)
-   httpClient(`${apiUrl}/${resource}/${params.id}`).then(({ json }) => (
-     {data: json,
-    }));
+    console.log("getOne resource", resource);
+
+    return httpClient(`${apiUrl}/${resource}/${params.id}`)
+    .then(({ json }) => {
+      console.log(json);
+      return { data: json };
+    })
+
   },
 
   getMany: (resource, params) => {
@@ -72,10 +75,12 @@ export default {
   update: (resource, params) => {
     console.log("update");
 
-    httpClient(`${apiUrl}/${resource}/${params.id}`, {
+   return httpClient(`${apiUrl}/${resource}/${params.id}`, {
       method: "PUT",
       body: JSON.stringify(params.data),
-    }).then(({ json }) => ({ data: json }));
+    }).then(({ json }) => {
+      return { data: json }
+    });
   },
 
   updateMany: (resource, params) => {
@@ -87,18 +92,21 @@ export default {
     return httpClient(`${apiUrl}/${resource}?${stringify(query)}`, {
       method: "PUT",
       body: JSON.stringify(params.data),
-    }).then(({ json }) => ({ data: json }));
+    }).then(({ json }) => {
+     return { data: json }
+    });
   },
 
   create: (resource, params) => {
     console.log("create");
 
-    httpClient(`${apiUrl}/${resource}`, {
+    return httpClient(`${apiUrl}/${resource}`, {
       method: "POST",
       body: JSON.stringify(params.data),
-    }).then(({ json }) => ({
-      data: { ...params.data, id: json.id },
-    }));
+    }).then(({ json }) => {
+      json = { ...params.data, id: json.id }
+      return { data: json }
+    })
   },
 
   delete: (resource, params) => {

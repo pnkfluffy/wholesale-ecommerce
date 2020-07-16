@@ -21,12 +21,11 @@ import {
 } from 'react-admin'
 
 export const UserShow = (props) => (
-  <Show title="User View" {...props}>
+  <Show title="User Name" {...props}>
       <SimpleShowLayout>
-          <TextField label="title" source="name" />
-          {/* <TextField label="teaser"/>
-          <RichTextField source="body" />
-          <DateField label="Publication date" source="created_at" /> */}
+
+          <TextField label="Payment confirmed: " source="paymentVerified" />
+          <TextField label="DocuSign confirmed: " source="docusignVerified"/>
       </SimpleShowLayout>
   </Show>
 );
@@ -45,9 +44,6 @@ export const UserList = props => (
   </List>
 )
 
-const UserTitle = ({ record }) => {
-  return <span>Post {record ? `"${record.name}"` : ''}</span>
-}
 
 export const UserEdit = props => (
   <Edit title={<UserTitle />} {...props}>
@@ -61,12 +57,25 @@ export const UserEdit = props => (
         disabled
         label='Payment Verified'
         source='paymentVerified'
-      />
+        />
       <BooleanInput
         label='Enable Purchases (form signed)'
         source='docusignVerified'
-      />
+        />
       <TextInput disabled label='goCardless ID' source='goCardlessID' />
     </SimpleForm>
   </Edit>
 )
+
+// custom components
+const UserTitle = ({ record }) => {
+  return <span>Post {record ? `"${record.name}"` : ''}</span>
+}
+
+const UserShowActions = ({ basePath, data, resource }) => (
+  <TopToolbar>
+      <EditButton basePath={basePath} record={data} />
+      {/* Add your custom actions */}
+      <Button color="primary" onClick={customAction}>Custom Action</Button>
+  </TopToolbar>
+);

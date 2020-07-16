@@ -9,8 +9,9 @@ const mapStateToProps = state => ({
 class Products extends React.Component {
   print_products = () => {
     const category = this.props.state.products.category
+    const searchTerm = this.props.state.products.searchTerm
     let products = this.props.state.products.products
-    let categorizedProducts
+    let categorizedProducts = []
     if (!products.length) {
       // {!} STYLE
       return <div>SERVER ERROR: NO PRODUCTS FOUND</div>
@@ -19,20 +20,26 @@ class Products extends React.Component {
     if (category === 'All') {
       categorizedProducts = products
     } else {
-      categorizedProducts = products.map(product => {
-        if (category === product.category) {
-          return product
-        }
-        return
+      products.forEach(product => {
+        if (category === product.category) categorizedProducts.push(product)
       })
     }
-    return categorizedProducts.map(product => <ProductCard product={product} />)
-    // return products.map(product => {
-    //   if (this.props.state.products.category === 'All')
-    //     return <ProductCard product={product} />
-    //   else if (this.props.state.products.category === product.category)
-    //     return <ProductCard product={product} />
-    // })
+    console.log('categorized', categorizedProducts)
+    if (searchTerm !== '') {
+      return (
+        <FilterResults
+          value={searchTerm}
+          data={categorizedProducts}
+          renderResults={results =>
+            results.map(product => <ProductCard product={product} />)
+          }
+        />
+      )
+    } else {
+      return categorizedProducts.map(product => (
+        <ProductCard product={product} />
+      ))
+    }
   }
   render () {
     return (

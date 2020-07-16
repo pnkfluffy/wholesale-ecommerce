@@ -21,7 +21,8 @@ export default {
     console.log("query", query);
     console.log("url", url);
     return httpClient(url).then(({ headers, json }) => {
-      console.log("headers", headers);
+      console.log("getList dataprovider method hit")
+      // console.log("headers", headers);
       return {
         data: json,
         total: parseInt(headers.get("content-range").split("/").pop(), 10),
@@ -32,8 +33,9 @@ export default {
   getOne: (resource, params) => {
     console.log("getOne resource", resource);
 
-    httpClient(`${apiUrl}/${resource}/${params.id}`).then(({ json }) => ({
-      data: json,
+   httpClient(`${apiUrl}/${resource}/${params.id}`).then(({ json }) => (
+     {
+       data: json,
     }));
   },
 
@@ -62,7 +64,7 @@ export default {
     };
     const url = `${apiUrl}/${resource}?${stringify(query)}`;
 
-    return httpClient(url).then(({ headers, json }) => ({
+    httpClient(url).then(({ headers, json }) => ({
       data: json,
       total: parseInt(headers.get("content-range").split("/").pop(), 10),
     }));

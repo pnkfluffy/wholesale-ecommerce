@@ -4,6 +4,7 @@ const User = require("../schemas/userSchema");
 
 //getList
 router.get("/", (req, res) => {
+  console.log("list backend hit")
   const sortQuery = JSON.parse(req.query.sort);
   let sort = {};
   sort[sortQuery[0]] = sortQuery[1] === "ASC" ? 1 : -1;
@@ -27,7 +28,7 @@ router.get("/", (req, res) => {
 });
 
 //getOne
-router.get("/:id", async (req, res) => {
+router.get("/:id", (req, res) => {
   console.log("getOne hit. Id: ", req.params.id)
   User.findOne({_id: req.params.id})
   .then((user) => {

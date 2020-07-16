@@ -21,12 +21,12 @@ import {
 } from 'react-admin'
 
 export const UserShow = (props) => (
-  <Show {...props}>
+  <Show title="User View" {...props}>
       <SimpleShowLayout>
-          <TextField source="title" />
-          <TextField source="teaser" />
+          <TextField label="title" source="name" />
+          {/* <TextField label="teaser"/>
           <RichTextField source="body" />
-          <DateField label="Publication date" source="created_at" />
+          <DateField label="Publication date" source="created_at" /> */}
       </SimpleShowLayout>
   </Show>
 );

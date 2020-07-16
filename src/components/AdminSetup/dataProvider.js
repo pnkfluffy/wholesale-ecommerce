@@ -32,9 +32,12 @@ export default {
   getOne: (resource, params) => {
     console.log("getOne resource", resource);
 
-    httpClient(`${apiUrl}/${resource}/${params.id}`).then(({ json }) => ({
-      data: json,
-    }));
+    return httpClient(`${apiUrl}/${resource}/${params.id}`)
+    .then(({ json }) => {
+      console.log(json);
+      return { data: json };
+    })
+
   },
 
   getMany: (resource, params) => {

@@ -72,10 +72,10 @@ const UserTitle = ({ record }) => {
   return <span>Post {record ? `"${record.name}"` : ''}</span>
 }
 
-const UserShowActions = ({ basePath, data, resource }) => (
-  <TopToolbar>
-      <EditButton basePath={basePath} record={data} />
-      {/* Add your custom actions */}
-      <Button color="primary" onClick={customAction}>Custom Action</Button>
-  </TopToolbar>
-);
+// const UserShowActions = ({ basePath, data, resource }) => (
+//   <TopToolbar>
+//       <EditButton basePath={basePath} record={data} />
+//       {/* Add your custom actions */}
+//       <Button color="primary" onClick={customAction}>Custom Action</Button>
+//   </TopToolbar>
+// );

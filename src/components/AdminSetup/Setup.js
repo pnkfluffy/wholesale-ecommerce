@@ -17,7 +17,6 @@ import PostIcon from "@material-ui/icons/Book";
 import UserIcon from "@material-ui/icons/Group";
 
 import myDataProvider from "./dataProvider";
-// const authProvider = () => Promise.resolve();
 const i18nProvider = polyglotI18nProvider((locale) => {
   return defaultMessages;
 });

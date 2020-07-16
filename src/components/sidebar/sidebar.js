@@ -6,6 +6,7 @@ import { withRouter } from "react-router-dom";
 
 /*icons*/
 import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined'
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined'
 
 /*images*/
@@ -50,6 +51,13 @@ class Sidebar extends React.Component {
             to='/account'
           >
             <AccountCircleOutlinedIcon /> Account
+          </Link>
+          <Link
+            className={`menu_link + ${location === '/cart' &&
+              'menu_active'}`}
+            to='/cart'
+          >
+            <ShoppingCartIcon /> Cart
           </Link>
         </div>
         <Categories />

@@ -8,9 +8,9 @@ const mapStateToProps = state => ({
 
 class Products extends React.Component {
   print_products = () => {
+    const category = this.props.state.products.category
     let products = this.props.state.products.products
     let categorizedProducts
-    const category = this.props.state.products.category
     if (!products.length) {
       // {!} STYLE
       return <div>SERVER ERROR: NO PRODUCTS FOUND</div>

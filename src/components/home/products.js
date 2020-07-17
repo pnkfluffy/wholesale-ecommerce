@@ -17,6 +17,7 @@ class Products extends React.Component {
       return <div>SERVER ERROR: NO PRODUCTS FOUND</div>
     }
 
+    //  filters by category
     if (category === 'All') {
       categorizedProducts = products
     } else {
@@ -24,7 +25,8 @@ class Products extends React.Component {
         if (category === product.category) categorizedProducts.push(product)
       })
     }
-    console.log('categorized', categorizedProducts)
+
+    //  filters by searchterm if searchterm exists
     if (searchTerm !== '') {
       return (
         <FilterResults
@@ -45,11 +47,12 @@ class Products extends React.Component {
     const category =
       this.props.state.products.category === 'All'
         ? 'Products'
-        : this.props.state.products.category;
+        : this.props.state.products.category
     return (
       <div className='products'>
         <div className='home_header_text'>
-          Discover New&nbsp;<div className='home_header_category'>{category}</div>
+          Discover New&nbsp;
+          <div className='home_header_category'>{category}</div>
         </div>
         <div className='products_area'>{this.print_products()}</div>
       </div>

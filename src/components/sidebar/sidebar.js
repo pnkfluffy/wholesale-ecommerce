@@ -52,13 +52,14 @@ class Sidebar extends React.Component {
         </div>
         <Categories />
         <div className='sidebar_footer'>
-          <p>
-            all products contain <a>&#60;0.3%</a> thc in accordance with the
-            farm bill
+          <p className="sidebar_footer_text">
+            all products contain <a className='dark_green'>&#60;0.3%</a> thc in
+            accordance with the farm bill
           </p>
-          <p>
+          <p className="sidebar_footer_text">
             <a>customer support</a>, <a>privacy policy</a>,
-            <a> terms and conditions</a>, 2020 Cbddy, All rights reserved
+            <a> terms and conditions</a>, 2020{' '}
+            <a className='dark_green'>Cbddy</a>, All rights reserved
           </p>
         </div>
       </div>

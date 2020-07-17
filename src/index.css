@@ -1,3 +1,17 @@
+:root {
+  --logo-green: #59BA47;
+  --light-hyperlink-green: #60944d;
+  --dark-hyperlink-green: #33743A;
+
+  --header-font-white: #cccccc;
+  --paragraph-font-grey: #B4B5B7;
+  --nofocus-font-grey: #75777A;
+
+  --sidebar-black: #16181D;
+  --searchbar-black: #1a1b20;
+  --background-grey: #1E2026;
+}
+
 body,
 html {
   height: 100%;
@@ -7,8 +21,8 @@ html {
 }
 
 html {
-  background-color: #17181d;
-  color: #808183;
+  background-color: var(--sidebar-black);
+  color: var(--nofocus-font-grey);
 }
 
 
@@ -25,7 +39,7 @@ body {
 }
 
 .body {
-  background-color: #1f2025;
+  background-color: var(--background-grey);
   width: 95%;
   padding: 6vh;
   min-height: 100vh;

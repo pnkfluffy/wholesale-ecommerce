@@ -15,6 +15,12 @@ const UserSchema = new Schema({
   name: {
     type: String
   },
+  favorites: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'product'
+    }
+  ],
   paymentVerified: {
     type: Boolean,
     default: false

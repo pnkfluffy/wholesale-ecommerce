@@ -3,11 +3,11 @@
     top: 0;
     bottom: 0;
     height: 95vh;
-    padding-left: 1.5%;
-    padding-right: 1.5%;
+    padding-left: 2%;
+    padding-right: 2%;
     padding-top: 3vh;
     padding-bottom: 2vh;
-    width: 10%;
+    width: 9%;
     display: flex;
     /* font-size: 14px; */
     font-size: 0.8vw;
@@ -16,12 +16,15 @@
 }
 
 .logo_sidebar {
-    margin-top: 15%;
+    margin-top: 3vh;
     width: 80%;
 }
 
 .sidebar_section_header {
     font-weight: bolder;
+    font-size: 0.7vw;
+    margin-bottom: 1.5vh;
+    color: #707275;
 }
 
 .menu_sidebar {
@@ -33,12 +36,8 @@
     justify-content: space-between;
 }
 
-.category, .menu_link {
-    margin-left: 10%;
-}
-
 .menu_link{
-    color: grey;
+    color: #707275;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -62,6 +61,7 @@
 }
 
 .category {
+    color: #707275;
     display: flex;
     align-items: center;
     cursor: pointer;

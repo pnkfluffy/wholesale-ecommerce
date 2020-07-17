@@ -42,9 +42,15 @@ class Products extends React.Component {
     }
   }
   render () {
+    const category =
+      this.props.state.products.category === 'All'
+        ? 'Products'
+        : this.props.state.products.category;
     return (
       <div className='products'>
-        <b>Discover New Products</b>
+        <div className='home_header_text'>
+          Discover New&nbsp;<div className='home_header_category'>{category}</div>
+        </div>
         <div className='products_area'>{this.print_products()}</div>
       </div>
     )

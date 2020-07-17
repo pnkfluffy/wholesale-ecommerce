@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
 import loading from '../../resources/images/loading.svg'
+import { GreenButton } from '../reuseable/materialButtons'
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -62,7 +63,8 @@ class AddToCartButton extends React.Component {
       })
   }
 
-  addToCart = () => {
+  addToCart = e => {
+    e.stopPropagation()
     this.setState({
       loading: true
     })
@@ -74,15 +76,21 @@ class AddToCartButton extends React.Component {
   }
 
   render () {
-    if (this.state.loading) {
-      return <img src={loading} />
-    } else {
-      return (
-        <div className='add_to_cart_button' onClick={this.addToCart}>
-          Add To Cart : ${this.props.product.price}
-        </div>
-      )
-    }
+    return (
+      <div className='product_card_button_container'>
+        {this.state.loading ? (
+          <img className='product_card_loading' alt='loading' src={loading} />
+        ) : (
+          <GreenButton
+            variant='contained'
+            className='add_to_cart_button'
+            onClick={this.addToCart}
+          >
+            Add To Cart : ${this.props.product.price}
+          </GreenButton>
+        )}
+      </div>
+    )
   }
 }
 export default connect(mapStateToProps)(AddToCartButton)

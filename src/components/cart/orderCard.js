@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import axios from "axios";
-import Header from "../header/header";
 
 import productImg from "../../resources/images/product_1.png"
 import loading from "../../resources/images/loading.svg"
@@ -70,7 +69,7 @@ class OrderCard extends React.Component {
             productID: this.props.product.product,
         }
         axios
-            .post("orders/addProduct/" + this.props.state.order._id, data)
+            .post("/orders/addProduct/" + this.props.state.order._id, data)
             .then(res => {
                 this.props.dispatch({ type: 'ADD_ORDER', payload: res.data });
             })
@@ -110,7 +109,7 @@ class OrderCard extends React.Component {
         }
         console.log(data);
         axios
-            .post("orders/changeQuantity/" + this.props.state.order._id, data)
+            .post("/orders/changeQuantity/" + this.props.state.order._id, data)
             .then(res => {
                 this.props.dispatch({ type: 'ADD_ORDER', payload: res.data });
             })
@@ -126,7 +125,7 @@ class OrderCard extends React.Component {
 
         axios({
             method: 'delete',
-            url: "orders/deleteWholeProduct/" + this.props.state.order._id,
+            url: "/orders/deleteWholeProduct/" + this.props.state.order._id,
             headers: {},
             data: {
                 productID: this.props.product.product

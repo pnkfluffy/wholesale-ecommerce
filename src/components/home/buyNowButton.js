@@ -63,7 +63,8 @@ class BuyNowButton extends React.Component {
             });
     }
 
-    addToCart = () => {
+    addToCart = e => {
+        e.stopPropagation();
         this.setState({
             loading: true
         })

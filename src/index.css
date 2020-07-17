@@ -27,7 +27,7 @@ body {
 .body {
   background-color: #1f2025;
   width: 95%;
-  padding: 55px 55px 55px 80px;
+  padding: 8vh;
   min-height: 100vh;
   display: flex;
   flex-direction: column;

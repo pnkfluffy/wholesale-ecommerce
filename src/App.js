@@ -38,6 +38,7 @@ class App extends React.Component {
             <Route exact path="/buy" component={GoCardless}/>
             <Route exact path="/settings" component={Settings} />
             <Route exact path="/logout" component={Logout} />
+            <Route exact path="/product/:productID"/>
             <Route exact path="/*" component={ErrorPage404} />
           </Switch>
         </div>

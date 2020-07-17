@@ -7,7 +7,7 @@
     padding-right: 1.5%;
     padding-top: 3vh;
     padding-bottom: 2vh;
-    width: 8%;
+    width: 10%;
     display: flex;
     /* font-size: 14px; */
     font-size: 0.8vw;
@@ -73,7 +73,7 @@
 
 .category_active_dash {
     height: 2px;
-    width: 10px;
+    width: 8%;
     background-color: #59BA47;
     margin-right: 8%;
     margin-top: -3%;

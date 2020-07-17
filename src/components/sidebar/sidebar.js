@@ -1,35 +1,26 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import axios from 'axios'
-import { withRouter } from "react-router-dom";
+import { withRouter } from 'react-router-dom'
 
 /*icons*/
 import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined'
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined'
 
 /*images*/
 import logo from '../../resources/images/cbddy_logo_small.png'
 import Categories from './categories'
 
+import { initializeLoggedInRequests } from '../../index-init'
+
+initializeLoggedInRequests()
+
 const mapStateToProps = state => ({
   state: state.reducer
 })
 
 class Sidebar extends React.Component {
-  getAllProducts = () => {
-    axios
-      .get('products/all')
-      .then(res => {
-        console.log(res)
-        this.props.dispatch({ type: 'UPDATE_PRODUCTS', payload: res.data })
-      })
-      .catch(err => {
-        console.log(err)
-      })
-  }
-
   render () {
     const location = window.location.pathname
     console.log('location', location)
@@ -53,8 +44,7 @@ class Sidebar extends React.Component {
             <AccountCircleOutlinedIcon /> Account
           </Link>
           <Link
-            className={`menu_link + ${location === '/cart' &&
-              'menu_active'}`}
+            className={`menu_link + ${location === '/cart' && 'menu_active'}`}
             to='/cart'
           >
             <ShoppingCartIcon /> Cart
@@ -63,10 +53,11 @@ class Sidebar extends React.Component {
         <Categories />
         <div className='sidebar_footer'>
           <p>
-            all products contain <a>&#60;0.3%</a> thc in accordance with the farm bill
+            all products contain <a>&#60;0.3%</a> thc in accordance with the
+            farm bill
           </p>
           <p>
-            <a>customer support</a>, <a>privacy policy</a>, 
+            <a>customer support</a>, <a>privacy policy</a>,
             <a> terms and conditions</a>, 2020 Cbddy, All rights reserved
           </p>
         </div>

@@ -1,47 +1,53 @@
-import React from "react";
-import { connect } from "react-redux";
-import ProductCard from "./productCard";
-import axios from "axios";
-
-const mapStateToProps = (state) => ({
-    state: state.reducer,
-});
+import React from 'react'
+import { connect } from 'react-redux'
+import FilterResults from 'react-filter-search'
+import ProductCard from './productCard'
+const mapStateToProps = state => ({
+  state: state.reducer
+})
 
 class Products extends React.Component {
-    constructor(props) {
-        super(props);
+  print_products = () => {
+    const category = this.props.state.products.category
+    const searchTerm = this.props.state.products.searchTerm
+    let products = this.props.state.products.products
+    let categorizedProducts = []
+    if (!products.length) {
+      // {!} STYLE
+      return <div>SERVER ERROR: NO PRODUCTS FOUND</div>
     }
-    print_products = () => {
-        let products = this.props.state.products.products;
-        if (!products[0])
-        {
-            axios
-                .get("products/all")
-                .then(res => {
-                    this.props.dispatch({ type: 'ADD_ALL_PRODUCTS', payload: res.data })
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-            products = this.props.state.products.products
-        }
-        console.log(products);
-        return products.map(product => {
-            if (this.props.state.products.category === "All")
-                return <ProductCard product = {product}/>;
-            else if (this.props.state.products.category === product.category)
-                return <ProductCard product = {product}/>;
-            })
+
+    if (category === 'All') {
+      categorizedProducts = products
+    } else {
+      products.forEach(product => {
+        if (category === product.category) categorizedProducts.push(product)
+      })
     }
-    render() {
-        return (
-            <div className="products">
-                <b>Discover New Products</b>
-                <div className="products_area">
-                    {this.print_products()}
-                </div>
-            </div>
-        );
+    console.log('categorized', categorizedProducts)
+    if (searchTerm !== '') {
+      return (
+        <FilterResults
+          value={searchTerm}
+          data={categorizedProducts}
+          renderResults={results =>
+            results.map(product => <ProductCard product={product} />)
+          }
+        />
+      )
+    } else {
+      return categorizedProducts.map(product => (
+        <ProductCard product={product} />
+      ))
     }
+  }
+  render () {
+    return (
+      <div className='products'>
+        <b>Discover New Products</b>
+        <div className='products_area'>{this.print_products()}</div>
+      </div>
+    )
+  }
 }
-export default connect(mapStateToProps)(Products);
+export default connect(mapStateToProps)(Products)

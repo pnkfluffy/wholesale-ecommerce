@@ -1,6 +1,5 @@
 import React from 'react'
 import SearchIcon from '@material-ui/icons/Search'
-import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
@@ -10,11 +9,18 @@ const mapStateToProps = state => ({
   state: state.reducer
 })
 
+const mapDispatchToProps = dispatch => {
+  return {
+    updateSearch: e => {
+      dispatch({ type: 'UPDATE_SEARCH', payload: e.target.value })
+    }
+  }
+}
+
 class Header extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      searchTerm: '',
       dropdown: false
     }
   }
@@ -30,8 +36,6 @@ class Header extends React.Component {
     this.setState({ dropdown: false })
   }
 
-  changeSearch = e => {}
-
   render () {
     return (
       <div className='header'>
@@ -40,7 +44,7 @@ class Header extends React.Component {
             <SearchIcon />
             <input
               className='search_input'
-              onChange={this.changeSearch}
+              onChange={this.props.updateSearch}
               placeholder='Search...'
             />
           </div>
@@ -62,4 +66,4 @@ class Header extends React.Component {
     )
   }
 }
-export default connect(mapStateToProps)(withRouter(Header))
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Header))

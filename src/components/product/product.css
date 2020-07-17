@@ -1,0 +1,10 @@
+.product_page {
+    width: 70%;
+    display: flex;
+    flex-direction: row;
+}
+
+.product_page_info {
+    display: flex;
+    flex-direction: column;
+}

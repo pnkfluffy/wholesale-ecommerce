@@ -1,7 +1,7 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import Products from './products'
-import UserReviews from './userReviews'
+import React from "react";
+import { connect } from "react-redux";
+import Products from "./products";
+import UserReviews from "./userReviews";
 
 const mapStateToProps = state => ({
   state: state.reducer

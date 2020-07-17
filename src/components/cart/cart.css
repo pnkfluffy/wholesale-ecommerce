@@ -1,3 +1,28 @@
+/*** CART ***/
+.top_cart_area {
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.cart_button_area {
+    display: flex;
+    flex-direction: row;
+}
+.cart_button {
+    margin-left: 1%;
+    width: 15vw;
+    height: 3vh;
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    text-align: center;
+    background-color: #59ba47;
+    color: #1a1c22;
+}
+
+/** ORDER CARD **/
 .order_card {
     display: flex;
     flex-direction: row;
@@ -9,6 +34,10 @@
 .manage_quantity {
     display: flex;
     flex-direction: row;
+}
+
+.order_card_input {
+    width: 5vw;
 }
 
 .order_quantity_button {
@@ -24,4 +53,37 @@
     padding-left: 1%;
     background-color: #59ba47;
     color: #1a1c22;
+}
+
+/***  BUY ***/
+.buy {
+    display: flex;
+    flex-direction: row;
+}
+
+/*** Process to make purchase ***/
+.process_buy {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+}
+
+.gc_form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    width: 20vw;
+}
+
+input {
+    margin-bottom: 1vh;
+    width: 40vw;
+}
+
+.confirm_order {
+    width: 20%;
+    display: flex;
+    flex-direction: column;
 }

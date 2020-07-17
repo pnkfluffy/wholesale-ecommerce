@@ -8,7 +8,9 @@ import Header from "./components/header/header";
 import Home from "./components/home/home";
 import Account from "./components/account/account";
 import Cart from "./components/cart/cart";
+import GoCardless from "./components/cart/goCardless";
 import Settings from "./components/settings/settings";
+import Product from "./components/product/product";
 
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
@@ -34,8 +36,10 @@ class App extends React.Component {
             <Route exact path="/" component={Home} />
             <Route exact path="/account" component={Account} />
             <Route exact path="/cart" component={Cart} />
+            <Route exact path="/buy" component={GoCardless}/>
             <Route exact path="/settings" component={Settings} />
             <Route exact path="/logout" component={Logout} />
+            <Route exact path="/product/:productID" component={Product}/>
             <Route exact path="/*" component={ErrorPage404} />
           </Switch>
         </div>

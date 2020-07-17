@@ -116,7 +116,7 @@ router.post("/newOrder/:productID", async (req, res) => {
 });
 
 // @route   POST /orders/addProduct/
-// @desc    Returns all users
+// @desc    Returns order with new product
 // @access  Private
 router.post("/addProduct/:orderID", (req, res) => {
     Order.findById(req.params.orderID).then(async (order) => {
@@ -133,7 +133,8 @@ router.post("/addProduct/:orderID", (req, res) => {
         quantity: 1,
       });
     }
-      //Checks new total based on new array of products
+
+    //Checks new total based on new array of products
     const total = await updateTotal(products)
                         .then(total => {return(total)})
                         .catch(err => console.log(err));
@@ -154,6 +155,45 @@ router.post("/addProduct/:orderID", (req, res) => {
         res.status(500).send("Couldn't add product");
       });
   });
+});
+
+// @route   POST /orders/addProduct/
+// @desc    Returns order with changed product quantity
+// @access  Private
+router.post("/changeQuantity/:orderID", (req, res) => {
+    Order.findById(req.params.orderID).then(async (order) => {
+        let products = order.products;
+        //check if product is already in the order
+        const alreadyInOrder = products.findIndex(
+            (product) => product.product.toString() === req.body.productID
+        );
+        if (alreadyInOrder >= 0) {
+            products[alreadyInOrder].quantity = req.body.quantity;
+        } else {
+            console.log("product not in order");
+        }
+
+        //Checks new total based on new array of products
+        const total = await updateTotal(products)
+            .then(total => {return(total)})
+            .catch(err => console.log(err));
+
+        order
+            .updateOne({  products: products,
+                total: total })
+            .then(res.json({
+                _id: order._id,
+                user: order.user,
+                products: products,
+                total: total,
+                date: order.date,
+                __v: order.__v
+            }))
+            .catch((error) => {
+                console.log(error);
+                res.status(500).send("Couldn't add product");
+            });
+    });
 });
 
 // @route   DELETE /orders/
@@ -187,7 +227,6 @@ router.delete("/deleteInQuantity/:orderID", (req, res) => {
                         products = products.filter((product) => {
                             return product.product != req.body.productID;
                         });
-                        console.log(products);
                     }
                 } else {
                     console.log("Product not found");

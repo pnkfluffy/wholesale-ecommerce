@@ -74,6 +74,7 @@ input::-webkit-inner-spin-button {
 @import "./components/sidebar/sidebar.css";
 @import "./components/header/header.css";
 @import "./components/home/home.css";
+@import "./components/product/product.css";
 @import "./components/account/account.css";
 @import "./components/auth/auth.css";
 @import "./components/cart/cart.css";

@@ -51,7 +51,7 @@ class Header extends React.Component {
           <div className='search_category_container'>
             <div className='search_seperator' />
             <div className='search_category'>
-              {this.props.state.products.category}
+              {this.props.state.categories.category}
             </div>
           </div>
         </div>

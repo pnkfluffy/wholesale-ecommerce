@@ -8,7 +8,7 @@ const mapStateToProps = state => ({
 
 class Products extends React.Component {
   print_products = () => {
-    const category = this.props.state.products.category
+    const category = this.props.state.categories.category
     const searchTerm = this.props.state.products.searchTerm
     let products = this.props.state.products.products
     let categorizedProducts = []
@@ -45,9 +45,9 @@ class Products extends React.Component {
   }
   render () {
     const category =
-      this.props.state.products.category === 'All'
+      this.props.state.categories.category === 'All'
         ? 'Products'
-        : this.props.state.products.category
+        : this.props.state.categories.category
     return (
       <div className='products'>
         <div className='home_header_text'>

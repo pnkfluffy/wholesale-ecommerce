@@ -34,7 +34,13 @@ const UserSchema = new Schema({
   },
   goCardlessMandate: {
     type: String
-  }
+  },
+  cart: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'product'
+    }
+  ]
 })
 
 module.exports = User = mongoose.model('user', UserSchema)

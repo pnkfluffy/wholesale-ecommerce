@@ -12,10 +12,6 @@ import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined'
 import logo from '../../resources/images/cbddy_logo_small.png'
 import Categories from './categories'
 
-import { initializeLoggedInRequests } from '../../index-init'
-
-initializeLoggedInRequests()
-
 const mapStateToProps = state => ({
   state: state.reducer
 })

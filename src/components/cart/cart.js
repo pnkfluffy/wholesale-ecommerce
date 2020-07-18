@@ -27,27 +27,6 @@ class Cart extends React.Component {
         return true;
   }
 
-  componentDidMount() {
-      this.setState({
-          loading: true
-      })
-      //get last open cart from db
-      axios
-          .get("orders/openOrder")
-          .then(res => {
-            if (res.data.order)
-            {
-              this.props.dispatch({ type: 'ADD_ORDER', payload: res.data.order });
-            }
-            this.setState({
-                loading: false
-            })
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-  }
-
     displayProducts = () => {
     const products = this.props.state.order.products;
     return products.map(product => {

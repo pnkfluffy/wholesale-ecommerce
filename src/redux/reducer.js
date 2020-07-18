@@ -22,6 +22,25 @@ const loaded = (state = false, action) => {
   }
 }
 
+const initialCategories = {
+  categories: [],
+  category: 'All'
+}
+
+const categories = (state = initialCategories, action) => {
+  switch (action.type) {
+    case 'SET_CATEGORIES':
+      return { ...state, categories: action.payload }
+    case 'UPDATE_CATEGORY':
+      return {
+        ...state,
+        category: action.payload
+      }
+    default:
+      return state
+  }
+}
+
 const initialProducts = {
   products: [],
   searchTerm: '',
@@ -35,11 +54,6 @@ const products = (state = initialProducts, action) => {
         ...state,
         products: action.payload
       }
-    case 'UPDATE_CATEGORY':
-      return {
-        ...state,
-        category: action.payload
-      }
     case 'UPDATE_SEARCH':
       return {
         ...state,
@@ -50,7 +64,7 @@ const products = (state = initialProducts, action) => {
   }
 }
 
-const order = (state = '', action) => {
+const order = (state = [], action) => {
   switch (action.type) {
     case 'ADD_ORDER':
       return action.payload
@@ -61,6 +75,7 @@ const order = (state = '', action) => {
 
 export default combineReducers({
   user,
+  categories,
   products,
   order,
   loaded

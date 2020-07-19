@@ -2,9 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import productImg from '../../resources/images/product_1.png'
 import axios from 'axios'
-import StarBorderIcon from '@material-ui/icons/StarBorder';
-import StarIcon from '@material-ui/icons/Star';
-import { GreenButton } from '../reuseable/materialButtons';
 import loading from "../../resources/images/loading.svg";
 import CreateReview from "./createReview";
 import ReviewsCard from "../reuseable/reviewsCard";

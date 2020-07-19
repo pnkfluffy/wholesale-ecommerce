@@ -37,14 +37,12 @@ class ReviewsCard extends React.Component {
         let stars = [];
         while(i < this.props.review.stars)
         {
-            const index = i + 1;
-            stars.push(<StarIcon onClick={e => this.editStars(index)}></StarIcon>)
+            stars.push(<StarIcon></StarIcon>)
             i++
         }
         while(i < 5)
         {
-            const index = i + 1;
-            stars.push(<StarBorderIcon onClick={e => this.editStars(index)}></StarBorderIcon>)
+            stars.push(<StarBorderIcon></StarBorderIcon>)
             i++
         }
         return(stars);
@@ -60,7 +58,8 @@ class ReviewsCard extends React.Component {
                 <div className="reviews_card" onClick={this.goToProduct}>
                     {this.getProductName()}
                     {this.props.review.userName}
-                    <div className="stars">
+                    <p>{this.props.review.date}</p>
+                    <div>
                         {this.printStars()}
                     </div>
                     {this.props.review.review}

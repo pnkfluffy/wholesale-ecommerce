@@ -7,6 +7,9 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 import ProductQuantity from './productQuantity'
 import UserReviews from "./productUserReviews";
 import { GreenButton } from '../reuseable/materialButtons'
+import StarIcon from "@material-ui/icons/Star";
+import StarBorderIcon from "@material-ui/icons/StarBorder";
+import StarHalfIcon from '@material-ui/icons/StarHalf';
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -50,16 +53,49 @@ class Product extends React.Component {
       })
   }
 
-  onSubmit = e => {
-    e.preventDefault()
-    if (this.state.quantity === '0') this.deleteProduct()
-    else this.changeQuantity()
+  getStars = stars => {
+    let starsArray = [];
+    let tempStars = stars;
+    let emptyStars = (5 - tempStars)
+    if (emptyStars % 1)
+    {
+      emptyStars -= 1;
+    }
+    while(tempStars > 1)
+    {
+      starsArray.push(<StarIcon></StarIcon>)
+      tempStars -= 1;
+    }
+    if (tempStars > 0.5)
+    {
+      starsArray.push(<StarIcon></StarIcon>)
+    }
+    if (tempStars > 0 && tempStars <= 0.5)
+    {
+      starsArray.push(<StarHalfIcon></StarHalfIcon>)
+    }
+    while(emptyStars > 0)
+    {
+      starsArray.push(<StarBorderIcon></StarBorderIcon>)
+      emptyStars--;
+    }
+    return(starsArray);
   }
 
-  onChange = e => {
-    this.setState({
-      quantity: e.target.value
-    })
+  printStars = () => {
+    let stars = 5;
+    if (this.props.state.reviews)
+    {
+      const reviews = this.props.state.reviews.filter(review => review.product === this.props.match.params.productID);
+      if (reviews) {
+        let media = 0;
+        reviews.forEach(review => {
+          media = media + review.stars;
+        })
+        stars = media / reviews.length;
+      }
+    }
+    return this.getStars(stars)
   }
 
   render () {
@@ -87,6 +123,9 @@ class Product extends React.Component {
                   productID={this.props.match.params.productID}
                 />
               </div>
+              <div>
+                {this.printStars()}
+              </div>
               <p>{this.state.product.description}</p>
               <h2 className='product_overview_title'>Overview</h2>
               <div className='product_metaData'></div>
@@ -111,4 +150,4 @@ class Product extends React.Component {
     )
   }
 }
-export default Product
+export default connect(mapStateToProps)(Product)

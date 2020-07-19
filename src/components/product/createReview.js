@@ -33,8 +33,8 @@ class CreateReview extends React.Component {
                      review: "",
                      stars: 5
                  })
-                 const reviews = [...this.props.state.reviews,
-                                 res.data];
+                 const reviews = [res.data,
+                                  ...this.props.state.reviews];
                  store.dispatch({ type: 'ADD_REVIEWS', payload: reviews })
              })
             .catch(err => {

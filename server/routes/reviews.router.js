@@ -13,7 +13,7 @@ const Review = require('../schemas/reviewSchema')
 // @desc    Returns page_size reviews of page_number
 // @access  Private
 router.get('/all', (req, res) => {
-    Review.find()
+    Review.find().sort({date: -1})
           .then(reviews => res.json(reviews))
           .catch(error => {
              console.log(error)

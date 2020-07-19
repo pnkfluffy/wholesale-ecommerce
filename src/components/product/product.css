@@ -60,3 +60,21 @@
 .product_button {
     width: 70%;
 }
+
+/*Reviews*/
+.add_to_reviews_input {
+    width: 100%;
+    color: var(--paragraph-font-grey);
+    resize: none;
+    background-color: transparent;
+    border-width: 1px;
+    border-color: var(--logo-green);
+    border-style: solid;
+}
+
+add_to_reviews_input:focus {
+    border-width: 1px;
+    border-style: solid;
+    box-shadow: none;
+    outline: none;
+}

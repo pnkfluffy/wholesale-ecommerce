@@ -5,6 +5,7 @@ import axios from 'axios'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 import ProductQuantity from './productQuantity'
+import UserReviews from "./productUserReviews";
 import { GreenButton } from '../reuseable/materialButtons'
 
 const mapStateToProps = state => ({
@@ -105,7 +106,7 @@ class Product extends React.Component {
           </div>
           <div className='product_page_pricetiers'>x price if you buy x</div>
         </div>
-        <div className='user_reviews'></div>
+        <UserReviews productID={this.props.match.params.productID} />
       </div>
     )
   }

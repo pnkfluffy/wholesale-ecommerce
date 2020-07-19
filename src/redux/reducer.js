@@ -73,10 +73,21 @@ const order = (state = [], action) => {
   }
 }
 
+const reviews = (state = [], action) => {
+  switch (action.type) {
+    case 'ADD_REVIEWS':
+      console.log("Adding REVIEWS" + action.payload);
+      return action.payload
+    default:
+      return state
+  }
+}
+
 export default combineReducers({
   user,
   categories,
   products,
   order,
+  reviews,
   loaded
 })

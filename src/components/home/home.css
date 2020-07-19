@@ -111,6 +111,18 @@
   font-size: 0.8vw !important;
 }
 
-.user_reviews {
+/* REVIEWS */
+.user_reviews_area {
   width: 24%;
+}
+
+.user_reviews {
+  width: 100%;
+}
+.reviews_card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 3%;
+  background-color: var(--searchbar-black);
 }

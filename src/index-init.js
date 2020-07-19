@@ -3,6 +3,7 @@ import store from './redux/store'
 
 export const initializeAllRequests = () => {
   console.log('redux initializing')
+  getAllReviews()
   getAllProducts()
   getAllCategories()
   axios
@@ -49,6 +50,7 @@ const getAllCategories = () => {
     })
 }
 
+
 export const getAllProducts = () => {
   axios
     .get('products/all')
@@ -59,4 +61,12 @@ export const getAllProducts = () => {
     .catch(err => {
       console.log(err)
     })
+}
+
+export const getAllReviews = () => {
+    axios.get('/reviews/all')
+         .then(res => {
+             store.dispatch({ type: 'ADD_REVIEWS', payload: res.data })
+         })
+         .catch(err => console.log(err));
 }

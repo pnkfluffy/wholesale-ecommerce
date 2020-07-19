@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import Products from "./products";
-import UserReviews from "./userReviews";
+import HomeUserReviews from "./homeUserReviews";
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -13,7 +13,7 @@ class Home extends React.Component {
     return (
       <div className='home'>
         <Products />
-        <UserReviews />
+        <HomeUserReviews />
       </div>
     )
   }

@@ -11,6 +11,7 @@ const PORT = process.env.PORT || 5000;
 const passport = require("./modules/passport");
 const sessionMiddleware = require("./modules/session-middleware");
 const userRouter = require("./routes/user.router");
+const reviewRouter = require("./routes/reviews.router");
 const gcRouter = require("./routes/goCardless.router");
 const orderRouter = require("./routes/order.router");
 const productRouter = require("./routes/product.router");
@@ -34,6 +35,7 @@ app.use("/auth", userRouter);
 app.use("/gc", gcRouter);
 app.use("/orders", orderRouter);
 app.use("/products", productRouter);
+app.use("/reviews", reviewRouter)
 
 /*AdminRouters*/
 app.use("/admin-products", adminProductRouter);

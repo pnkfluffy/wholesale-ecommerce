@@ -30,6 +30,7 @@ class Cart extends React.Component {
       const productInfo = this.props.state.products.products.find(
         stateProduct => stateProduct._id === cart[i].product
       )
+      console.log('productinfo', productInfo);
       const productTotal = cart[i].quantity * productInfo.price
       cartProducts.push(
         <OrderCard productInfo={productInfo} total={productTotal} />

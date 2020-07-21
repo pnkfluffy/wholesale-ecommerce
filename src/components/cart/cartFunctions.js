@@ -29,17 +29,18 @@ export const removeFromCart = productID => {
   updateCartServer(cart)
 }
 
-export const addToCart = productID => {
+export const addToCart = (productID, num) => {
+  const numToAdd = num ? num : 1
   console.log('addtocart', productID)
   const cart = store.getState().reducer.cart
   let itemUpdated = false
   for (let i = 0; i < cart.length; i++) {
     if (cart[i].product === productID) {
-      cart[i].quantity++
+      cart[i].quantity += numToAdd
       itemUpdated = true
     }
   }
-  if (!itemUpdated) cart.push({ product: productID, quantity: 1 })
+  if (!itemUpdated) cart.push({ product: productID, quantity: numToAdd })
   store.dispatch({ type: 'SET_CART', payload: cart })
   updateCartServer(cart)
 }

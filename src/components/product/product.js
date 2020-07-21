@@ -36,7 +36,7 @@ class Product extends React.Component {
         },
         priceTiers: []
       },
-      loading: false
+      quantity: 1
     }
   }
 
@@ -95,6 +95,10 @@ class Product extends React.Component {
     return this.getStars(stars)
   }
 
+  changeQuantity = quantity => {
+    this.setState({ quantity })
+  }
+
   render () {
     return (
       <div className='product_page'>
@@ -118,6 +122,8 @@ class Product extends React.Component {
                 <h2>{this.state.product.name}</h2>
                 <ProductQuantity
                   productID={this.props.match.params.productID}
+                  quantity={this.state.quantity}
+                  changeQuantity={this.changeQuantity}
                 />
               </div>
               <div>{this.printStars()}</div>
@@ -128,7 +134,7 @@ class Product extends React.Component {
                 <GreenButton
                   variant='contained'
                   className='product_button'
-                  onClick={() => addToCart(this.state._id)}
+                  onClick={() => addToCart(this.state._id, this.state.quantity)}
                 >
                   Add To Cart
                 </GreenButton>

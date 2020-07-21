@@ -6,41 +6,23 @@ const mapStateToProps = state => ({
   state: state.reducer
 })
 
-class Product extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      quantity: 0
-    }
-  }
+class ProductQuantity extends React.Component {
 
-  componentDidMount () {
-    const productInOrder = this.props.state.cart.find(
-      cartItem => cartItem.product === this.props.productID
-    )
-    const quantity = productInOrder ? productInOrder.quantity : 0;
-    this.setState({ quantity })
-  }
-
-  changeQuantity = quantity => {
-    this.setState({ quantity: Number(quantity) })
-    editCartQuantity(this.props.productID, quantity)
-  }
 
   render () {
-    const quantity = this.state.quantity ? this.state.quantity : "";
+    const quantity = this.props.quantity ? this.props.quantity : "";
     return (
       <div className='product_quantity'>
         <div
           className='order_quantity_button'
-          onClick={() => this.changeQuantity(this.state.quantity - 1)}
+          onClick={() => this.props.changeQuantity(this.props.quantity - 1)}
         >
           -
         </div>
         <b>Quantity</b>
 
         <input
-          onChange={e => this.changeQuantity(e.target.value)}
+          onChange={e => this.props.changeQuantity(e.target.value)}
           className='order_card_input'
           value={quantity}
           type='number'
@@ -48,7 +30,7 @@ class Product extends React.Component {
 
         <div
           className='order_quantity_button'
-          onClick={() => this.changeQuantity(this.state.quantity + 1)}
+          onClick={() => this.props.changeQuantity(this.props.quantity + 1)}
         >
           +
         </div>
@@ -56,4 +38,4 @@ class Product extends React.Component {
     )
   }
 }
-export default connect(mapStateToProps)(Product)
+export default connect(mapStateToProps)(ProductQuantity)

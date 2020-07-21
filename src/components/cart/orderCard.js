@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import ProductQuantity from '../product/productQuantity'
+import CartQuantity from './cartQuantity'
 import { editCartQuantity } from './cartFunctions'
 import productImg from '../../resources/images/product_1.png'
 
@@ -21,7 +21,7 @@ class OrderCard extends React.Component {
         <div className='order_content'>
           <h2>{this.props.productInfo.name}</h2>
           <div className='manage_quantity'>
-            <ProductQuantity productID={this.props.productInfo._id} />
+            <CartQuantity productID={this.props.productInfo._id} />
           </div>
           <b>price {this.props.total}</b>
 

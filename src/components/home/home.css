@@ -65,11 +65,11 @@
   position: absolute;
   display: flex;
   justify-content: flex-end;
-  left: 0;
   top: 0;
   right: 0;
   bottom: 0;
   margin: 5%;
+  width: 200%;
 }
 
 .product_card_heart > svg {

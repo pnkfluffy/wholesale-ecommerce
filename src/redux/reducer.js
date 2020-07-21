@@ -8,6 +8,11 @@ const user = (state = initialUser, action) => {
   switch (action.type) {
     case 'GET_USER':
       return action.payload
+    case 'ADD_FAVORITE_PRODUCT':
+      return { ...state, favorites: action.payload }
+    case 'DELETE_FAVORITE_PRODUCT':
+      console.log("Deleting FAVORITE PRODUCT" + action.payload);
+      return action.payload
     default:
       return state
   }
@@ -64,14 +69,14 @@ const products = (state = initialProducts, action) => {
   }
 }
 
-const order = (state = [], action) => {
-  switch (action.type) {
-    case 'ADD_ORDER':
-      return action.payload
-    default:
-      return state
-  }
-}
+ const order = (state = [], action) => {
+   switch (action.type) {
+     case 'ADD_ORDER':
+       return action.payload
+     default:
+       return state
+   }
+ }
 
 const reviews = (state = [], action) => {
   switch (action.type) {
@@ -83,6 +88,19 @@ const reviews = (state = [], action) => {
   }
 }
 
+// const favoriteProducts = (state = [], action) => {
+//   switch (action.type) {
+//     case 'ADD_FAVORITE_PRODUCT':
+//       return { ...state, user: action.payload },
+//       console.log("Adding FAVORITE PRODUCT" + action.payload);
+//     case 'DELETE_FAVORITE_PRODUCT':
+//       console.log("Deleting FAVORITE PRODUCT" + action.payload);
+//       return action.payload
+//     default:
+//       return state
+//   }
+// }
+
 export default combineReducers({
   user,
   categories,
@@ -90,4 +108,5 @@ export default combineReducers({
   order,
   reviews,
   loaded
+//  favoriteProducts
 })

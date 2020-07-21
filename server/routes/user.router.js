@@ -14,7 +14,8 @@ router.get('/login/google', passport.authenticate('google', {
 
 router.get('/user', rejectUnauthenticated, (req, res) => {
 	let user = {
-		name: req.user.name
+		name: req.user.name,
+		favorites: req.user.favorites
 	}
 	res.send(user)
 })
@@ -32,6 +33,39 @@ router.post('/update-user', rejectUnauthenticated, async (req, res) => {
 		res.status(500).send('error updating user')
 	}
 })
+
+router.post('/addFavoriteProduct', rejectUnauthenticated, async (req, res) => {	
+		const productId = req.body._id;
+		User.findById({ _id: req.user.id })
+		.then(user => {
+			const newFavoritesArray = req.user.favorites;
+			newFavoritesArray.push(productId);
+			user
+				.updateOne({ favorites: newFavoritesArray})
+				.then(user => res.json(user))
+				.catch(error => {
+					console.log(error)
+					res.status(500).send("Couldn't edit favorites products array")
+				})
+			});
+	});
+
+	router.post('/deleteFavoriteProduct', rejectUnauthenticated, async (req, res) => {	
+		const productId = req.body._id;
+		User.findById({ _id: req.user.id })
+		.then(user => {
+			const index = req.user.favorites.indexOf(productId);
+			const newFavoritesArray = req.user.favorites;
+			newFavoritesArray.splice(index, 1)
+			user
+				.updateOne({ favorites: newFavoritesArray})
+				.then(user => res.json(user))
+				.catch(error => {
+					console.log(error)
+					res.status(500).send("Couldn't edit favorites products array")
+				})
+			});
+	});
 
 router.get('/login-uri', (req, res) => {
 	res.send(process.env.DEV_URI)

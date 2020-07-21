@@ -1,13 +1,24 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { updateCartServer } from '../cart/cartFunctions'
+import { updateCartServer, editCartQuantity } from '../cart/cartFunctions'
+import { getUserCart } from '../../index-init'
 /*components*/
 import OrderCard from './orderCard'
 
-const mapStateToProps = state => ({
-  state: state.reducer
-})
+const mapStateToProps = state => {
+  console.log('stateupdate', state)
+  return {
+    state: state.reducer
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    update: (productID, quantity) =>
+      dispatch(editCartQuantity(productID, quantity))
+  }
+}
 
 class Cart extends React.Component {
   isEmpty = obj => {
@@ -22,21 +33,26 @@ class Cart extends React.Component {
     updateCartServer([])
   }
 
+  componentDidMount = () => {
+    getUserCart()
+  }
+
   render () {
-    const cart = this.props.state.cart
-    let total = 0;
-    let cartProducts = []
-    for (let i = 0; i < cart.length; i++) {
-      const productInfo = this.props.state.products.products.find(
-        stateProduct => stateProduct._id === cart[i].product
-      )
-      console.log('productinfo', productInfo);
-      const productTotal = cart[i].quantity * productInfo.price
-      cartProducts.push(
-        <OrderCard productInfo={productInfo} total={productTotal} />
-      )
+    let total = 0
+
+    const cartProducts = this.props.state.cart.map((cartProduct, index) => {
+      const productTotal = cartProduct.quantity * cartProduct.price
       total += productTotal
-    }
+
+      return (
+        <OrderCard
+          productInfo={cartProduct}
+          total={productTotal}
+          key={index}
+          // updateQuantity={this.props.updateQuantity()}
+        />
+      )
+    })
 
     return (
       <div className='cart'>
@@ -67,4 +83,4 @@ class Cart extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(Cart)
+export default connect(mapStateToProps, mapDispatchToProps)(Cart)

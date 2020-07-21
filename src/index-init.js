@@ -28,7 +28,11 @@ export const getUserCart = () => {
     .then(res => {
       console.log('GOT CART', res.data)
       if (res.data) {
-        store.dispatch({ type: 'SET_CART', payload: res.data })
+        const filtered = res.data.filter(function (el) {
+          return el != null
+        })
+
+        store.dispatch({ type: 'SET_CART', payload: filtered })
       }
     })
     .catch(err => {

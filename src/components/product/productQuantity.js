@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { editCartQuantity } from '../cart/cartFunctions'
 
 const mapStateToProps = state => ({
   state: state.reducer

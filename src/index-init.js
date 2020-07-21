@@ -23,13 +23,12 @@ export const initializeAllRequests = () => {
 }
 
 export const getUserCart = () => {
-  //get last open cart from db
   axios
-    .get('orders/openOrder')
+    .get('/cart')
     .then(res => {
-      console.log('GOT ORDER', res.data.order)
-      if (res.data.order) {
-        store.dispatch({ type: 'ADD_ORDER', payload: res.data.order })
+      console.log('GOT CART', res.data)
+      if (res.data) {
+        store.dispatch({ type: 'SET_CART', payload: res.data })
       }
     })
     .catch(err => {
@@ -50,7 +49,6 @@ const getAllCategories = () => {
     })
 }
 
-
 export const getAllProducts = () => {
   axios
     .get('products/all')
@@ -64,9 +62,10 @@ export const getAllProducts = () => {
 }
 
 export const getAllReviews = () => {
-    axios.get('/reviews/all')
-         .then(res => {
-             store.dispatch({ type: 'ADD_REVIEWS', payload: res.data })
-         })
-         .catch(err => console.log(err));
+  axios
+    .get('/reviews/all')
+    .then(res => {
+      store.dispatch({ type: 'ADD_REVIEWS', payload: res.data })
+    })
+    .catch(err => console.log(err))
 }

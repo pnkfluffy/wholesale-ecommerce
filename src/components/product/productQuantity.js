@@ -1,154 +1,55 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import axios from 'axios'
-import loading from '../../resources/images/loading.svg'
+import { editCartQuantity } from '../cart/cartFunctions'
 
 const mapStateToProps = state => ({
   state: state.reducer
 })
 
-const mapDispatchToProps = dispatch => {
-  return {
-    updateQuantity: e => {
-      dispatch({ type: 'ADD_ORDER', payload: e.target.value })
-    }
-  }
-}
-
 class Product extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      loading: false
+      quantity: 0
     }
   }
 
-  //   increaseQuantity = () => {
-  //     this.setState({
-  //       loading: true
-  //     })
-
-  //     const data = {
-  //       productID: this.state.product._id
-  //     }
-  //     axios
-  //       .post('/orders/addProduct/' + this.props.state.order._id, data)
-  //       .then(res => {
-  //         this.props.dispatch({ type: 'ADD_ORDER', payload: res.data })
-  //         this.setState({
-  //           quantity: this.state.quantity + 1,
-  //           loading: false
-  //         })
-  //       })
-  //       .catch(err => {
-  //         this.setState({
-  //           loading: false
-  //         })
-  //         console.log('error' + err)
-  //       })
-  //   }
-
-  //   decreaseQuantity = () => {
-  //     this.setState({
-  //       loading: true
-  //     })
-
-  //     axios({
-  //       method: 'delete',
-  //       url: '/orders/deleteInQuantity/' + this.props.state.order._id,
-  //       headers: {},
-  //       data: {
-  //         productID: this.state.product._id
-  //       }
-  //     })
-  //       .then(res => {
-  //         this.props.dispatch({ type: 'ADD_ORDER', payload: res.data })
-  //         this.setState({
-  //           quantity: this.state.quantity - 1,
-  //           loading: false
-  //         })
-  //       })
-  //       .catch(err => {
-  //         this.setState({
-  //           loading: false
-  //         })
-  //         console.log(err)
-  //       })
-  //   }
+  componentDidMount () {
+    const productInOrder = this.props.state.cart.find(
+      cartItem => cartItem.product === this.props.productID
+    )
+    const quantity = productInOrder ? productInOrder.quantity : 0;
+    this.setState({ quantity })
+  }
 
   changeQuantity = quantity => {
-    this.setState({
-      loading: true
-    })
-
-    const data = {
-      productID: this.props.productID,
-      quantity
-    }
-    console.log(data)
-    axios
-      .post('/orders/changeQuantity/' + this.props.state.order._id, data)
-      .then(res => {
-        this.props.dispatch({ type: 'ADD_ORDER', payload: res.data })
-        this.setState({
-          loading: false
-        })
-      })
-      .catch(err => {
-        this.setState({
-          loading: false
-        })
-        console.log('error' + err)
-      })
-  }
-
-  onSubmit = e => {
-    e.preventDefault()
-    if (this.state.quantity === '0') this.deleteProduct()
-    else this.changeQuantity()
-  }
-
-  onChange = e => {
-    this.setState({
-      quantity: e.target.value
-    })
+    this.setState({ quantity: Number(quantity) })
+    editCartQuantity(this.props.productID, quantity)
   }
 
   render () {
-    const productID = this.props.state.productID
-    let productInOrder
-
-    if (this.props.state.order.products) {
-      productInOrder = this.props.state.order.products.find(
-        product => product.product === productID
-      )
-    }
-    const quantity = productInOrder ? productInOrder.quantity : 0;
-    console.log("product", productInOrder, quantity);
-
+    const quantity = this.state.quantity ? this.state.quantity : "";
     return (
       <div className='product_quantity'>
-        <div className='order_quantity_button' onClick={this.decreaseQuantity}>
+        <div
+          className='order_quantity_button'
+          onClick={() => this.changeQuantity(this.state.quantity - 1)}
+        >
           -
         </div>
         <b>Quantity</b>
-        {(() => {
-          if (this.state.loading) {
-            return <img alt='loading' src={loading} />
-          } else {
-            return (
-              <form noValidate onSubmit={this.onSubmit}>
-                <input
-                  onChange={this.onChange}
-                  className='order_card_input'
-                  value={quantity}
-                  type='number'
-                />
-              </form>
-            )
-          }
-        })()}
-        <div className='order_quantity_button' onClick={this.increaseQuantity}>
+
+        <input
+          onChange={e => this.changeQuantity(e.target.value)}
+          className='order_card_input'
+          value={quantity}
+          type='number'
+        />
+
+        <div
+          className='order_quantity_button'
+          onClick={() => this.changeQuantity(this.state.quantity + 1)}
+        >
           +
         </div>
       </div>

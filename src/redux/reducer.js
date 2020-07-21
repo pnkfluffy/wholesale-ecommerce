@@ -22,6 +22,16 @@ const loaded = (state = false, action) => {
   }
 }
 
+const cart = (state = [], action) => {
+  switch (action.type) {
+    case 'SET_CART':
+      console.log('setting cart', action.payload, state)
+
+      return action.payload
+    default:
+      return state
+  }
+}
 const initialCategories = {
   categories: [],
   category: 'All'
@@ -64,19 +74,19 @@ const products = (state = initialProducts, action) => {
   }
 }
 
-const order = (state = [], action) => {
-  switch (action.type) {
-    case 'ADD_ORDER':
-      return action.payload
-    default:
-      return state
-  }
-}
+// const order = (state = [], action) => {
+//   switch (action.type) {
+//     case 'ADD_ORDER':
+//       return action.payload
+//     default:
+//       return state
+//   }
+// }
 
 const reviews = (state = [], action) => {
   switch (action.type) {
     case 'ADD_REVIEWS':
-      console.log("Adding REVIEWS" + action.payload);
+      console.log('Adding REVIEWS' + action.payload)
       return action.payload
     default:
       return state
@@ -86,8 +96,9 @@ const reviews = (state = [], action) => {
 export default combineReducers({
   user,
   categories,
+  cart,
   products,
-  order,
+  // order,
   reviews,
   loaded
 })

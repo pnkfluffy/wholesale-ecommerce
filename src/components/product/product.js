@@ -5,11 +5,12 @@ import axios from 'axios'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 import ProductQuantity from './productQuantity'
-import UserReviews from "./productUserReviews";
+import UserReviews from './productUserReviews'
 import { GreenButton } from '../reuseable/materialButtons'
-import StarIcon from "@material-ui/icons/Star";
-import StarBorderIcon from "@material-ui/icons/StarBorder";
-import StarHalfIcon from '@material-ui/icons/StarHalf';
+import StarIcon from '@material-ui/icons/Star'
+import StarBorderIcon from '@material-ui/icons/StarBorder'
+import StarHalfIcon from '@material-ui/icons/StarHalf'
+import { addToCart } from '../cart/cartFunctions'
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -54,45 +55,41 @@ class Product extends React.Component {
   }
 
   getStars = stars => {
-    let starsArray = [];
-    let tempStars = stars;
-    let emptyStars = (5 - tempStars)
-    if (emptyStars % 1)
-    {
-      emptyStars -= 1;
+    let starsArray = []
+    let tempStars = stars
+    let emptyStars = 5 - tempStars
+    if (emptyStars % 1) {
+      emptyStars -= 1
     }
-    while(tempStars > 1)
-    {
+    while (tempStars > 1) {
       starsArray.push(<StarIcon></StarIcon>)
-      tempStars -= 1;
+      tempStars -= 1
     }
-    if (tempStars > 0.5)
-    {
+    if (tempStars > 0.5) {
       starsArray.push(<StarIcon></StarIcon>)
     }
-    if (tempStars > 0 && tempStars <= 0.5)
-    {
+    if (tempStars > 0 && tempStars <= 0.5) {
       starsArray.push(<StarHalfIcon></StarHalfIcon>)
     }
-    while(emptyStars > 0)
-    {
+    while (emptyStars > 0) {
       starsArray.push(<StarBorderIcon></StarBorderIcon>)
-      emptyStars--;
+      emptyStars--
     }
-    return(starsArray);
+    return starsArray
   }
 
   printStars = () => {
-    let stars = 5;
-    if (this.props.state.reviews)
-    {
-      const reviews = this.props.state.reviews.filter(review => review.product === this.props.match.params.productID);
+    let stars = 5
+    if (this.props.state.reviews) {
+      const reviews = this.props.state.reviews.filter(
+        review => review.product === this.props.match.params.productID
+      )
       if (reviews) {
-        let media = 0;
+        let media = 0
         reviews.forEach(review => {
-          media = media + review.stars;
+          media = media + review.stars
         })
-        stars = media / reviews.length;
+        stars = media / reviews.length
       }
     }
     return this.getStars(stars)
@@ -123,9 +120,7 @@ class Product extends React.Component {
                   productID={this.props.match.params.productID}
                 />
               </div>
-              <div>
-                {this.printStars()}
-              </div>
+              <div>{this.printStars()}</div>
               <p>{this.state.product.description}</p>
               <h2 className='product_overview_title'>Overview</h2>
               <div className='product_metaData'></div>
@@ -133,7 +128,7 @@ class Product extends React.Component {
                 <GreenButton
                   variant='contained'
                   className='product_button'
-                  onClick={this.addToCart}
+                  onClick={() => addToCart(this.state._id)}
                 >
                   Add To Cart
                 </GreenButton>

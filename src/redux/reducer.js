@@ -26,7 +26,6 @@ const cart = (state = [], action) => {
   switch (action.type) {
     case 'SET_CART':
       console.log('setting cart', action.payload, state)
-
       return action.payload
     default:
       return state

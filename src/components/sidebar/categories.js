@@ -9,6 +9,8 @@ const mapStateToProps = state => ({
 class Categories extends React.Component {
   setCategory = category => {
     this.props.dispatch({ type: 'UPDATE_CATEGORY', payload: category })
+    if (this.props.location.pathname !== "/")
+          this.props.history.push("/");
   }
 
   render () {

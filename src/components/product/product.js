@@ -34,7 +34,8 @@ class Product extends React.Component {
           },
           weight: ''
         },
-        priceTiers: []
+        priceTiers: [],
+        _id: ''
       },
       quantity: 1
     }
@@ -134,7 +135,9 @@ class Product extends React.Component {
                 <GreenButton
                   variant='contained'
                   className='product_button'
-                  onClick={() => addToCart(this.state._id, this.state.quantity)}
+                  onClick={() =>
+                    addToCart(this.state.product._id, this.state.quantity)
+                  }
                 >
                   Add To Cart
                 </GreenButton>

@@ -1,3 +1,44 @@
+// import React from 'react'
+// import { connect } from 'react-redux'
+// import { editCartQuantity } from '../cart/cartFunctions'
+
+// class CartQuantity extends React.Component {
+//   changeQuantity = quantity => {
+//     editCartQuantity(this.props.productID, quantity)
+//   }
+
+//   render () {
+//     const quantity = this.props.productInfo.quantity
+//     console.log('quantity', quantity)
+//     return (
+//       <div className='product_quantity'>
+//         <div
+//           className='order_quantity_button'
+//           onClick={() => this.changeQuantity(quantity - 1)}
+//         >
+//           -
+//         </div>
+//         <b>Quantity</b>
+
+//         <input
+//           onChange={e => this.changeQuantity(e.target.value)}
+//           className='order_card_input'
+//           value={quantity}
+//           type='number'
+//         />
+
+//         <div
+//           className='order_quantity_button'
+//           onClick={() => this.changeQuantity(quantity + 1)}
+//         >
+//           +
+//         </div>
+//       </div>
+//     )
+//   }
+// }
+// export default CartQuantity
+
 import React from 'react'
 import { connect } from 'react-redux'
 import { editCartQuantity } from '../cart/cartFunctions'
@@ -10,20 +51,12 @@ class CartQuantity extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      quantity: 0
+      quantity: this.props.productInfo.quantity
     }
   }
 
-  componentDidMount () {
-    const productInOrder = this.props.state.cart.find(
-      cartItem => cartItem.product === this.props.productID
-    )
-    const quantity = productInOrder ? productInOrder.quantity : 0;
-    this.setState({ quantity })
-  }
-
   changeQuantity = quantity => {
-    this.setState({ quantity: Number(quantity) })
+    this.setState({ quantity: quantity})
     editCartQuantity(this.props.productID, quantity)
   }
 

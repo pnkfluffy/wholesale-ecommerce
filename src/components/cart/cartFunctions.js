@@ -3,6 +3,7 @@ import axios from 'axios'
 
 export const updateCartServer = cart => {
   console.log('updatecartServer')
+  console.log('cart', cart)
   axios
     .post('/cart', { cart })
     .then(res => {
@@ -56,7 +57,9 @@ export const editCartQuantity = (productID, quantity) => {
       itemUpdated = true
     }
   }
-  if (!itemUpdated) cart.push({ product: productID, quantity: quantity })
+  if (!itemUpdated) cart.push({ product: productID, quantity })
+
   store.dispatch({ type: 'SET_CART', payload: cart })
   updateCartServer(cart)
+  return quantity
 }

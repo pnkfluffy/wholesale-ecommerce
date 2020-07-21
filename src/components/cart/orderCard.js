@@ -21,7 +21,10 @@ class OrderCard extends React.Component {
         <div className='order_content'>
           <h2>{this.props.productInfo.name}</h2>
           <div className='manage_quantity'>
-            <CartQuantity productID={this.props.productInfo._id} />
+            <CartQuantity
+              productInfo={this.props.productInfo}
+              // updateQuantity={this.props.updateQuantity()}
+            />
           </div>
           <b>price {this.props.total}</b>
 

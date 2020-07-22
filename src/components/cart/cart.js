@@ -2,42 +2,18 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { updateCartServer, editCartQuantity } from '../cart/cartFunctions'
-import { getUserCart } from '../../index-init'
 /*components*/
 import OrderCard from './orderCard'
 
 const mapStateToProps = state => {
-  console.log('stateupdate', state)
   return {
     state: state.reducer
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    update: (productID, quantity) =>
-      dispatch(editCartQuantity(productID, quantity))
-  }
-}
 
 class Cart extends React.Component {
-  isEmpty = obj => {
-    for (var key in obj) {
-      if (obj.hasOwnProperty(key)) return false
-    }
-    return true
-  }
-
-  deleteCart = () => {
-    this.props.dispatch({ type: 'SET_CART', payload: [] })
-    updateCartServer([])
-  }
-
-  componentDidMount = () => {
-    getUserCart()
-  }
-
-  render () {
+  render() {    
     let total = 0
 
     const cartProducts = this.props.state.cart.map((cartProduct, index) => {
@@ -60,7 +36,7 @@ class Cart extends React.Component {
           <h1>cart</h1>
         </div>
         {(() => {
-          if (!this.isEmpty(this.props.state.cart)) {
+          if (this.props.state.cart.length > 0) {
             return (
               <div className='cart_body'>
                 <div className='cart_button_area'>
@@ -83,4 +59,4 @@ class Cart extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Cart)
+export default connect(mapStateToProps)(Cart)

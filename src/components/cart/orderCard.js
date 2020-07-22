@@ -10,7 +10,7 @@ const mapStateToProps = state => ({
 
 class OrderCard extends React.Component {
   deleteProduct = () => {
-    editCartQuantity(this.props.productInfo._id, 0)
+    this.props.dispatch({type: 'DELETE_CART_ITEM', payload: this.props.productInfo._id})
   }
 
   render () {

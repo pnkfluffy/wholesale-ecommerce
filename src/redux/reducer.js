@@ -26,6 +26,25 @@ const loaded = (state = false, action) => {
   }
 }
 
+const cart = (state = [], action) => {
+  switch (action.type) {
+    case 'SET_CART':
+      return action.payload
+    case 'ADD_TO_CART':
+      return [...state, action.payload]
+    case 'UPDATE_CART_ITEM':
+      let updateItemIndex = state.findIndex(c => c.product === action.payload.id)
+      state[updateItemIndex].quantity = action.payload.quantity
+      return [...state]
+    case 'DELETE_CART_ITEM':
+      let deleteItemIndex = state.findIndex(c => c.product === action.payload.id)
+      state.splice(deleteItemIndex, 1)
+      return [...state]
+    default:
+      return state
+  }
+}
+
 const initialCategories = {
   categories: [],
   category: 'All'
@@ -68,44 +87,31 @@ const products = (state = initialProducts, action) => {
   }
 }
 
- const order = (state = [], action) => {
-   switch (action.type) {
-     case 'ADD_ORDER':
-       return action.payload
-     default:
-       return state
-   }
- }
-
-const reviews = (state = [], action) => {
-  switch (action.type) {
-    case 'ADD_REVIEWS':
-      console.log("Adding REVIEWS" + action.payload);
-      return action.payload
-    default:
-      return state
-  }
-}
-
-// const favoriteProducts = (state = [], action) => {
+// const order = (state = [], action) => {
 //   switch (action.type) {
-//     case 'ADD_FAVORITE_PRODUCT':
-//       return { ...state, user: action.payload },
-//       console.log("Adding FAVORITE PRODUCT" + action.payload);
-//     case 'DELETE_FAVORITE_PRODUCT':
-//       console.log("Deleting FAVORITE PRODUCT" + action.payload);
+//     case 'ADD_ORDER':
 //       return action.payload
 //     default:
 //       return state
 //   }
 // }
 
+const reviews = (state = [], action) => {
+  switch (action.type) {
+    case 'ADD_REVIEWS':
+      console.log('Adding REVIEWS' + action.payload)
+      return action.payload
+    default:
+      return state
+  }
+}
+
 export default combineReducers({
   user,
   categories,
+  cart,
   products,
-  order,
+  // order,
   reviews,
   loaded
-//  favoriteProducts
 })

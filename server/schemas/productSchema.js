@@ -1,76 +1,91 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 const ProductSchema = new Schema({
   name: {
     type: String,
-    required: true,
+    required: true
   },
   description: {
-    type: String,
+    type: String
   },
   category: {
-    type: String,
+    type: String
   },
   price: {
-    type: Number,
+    type: Number
   },
   priceTiers: {
     default: {
       type: Boolean,
-      default: true,
+      default: true
     },
     tiers: [
       {
         price: {
-          type: Number,
+          type: Number
         },
-        ratio: {
-          type: Number,
-        },
-      },
-    ],
+        quantity: {
+          type: Number
+        }
+      }
+    ]
   },
   metaData: {
     cbd: {
-      type: Number,
+      unit: {
+        type: String
+      },
+      quantity: {
+        type: Number
+      }
     },
     thc: {
-      type: Number,
+      unit: {
+        type: String
+      },
+      quantity: {
+        type: Number
+      }
     },
     units: {
       unit: {
-        type: String,
+        type: String
       },
       quantity: {
-        type: Number,
-      },
+        type: Number
+      }
     },
     weight: {
-      type: Number,
-    },
+      unit: {
+        type: String
+      },
+      quantity: {
+        type: Number
+      }
+    }
   },
   imageData: [
     {
       bucket: {
-        type: String,
+        type: String
       },
       key: {
-        type: String,
+        type: String
       },
       url: {
-        type: String,
-      },
-    },
+        type: String
+      }
+    }
   ],
   draft: {
     type: Boolean,
-    default: true,
+    default: true
   },
   date: {
     type: Date,
-    default: Date.now,
-  },
-});
+    default: Date.now
+  }
+})
 
-module.exports = Product = mongoose.model("product", ProductSchema);
+module.exports = Product = mongoose.model('product', ProductSchema)

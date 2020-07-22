@@ -2,11 +2,14 @@ import React from 'react'
 import { connect } from 'react-redux'
 import FilterResults from 'react-filter-search'
 import ProductCard from './productCard'
+
 const mapStateToProps = state => ({
   state: state.reducer
 })
 
 class Products extends React.Component {
+
+
   print_products = () => {
     const category = this.props.state.categories.category
     const searchTerm = this.props.state.products.searchTerm
@@ -43,7 +46,8 @@ class Products extends React.Component {
       ))
     }
   }
-  render () {
+
+  render() {
     const category =
       this.props.state.categories.category === 'All'
         ? 'Products'

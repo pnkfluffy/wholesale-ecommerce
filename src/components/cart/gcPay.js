@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import axios from "axios";
 
 import loading from "../../resources/images/loadingBig.svg"
+import store from "../../redux/store";
 
 const mapStateToProps = (state) => ({
   state: state.reducer,
@@ -54,15 +55,14 @@ class GCPay extends React.Component {
         this.setState({
             loading: true
         })
-        console.log(this.props.state.order)
         axios
-            .post("gc/collectPayment/" + this.props.state.order._id)
+            .post("gc/collectPayment/")
             .then(res => {
                 this.setState({
                     loading: false,
                     paymentDone: true
                 });
-                this.props.dispatch({ type: 'ADD_ORDER', payload: {} });
+                store.dispatch({ type: 'SET_CART', payload: {} })
             })
             .catch((err) => {
                 console.log(err);

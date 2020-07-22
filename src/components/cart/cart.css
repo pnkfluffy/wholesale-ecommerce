@@ -40,13 +40,6 @@
     width: 5vw;
 }
 
-.order_quantity_button {
-    width: 5vw;
-    text-align: center;
-    background-color: #59ba47;
-    color: #1a1c22;
-}
-
 .delete_product_button {
     width: 10vw;
     text-align: center;
@@ -87,3 +80,4 @@ input {
     display: flex;
     flex-direction: column;
 }
+

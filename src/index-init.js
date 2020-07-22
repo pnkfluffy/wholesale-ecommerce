@@ -1,20 +1,16 @@
 import axios from 'axios'
 import store from './redux/store'
 
-export const initializeAllRequests = () => {
+export const initializeAllRequests = async () => {
   console.log('redux initializing')
-  getAllReviews()
-  getAllProducts()
-  getAllCategories()
+  await getAllCategories()
+  await getAllReviews()
+  await getAllProducts()
   axios
     .get('/auth/user')
-    .then(res => {
+    .then(async res => {
       store.dispatch({ type: 'GET_USER', payload: res.data })
-      store.dispatch({ type: 'APP_LOADED' })
-      if (store.getState().reducer.user) {
-        console.log('logged in initializing')
-        getUserCart()
-      }
+      await getUserCart()
     })
     .catch(err => {
       store.dispatch({ type: 'APP_LOADED' })
@@ -23,13 +19,16 @@ export const initializeAllRequests = () => {
 }
 
 export const getUserCart = () => {
-  //get last open cart from db
-  axios
-    .get('orders/openOrder')
+  return axios
+    .get('/cart')
     .then(res => {
-      console.log('GOT ORDER', res.data.order)
-      if (res.data.order) {
-        store.dispatch({ type: 'ADD_ORDER', payload: res.data.order })
+      if (res.data) {
+        const filtered = res.data.filter(function (el) {
+          return el != null
+        })
+
+        store.dispatch({ type: 'SET_CART', payload: filtered })
+        store.dispatch({ type: 'APP_LOADED' })
       }
     })
     .catch(err => {
@@ -38,9 +37,8 @@ export const getUserCart = () => {
 }
 
 const getAllCategories = () => {
-  console.log('getting categories')
-  axios
-    .get('products/categories')
+  return axios
+    .get('/products/categories')
     .then(res => {
       console.log('categories here', res.data)
       store.dispatch({ type: 'SET_CATEGORIES', payload: res.data })
@@ -50,10 +48,9 @@ const getAllCategories = () => {
     })
 }
 
-
 export const getAllProducts = () => {
-  axios
-    .get('products/all')
+  return axios
+    .get('/products/all')
     .then(res => {
       console.log(res)
       store.dispatch({ type: 'ADD_ALL_PRODUCTS', payload: res.data })
@@ -64,9 +61,10 @@ export const getAllProducts = () => {
 }
 
 export const getAllReviews = () => {
-    axios.get('/reviews/all')
-         .then(res => {
-             store.dispatch({ type: 'ADD_REVIEWS', payload: res.data })
-         })
-         .catch(err => console.log(err));
+  return axios
+    .get('/reviews/all')
+    .then(res => {
+      store.dispatch({ type: 'ADD_REVIEWS', payload: res.data })
+    })
+    .catch(err => console.log(err))
 }

@@ -1,13 +1,19 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import product_image_one from '../../resources/images/test/oil_all_1.jpg'
+import product_image_two from '../../resources/images/test/oil_2500mg_1.jpg'
+import product_image_three from '../../resources/images/test/oil_2500mg_2.jpg'
 import productImg from '../../resources/images/product_1.png'
 import axios from 'axios'
 import ProductQuantity from './productQuantity'
-import UserReviews from "./productUserReviews";
+import UserReviews from './productUserReviews'
+import ProductImages from './productImages'
+import ProductMetaData from './productMetaData'
+import PriceTiers from './priceTiers'
+import { getPriceQuantity } from '../reuseable/getPriceQuantity'
 import { GreenButton } from '../reuseable/materialButtons'
-import StarIcon from "@material-ui/icons/Star";
-import StarBorderIcon from "@material-ui/icons/StarBorder";
-import StarHalfIcon from '@material-ui/icons/StarHalf';
+
+import { addToCart } from '../cart/cartFunctions'
 
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
@@ -30,18 +36,44 @@ class Product extends React.Component {
         description: '',
         name: '',
         price: '',
-        metaData: {
-          cbd: '',
-          thc: '',
-          units: {
-            unit: '',
-            quantity: ''
-          },
-          weight: ''
-        },
-        priceTiers: []
+
+        _id: ''
       },
-      loading: false
+
+      //  needs to be moved back up into product
+      imageData: [
+        { url: product_image_one },
+        { url: product_image_two },
+        { url: product_image_three },
+        { url: productImg }
+      ],
+      metaData: {
+        cbd: {
+          unit: 'mg',
+          quantity: 2500
+        },
+        thc: {
+          unit: '%',
+          quantity: 0
+        },
+        units: {
+          unit: 'mL',
+          quantity: 30
+        },
+        weight: {
+          unit: 'oz',
+          quantity: 5
+        }
+      },
+      priceTiers: [
+        { price: 10, quantity: 100 },
+        { price: 8, quantity: 200 },
+        { price: 7, quantity: 300 },
+        { price: 6.5, quantity: 500 },
+        { price: 5, quantity: 1000 }
+      ],
+
+      quantity: 1
     }
   }
 
@@ -59,100 +91,57 @@ class Product extends React.Component {
       })
   }
 
-  getStars = stars => {
-    let starsArray = [];
-    let tempStars = stars;
-    let emptyStars = (5 - tempStars)
-    if (emptyStars % 1)
-    {
-      emptyStars -= 1;
-    }
-    while(tempStars > 1)
-    {
-      starsArray.push(<StarIcon></StarIcon>)
-      tempStars -= 1;
-    }
-    if (tempStars > 0.5)
-    {
-      starsArray.push(<StarIcon></StarIcon>)
-    }
-    if (tempStars > 0 && tempStars <= 0.5)
-    {
-      starsArray.push(<StarHalfIcon></StarHalfIcon>)
-    }
-    while(emptyStars > 0)
-    {
-      starsArray.push(<StarBorderIcon></StarBorderIcon>)
-      emptyStars--;
-    }
-    return(starsArray);
-  }
-
-  printStars = () => {
-    let stars = 5;
-    if (this.props.state.reviews)
-    {
-      const reviews = this.props.state.reviews.filter(review => review.product === this.props.match.params.productID);
-      if (reviews) {
-        let media = 0;
-        reviews.forEach(review => {
-          media = media + review.stars;
-        })
-        stars = media / reviews.length;
-      }
-    }
-    return this.getStars(stars)
+  changeQuantity = quantity => {
+    this.setState({ quantity })
   }
   render () {
+    const totalPrice = getPriceQuantity(
+      this.state.priceTiers,
+      this.state.quantity,
+      this.state.product.price
+    )
     return (
       <div className='product_page'>
         <div className='product_page_main'>
           <div className='product_page_top'>
-            <div className='product_page_images'>
-              <div className='product_page_image'>
-                <img
-                  className='product_image'
-                  alt='product_image'
-                  src={productImg}
-                />
-          <div className='product_card_heart'>
-            {
-            isFavorite(this.props.state.user.favorites, this.props.match.params.productID) ?
-            <FavoriteIcon onClick={() => removeFavoriteProduct(this.props.match.params.productID)}/> :
-            <FavoriteBorderIcon onClick={() => setAsFavoriteProduct(this.props.match.params.productID)}/>
-            }
-          </div>
-              </div>
-              <div className='product_images_carousel'></div>
-            </div>
+            <ProductImages images={this.state.imageData} />
             <div className='product_page_info'>
-              <div className='product_page_info_top'>
-                <h2>{this.state.product.name}</h2>
-                <ProductQuantity
-                  productID={this.props.match.params.productID}
-                />
+              <div className='product_info'>
+                <div className='product_description_container'>
+                  <div className='product_page_info_top'>
+                    <div className='product_title'>
+                      {this.state.product.name}
+                    </div>
+                    <ProductQuantity
+                      productID={this.props.match.params.productID}
+                      quantity={this.state.quantity}
+                      changeQuantity={this.changeQuantity}
+                    />
+                  </div>
+                  <PriceTiers tiers={this.state.priceTiers} />
+                </div>
+                <div className='product_overview_container'>
+                  <div className='product_overview_title'>Overview</div>
+                  <ProductMetaData metaData={this.state.metaData} />
+                </div>
               </div>
-              <div>
-                {this.printStars()}
-              </div>
-              <p>{this.state.product.description}</p>
-              <h2 className='product_overview_title'>Overview</h2>
-              <div className='product_metaData'></div>
               <div className='product_purchase'>
                 <GreenButton
                   variant='contained'
                   className='product_button'
-                  onClick={this.addToCart}
+                  onClick={() =>
+                    addToCart(this.state.product._id, this.state.quantity)
+                  }
                 >
                   Add To Cart
                 </GreenButton>
                 <div className='product_price'>
-                  $ {this.state.product.price}
+                  $<div className='price_price'>{totalPrice}</div>
                 </div>
               </div>
             </div>
           </div>
-          <div className='product_page_pricetiers'>x price if you buy x</div>
+          <p>{this.state.product.description}</p>
         </div>
         <UserReviews productID={this.props.match.params.productID} />
       </div>

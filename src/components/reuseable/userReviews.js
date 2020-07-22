@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { GreenButton } from './materialButtons'
-import ReviewsCard from "./reviewsCard";
+import ReviewsCard from './reviewsCard'
 
 class UserReviews extends React.Component {
   constructor (props) {
@@ -13,27 +13,22 @@ class UserReviews extends React.Component {
 
   printReviews = () => {
     const items = this.state.page * 3
-    let reviews = [];
+    let reviews = []
     /* paginate */
-    for (let i = items - 3; i < items; i++)
-    {
-      if (this.props.reviews[i])
-        reviews.push(this.props.reviews[i])
+    for (let i = items - 3; i < items; i++) {
+      if (this.props.reviews[i]) reviews.push(this.props.reviews[i])
     }
-    if (reviews[0])
-    {
+    if (reviews[0]) {
       return reviews.map(one => {
-        return <ReviewsCard review = {one}/>
+        return <ReviewsCard review={one} />
       })
     }
   }
 
   changePage = type => {
-    let page = this.state.page;
-    if (type)
-      page++;
-    else
-      page--;
+    let page = this.state.page
+    if (type) page++
+    else page--
     this.setState({
       page: page
     })
@@ -41,32 +36,36 @@ class UserReviews extends React.Component {
   render () {
     return (
       <div className='user_reviews'>
-        <h1>User Reviews</h1>
+
         {this.printReviews()}
         {(() => {
-          if (this.state.page > 1){
-            return <GreenButton
-                        variant='contained'
-                        className='product_button'
-                        onClick={e => this.changePage(false)}
-                  >
-                    previous
-                 </GreenButton>
+          if (this.state.page > 1) {
+            return (
+              <GreenButton
+                variant='contained'
+                className='product_button'
+                onClick={e => this.changePage(false)}
+              >
+                previous
+              </GreenButton>
+            )
           }
         })()}
         {(() => {
-          if (this.state.page * 3 < this.props.reviews.length){
-            return <GreenButton
-                      variant='contained'
-                      className='product_button'
-                      onClick={e => this.changePage(true)}
-                  >
-                    next
-                  </GreenButton>
+          if (this.state.page * 3 < this.props.reviews.length) {
+            return (
+              <GreenButton
+                variant='contained'
+                className='product_button'
+                onClick={e => this.changePage(true)}
+              >
+                next
+              </GreenButton>
+            )
           }
         })()}
       </div>
     )
   }
 }
-export default UserReviews;
+export default UserReviews

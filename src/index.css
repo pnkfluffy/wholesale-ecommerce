@@ -22,7 +22,7 @@ html {
 
 html {
   background-color: var(--sidebar-black);
-  color: var(--nofocus-font-grey);
+  color: var(--header-font-white);
 }
 
 
@@ -66,6 +66,10 @@ input::-webkit-inner-spin-button {
 .MuiButton-root {
   text-transform: none !important;
   border-radius: 8px !important;
+}
+
+.icon_upsidedown {
+  transform: rotate(180deg)
 }
 
 @import url(//db.onlinewebfonts.com/c/d4f20dfedfdf197ed0ac52b09bf25551?family=GT+Walsheim+Pro+Medium);

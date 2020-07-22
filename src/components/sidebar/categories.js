@@ -41,7 +41,7 @@ class Categories extends React.Component {
           {this.props.state.categories.category === 'All' && (
             <div className='category_active_dash' />
           )}
-          All
+          All 
         </div>
         {categories}
       </div>

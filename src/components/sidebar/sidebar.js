@@ -23,7 +23,9 @@ class Sidebar extends React.Component {
 
     return (
       <div className='sidebar'>
-        <img src={logo} alt='cbddy_logo' className='logo_sidebar' />
+        <Link to='/'>
+          <img src={logo} alt='cbddy_logo' className='logo_sidebar' />
+        </Link>
         <div className='menu_sidebar'>
           <div className='sidebar_section_header'>Menu</div>
           <Link
@@ -48,11 +50,11 @@ class Sidebar extends React.Component {
         </div>
         <Categories />
         <div className='sidebar_footer'>
-          <p className="sidebar_footer_text">
+          <p className='sidebar_footer_text'>
             all products contain <a className='dark_green'>&#60;0.3%</a> thc in
             accordance with the farm bill
           </p>
-          <p className="sidebar_footer_text">
+          <p className='sidebar_footer_text'>
             <a>customer support</a>, <a>privacy policy</a>,
             <a> terms and conditions</a>, 2020{' '}
             <a className='dark_green'>Cbddy</a>, All rights reserved

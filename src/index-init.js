@@ -3,9 +3,9 @@ import store from './redux/store'
 
 export const initializeAllRequests = () => {
   console.log('redux initializing')
+  getAllCategories()
   getAllReviews()
   getAllProducts()
-  getAllCategories()
   axios
     .get('/auth/user')
     .then(res => {
@@ -23,13 +23,16 @@ export const initializeAllRequests = () => {
 }
 
 export const getUserCart = () => {
-  //get last open cart from db
   axios
-    .get('orders/openOrder')
+    .get('/cart')
     .then(res => {
-      console.log('GOT ORDER', res.data.order)
-      if (res.data.order) {
-        store.dispatch({ type: 'ADD_ORDER', payload: res.data.order })
+      console.log('GOT CART', res.data)
+      if (res.data) {
+        const filtered = res.data.filter(function (el) {
+          return el != null
+        })
+
+        store.dispatch({ type: 'SET_CART', payload: filtered })
       }
     })
     .catch(err => {
@@ -40,7 +43,7 @@ export const getUserCart = () => {
 const getAllCategories = () => {
   console.log('getting categories')
   axios
-    .get('products/categories')
+    .get('/products/categories')
     .then(res => {
       console.log('categories here', res.data)
       store.dispatch({ type: 'SET_CATEGORIES', payload: res.data })
@@ -50,10 +53,9 @@ const getAllCategories = () => {
     })
 }
 
-
 export const getAllProducts = () => {
   axios
-    .get('products/all')
+    .get('/products/all')
     .then(res => {
       console.log(res)
       store.dispatch({ type: 'ADD_ALL_PRODUCTS', payload: res.data })
@@ -64,9 +66,10 @@ export const getAllProducts = () => {
 }
 
 export const getAllReviews = () => {
-    axios.get('/reviews/all')
-         .then(res => {
-             store.dispatch({ type: 'ADD_REVIEWS', payload: res.data })
-         })
-         .catch(err => console.log(err));
+  axios
+    .get('/reviews/all')
+    .then(res => {
+      store.dispatch({ type: 'ADD_REVIEWS', payload: res.data })
+    })
+    .catch(err => console.log(err))
 }

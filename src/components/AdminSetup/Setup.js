@@ -44,7 +44,7 @@ const AdminSetup = () => (
       <Resource name="admin-products" list={ProductList} edit={ProductEdit} show={ProductShow} create={ProductCreate}/>
       <Resource name="Orders" list={OrderList} show={OrderShow}/>
       <Resource name="Reviews" list={ReviewList} show={ReviewShow}/>
-    </Admin>
+    </Admin>n
   </Provider>
 );
 

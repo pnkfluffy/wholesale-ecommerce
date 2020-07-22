@@ -20,7 +20,7 @@ router.get("/", (req, res) => {
       //  each object needs to have an 'id' field in order for
       //  reactAdmin to parse
       products = JSON.parse(JSON.stringify(products).split('"_id":').join('"id":'));
-      console.log("parsed products: ", products)
+      console.log("parsed products: ", products[0], products[1], products[2])
       res.json(products);
     })
     .catch((error) => {
@@ -30,11 +30,13 @@ router.get("/", (req, res) => {
 });
 
 //getOne
-router.get("/:id", (req, res) => {
+router.get("/:id", async (req, res) => {
+  console.log("req method :", req.method)
+  console.log("req.data :", req.data)
   console.log("getOne hit. Id: ", req.params.id)
-  Product.findOne({_id: req.params.id})
-  .then((product) => {
-    product = JSON.parse(JSON.stringify(product).split('"_id":').join('"id":'));
+  await Product.findOne({_id: req.params.id})
+  .then(async (product) => {
+    product = await JSON.parse(JSON.stringify(product).split('"_id":').join('"id":'));
     console.log("parsed product: ", product)
     res.json(product)
   }).catch(err => {
@@ -70,10 +72,10 @@ router.put("/:id", async (req, res) => {
   console.log("update hit")
   console.log("id: ", req.params.id)
   console.log("body: ", req.body)
-  Product.updateOne({_id: req.params.id}, req.body)
-  .then((user) => {
-    user = JSON.parse(JSON.stringify(user).split('"_id":').join('"id":'));
-    res.json(user)
+  await Product.updateOne({_id: req.params.id}, req.body)
+  .then(async (product) => {
+    product = await JSON.parse(JSON.stringify(product).split('"_id":').join('"id":'));
+    return res.status(200).json(product)
   }).catch(err => {
     console.log(err)
     res.status(500).send("Failed to update.")

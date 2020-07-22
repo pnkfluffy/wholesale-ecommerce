@@ -2,6 +2,7 @@ import * as React from 'react'
 import { cloneElement, useMemo } from 'react';
 
 import {
+  useNotify, useRefresh, useRedirect,
   List, Create,
   Edit, SimpleForm, NumberInput,
   DisabledInput, BooleanInput, ImageInput,
@@ -71,26 +72,32 @@ export const ProductCreate = (props) => (
   </Create>
 );
 
-const editFailed = () => {
-  return "edit Failed"
-}
-const editSuccess = () => {
-  return "edit passed"
+
+export const ProductEdit = props => {
+  const notify = useNotify();
+  const refresh = useRefresh();
+  const redirect = useRedirect();
+
+  const onSuccess = ({ data }) => {
+    notify(`Changes to post "${data.title}" saved`)
+    redirect('/admin-products');
+    refresh();
+  };
+  return (
+    <Edit onSuccess={onSuccess} actions={<ProductEditActions />} title={<ProductTitle />} {...props}>
+      <SimpleForm>
+        {/* {!} NEEDS TO BE DONE LATER TO EDIT ORDERS OF USERS */}
+        {/* <ReferenceInput source="orderId" reference="orders"> */}
+        <TextInput label="Product Name" source="name" />
+        <TextInput label="Category" source="category"/>
+        <TextInput label="Description" source="description" options={{ multiLine: true }} />
+        <NumberInput label="Price" source="price"/>
+        {/* <ImageInput source="imageData"/> */}
+      </SimpleForm>
+    </Edit>
+  )
 }
 
-export const ProductEdit = props => (
-  <Edit onFailure={editFailed} onSuccess={editSuccess} actions={<ProductEditActions />} title={<ProductTitle />} {...props}>
-    <SimpleForm>
-      {/* {!} NEEDS TO BE DONE LATER TO EDIT ORDERS OF USERS */}
-      {/* <ReferenceInput source="orderId" reference="orders"> */}
-      <TextInput label="Product Name" source="name" />
-      <TextInput label="Category" source="category"/>
-      <TextInput label="Description" source="description" options={{ multiLine: true }} />
-      <NumberInput label="Price" source="price"/>
-      {/* <ImageInput source="imageData"/> */}
-    </SimpleForm>
-  </Edit>
-)
 
 // custom components
 const ProductTitle = ({ record }) => {
@@ -106,6 +113,7 @@ const ProductShowActions = ({ basePath, data, resource }) => (
   </TopToolbar>
 );
 const ProductEditActions = ({ basePath, data, resource }) => (
+
   <TopToolbar>
     <ShowButton basePath={basePath} record={data} />
     < ListButton basePath={basePath} record={data} />

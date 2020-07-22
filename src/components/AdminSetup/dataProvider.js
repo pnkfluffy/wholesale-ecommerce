@@ -93,10 +93,8 @@ export default {
       method: "PUT",
       body: JSON.stringify(params.data),
     }).then(({ json }) => {
-      displayErrorMessage(json)
-      // return { data: json }
+      return { data: json }
     }).catch(err => {
-      alert("error: ", err)
       return displayErrorMessage(err)
     })
   },

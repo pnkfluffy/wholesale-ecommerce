@@ -1,0 +1,6 @@
+.getReceiptButton {
+    width: 10vw;
+    height: 3vh;
+    background-color: var(--dark-hyperlink-green);
+    color: var(--background-grey);
+}

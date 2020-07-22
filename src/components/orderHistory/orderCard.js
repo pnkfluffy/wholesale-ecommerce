@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import {PDFDownloadLink} from '@react-pdf/renderer'
 import { Invoice } from './invoice'
+import loading from "../../resources/images/loading.svg"
 
 const mapStateToProps = state => ({
     state: state.reducer
@@ -14,7 +15,8 @@ class OrderCard extends React.Component {
         super(props);
         this.state = {
             invoice: {},
-            receiptReady: false
+            receiptReady: false,
+            loading: false,
         }
     }
 
@@ -55,6 +57,9 @@ class OrderCard extends React.Component {
         return(productsWithTotal);
     }
     getInvoice = async () => {
+        this.setState({
+            loading: true,
+        })
         const shipping = await this.getClientInfo();
         const items = await this.getItems();
         const subtotal = this.props.order.total;
@@ -63,7 +68,7 @@ class OrderCard extends React.Component {
         const chargingDate = this.props.payment.charge_date;
         const date = new Date();
         const month = date.getMonth() + 1
-        const fullDate = month + "/" + date.getDate() + "/" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes();
+        const fullDate =  date.getFullYear() + "-" + month + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes();
         const invoice = {
             shipping: shipping,
             items: items,
@@ -75,7 +80,8 @@ class OrderCard extends React.Component {
         }
         this.setState({
             invoice: invoice,
-            receiptReady: true
+            receiptReady: true,
+            loading: false
         })
     }
 
@@ -85,19 +91,22 @@ class OrderCard extends React.Component {
                 {this.props.payment.status} Will be charged: {this.props.payment.charge_date}
                 <p>{this.props.order._id}</p>
                 {(() => {
-                    if(this.state.receiptReady)
+                    if (this.state.loading)
+                        return <img src={loading}/>
+                    else if(this.state.receiptReady)
                     {
                         return (
                             <PDFDownloadLink
+                                className="getReceiptButton"
                                 document={<Invoice data={this.state.invoice}/>}
-                                fileName="invoiceTest.pdf"
+                                fileName="invoice_cbddy.pdf"
                             >
                                 Download Receipt
                             </PDFDownloadLink>
                         );
                     }
                     else {
-                        return (<div onClick={this.getInvoice}>Generate Receipt</div>);
+                        return (<div className="getReceiptButton" onClick={this.getInvoice}>Generate Receipt</div>);
                     }
                 })()}
             </div>

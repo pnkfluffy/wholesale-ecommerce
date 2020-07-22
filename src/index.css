@@ -83,4 +83,5 @@ input::-webkit-inner-spin-button {
 @import "./components/auth/auth.css";
 @import "./components/cart/cart.css";
 @import "./components/settings/settings.css";
+@import "./components/orderHistory/orderHistory.css";
 @import "./components/error/error.css";

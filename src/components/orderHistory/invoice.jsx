@@ -88,12 +88,13 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         color: '#0a3b09',
         fontSize: 12,
-        marginRight: 10,
+        marginRight: 15,
         paddingRight: 10,
     },
     totalTitle: {
         width: 100,
         height: 15,
+        textAlign: 'center',
         flexDirection: 'row',
         borderColor: '#52ff4d',
         borderWidth: 1,
@@ -107,7 +108,12 @@ const styles = StyleSheet.create({
         borderColor: '#52ff4d',
         borderWidth: 1,
         borderStyle: 'solid',
-
+    },
+    thanks: {
+        color: '#52ff4d',
+        fontSize: 15,
+        textAlign: 'center',
+        marginTop: 20,
     }
 });
 
@@ -185,6 +191,9 @@ export function Invoice(props) {
                                 <Text style={styles.totalValue}>{props.data.total}</Text>
                             </View>
                         </View>
+                    </View>
+                    <View style={styles.thanks}>
+                        <Text>Thanks for buying with CBDDY!</Text>
                     </View>
                 </Page>
             </Document>

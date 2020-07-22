@@ -2,8 +2,6 @@ import React from "react";
 import axios from 'axios';
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import generateInvoice from "./generateInvoice";
-import setShipping from "./generateInvoice";
 import OrderCard from "./orderCard";
 
 const mapStateToProps = state => ({
@@ -49,10 +47,7 @@ class OrderHistory extends React.Component {
     render() {
         return (
             <div className="account">
-                <h1>account</h1>
-                <div onClick={this.printPayments}>
-                    PRINT PAYMENTS
-                </div>
+                <h1>Order History</h1>
                 {this.printOrders()}
             </div>
         );

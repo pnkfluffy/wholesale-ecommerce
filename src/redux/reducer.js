@@ -25,12 +25,22 @@ const loaded = (state = false, action) => {
 const cart = (state = [], action) => {
   switch (action.type) {
     case 'SET_CART':
-      console.log('setting cart', action.payload, state)
       return action.payload
+    case 'ADD_TO_CART':
+      return [...state, action.payload]
+    case 'UPDATE_CART_ITEM':
+      let updateItemIndex = state.findIndex(c => c.product === action.payload.id)
+      state[updateItemIndex].quantity = action.payload.quantity
+      return [...state]
+    case 'DELETE_CART_ITEM':
+      let deleteItemIndex = state.findIndex(c => c.product === action.payload.id)
+      state.splice(deleteItemIndex, 1)
+      return [...state]
     default:
       return state
   }
 }
+
 const initialCategories = {
   categories: [],
   category: 'All'

@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import CartQuantity from './cartQuantity'
-import { editCartQuantity } from './cartFunctions'
 import productImg from '../../resources/images/product_1.png'
 
 const mapStateToProps = state => ({

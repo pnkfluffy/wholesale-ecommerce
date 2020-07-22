@@ -1,11 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { updateCartServer, editCartQuantity } from '../cart/cartFunctions'
 /*components*/
 import OrderCard from './orderCard'
-import { v4 } from 'uuid';
-
+import { v4 } from 'uuid'
 
 const mapStateToProps = state => {
   return {
@@ -13,9 +11,8 @@ const mapStateToProps = state => {
   }
 }
 
-
 class Cart extends React.Component {
-  render() {    
+  render () {
     let total = 0
 
     const cartProducts = this.props.state.cart.map((cartProduct, index) => {
@@ -23,12 +20,7 @@ class Cart extends React.Component {
       total += productTotal
 
       return (
-        <OrderCard
-          productInfo={cartProduct}
-          total={productTotal}
-          key={v4()}
-          // updateQuantity={this.props.updateQuantity()}
-        />
+        <OrderCard productInfo={cartProduct} total={productTotal} key={v4()} />
       )
     })
 

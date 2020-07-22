@@ -82,6 +82,8 @@ export default {
       alert(params)
       return "hit"
     }
+    alert(params)
+    
    return httpClient(`${apiUrl}/${resource}/${params.id}`, {
       method: "PUT",
       body: JSON.stringify(params.data),

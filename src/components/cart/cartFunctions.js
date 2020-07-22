@@ -46,20 +46,20 @@ export const addToCart = (productID, num) => {
   updateCartServer(cart)
 }
 
-export const editCartQuantity = (productID, quantity) => {
-  console.log('editCartQuantity', productID)
-  const cart = store.getState().reducer.cart
-  let itemUpdated = false
-  for (let i = 0; i < cart.length; i++) {
-    if (cart[i].product === productID) {
-      cart[i].quantity = quantity
-      if (!quantity) cart.splice(i, 1)
-      itemUpdated = true
-    }
-  }
-  if (!itemUpdated) cart.push({ product: productID, quantity })
+// export const editCartQuantity = (productID, quantity) => {
+//   console.log('editCartQuantity', productID)
+//   const cart = store.getState().reducer.cart
+//   let itemUpdated = false
+//   for (let i = 0; i < cart.length; i++) {
+//     if (cart[i].product === productID) {
+//       cart[i].quantity = quantity
+//       if (!quantity) cart.splice(i, 1)
+//       itemUpdated = true
+//     }
+//   }
+//   if (!itemUpdated) cart.push({ product: productID, quantity })
 
-  store.dispatch({ type: 'SET_CART', payload: cart })
-  updateCartServer(cart)
-  return quantity
-}
+//   store.dispatch({ type: 'SET_CART', payload: cart })
+//   updateCartServer(cart)
+//   return quantity
+// }

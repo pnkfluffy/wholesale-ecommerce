@@ -2,8 +2,8 @@ import store from "../../redux/store";
 import axios from 'axios'
 
 
-function setAsFavoriteProduct(productId) {
-    const dataContainer = [productId]
+function setAsFavoriteProduct(productID) {
+    const dataContainer = [productID]
     console.log("making post request")
     axios.post('/auth/addFavoriteProduct', dataContainer)
     .then(res =>{
@@ -16,4 +16,5 @@ function setAsFavoriteProduct(productId) {
      console.log(err)
    })
   }
+
   export default setAsFavoriteProduct;

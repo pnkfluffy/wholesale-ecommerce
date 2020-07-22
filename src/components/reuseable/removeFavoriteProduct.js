@@ -1,9 +1,8 @@
 import store from "../../redux/store";
 import axios from 'axios'
 
-
-function removeFavoriteProduct(productId){
-  const dataContainer = [productId]
+function removeFavoriteProduct(productID){
+  const dataContainer = [productID]
     console.log("making delete request")
     axios.post('/auth/deleteFavoriteProduct', dataContainer)
     .then(res =>{
@@ -16,4 +15,5 @@ function removeFavoriteProduct(productId){
      console.log(err)
    })
   }
+  
   export default removeFavoriteProduct;

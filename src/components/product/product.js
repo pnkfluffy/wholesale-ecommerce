@@ -15,12 +15,6 @@ import { GreenButton } from '../reuseable/materialButtons'
 
 import { addToCart } from '../cart/cartFunctions'
 
-import FavoriteIcon from '@material-ui/icons/Favorite'
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
-import isFavorite from '../reuseable/isFavoriteProduct'
-import setAsFavoriteProduct from '../reuseable/setAsFavoriteProduct'
-import removeFavoriteProduct from '../reuseable/removeFavoriteProduct'
-
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -104,7 +98,7 @@ class Product extends React.Component {
       <div className='product_page'>
         <div className='product_page_main'>
           <div className='product_page_top'>
-            <ProductImages images={this.state.imageData} />
+            <ProductImages images={this.state.imageData} productID={this.state.product._id} />
             <div className='product_page_info'>
               <div className='product_info'>
                 <div className='product_description_container'>

@@ -1,6 +1,15 @@
-import React from 'react'
+import React from 'react';
+import { connect } from 'react-redux'
+
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
+import isFavorite from '../reuseable/isFavoriteProduct'
+import setAsFavoriteProduct from '../reuseable/setAsFavoriteProduct'
+import removeFavoriteProduct from '../reuseable/removeFavoriteProduct'
+
+const mapStateToProps = state => ({
+  state: state.reducer
+})
 
 const CarouselImage = ({ image, select, index, activeIndex }) => {
   const imageCSS =
@@ -46,7 +55,11 @@ class ProductImages extends React.Component {
             src={this.props.images[this.state.active].url}
           />
           <div className='product_card_heart'>
-            <FavoriteBorderIcon onClick={this.favoriteProduct} />
+            {
+            isFavorite(this.props.state.user.favorites, this.props.productID) ?
+            <FavoriteIcon onClick={() => removeFavoriteProduct(this.props.productID)}/> :
+            <FavoriteBorderIcon onClick={() => setAsFavoriteProduct(this.props.productID)}/>
+            }
           </div>
         </div>
         <div className='product_images_carousel'>{carouselImages}</div>
@@ -54,4 +67,4 @@ class ProductImages extends React.Component {
     )
   }
 }
-export default ProductImages
+export default connect(mapStateToProps)(ProductImages)

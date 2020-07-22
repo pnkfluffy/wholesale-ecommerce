@@ -27,13 +27,18 @@ class ProductImages extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      active: 0
+      active: 0,
+     favoriteProducts: this.props.state.user.favorites
     }
   }
 
   selectImage = index => {
     this.setState({ active: index })
   }
+
+  // componentDidMount(){
+  //   isFavorite(this.props.state.user.favorites, this.props.productID)
+  // }
 
   render () {
     const carouselImages = this.props.images.map((image, index) => (
@@ -56,7 +61,7 @@ class ProductImages extends React.Component {
           />
           <div className='product_card_heart'>
             {
-            isFavorite(this.props.state.user.favorites, this.props.productID) ?
+            isFavorite(this.state.favoriteProducts, this.props.productID) ?
             <FavoriteIcon onClick={() => removeFavoriteProduct(this.props.productID)}/> :
             <FavoriteBorderIcon onClick={() => setAsFavoriteProduct(this.props.productID)}/>
             }

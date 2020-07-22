@@ -12,25 +12,13 @@ class Account extends React.Component {
     super(props);
   }
 
-  printPayments = () => {
-    axios.get('/gc/payments/from')
-         .then(res => console.log(res))
-         .catch(err => console.log(err))
-  }
-
-  showUser = () => {
-console.log(this.props.state.user)
-  }
   render() {
     return (
       <div className="account">
         <h1>account</h1>
-        <div onClick={this.printPayments}>
-            PRINT PAYMENTS
-        </div>
-        <div onClick={this.showUser}>
-            SHOW USER
-        </div>
+        <Link to='/orderHistory'>
+            Order Hirstory
+        </Link>
       </div>
     );
   }

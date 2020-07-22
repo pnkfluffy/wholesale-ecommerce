@@ -23,20 +23,20 @@ router.get('/oneOrder/:orderId', (req, res) => {
 // @route   GET /orders/from/
 // @desc    Returns all orders from user
 // @access  Private
-router.get('/from/', (req, res) => {
-  const skips = req.params.page_size * (req.params.page_num - 1)
-
+router.get('/from', (req, res) => {
   Order.find({ user: req.user._id })
     .then(orders => {
-      res.json({
-        success: true,
-        orders: orders
-      })
+        res.json(orders)
     })
     .catch(error => {
       console.log(error)
       res.status(500).send('Error finding orders')
     })
+})
+
+//@route POST /orders/generateInvoice
+router.get('/generateInvoice', (req, res) => {
+
 })
 
 module.exports = router

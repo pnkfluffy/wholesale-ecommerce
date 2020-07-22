@@ -3,9 +3,10 @@ import store from './redux/store'
 
 export const initializeAllRequests = () => {
   console.log('redux initializing')
-  getAllCategories()
-  getAllReviews()
-  getAllProducts()
+  getAllReviews();
+  getAllProducts();
+  getAllCategories();
+  getAllOrders();
   axios
     .get('/auth/user')
     .then(res => {
@@ -72,4 +73,17 @@ export const getAllReviews = () => {
       store.dispatch({ type: 'ADD_REVIEWS', payload: res.data })
     })
     .catch(err => console.log(err))
+}
+
+export const getAllOrders = () => {
+    //get all orders from user
+    axios
+        .get('orders/from')
+        .then(res => {
+            console.log(res.data);
+            store.dispatch({ type: 'ADD_ORDERS', payload: res.data })
+        })
+        .catch(err => {
+            console.log(err)
+        })
 }

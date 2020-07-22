@@ -244,6 +244,7 @@ const getTotal = async products => {
 
 // @route   POST gc/collectPayment/:orderID
 // @desc    Collect Payment of active user
+// @reqBody Delivery Information
 // @access  Private
 router.post('/collectPayment', async (req, res) => {
 	try {

@@ -42,11 +42,15 @@ router.post('/addFavoriteProduct', rejectUnauthenticated, async (req, res) => {
 			newFavoritesArray.push(productId);
 			user
 				.updateOne({ favorites: newFavoritesArray})
-				.then(user => res.json(user))
+				.then(() => res.json(user.favorites))
 				.catch(error => {
 					console.log(error)
 					res.status(500).send("Couldn't edit favorites products array")
 				})
+			})
+			.catch(error => {
+				console.log(error)
+				res.status(500).send("Couldn't edit favorites products array")
 			});
 	});
 
@@ -59,7 +63,7 @@ router.post('/addFavoriteProduct', rejectUnauthenticated, async (req, res) => {
 			newFavoritesArray.splice(index, 1)
 			user
 				.updateOne({ favorites: newFavoritesArray})
-				.then(user => res.json(user))
+				.then(() => res.json(user.favorites))
 				.catch(error => {
 					console.log(error)
 					res.status(500).send("Couldn't edit favorites products array")

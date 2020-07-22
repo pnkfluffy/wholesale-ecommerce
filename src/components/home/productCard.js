@@ -31,7 +31,8 @@ class ProductCard extends React.Component {
     axios.post('/auth/addFavoriteProduct', this.props.product)
     .then(res =>{
       console.log("updating redux state")
-      const FavoriteProductList = res.data.favorites;
+      const FavoriteProductList = res.data;
+      console.log("FavoriteProductList", FavoriteProductList)
      store.dispatch({ type: 'ADD_FAVORITE_PRODUCT', payload: FavoriteProductList })
    })
    .catch(err => {
@@ -45,19 +46,18 @@ class ProductCard extends React.Component {
     const productId = this.props.product._id;
 
     console.log("making delete request")
-    // axios.post('/auth/deleteFavoriteProduct', this.props.product)
-    //  .then(res =>{
-    //    const FavoriteProductList = [res.data,
-    //   ...this.props.state.user.favorites];
-    //   store.dispatch({ type: 'DELETE_FAVORITE_PRODUCT', payload: FavoriteProductList })
-    // })
+    axios.post('/auth/deleteFavoriteProduct', this.props.product)
+    .then(res =>{
+      console.log("updating redux state")
+      const FavoriteProductList = res.data;
+      console.log("FavoriteProductList", FavoriteProductList)
+     store.dispatch({ type: 'DELETE_FAVORITE_PRODUCT', payload: FavoriteProductList })
+   })
    .catch(err => {
      console.log(err)
    })
   }
   
-  //<FavoriteBorderIcon onClick={this.isFavorite} />
-
   render () {
     return (
       <div className='product_card'>

@@ -11,8 +11,7 @@ const user = (state = initialUser, action) => {
     case 'ADD_FAVORITE_PRODUCT':
       return { ...state, favorites: action.payload }
     case 'DELETE_FAVORITE_PRODUCT':
-      console.log("Deleting FAVORITE PRODUCT" + action.payload);
-      return action.payload
+      return { ...state, favorites: action.payload }
     default:
       return state
   }

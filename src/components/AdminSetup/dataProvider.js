@@ -89,14 +89,13 @@ export default {
 
   update: (resource, params) => {
     console.log("update");
-   return httpClient(`${apiUrl}/${resource}/${params.id}`, {
-      method: "PUT",
+   return httpClient(`${apiUrl}/${resource}/zog/${params.id}`, {
+      method: "POST",
       body: JSON.stringify(params.data),
     }).then(({ json }) => {
-      displayErrorMessage(json)
-      // return { data: json }
+      // displayErrorMessage(json)
+      return { data: json }
     }).catch(err => {
-      alert("error: ", err)
       return displayErrorMessage(err)
     })
   },

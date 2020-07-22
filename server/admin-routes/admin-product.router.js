@@ -66,17 +66,17 @@ router.post("/", (req, res) => {
 // @route   POST /admin-products/edit/:id
 // @desc    Edit a product
 // @access  Private
-router.put("/:id", async (req, res) => {
+router.post("/zog/:id", async (req, res) => {
   console.log("update hit")
   console.log("id: ", req.params.id)
   console.log("body: ", req.body)
   Product.updateOne({_id: req.params.id}, req.body)
-  .then((user) => {
-    user = JSON.parse(JSON.stringify(user).split('"_id":').join('"id":'));
-    res.json(user)
+  .then((product) => {
+    product = JSON.parse(JSON.stringify(product).split('"_id":').join('"id":'));
+    res.json(product)
   }).catch(err => {
     console.log(err)
-    res.status(500).send("Failed to update.")
+    res.send("Failed to update.")
   })
 })
 // router.post("/edit/:id", (req, res) => {

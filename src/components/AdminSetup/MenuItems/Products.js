@@ -71,21 +71,14 @@ export const ProductCreate = (props) => (
   </Create>
 );
 
-const editFailed = () => {
-  return "edit Failed"
-}
-const editSuccess = () => {
-  return "edit passed"
-}
-
 export const ProductEdit = props => (
-  <Edit onFailure={editFailed} onSuccess={editSuccess} actions={<ProductEditActions />} title={<ProductTitle />} {...props}>
+  <Edit actions={<ProductEditActions />} title={<ProductTitle />} {...props}>
     <SimpleForm>
       {/* {!} NEEDS TO BE DONE LATER TO EDIT ORDERS OF USERS */}
       {/* <ReferenceInput source="orderId" reference="orders"> */}
       <TextInput label="Product Name" source="name" />
       <TextInput label="Category" source="category"/>
-      <TextInput label="Description" source="description" options={{ multiLine: true }} />
+      <TextInput label="Description" source="description"  />
       <NumberInput label="Price" source="price"/>
       {/* <ImageInput source="imageData"/> */}
     </SimpleForm>
@@ -99,7 +92,7 @@ const ProductTitle = ({ record }) => {
 
 const ProductShowActions = ({ basePath, data, resource }) => (
   <TopToolbar>
-    <EditButton basePath={basePath} record={data} />
+    <EditButton label="Edit" basePath={basePath} record={data} />
     <DeleteButton basePath={basePath} record={data} />
     < ListButton basePath={basePath} record={data} />
       {/* Add your custom actions */}

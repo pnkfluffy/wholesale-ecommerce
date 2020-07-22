@@ -13,68 +13,232 @@
 
 .product_page_top {
   display: flex;
+  height: 60vh;
   flex-direction: row;
-}
-
-.product_page_images {
-  width: 45%;
-  padding-right: 5%;
 }
 
 .product_page_image {
   width: 100%;
-  flex: 1;
+  height: 80%;
   position: relative;
 }
 
 .product_image {
   width: 100%;
-  flex: 1;
+  height: 100%;
   object-fit: cover;
 }
 
-.product_page_info {
-  width: 50%;
+.product_page_images {
+  width: 45%;
+  padding-right: 5%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
+.product_images_carousel {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  height: 15%;
+}
+
+.carousel_image_container,
+.carousel_image_container_active {
+  width: 18%;
+  border-radius: 15px;
+  border: 2px solid;
+}
+
+.carousel_image_container {
+  border-color: transparent;
+}
+
+.carousel_image_container_active {
+  border-color: rgba(89, 186, 71, 1);
+}
+
+.carousel_image {
+  object-fit: cover;
+  border-radius: 12px;
+  height: 100%;
+  width: 100%;
+}
+
+.product_page_info {
+  width: 50%;
+  margin-right: 5%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.product_info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+}
+
 .product_page_info_top {
-    display: flex;
-    flex-wrap: nowrap;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.product_title,
+.product_overview_title {
+  font-size: 1.4vw;
+}
+
+.product_overview_container {
+  height: 40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .product_overview_title {
-    color: var(--logo-green);
-    margin-top: 3%;
-    margin-bottom: 3%;
+  color: var(--logo-green);
+  margin-top: 3%;
+  margin-bottom: 3%;
 }
 
+.product_meta_data {
+  height: 60%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.meta_data_card {
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  width: 15%;
+}
+
+.meta_data_card > div {
+  height: 48.5%;
+  background-color: var(--searchbar-black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.meta_title {
+  border-radius: 10px 10px 0 0;
+  font-size: 0.8vw;
+}
+
+.meta_contents {
+  border-radius: 0 0 10px 10px;
+}
+
+.meta_variable {
+  margin-right: 5%;
+  font-size: 1vw;
+  color: var(--logo-green);
+}
+
+.meta_unit {
+  font-size: 0.6vw;
+}
+
+
 .product_purchase {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 15%;
+  margin-top: 5%;
 }
 
 .product_button {
-    width: 70%;
+  width: 60%;
+}
+
+.product_price {
+  display: flex;
+  font-size: 1.4vw;
+}
+
+.price_price {
+  margin-left: 8px;
+  color: var(--logo-green);
 }
 
 /*Reviews*/
 .add_to_reviews_input {
-    width: 100%;
-    color: var(--paragraph-font-grey);
-    resize: none;
-    background-color: transparent;
-    border-width: 1px;
-    border-color: var(--logo-green);
-    border-style: solid;
+  width: 100%;
+  color: var(--paragraph-font-grey);
+  resize: none;
+  background-color: transparent;
+  border-width: 1px;
+  border-color: var(--logo-green);
+  border-style: solid;
 }
 
-add_to_reviews_input:focus {
-    border-width: 1px;
-    border-style: solid;
-    box-shadow: none;
-    outline: none;
+.add_to_reviews_input:focus {
+  border-width: 1px;
+  border-style: solid;
+  box-shadow: none;
+  outline: none;
+}
+
+.reviews_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.product_title {
+  width: 80%;
+}
+
+.product_quantity {
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+  width: 20%;
+  height: 100%;
+  max-height: 44px;
+  border-radius: 10px;
+  background-color: var(--searchbar-black);
+}
+
+.product_quantity_input {
+  background-color: transparent;
+  border: none;
+  color: inherit;
+  width: 55%;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  margin-bottom: 0;
+  padding-left: 15%;
+}
+
+.quantity_arrows {
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.order_quantity_button {
+  height: 40%;
+  color: var(--logo-green);
+}
+
+.order_quantity_button:first-child {
+  margin-top: 20%;
+}
+
+.order_quantity_button > svg {
+  height: 80%;
+  cursor: pointer;
 }

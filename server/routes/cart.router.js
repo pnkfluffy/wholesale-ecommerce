@@ -14,6 +14,8 @@ router.get('/', rejectUnauthenticated, async (req, res) => {
     for (let i = 0; i < cart.length; i++) {
       const productInfo = await Product.findById(cart[i].product)
         .then(info => {
+          //  means nothing found
+          if (!info) return
           const relavent = info._doc
           return {
             ...relavent,
@@ -24,7 +26,6 @@ router.get('/', rejectUnauthenticated, async (req, res) => {
         .catch(err => console.log(err))
       cartProductInfo.push(productInfo)
     }
-    console.log('finalcart', cartProductInfo)
     res.send(cartProductInfo)
   } catch (error) {
     console.log(error)

@@ -11,6 +11,8 @@ import ProductQuantity from './productQuantity'
 import UserReviews from './productUserReviews'
 import ProductImages from './productImages'
 import ProductMetaData from './productMetaData'
+import PriceTiers from './priceTiers'
+import { getPriceQuantity } from '../reuseable/getPriceQuantity'
 import { GreenButton } from '../reuseable/materialButtons'
 
 import { addToCart } from '../cart/cartFunctions'
@@ -28,7 +30,7 @@ class Product extends React.Component {
         description: '',
         name: '',
         price: '',
-        priceTiers: [],
+
         _id: ''
       },
 
@@ -57,6 +59,13 @@ class Product extends React.Component {
           quantity: 5
         }
       },
+      priceTiers: [
+        { price: 10, quantity: 100 },
+        { price: 8, quantity: 200 },
+        { price: 7, quantity: 300 },
+        { price: 6.5, quantity: 500 },
+        { price: 5, quantity: 1000 }
+      ],
 
       quantity: 1
     }
@@ -81,6 +90,11 @@ class Product extends React.Component {
   }
 
   render () {
+    const totalPrice = getPriceQuantity(
+      this.state.priceTiers,
+      this.state.quantity,
+      this.state.product.price
+    )
     return (
       <div className='product_page'>
         <div className='product_page_main'>
@@ -99,7 +113,7 @@ class Product extends React.Component {
                       changeQuantity={this.changeQuantity}
                     />
                   </div>
-                  <p>{this.state.product.description}</p>
+                  <PriceTiers tiers={this.state.priceTiers} />
                 </div>
                 <div className='product_overview_container'>
                   <div className='product_overview_title'>Overview</div>
@@ -117,15 +131,12 @@ class Product extends React.Component {
                   Add To Cart
                 </GreenButton>
                 <div className='product_price'>
-                  $
-                  <div className='price_price'>
-                    {this.state.product.price * this.state.quantity}
-                  </div>
+                  $<div className='price_price'>{totalPrice}</div>
                 </div>
               </div>
             </div>
           </div>
-          <div className='product_page_pricetiers'>x price if you buy x</div>
+          <p>{this.state.product.description}</p>
         </div>
         <UserReviews productID={this.props.match.params.productID} />
       </div>

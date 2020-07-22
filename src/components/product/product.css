@@ -86,6 +86,7 @@
   flex-wrap: nowrap;
   flex-direction: row;
   justify-content: space-between;
+  margin-bottom: 5%;
 }
 
 .product_title,
@@ -241,4 +242,35 @@
 .order_quantity_button > svg {
   height: 80%;
   cursor: pointer;
+}
+
+.price_table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--paragraph-font-grey)
+}
+
+.price_table_row > th,
+.price_table_row > td {
+  text-align: center;
+  border: 0.5px solid var(--paragraph-font-grey);
+  padding: 0;
+  border-spacing: 0;
+}
+
+.price_table_row > td {
+  font-size: 0.8vw;
+}
+
+.price_table_row > th {
+  font-size: 1vw;
+  color: var(--header-font-white);
+  padding-top: 4px;
+}
+
+.table_add_cart_icon {
+  width: 20px !important;
+  color: var(--light-hyperlink-green);
+  margin-top: 1px;
+  margin-bottom: -1px;
 }

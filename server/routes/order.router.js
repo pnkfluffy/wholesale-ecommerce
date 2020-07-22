@@ -23,12 +23,10 @@ router.get('/oneOrder/:orderId', (req, res) => {
 // @route   GET /orders/from/
 // @desc    Returns all orders from user
 // @access  Private
-router.get('/from/:id/:page_size/:page_num', (req, res) => {
+router.get('/from/', (req, res) => {
   const skips = req.params.page_size * (req.params.page_num - 1)
 
-  Order.find({ user: req.params.id })
-    .skip(skips)
-    .limit(parseInt(req.params.page_size, 10))
+  Order.find({ user: req.user._id })
     .then(orders => {
       res.json({
         success: true,

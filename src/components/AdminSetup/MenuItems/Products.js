@@ -72,18 +72,14 @@ export const ProductCreate = (props) => (
 );
 
 const editFailed = () => {
-  alert("Edit failed");
-  console.log("Edit failed");
-  return "edit failed"
+  return "edit Failed"
 }
 const editSuccess = () => {
-  alert("Edit passed");
-  console.log("Edit passed");
   return "edit passed"
 }
 
 export const ProductEdit = props => (
-  <Edit onSuccess={editSuccess} onFailure={editFailed } actions={<ProductEditActions />} title={<ProductTitle />} {...props}>
+  <Edit onFailure={editFailed} onSuccess={editSuccess} actions={<ProductEditActions />} title={<ProductTitle />} {...props}>
     <SimpleForm>
       {/* {!} NEEDS TO BE DONE LATER TO EDIT ORDERS OF USERS */}
       {/* <ReferenceInput source="orderId" reference="orders"> */}

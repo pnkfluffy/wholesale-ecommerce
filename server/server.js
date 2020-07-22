@@ -41,8 +41,7 @@ app.use("/gc", gcRouter);
 app.use("/orders", orderRouter);
 app.use("/products", productRouter);
 
-/*AdminRouters have capital letters*/
-app.use("/Products", adminProductRouter);
+app.use("/admin-products", adminProductRouter);
 app.use("/Customers", adminUserRouter);
 app.use("/Orders", adminOrderRouter);
 app.use("/Reviews", adminReviewRouter);

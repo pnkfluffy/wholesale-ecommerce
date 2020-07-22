@@ -1,9 +1,19 @@
 import { fetchUtils } from "react-admin";
+import * as React from 'react'
 import { stringify } from "query-string";
 import { ConnectionStates } from "mongoose";
 
 const apiUrl = "http://localhost:5000";
 const httpClient = fetchUtils.fetchJson;
+
+const displayErrorMessage = (props) => {
+  return (
+  <div style={{width: "25vw"}}>
+    <h1>Error message</h1>
+    {props}
+  </div>
+  )
+}
 
 export default {
   getList: (resource, params) => {
@@ -34,6 +44,7 @@ export default {
 
   getOne: (resource, params) => {
     console.log("getOne resource", resource);
+    
 
     return httpClient(`${apiUrl}/${resource}/${params.id}`)
     .then(({ json }) => {
@@ -78,18 +89,15 @@ export default {
 
   update: (resource, params) => {
     console.log("update");
-    if(resource == "admin-products"){
-      alert(params)
-      return "hit"
-    }
    return httpClient(`${apiUrl}/${resource}/${params.id}`, {
       method: "PUT",
       body: JSON.stringify(params.data),
     }).then(({ json }) => {
-      return { data: json }
+      displayErrorMessage(json)
+      // return { data: json }
     }).catch(err => {
       alert("error: ", err)
-      return err
+      return displayErrorMessage(err)
     })
   },
 

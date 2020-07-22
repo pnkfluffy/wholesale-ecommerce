@@ -1,7 +1,7 @@
 import * as React from 'react'
 import {
   List, Create,
-  Edit, SimpleForm,
+  Edit, SimpleForm, ArrayField,
   DisabledInput, BooleanInput,
   TextInput, DateInput,
   LongTextInput, ReferenceManyField,
@@ -15,11 +15,19 @@ import {
 } from 'react-admin'
 
 export const UserShow = (props) => (
-  <Show actions={< UserActions />} {...props}>
+  <Show actions={< UserShowActions />} {...props}>
       <SimpleShowLayout>
         <TextField label="Full Name" source="name"/>
         <TextField label="Payment confirmed" source="paymentVerified" />
         <TextField label="DocuSign confirmed" source="docusignVerified"/>
+        <ArrayField label="Favorites" source="favorites">
+          <Datagrid>
+            <TextField label="ID" source="id"/>
+            <TextField label="Product Name" source="name" />
+            <TextField label="Category" source="category"/>
+            <TextField label="Price" source="price" />
+          </Datagrid>
+        </ArrayField>
         <TextField label="Database ID" source="id" />
         <TextField label='Google ID' source='googleID' /> 
         <TextField label='goCardless ID' source='goCardlessID' />
@@ -32,10 +40,8 @@ export const UserList = props => (
     <Datagrid rowClick='show'>
       {/* <TextField label='ID' source='id' /> */}
       <TextField label='Name' source='name' />
-      <TextField label='goCardless Verified' source='Verified' />
-      <TextField label='docusign Verified' source='docusignVerified' />
+      <TextField label="Database ID" source="id" />
       < ShowButton />
-      < EditButton />
       < DeleteButton />
     </Datagrid>
   </List>
@@ -43,7 +49,7 @@ export const UserList = props => (
 
 
 export const UserEdit = props => (
-  <Edit actions={<UserActions />} title={<UserTitle />} {...props}>
+  <Edit actions={<UserEditActions />} title={<UserTitle />} {...props}>
     <SimpleForm>
       <TextInput disabled source='id' />
       {/* {!} NEEDS TO BE DONE LATER TO EDIT ORDERS OF USERS */}
@@ -69,10 +75,17 @@ const UserTitle = ({ record }) => {
   return <span>Post {record ? `"${record.name}"` : ''}</span>
 }
 
-const UserActions = ({ basePath, data, resource }) => (
+const UserShowActions = ({ basePath, data, resource }) => (
+  <TopToolbar>
+    <EditButton basePath={basePath} record={data} />
+    <DeleteButton basePath={basePath} record={data} />
+    < ListButton basePath={basePath} record={data} />
+      {/* Add your custom actions */}
+  </TopToolbar>
+);
+const UserEditActions = ({ basePath, data, resource }) => (
   <TopToolbar>
     <ShowButton basePath={basePath} record={data} />
-    <EditButton basePath={basePath} record={data} />
     <DeleteButton basePath={basePath} record={data} />
     < ListButton basePath={basePath} record={data} />
       {/* Add your custom actions */}

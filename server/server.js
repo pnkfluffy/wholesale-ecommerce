@@ -15,8 +15,10 @@ const userRouter = require("./routes/user.router");
 const gcRouter = require("./routes/goCardless.router");
 const orderRouter = require("./routes/order.router");
 const productRouter = require("./routes/product.router");
-const adminProductRouter = require("./admin-routes/product.router");
+const adminProductRouter = require("./admin-routes/admin-product.router");
 const adminUserRouter = require("./admin-routes/user.router");
+const adminOrderRouter = require("./admin-routes/order.router");
+const adminReviewRouter = require("./admin-routes/review.router");
 dotenv.config();
 
 connectDB();
@@ -42,6 +44,8 @@ app.use("/products", productRouter);
 /*AdminRouters*/
 app.use("/admin-products", adminProductRouter);
 app.use("/users", adminUserRouter);
+app.use("/admin-orders", adminOrderRouter);
+app.use("/reviews", adminReviewRouter);
 // app.use("/admin-users", adminUserRouter);
 
 app.get("/*", function (req, res) {

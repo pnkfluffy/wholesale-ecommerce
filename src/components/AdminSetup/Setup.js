@@ -8,8 +8,9 @@ import polyglotI18nProvider from "ra-i18n-polyglot";
 import createAdminStore from "./createAdminStore";
 
 import { UserList, UserEdit, UserShow } from "./MenuItems/Users";
-import { ProductList } from "./MenuItems/Products"
-import { OrderList } from "./MenuItems/Order"
+import { ProductList, ProductShow, ProductEdit, ProductCreate } from "./MenuItems/Products"
+import { OrderList, OrderShow } from "./MenuItems/Orders"
+import { ReviewList, ReviewShow } from "./MenuItems/Reviews"
 // import { PostList, PostEdit, PostCreate } from "./MenuItems/Posts";
 import Dashboard from "./MenuItems/Dashboard";
 import authProvider from "./authProvider";
@@ -40,15 +41,9 @@ const AdminSetup = () => (
       title="My Admin"
     >
       <Resource name="users" list={UserList} edit={UserEdit} show={UserShow} icon={UserIcon} />
-      <Resource name="products" list={ProductList}/>
-      <Resource name="orders" list={OrderList}/>
-      <Resource
-        name="posts"
-        // list={PostList}
-        // edit={PostEdit}
-        // create={PostCreate}
-        // icon={PostIcon}
-      />
+      <Resource name="admin-products" list={ProductList} edit={ProductEdit} show={ProductShow} create={ProductCreate}/>
+      <Resource name="admin-orders" list={OrderList} show={OrderShow}/>
+      <Resource name="reviews" list={ReviewList} show={ReviewShow}/>
     </Admin>
   </Provider>
 );

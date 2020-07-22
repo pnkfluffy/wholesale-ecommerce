@@ -1,5 +1,6 @@
 import { fetchUtils } from "react-admin";
 import { stringify } from "query-string";
+import { ConnectionStates } from "mongoose";
 
 const apiUrl = "http://localhost:5000";
 const httpClient = fetchUtils.fetchJson;
@@ -18,6 +19,7 @@ export default {
       filter: JSON.stringify(params.filter),
     };
     const url = `${apiUrl}/${resource}?${stringify(query)}`;
+    console.log(url)
     console.log("query", query);
     console.log("url", url);
     return httpClient(url).then(({ headers, json }) => {
@@ -80,7 +82,10 @@ export default {
       body: JSON.stringify(params.data),
     }).then(({ json }) => {
       return { data: json }
-    });
+    }).catch(err => {
+      alert("error: ", err)
+      return err
+    })
   },
 
   updateMany: (resource, params) => {
@@ -112,9 +117,11 @@ export default {
   delete: (resource, params) => {
     console.log("delete");
 
-    httpClient(`${apiUrl}/${resource}/${params.id}`, {
+    return httpClient(`${apiUrl}/${resource}/${params.id}`, {
       method: "DELETE",
-    }).then(({ json }) => ({ data: json }));
+    }).then(({ json }) => {
+     return {data: json};
+    })
   },
 
   deleteMany: (resource, params) => {

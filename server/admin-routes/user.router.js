@@ -19,6 +19,7 @@ router.get("/", (req, res) => {
       //  each object needs to have an 'id' field in order for
       //  reactAdmin to parse
       users = JSON.parse(JSON.stringify(users).split('"_id":').join('"id":'));
+      console.log("parsed users: ", users)
       res.json(users);
     })
     .catch((error) => {

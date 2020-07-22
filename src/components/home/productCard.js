@@ -3,11 +3,6 @@ import { Link } from 'react-router-dom'
 import AddToCartButton from './addToCartButton'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import axios from 'axios'
-import FavoriteIcon from '@material-ui/icons/Favorite'
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
-import store from "../../redux/store";
-import isFavorite from '../reuseable/isFavoriteProduct'
 
 import productImg from '../../resources/images/product_1.png'
 
@@ -22,56 +17,12 @@ class ProductCard extends React.Component {
     this.props.history.push(redirect_url)
   }
 
-  setAsFavoriteProduct = e => {
-    e.stopPropagation()
-    const favoriteProducts = this.props.state.user.favorites;
-    const productId = this.props.product._id;
-
-    console.log("making post request")
-    axios.post('/auth/addFavoriteProduct', this.props.product)
-    .then(res =>{
-      console.log("updating redux state")
-      const FavoriteProductList = res.data;
-      console.log("FavoriteProductList", FavoriteProductList)
-     store.dispatch({ type: 'ADD_FAVORITE_PRODUCT', payload: FavoriteProductList })
-   })
-   .catch(err => {
-     console.log(err)
-   })
-  }
-
-  removeFromFavorite = e => {
-    e.stopPropagation()
-    const favoriteProducts = this.props.state.user.favorites;
-    const productId = this.props.product._id;
-
-    console.log("making delete request")
-    axios.post('/auth/deleteFavoriteProduct', this.props.product)
-    .then(res =>{
-      console.log("updating redux state")
-      const FavoriteProductList = res.data;
-      console.log("FavoriteProductList", FavoriteProductList)
-     store.dispatch({ type: 'DELETE_FAVORITE_PRODUCT', payload: FavoriteProductList })
-   })
-   .catch(err => {
-     console.log(err)
-   })
-  }
-  
   render () {
     return (
       <div className='product_card'>
         <div className='product_card_image' >
           <img alt='product_image' src={productImg} onClick={this.goToProduct} />
-          <div className='product_card_heart'>
-    {
-      isFavorite(this.props.state.user.favorites, this.props.product._id) ?
-      <FavoriteIcon onClick={this.removeFromFavorite}/> :
-        <FavoriteBorderIcon onClick={this.setAsFavoriteProduct}/>
-        }
-          </div>
         </div>
-        
         <div className='product_name'>{this.props.product.name}</div>
         <div className='product_metadata'>
           <span>

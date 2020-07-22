@@ -35,7 +35,8 @@ router.post('/update-user', rejectUnauthenticated, async (req, res) => {
 })
 
 router.post('/addFavoriteProduct', rejectUnauthenticated, async (req, res) => {	
-		const productId = req.body._id;
+		const productId = req.body;
+		console.log("backend object",productId)
 		User.findById({ _id: req.user.id })
 		.then(user => {
 			const newFavoritesArray = req.user.favorites;
@@ -55,7 +56,7 @@ router.post('/addFavoriteProduct', rejectUnauthenticated, async (req, res) => {
 	});
 
 	router.post('/deleteFavoriteProduct', rejectUnauthenticated, async (req, res) => {	
-		const productId = req.body._id;
+		const productId = req.body;
 		User.findById({ _id: req.user.id })
 		.then(user => {
 			const index = req.user.favorites.indexOf(productId);

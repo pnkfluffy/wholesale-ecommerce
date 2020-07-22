@@ -2,8 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import productImg from '../../resources/images/product_1.png'
 import axios from 'axios'
-import FavoriteIcon from '@material-ui/icons/Favorite'
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 import ProductQuantity from './productQuantity'
 import UserReviews from "./productUserReviews";
 import { GreenButton } from '../reuseable/materialButtons'
@@ -11,9 +9,17 @@ import StarIcon from "@material-ui/icons/Star";
 import StarBorderIcon from "@material-ui/icons/StarBorder";
 import StarHalfIcon from '@material-ui/icons/StarHalf';
 
+import FavoriteIcon from '@material-ui/icons/Favorite'
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
+import isFavorite from '../reuseable/isFavoriteProduct'
+import setAsFavoriteProduct from '../reuseable/setAsFavoriteProduct'
+import removeFavoriteProduct from '../reuseable/removeFavoriteProduct'
+
+
 const mapStateToProps = state => ({
   state: state.reducer
 })
+
 
 class Product extends React.Component {
   constructor (props) {
@@ -97,7 +103,6 @@ class Product extends React.Component {
     }
     return this.getStars(stars)
   }
-
   render () {
     return (
       <div className='product_page'>
@@ -110,9 +115,13 @@ class Product extends React.Component {
                   alt='product_image'
                   src={productImg}
                 />
-                <div className='product_card_heart'>
-                  <FavoriteBorderIcon onClick={this.favoriteProduct} />
-                </div>
+          <div className='product_card_heart'>
+            {
+            isFavorite(this.props.state.user.favorites, this.props.match.params.productID) ?
+            <FavoriteIcon onClick={() => removeFavoriteProduct(this.props.match.params.productID)}/> :
+            <FavoriteBorderIcon onClick={() => setAsFavoriteProduct(this.props.match.params.productID)}/>
+            }
+          </div>
               </div>
               <div className='product_images_carousel'></div>
             </div>

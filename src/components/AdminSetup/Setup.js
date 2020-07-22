@@ -40,10 +40,10 @@ const AdminSetup = () => (
       history={history}
       title="My Admin"
     >
-      <Resource name="users" list={UserList} edit={UserEdit} show={UserShow} icon={UserIcon} />
-      <Resource name="admin-products" list={ProductList} edit={ProductEdit} show={ProductShow} create={ProductCreate}/>
-      <Resource name="admin-orders" list={OrderList} show={OrderShow}/>
-      <Resource name="reviews" list={ReviewList} show={ReviewShow}/>
+      <Resource name="Customers" list={UserList} edit={UserEdit} show={UserShow} icon={UserIcon} />
+      <Resource name="Products" list={ProductList} edit={ProductEdit} show={ProductShow} create={ProductCreate}/>
+      <Resource name="Orders" list={OrderList} show={OrderShow}/>
+      <Resource name="Reviews" list={ReviewList} show={ReviewShow}/>
     </Admin>
   </Provider>
 );

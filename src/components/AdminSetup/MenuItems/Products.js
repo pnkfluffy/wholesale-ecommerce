@@ -35,7 +35,7 @@ export const ProductShow = (props) => (
         <TextField label="Price" source="price" />
         <DateField label="Release date" source="date"/>
         <TextField label="Database ID" source="id" />
-        <ImageField source="imageData" />
+        {/* <ImageField source="imageData" /> */}
       </SimpleShowLayout>
   </Show>
 );
@@ -62,16 +62,28 @@ export const ProductCreate = (props) => (
           <NumberInput label="Price" source="price"/>
           <ArrayInput label="Price Tiers" source="priceTiers.tiers">
             <SimpleFormIterator>
-              <NumberInput />
+              <NumberInput label="Quantity" source="priceTiers.tiers.price"/>
+              <NumberInput label="Discount applied" source="priceTiers.tiers.ratio"/>
             </SimpleFormIterator>
           </ArrayInput>
-          <ImageInput source="imageData"/>
+          {/* <ImageInput source="imageData"/> */}
       </SimpleForm>
   </Create>
 );
 
+const editFailed = () => {
+  alert("Edit failed");
+  console.log("Edit failed");
+  return "edit failed"
+}
+const editSuccess = () => {
+  alert("Edit passed");
+  console.log("Edit passed");
+  return "edit passed"
+}
+
 export const ProductEdit = props => (
-  <Edit actions={<ProductEditActions />} title={<ProductTitle />} {...props}>
+  <Edit onSuccess={editSuccess} onFailure={editFailed } actions={<ProductEditActions />} title={<ProductTitle />} {...props}>
     <SimpleForm>
       {/* {!} NEEDS TO BE DONE LATER TO EDIT ORDERS OF USERS */}
       {/* <ReferenceInput source="orderId" reference="orders"> */}
@@ -79,7 +91,7 @@ export const ProductEdit = props => (
       <TextInput label="Category" source="category"/>
       <TextInput label="Description" source="description" options={{ multiLine: true }} />
       <NumberInput label="Price" source="price"/>
-      <ImageInput source="imageData"/>
+      {/* <ImageInput source="imageData"/> */}
     </SimpleForm>
   </Edit>
 )

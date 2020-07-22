@@ -68,15 +68,20 @@ export default {
     };
     const url = `${apiUrl}/${resource}?${stringify(query)}`;
 
-    httpClient(url).then(({ headers, json }) => ({
-      data: json,
-      total: parseInt(headers.get("content-range").split("/").pop(), 10),
-    }));
+    return httpClient(url).then(({ headers, json }) => {
+      return {
+        data: json,
+        total: parseInt(headers.get("content-range").split("/").pop(), 10),
+      };
+    })
   },
 
   update: (resource, params) => {
     console.log("update");
-
+    if(resource == "admin-products"){
+      alert(params)
+      return "hit"
+    }
    return httpClient(`${apiUrl}/${resource}/${params.id}`, {
       method: "PUT",
       body: JSON.stringify(params.data),

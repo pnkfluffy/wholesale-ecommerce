@@ -41,11 +41,11 @@ app.use("/gc", gcRouter);
 app.use("/orders", orderRouter);
 app.use("/products", productRouter);
 
-/*AdminRouters*/
-app.use("/admin-products", adminProductRouter);
-app.use("/users", adminUserRouter);
-app.use("/admin-orders", adminOrderRouter);
-app.use("/reviews", adminReviewRouter);
+/*AdminRouters have capital letters*/
+app.use("/Products", adminProductRouter);
+app.use("/Customers", adminUserRouter);
+app.use("/Orders", adminOrderRouter);
+app.use("/Reviews", adminReviewRouter);
 // app.use("/admin-users", adminUserRouter);
 
 app.get("/*", function (req, res) {

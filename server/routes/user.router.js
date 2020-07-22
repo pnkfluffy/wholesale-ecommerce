@@ -36,10 +36,13 @@ router.post('/update-user', rejectUnauthenticated, async (req, res) => {
 
 router.post('/addFavoriteProduct', rejectUnauthenticated, async (req, res) => {	
 		const productId = req.body;
-		console.log("backend object",productId)
 		User.findById({ _id: req.user.id })
 		.then(user => {
 			const newFavoritesArray = req.user.favorites;
+			if (newFavoritesArray.indexOf(productId) === -1){
+				console.log("Error: Product already exists on the array")
+				return;
+			}
 			newFavoritesArray.push(productId);
 			user
 				.updateOne({ favorites: newFavoritesArray})

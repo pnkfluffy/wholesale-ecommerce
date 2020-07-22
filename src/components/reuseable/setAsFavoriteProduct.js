@@ -4,8 +4,6 @@ import axios from 'axios'
 
 function setAsFavoriteProduct(productId) {
     const dataContainer = [productId]
-    console.log("product data", dataContainer)
-
     console.log("making post request")
     axios.post('/auth/addFavoriteProduct', dataContainer)
     .then(res =>{

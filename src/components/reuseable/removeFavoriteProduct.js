@@ -2,9 +2,10 @@ import store from "../../redux/store";
 import axios from 'axios'
 
 
-function removeFavoriteProduct(product){
+function removeFavoriteProduct(productId){
+  const dataContainer = [productId]
     console.log("making delete request")
-    axios.post('/auth/deleteFavoriteProduct', product)
+    axios.post('/auth/deleteFavoriteProduct', dataContainer)
     .then(res =>{
       console.log("updating redux state")
       const FavoriteProductList = res.data;

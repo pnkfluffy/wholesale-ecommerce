@@ -3,9 +3,9 @@ import store from './redux/store'
 
 export const initializeAllRequests = () => {
   console.log('redux initializing')
+  getAllCategories()
   getAllReviews()
   getAllProducts()
-  getAllCategories()
   axios
     .get('/auth/user')
     .then(res => {
@@ -43,7 +43,7 @@ export const getUserCart = () => {
 const getAllCategories = () => {
   console.log('getting categories')
   axios
-    .get('products/categories')
+    .get('/products/categories')
     .then(res => {
       console.log('categories here', res.data)
       store.dispatch({ type: 'SET_CATEGORIES', payload: res.data })
@@ -55,7 +55,7 @@ const getAllCategories = () => {
 
 export const getAllProducts = () => {
   axios
-    .get('products/all')
+    .get('/products/all')
     .then(res => {
       console.log(res)
       store.dispatch({ type: 'ADD_ALL_PRODUCTS', payload: res.data })

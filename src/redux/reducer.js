@@ -29,11 +29,11 @@ const cart = (state = [], action) => {
     case 'ADD_TO_CART':
       return [...state, action.payload]
     case 'UPDATE_CART_ITEM':
-      let updateItemIndex = state.findIndex(c => c.id === action.payload.id)
+      let updateItemIndex = state.findIndex(c => c.product === action.payload.id)
       state[updateItemIndex].quantity = action.payload.quantity
       return [...state]
     case 'DELETE_CART_ITEM':
-      let deleteItemIndex = state.findIndex(c => c.id === action.payload.id)
+      let deleteItemIndex = state.findIndex(c => c.product === action.payload.id)
       state.splice(deleteItemIndex, 1)
       return [...state]
     default:

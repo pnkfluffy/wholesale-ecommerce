@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 import { updateCartServer, editCartQuantity } from '../cart/cartFunctions'
 /*components*/
 import OrderCard from './orderCard'
+import { v4 } from 'uuid';
+
 
 const mapStateToProps = state => {
   return {
@@ -24,7 +26,7 @@ class Cart extends React.Component {
         <OrderCard
           productInfo={cartProduct}
           total={productTotal}
-          key={index}
+          key={v4()}
           // updateQuantity={this.props.updateQuantity()}
         />
       )

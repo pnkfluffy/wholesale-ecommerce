@@ -49,7 +49,7 @@ class CartQuantity extends React.Component {
     this.props.dispatch({
       type: 'UPDATE_CART_ITEM',
       payload: {
-        id: this.props.productID,
+        id: this.props.productInfo.product,
         quantity: this.state.quantity
       }
     })

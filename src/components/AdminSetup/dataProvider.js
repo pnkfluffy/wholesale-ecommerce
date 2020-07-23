@@ -44,14 +44,11 @@ export default {
 
   getOne: (resource, params) => {
     console.log("getOne resource", resource);
-    
-
     return httpClient(`${apiUrl}/${resource}/${params.id}`)
     .then(({ json }) => {
       console.log(json);
       return { data: json };
     })
-
   },
 
   getMany: (resource, params) => {
@@ -88,8 +85,8 @@ export default {
   },
 
   update: (resource, params) => {
-    console.log("update");
-   return httpClient(`${apiUrl}/${resource}/${params.id}`, {
+    console.log("update", resource);
+    return httpClient(`${apiUrl}/${resource}/${params.id}`, {
       method: "PUT",
       body: JSON.stringify(params.data),
     }).then(({ json }) => {

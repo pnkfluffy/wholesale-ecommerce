@@ -108,7 +108,7 @@ export const ProductEdit = props => {
   const redirect = useRedirect();
 
   const onSuccess = ({ data }) => {
-    notify(`Changes to post "${data.title}" saved`)
+    notify(`Changes to product "${data.name}" saved`)
     redirect('/admin-products');
     refresh();
   };

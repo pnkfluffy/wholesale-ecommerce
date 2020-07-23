@@ -22,6 +22,7 @@ class GCPay extends React.Component {
             ClientAddr2: "",
             ClientCity: "",
             ClientPostalCode: "",
+            ClientState: "",
         }
     }
 
@@ -32,6 +33,7 @@ class GCPay extends React.Component {
         axios
             .get("gc/oneClient")
             .then(res => {
+                    console.log(res.data)
                     this.setState({
                         loading: false,
                         ClientName: res.data.given_name,
@@ -40,6 +42,7 @@ class GCPay extends React.Component {
                         ClientAddr2: res.data.address_line2,
                         ClientCity: res.data.city,
                         ClientPostalCode: res.data.postal_code,
+                        ClientState: res.data.region
                     })
             })
             .catch((err) => {
@@ -55,8 +58,19 @@ class GCPay extends React.Component {
         this.setState({
             loading: true
         })
+        const fullName = this.state.ClientName + " " + this.state.ClientLastName;
         axios
-            .post("gc/collectPayment/")
+            .post("gc/collectPayment/",
+                {
+                        delivery: {
+                                    ClientFullName: fullName,
+                                    ClientAddr1: this.state.ClientAddr1,
+                                    ClientAddr2: this.state.ClientAddr2,
+                                    city: this.state.ClientCity,
+                                    state: this.state.ClientState,
+                                    postal_code: this.state.ClientPostalCode,
+                                    }
+                    })
             .then(res => {
                 this.setState({
                     loading: false,
@@ -107,14 +121,14 @@ class GCPay extends React.Component {
                             Address Line 1
                             <input onChange={this.onChange}
                                    value={this.state.ClientAddr1}
-                                   id="ClientAddr"
+                                   id="ClientAddr1"
                                    type="text" />
                         </label>
                         <label>
                             Address Line 2
                             <input onChange={this.onChange}
                                    value={this.state.ClientAddr2}
-                                   id="ClientAddr"
+                                   id="ClientAddr2"
                                    type="text" />
                         </label>
                         <label>
@@ -122,6 +136,13 @@ class GCPay extends React.Component {
                             <input onChange={this.onChange}
                                    value={this.state.ClientCity}
                                    id="ClientCity"
+                                   type="text" />
+                        </label>
+                        <label>
+                            City
+                            <input onChange={this.onChange}
+                                   value={this.state.ClientState}
+                                   id="ClientState"
                                    type="text" />
                         </label>
                         <label>

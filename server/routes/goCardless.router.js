@@ -248,7 +248,6 @@ const getTotal = async products => {
 // @access  Private
 router.post('/collectPayment', async (req, res) => {
 	try {
-		console.log(req.user);
 		//get all the order information from DB
 		const order = req.user.cart
 
@@ -258,10 +257,10 @@ router.post('/collectPayment', async (req, res) => {
 			constants.Environments.Sandbox,
 			{ raiseOnIdempotencyConflict: true },
 		);
-		const theClient = await allClients.customers.find(req.user.goCardlessID);
 
 		//set proper client currency to payment
 		//to go live needs to add other currencies
+		const theClient = await allClients.customers.find(req.user.goCardlessID);
 		const clientCountry = theClient.country_code;
 		let currency;
 		if (clientCountry === "US")
@@ -278,6 +277,7 @@ router.post('/collectPayment', async (req, res) => {
 		const newOrder = new Order({
 			user: req.user._id,
 			products: order,
+			deliveryInfo: req.body.delivery,
 			total: total
 		});
 

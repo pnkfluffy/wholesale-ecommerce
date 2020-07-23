@@ -69,7 +69,7 @@
   right: 0;
   bottom: 0;
   margin: 5%;
-  width: 200%;
+  cursor: pointer;
 }
 
 .product_card_heart > svg {

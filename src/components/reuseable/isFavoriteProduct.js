@@ -1,8 +1,7 @@
 function isFavorite(favoriteProducts, productId){
-
-  console.log("product passed on req",productId)
+  console.log("productID", productId)
     function checkIfIsFavorite(result){
-      return result == productId;
+      return result === productId;
      }
     
     if (favoriteProducts.find(checkIfIsFavorite)){

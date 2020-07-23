@@ -69,8 +69,6 @@ class CartQuantity extends React.Component {
     return (
       <div className='cart_quantity'>
         <input
-          // disabled={this.state.active ? '' : 'disabled'}
-          onFocus={this.onFocus}
           onBlur={this.onBlur}
           onChange={this.inputQuantity}
           className='product_quantity_input'

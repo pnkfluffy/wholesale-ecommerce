@@ -1,16 +1,12 @@
 /*** CART ***/
-.cart_body {
+.cart_body, .cart {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
 .top_cart_area {
-  width: 80%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+    padding-left: 10%;
 }
 
 .cart_button_area {

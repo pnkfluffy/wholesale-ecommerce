@@ -1,11 +1,11 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { updateCartServer, editCartQuantity } from '../cart/cartFunctions'
 /*components*/
 import OrderCard from './orderCard'
-import { v4 } from 'uuid';
-
+import { getPriceByQuantity } from '../reuseable/getPriceByQuantity'
+import { v4 } from 'uuid'
+import { GreenButton } from '../reuseable/materialButtons'
 
 const mapStateToProps = state => {
   return {
@@ -13,22 +13,20 @@ const mapStateToProps = state => {
   }
 }
 
-
 class Cart extends React.Component {
-  render() {    
+  render () {
     let total = 0
 
     const cartProducts = this.props.state.cart.map((cartProduct, index) => {
-      const productTotal = cartProduct.quantity * cartProduct.price
+      const productTotal = getPriceByQuantity(
+        cartProduct.priceTiers,
+        cartProduct.quantity,
+        cartProduct.price
+      )
       total += productTotal
 
       return (
-        <OrderCard
-          productInfo={cartProduct}
-          total={productTotal}
-          key={v4()}
-          // updateQuantity={this.props.updateQuantity()}
-        />
+        <OrderCard productInfo={cartProduct} total={productTotal} key={v4()} />
       )
     })
 
@@ -37,25 +35,24 @@ class Cart extends React.Component {
         <div className='top_cart_area'>
           <h1>cart</h1>
         </div>
-        {(() => {
-          if (this.props.state.cart.length > 0) {
-            return (
-              <div className='cart_body'>
-                <div className='cart_button_area'>
-                  <Link to='/buy' className='cart_button'>
-                    Buy {total}
-                  </Link>
-                  <div className='cart_button' onClick={this.deleteCart}>
-                    Delete Cart
-                  </div>
-                </div>
-                <div>{cartProducts}</div>
-              </div>
-            )
-          } else {
-            return <b>Your cart is empty! =( </b>
-          }
-        })()}
+        {this.props.state.cart.length ? (
+          <div className='cart_body'>
+            <div className='cart_products'>{cartProducts}</div>
+            <div className='cart_button_area'>
+              <Link to='/buy' className='cart_button'>
+                <GreenButton
+                  variant='contained'
+                  className='checkout_button'
+                  onClick={this.addToCart}
+                >
+                  CHECK OUT: ${total}
+                </GreenButton>
+              </Link>
+            </div>
+          </div>
+        ) : (
+          <b> Your cart is empty! </b>
+        )}
       </div>
     )
   }

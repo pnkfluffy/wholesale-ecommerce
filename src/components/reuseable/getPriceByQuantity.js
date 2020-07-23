@@ -1,4 +1,4 @@
-export const getPriceQuantity = (priceTiers, quantity, basePrice) => {
+export const getPriceByQuantity = (priceTiers, quantity, basePrice) => {
   let unitPrice = basePrice
 
   console.log('units', priceTiers, quantity, basePrice)

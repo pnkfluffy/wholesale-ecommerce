@@ -12,10 +12,9 @@ import UserReviews from './productUserReviews'
 import ProductImages from './productImages'
 import ProductMetaData from './productMetaData'
 import PriceTiers from './priceTiers'
-import { getPriceQuantity } from '../reuseable/getPriceQuantity'
+import { addQuantityToCart } from '../reuseable/addQuantityToCart'
+import { getPriceByQuantity } from '../reuseable/getPriceByQuantity'
 import { GreenButton } from '../reuseable/materialButtons'
-
-import { addToCart } from '../cart/cartFunctions'
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -33,7 +32,6 @@ class Product extends React.Component {
 
         _id: ''
       },
-
       //  needs to be moved back up into product
       imageData: [
         { url: product_image_one },
@@ -89,8 +87,18 @@ class Product extends React.Component {
     this.setState({ quantity })
   }
 
+  addToCart = () => {
+    let product = this.state.product
+    product.metaData = this.state.metaData
+    product.priceTiers = this.state.priceTiers
+    product.quantity = this.state.quantity
+    product.product = this.state.product._id
+
+    addQuantityToCart(product)
+  }
+
   render () {
-    const totalPrice = getPriceQuantity(
+    const totalPrice = getPriceByQuantity(
       this.state.priceTiers,
       this.state.quantity,
       this.state.product.price
@@ -113,7 +121,10 @@ class Product extends React.Component {
                       changeQuantity={this.changeQuantity}
                     />
                   </div>
-                  <PriceTiers tiers={this.state.priceTiers} />
+                  <PriceTiers
+                    tiers={this.state.priceTiers}
+                    product={this.state}
+                  />
                 </div>
                 <div className='product_overview_container'>
                   <div className='product_overview_title'>Overview</div>
@@ -124,9 +135,7 @@ class Product extends React.Component {
                 <GreenButton
                   variant='contained'
                   className='product_button'
-                  onClick={() =>
-                    addToCart(this.state.product._id, this.state.quantity)
-                  }
+                  onClick={this.addToCart}
                 >
                   Add To Cart
                 </GreenButton>

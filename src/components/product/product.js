@@ -13,7 +13,7 @@ import ProductImages from './productImages'
 import ProductMetaData from './productMetaData'
 import PriceTiers from './priceTiers'
 import { addQuantityToCart } from '../reuseable/addQuantityToCart'
-import { getPriceQuantity } from '../reuseable/getPriceQuantity'
+import { getPriceByQuantity } from '../reuseable/getPriceByQuantity'
 import { GreenButton } from '../reuseable/materialButtons'
 
 const mapStateToProps = state => ({
@@ -98,7 +98,7 @@ class Product extends React.Component {
   }
 
   render () {
-    const totalPrice = getPriceQuantity(
+    const totalPrice = getPriceByQuantity(
       this.state.priceTiers,
       this.state.quantity,
       this.state.product.price

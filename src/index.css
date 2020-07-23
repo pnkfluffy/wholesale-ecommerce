@@ -66,6 +66,7 @@ input::-webkit-inner-spin-button {
 .MuiButton-root {
   text-transform: none !important;
   border-radius: 8px !important;
+  letter-spacing: 1px !important;
 }
 
 .icon_upsidedown {

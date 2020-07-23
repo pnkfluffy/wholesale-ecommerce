@@ -3,7 +3,7 @@ import { cloneElement, useMemo } from 'react';
 
 import {
   useNotify, useRefresh, useRedirect,
-  List, Create,
+  List, Create, ArrayField, FunctionField,
   Edit, SimpleForm, NumberInput,
   DisabledInput, BooleanInput, ImageInput,
   TextInput, DateInput, ArrayInput,
@@ -27,19 +27,45 @@ import { makeStyles } from '@material-ui/core/styles';
 // });
 // const classes = useStyles()
 
-export const ProductShow = (props) => (
-  <Show actions={< ProductShowActions />} {...props}>
-      <SimpleShowLayout>
-        <TextField label="Product Name" source="name"/>
-        <TextField label="Category" source="category" />
-        <TextField label="Description" source="description" />
-        <TextField label="Price" source="price" />
-        <DateField label="Release date" source="date"/>
-        <TextField label="Database ID" source="id" />
-        {/* <ImageField source="imageData" /> */}
-      </SimpleShowLayout>
-  </Show>
-);
+export const ProductShow = (props) => {
+
+  const discountIntervals = ({ record }) => (
+    <ul>
+        {record.priceTiers.tiers.map(item => (
+          <li key={item.quantity}>{item.quantity}: {item.ratio} </li>
+        ))}
+    </ul>
+  )
+
+  return (
+    <Show actions={< ProductShowActions />} {...props}>
+        <SimpleShowLayout>
+          <TextField label="Product Name" source="name"/>
+          <TextField label="Category" source="category" />
+          <TextField label="Description" source="description" />
+          <TextField label="Price" source="price" />
+          <DateField label="Release date" source="date"/>
+          <FunctionField label="Discount Intervals" render={ record => {
+            console.log("priceTiers: ", record.priceTiers)
+            console.log("tiers: ", record.priceTiers.tiers)
+           return <ul>
+              {record.priceTiers.tiers.map(item => {
+                return <li key={item.quantity}>{item.id}: {item.ratio} </li>
+              })}
+            </ul>
+          }}/>
+          {/* <ArrayField label="Progessive Discounts" source="priceTiers[tiers]">
+            <Datagrid>
+              <TextField label='Quantity Interval' source="quantity" />
+              <TextField label="Discount Per Unit" source="ratio" />
+            </Datagrid>
+          </ArrayField> */}
+          {/* <ImageField source="imageData" /> */}
+          <TextField label="Database ID" source="id" />
+        </SimpleShowLayout>
+    </Show>
+  )
+};
 
 export const ProductList = props => (
 <List {...props}>
@@ -54,23 +80,26 @@ export const ProductList = props => (
   </List>
 )
 
-export const ProductCreate = (props) => (
-  <Create {...props}>
-      <SimpleForm >
-          <TextInput label="Product Name" source="name" />
-          <TextInput label="Category" source="category"/>
-          <TextInput label="Description" source="description" options={{ multiLine: true }} />
-          <NumberInput label="Price" source="price"/>
-          <ArrayInput label="Price Tiers" source="priceTiers.tiers">
-            <SimpleFormIterator>
-              <NumberInput label="Quantity" source="priceTiers.tiers.price"/>
-              <NumberInput label="Discount applied" source="priceTiers.tiers.ratio"/>
-            </SimpleFormIterator>
-          </ArrayInput>
-          {/* <ImageInput source="imageData"/> */}
-      </SimpleForm>
-  </Create>
-);
+export const ProductCreate = (props) => {
+
+  return (
+    <Create {...props}>
+        <SimpleForm >
+            <TextInput label="Product Name" source="name" /> 
+            {/* // <TextInput label="Category" source="category"/>
+            // <TextInput label="Description" source="description" options={{ multiLine: true }} />
+            // <NumberInput label="Price" source="price"/>  */}
+            <ArrayInput label="Price Tiers" source="priceTiers.tiers">
+              <SimpleFormIterator>
+                <NumberInput label="Quantity" source="priceTiers.tiers.price"/>
+                <NumberInput label="Discount applied" source="priceTiers.tiers.ratio"/>
+              </SimpleFormIterator>
+            </ArrayInput>
+            {/* <ImageInput source="imageData"/> */}
+        </SimpleForm>
+    </Create>
+  )
+};
 
 
 export const ProductEdit = props => {
@@ -101,7 +130,7 @@ export const ProductEdit = props => {
 
 // custom components
 const ProductTitle = ({ record }) => {
-  return <span>Post {record ? `"${record.name}"` : ''}</span>
+  return <span>Product {record ? `"${record.name}"` : ''}</span>
 }
 
 const ProductShowActions = ({ basePath, data, resource }) => (

@@ -50,6 +50,8 @@ router.get("/:id", async (req, res) => {
 // @desc    Posts new product
 // @access  Private
 router.post("/", (req, res) => {
+  console.log("price tiers: ", req.body.tiers)
+
   const newProduct = new Product({
     name: req.body.name,
     description: req.body.description,
@@ -61,7 +63,12 @@ router.post("/", (req, res) => {
   });
   newProduct
     .save()
-    .then((product) => res.json(product))
+    .then((product) => {
+      console.log("product: ", product)
+      product = JSON.parse(JSON.stringify(product).split('"_id":').join('"id":'));
+      console.log("priceTiers: ", product.priceTiers.tiers)
+      return res.json(product)
+    })
     .catch((err) => console.log(err));
 });
 
@@ -74,6 +81,7 @@ router.put("/:id", async (req, res) => {
   console.log("body: ", req.body)
   await Product.updateOne({_id: req.params.id}, req.body)
   .then(async (product) => {
+    product.save();
     product = await JSON.parse(JSON.stringify(product).split('"_id":').join('"id":'));
     return res.status(200).json(product)
   }).catch(err => {

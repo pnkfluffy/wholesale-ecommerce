@@ -46,6 +46,9 @@ const styles = StyleSheet.create({
         height: 50,
         width: 150
     },
+    paymentStatus: {
+        fontSize: 14,
+    },
     displayItems: {
         flexDirection: 'column',
         color: '#0a3b09',
@@ -102,7 +105,7 @@ const styles = StyleSheet.create({
     },
     totalValue: {
         textAlign: 'center',
-        width: 120,
+        width: 180,
         height: 15,
         flexDirection: 'row',
         borderColor: '#52ff4d',
@@ -139,7 +142,7 @@ export function Invoice(props) {
                             <Text>Website: www.cbddy-wholesale.com</Text>
                         </View>
                         <View style={styles.text}>
-                            <Text>Payment Status: {props.data.status}</Text>
+                            <Text style={styles.paymentStatus}>Payment Status: {props.data.status}</Text>
                             <Text>Charging date: {props.data.chargingDate}</Text>
                             <Text>Invoice emitted: {props.data.date}</Text>
                             <Text>Invoice #{props.data.invoice_nr}</Text>
@@ -163,15 +166,15 @@ export function Invoice(props) {
                     </View>
                     <View style={styles.displayItems}>
                         <View style={styles.item}>
-                            <Text style={styles.itemNumbers}>Quantity</Text>
                             <Text style={styles.itemNameTitle}>Product</Text>
+                            <Text style={styles.itemNumbers}>Quantity</Text>
                             <Text style={styles.itemNumbers}>Unit Price</Text>
                             <Text style={styles.itemNumbers}>Total</Text>
                         </View>
                         {props.data.items.map(item => {
                             return <View style={styles.item}>
-                                <Text style={styles.itemNumbers}>{item.quantity}</Text>
                                 <Text style={styles.itemName}>{item.item}</Text>
+                                <Text style={styles.itemNumbers}>{item.quantity}</Text>
                                 <Text style={styles.itemNumbers}>{item.price}</Text>
                                 <Text style={styles.itemNumbers}>{item.amount}</Text>
                             </View>
@@ -185,7 +188,7 @@ export function Invoice(props) {
                             </View>
                             <View style={styles.item}>
                                 <Text style={styles.totalTitle}>Taxes</Text>
-                                <Text style={styles.totalValue}>10%</Text>
+                                <Text style={styles.totalValue}>+ 10%</Text>
                             </View>
                             <View style={styles.item}>
                                 <Text style={styles.totalTitle}>Total</Text>

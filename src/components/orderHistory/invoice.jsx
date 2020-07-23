@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         color: '#0a3b09',
         fontSize: 12,
-        marginRight: 10,
+        marginRight: 20,
     },
     section: {
         margin: 10,
@@ -139,6 +139,7 @@ export function Invoice(props) {
                             <Text>Website: www.cbddy-wholesale.com</Text>
                         </View>
                         <View style={styles.text}>
+                            <Text>Payment Status: {props.data.status}</Text>
                             <Text>Charging date: {props.data.chargingDate}</Text>
                             <Text>Invoice emitted: {props.data.date}</Text>
                             <Text>Invoice #{props.data.invoice_nr}</Text>
@@ -147,17 +148,17 @@ export function Invoice(props) {
                     <View style={styles.information}>
                         <View style={styles.text}>
                             <Text style={styles.title}>Payment Information</Text>
-                            <Text>{props.data.shipping.name}</Text>
-                            <Text>{props.data.shipping.address}</Text>
-                            <Text>{props.data.shipping.postal_code}</Text>
-                            <Text>{props.data.shipping.country}, {props.data.shipping.state}, {props.data.shipping.city}</Text>
+                            <Text>{props.data.client.name}</Text>
+                            <Text>{props.data.client.address_line1}{props.data.client.address_line2}</Text>
+                            <Text>{props.data.client.postal_code}</Text>
+                            <Text>{props.data.client.state}, {props.data.client.city}</Text>
                         </View>
                         <View style={styles.text}>
                             <Text style={styles.title}>Shipping Information</Text>
-                            <Text>{props.data.shipping.name}</Text>
-                            <Text>{props.data.shipping.address}</Text>
+                            <Text>{props.data.shipping.ClientFullName}</Text>
+                            <Text>{props.data.shipping.ClientAddr1}{props.data.shipping.ClientAddr2}</Text>
                             <Text>{props.data.shipping.postal_code}</Text>
-                            <Text>{props.data.shipping.country}, {props.data.shipping.state}, {props.data.shipping.city}</Text>
+                            <Text>{props.data.shipping.state}, {props.data.shipping.city}</Text>
                         </View>
                     </View>
                     <View style={styles.displayItems}>

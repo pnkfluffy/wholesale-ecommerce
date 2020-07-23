@@ -28,27 +28,29 @@ class OrderCard extends React.Component {
             })
             .catch(err => console.log(err))
         const fullName =  clientInfo.given_name + " " + clientInfo.family_name
-        const shipping = {
+        let addr_2 = "";
+        if (clientInfo.address_line2)
+            addr_2 = ", " + clientInfo.address_line2;
+        const client = {
             name: fullName,
-            address: clientInfo.address_line1,
+            address_line1: clientInfo.address_line1,
+            address_line2: addr_2,
             city: clientInfo.city,
             state: clientInfo.region,
             country: clientInfo.country_code,
             postal_code: clientInfo.postal_code
         }
-        return(shipping);
+        console.log(client);
+        return(client);
     }
 
     getItems = () => {
         let allProducts = this.props.state.products.products;
         let productsInOrder = this.props.order.products;
-        console.log(allProducts);
-        console.log(productsInOrder);
         const productsWithTotal = productsInOrder.map(product => {
             const wholeProductInfo = allProducts.find(productAllInfo => productAllInfo._id === product.product)
             return {
                         item: wholeProductInfo.name,
-                        description: wholeProductInfo.description,
                         quantity: product.quantity,
                         price: wholeProductInfo.price,
                         amount: wholeProductInfo.price * product.quantity
@@ -56,40 +58,60 @@ class OrderCard extends React.Component {
         })
         return(productsWithTotal);
     }
+
+    addZero = value => {
+        if (value < 10)
+            return "0" + value
+        return value
+    }
+    getDate = () => {
+        const date = new Date();
+        const month = this.addZero(date.getMonth() + 1)
+        const day = this.addZero(date.getDate())
+        const hour = this.addZero(date.getHours());
+        const min = this.addZero(date.getMinutes());
+        const fullDate =  date.getFullYear() + "-" + month + "-" + day + " " + hour + ":" + min;
+        return (fullDate);
+    }
+
     getInvoice = async () => {
         this.setState({
             loading: true,
         })
-        const shipping = await this.getClientInfo();
+        const client = await this.getClientInfo();
+        const shipping = {...this.props.order.deliveryInfo,
+                          ClientAddr2: ", " + this.props.order.deliveryInfo.ClientAddr2};
         const items = await this.getItems();
         const subtotal = this.props.order.total;
-        const total = this.props.order.total + (this.props.order.total * 0.01);
+        const total = parseInt(this.props.order.total, 10) + (parseInt(this.props.order.total, 10) * 0.01);
         const invoice_nr = this.props.order._id;
         const chargingDate = this.props.payment.charge_date;
-        const date = new Date();
-        const month = date.getMonth() + 1
-        const fullDate =  date.getFullYear() + "-" + month + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes();
+        const date = await this.getDate()
         const invoice = {
+            client: client,
             shipping: shipping,
             items: items,
             subtotal: subtotal,
             total: total,
             invoice_nr: invoice_nr,
-            date: fullDate,
-            chargingDate: chargingDate
+            date: date,
+            chargingDate: chargingDate,
+            status: this.props.payment.status
         }
         this.setState({
             invoice: invoice,
             receiptReady: true,
             loading: false
         })
+        console.log(invoice);
     }
 
     render() {
         return (
             <div>
-                {this.props.payment.status} Will be charged: {this.props.payment.charge_date}
-                <p>{this.props.order._id}</p>
+                Status: {this.props.payment.status}
+                <p>Will be charged: {this.props.payment.charge_date}</p>
+                <p>#{this.props.order._id}</p>
                 {(() => {
                     if (this.state.loading)
                         return <img src={loading}/>

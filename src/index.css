@@ -6,7 +6,8 @@ body,
 html {
   height: 100%;
   margin: 0px;
-  overflow: hidden;
+  /* ADDING THIS MAKES IT IMPOSSIBLE TO SCROLL */
+  /* overflow: hidden; */
 }
 
 html {
@@ -34,11 +35,11 @@ body {
   flex-direction: column;
 }
 
-@import "./components/sidebar/sidebar.css";
-@import "./components/header/header.css";
-@import "./components/home/home.css";
-@import "./components/account/account.css";
-@import "./components/auth/auth.css";
-@import "./components/cart/cart.css";
-@import "./components/settings/settings.css";
-@import "./components/error/error.css";
+@import './components/sidebar/sidebar.css';
+@import './components/header/header.css';
+@import './components/home/home.css';
+@import './components/account/account.css';
+@import './components/auth/auth.css';
+@import './components/cart/cart.css';
+@import './components/settings/settings.css';
+@import './components/error/error.css';

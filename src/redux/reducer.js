@@ -91,14 +91,14 @@ const products = (state = initialProducts, action) => {
   }
 }
 
-// const order = (state = [], action) => {
-//   switch (action.type) {
-//     case 'ADD_ORDER':
-//       return action.payload
-//     default:
-//       return state
-//   }
-// }
+ const orders = (state = [], action) => {
+   switch (action.type) {
+     case 'ADD_ORDERS':
+       return action.payload
+     default:
+       return state
+   }
+}
 
 const reviews = (state = [], action) => {
   switch (action.type) {
@@ -115,7 +115,7 @@ export default combineReducers({
   categories,
   cart,
   products,
-  // order,
+  orders,
   reviews,
   loaded
 })

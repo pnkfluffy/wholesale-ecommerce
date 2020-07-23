@@ -6,6 +6,7 @@ export const initializeAllRequests = async () => {
   await getAllCategories()
   await getAllReviews()
   await getAllProducts()
+  await getAllOrders()
   axios
     .get('/auth/user')
     .then(async res => {
@@ -67,4 +68,16 @@ export const getAllReviews = () => {
       store.dispatch({ type: 'ADD_REVIEWS', payload: res.data })
     })
     .catch(err => console.log(err))
+}
+
+export const getAllOrders = () => {
+    //get all orders from user
+   return axios
+        .get('orders/from')
+        .then(res => {
+            store.dispatch({ type: 'ADD_ORDERS', payload: res.data })
+        })
+        .catch(err => {
+            console.log(err)
+        })
 }

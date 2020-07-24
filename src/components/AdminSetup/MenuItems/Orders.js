@@ -1,7 +1,7 @@
 import * as React from 'react'
 import {
   CreateButton, ArrayField,
-  List, Create,
+  List, Create, ReferenceField,
   Edit, SimpleForm,
   TopToolbar, Button,
   Datagrid, TextField,
@@ -28,6 +28,9 @@ export const OrderShow = (props) => (
             <TextField label="Price" source="price" />
           </Datagrid>
         </ArrayField>
+        <ReferenceField label="User details" source="user" reference="Customers">
+          <TextField label="Name" source="name"/>
+        </ReferenceField>
       </SimpleShowLayout>
   </Show>
 );
@@ -36,9 +39,9 @@ export const OrderList = props => (
     <List {...props}>
         <Datagrid rowClick='show'>
           {/* <TextField label='ID' source='id' /> */}
-          <TextField label="User" source="user" />
+          {/* <TextField label="User" source="user" />
           <TextField label="Total" source="total" />
-          <DateField label="Date" source="date" />
+          <DateField label="Date" source="date" /> */}
           < ShowButton />
         </Datagrid>
       </List>

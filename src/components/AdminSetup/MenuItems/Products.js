@@ -51,16 +51,6 @@ import { makeStyles } from '@material-ui/core/styles'
 // const classes = useStyles()
 
 export const ProductShow = props => {
-  const discountIntervals = ({ record }) => (
-    <ul>
-      {record.priceTiers.tiers.map(item => (
-        <li key={item.quantity}>
-          {item.quantity}: {item.ratio}{' '}
-        </li>
-      ))}
-    </ul>
-  )
-
   return (
     <Show actions={<ProductShowActions />} {...props}>
       <SimpleShowLayout>
@@ -211,10 +201,10 @@ export const ProductEdit = props => {
   const redirect = useRedirect()
 
   const onSuccess = ({ data }) => {
-    notify(`Changes to post "${data.title}" saved`)
-    redirect('/admin-products')
-    refresh()
-  }
+    notify(`Changes to product "${data.name}" saved`)
+    redirect('/admin-products');
+    refresh();
+  };
   return (
     <Edit
       onSuccess={onSuccess}

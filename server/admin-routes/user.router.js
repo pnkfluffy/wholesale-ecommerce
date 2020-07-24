@@ -4,8 +4,17 @@ const User = require("../schemas/userSchema");
 
 //getList
 router.get("/", (req, res) => {
-  console.log("list backend hit")
+  console.log("User list backend hit")
+  if(req.query.sort === undefined){
+    req.query.sort = JSON.stringify(["id","ASC"])
+  }
+  if(req.query.range === undefined){
+    req.query.range = JSON.stringify([0,9])
+  }
+  console.log("req.query: ", req.query)
+  console.log("req.query.sort: ", req.query.sort)
   const sortQuery = JSON.parse(req.query.sort);
+  console.log("made sortQuery: ", sortQuery)
   let sort = {};
   sort[sortQuery[0]] = sortQuery[1] === "ASC" ? 1 : -1;
   console.log("query: ", req.query, " end query");
@@ -47,6 +56,7 @@ router.get("/:id", (req, res) => {
 //getMany
 
 //getManyReference
+
 
 //update
 router.put("/:id", async (req, res) => {

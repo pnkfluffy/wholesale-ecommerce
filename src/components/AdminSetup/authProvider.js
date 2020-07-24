@@ -3,11 +3,11 @@ const apiUrl = "http://localhost:5000";
 export default {
   // called when the user attempts to log in
   login: ({ username }) => {
-    const request = new Request(`${apiUrl}/auth/`, {
-      method: 'POST',
-      body: JSON.stringify({ username, password }),
-      headers: new Headers({ 'Content-Type': 'application/json' }),
-    });
+    // const request = new Request(`${apiUrl}/auth/`, {
+    //   method: 'POST',
+    //   body: JSON.stringify({ username, password }),
+    //   headers: new Headers({ 'Content-Type': 'application/json' }),
+    // });
     localStorage.setItem("username", username);
     // accept all username/password combinations
     return Promise.resolve();

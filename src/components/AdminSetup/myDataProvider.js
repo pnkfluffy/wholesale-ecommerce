@@ -1,59 +1,55 @@
-import dataProvider from "./dataProvider";
+import dataProvider from './dataProvider'
 
 const myDataProvider = {
-    ...dataProvider,
-    update: (resource, params) => {
-        if (resource !== 'posts' || !params.data.pictures) {
-            // fallback to the default implementation
-            return dataProvider.update(resource, params);
-        }
-        /**
-         * For posts update only, convert uploaded image in base 64 and attach it to
-         * the `picture` sent property, with `src` and `title` attributes.
-         */
-        
-        // Freshly dropped pictures are File objects and must be converted to base64 strings
-        const newPictures = params.data.pictures.filter(
-            p => p.rawFile instanceof File
-        );
-        const formerPictures = params.data.pictures.filter(
-            p => !(p.rawFile instanceof File)
-        );
+  ...dataProvider,
+  create: (resource, params) => {
+    console.log('create intercept')
+    if (resource !== 'admin-products' || !params.data.images) {
+      // fallback to the default implementation
+      console.log('not product with images')
+      return dataProvider.create(resource, params)
+    }
+    /**
+     * For posts update only, convert uploaded image in base 64 and attach it to
+     * the `picture` sent property, with `src` and `title` attributes.
+     */
 
-        return Promise.all(newPictures.map(convertFileToBase64))
-            .then(base64Pictures =>
-                base64Pictures.map(picture64 => ({
-                    src: picture64,
-                    title: `${params.data.title}`,
-                }))
-            )
-            .then(transformedNewPictures =>
-                dataProvider.update(resource, {
-                    ...params,
-                    data: {
-                        ...params.data,
-                        pictures: [
-                            ...transformedNewPictures,
-                            ...formerPictures,
-                        ],
-                    },
-                })
-            );
-    },
-};
+    // Freshly dropped images are File objects and must be converted to base64 strings
+    const newImages = params.data.images.filter(p => p.rawFile instanceof File)
+    const formerImages = params.data.images.filter(
+      p => !(p.rawFile instanceof File)
+    )
 
-/**
- * Convert a `File` object returned by the upload input into a base 64 string.
- * That's not the most optimized way to store images in production, but it's
- * enough to illustrate the idea of data provider decoration.
- */
+    return Promise.all(newImages.map(convertFileToBase64))
+      .then(base64images =>
+        base64images.map(picture64 => ({
+          src: picture64,
+          title: `${params.data.title + '_' + Date.now()}`
+        }))
+      )
+      .then(transformedNewImages =>
+        dataProvider.create(resource, {
+          ...params,
+          data: {
+            ...params.data,
+            images: [...transformedNewImages, ...formerImages]
+          }
+        })
+      )
+  }
+}
+
+/*
+Convert a `File` object returned by the upload input into a base 64 string.
+*/
+
 const convertFileToBase64 = file =>
-    new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = reject;
+  new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = reject
 
-        reader.readAsDataURL(file.rawFile);
-    });
+    reader.readAsDataURL(file.rawFile)
+  })
 
-export default myDataProvider;
+export default myDataProvider

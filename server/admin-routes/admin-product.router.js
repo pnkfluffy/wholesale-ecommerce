@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const uploadProductPhotos = require("../middleware/uploadphotosAWS");
 
 const Product = require("../schemas/productSchema");
 
@@ -49,7 +50,7 @@ router.get("/:id", async (req, res) => {
 // @route   POST /admin-products
 // @desc    Posts new product
 // @access  Private
-router.post("/", (req, res) => {
+router.post("/", uploadProductPhotos, async (req, res) => {
   console.log("images", req.body.images);
   console.log("price tiers: ", req.body.priceTiers)
 

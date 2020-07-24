@@ -21,7 +21,8 @@ export default {
 
     const { page, perPage } = params.pagination;
     const { field, order } = params.sort;
-    console.log("params", page, perPage, field, order, params.filter);
+    console.log("getList params: ", params)
+    console.log(page,  perPage, field, order, params.filter);
 
     const query = {
       sort: JSON.stringify([field, order]),
@@ -35,10 +36,13 @@ export default {
     return httpClient(url).then(({ headers, json }) => {
       console.log("getList dataprovider method hit")
       // console.log("headers", headers);
+      console.log("getList response: ", { data: json})
       return {
         data: json,
         total: parseInt(headers.get("content-range").split("/").pop(), 10),
       };
+    }).catch(err => {
+      console.log("getList error: ", err)
     });
   },
 
@@ -52,13 +56,21 @@ export default {
   },
 
   getMany: (resource, params) => {
-    //I think an array of ids is expected in params.
-    console.log("getMany");
+    console.log("getMany", resource);
+    console.log("params: ", params)
+    // const { page, perPage } = params.pagination;
+    // const { field, order } = params.sort;
     const query = {
-      filter: JSON.stringify({ id: params.ids }),
+      filter: JSON.stringify({ id: params.ids })
     };
     const url = `${apiUrl}/${resource}?${stringify(query)}`;
-    return httpClient(url).then(({ json }) => ({ data: json }));
+    console.log("url: ", url)
+    return httpClient(url).then(({ json }) => {
+      console.log("getMany response: ", {data: json})
+      return { data: json }
+    }).catch(err => {
+      console.log("getmany error: ", err)
+    })
   },
 
   getManyReference: (resource, params) => {
@@ -76,12 +88,15 @@ export default {
     };
     const url = `${apiUrl}/${resource}?${stringify(query)}`;
 
-    return httpClient(url).then(({ headers, json }) => {
+    return (httpClient(url).then(({ headers, json }) => {
       return {
         data: json,
         total: parseInt(headers.get("content-range").split("/").pop(), 10),
       };
-    })
+    }).catch(err => {
+      console.log("error: ", err)
+      return err
+    }))
   },
 
   update: (resource, params) => {

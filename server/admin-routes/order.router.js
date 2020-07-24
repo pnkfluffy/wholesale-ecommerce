@@ -4,7 +4,15 @@ const Order = require("../schemas/orderSchema");
 
 //getList
 router.get("/", (req, res) => {
-  console.log("Order list  hit")
+  console.log("Order list backend hit")
+  if(req.query.sort === undefined){
+    req.query.sort = JSON.stringify(["id","ASC"])
+  }
+  if(req.query.range === undefined){
+    req.query.range = JSON.stringify([0,9])
+  }
+  console.log("req.query: ", req.query)
+  console.log("req.query.sort: ", req.query.sort)
   const sortQuery = JSON.parse(req.query.sort);
   let sort = {};
   sort[sortQuery[0]] = sortQuery[1] === "ASC" ? 1 : -1;
@@ -15,15 +23,15 @@ router.get("/", (req, res) => {
   Order.find()
     .sort(sort)
     .then((orders) => {
-        console.log("orders: ", orders)
-      res.set("content-range", JSON.stringify(orders.length));
+      res.set("content-range", JSON.stringify(orders.length + 1));
       //  each object needs to have an 'id' field in order for
       //  reactAdmin to parse
       orders = JSON.parse(JSON.stringify(orders).split('"_id":').join('"id":'));
+      console.log("parsed orders: ", orders)
       res.json(orders);
     })
     .catch((error) => {
-      console.log("error: ", error);
+      console.log(error);
       res.status(500).send("no users found");
     });
 });

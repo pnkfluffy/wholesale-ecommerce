@@ -3,7 +3,7 @@ import {
   List, Create,
   Edit, SimpleForm, ArrayField,
   DisabledInput, BooleanInput,
-  TextInput, DateInput,
+  TextInput, DateInput, ReferenceField,
   LongTextInput, ReferenceManyField,
   Datagrid, TextField,
   DateField, EditButton,
@@ -11,29 +11,58 @@ import {
   RichTextField, ShowButton,
   TopToolbar, Button,
   DeleteButton, ListButton,
-  CreateButton
+  CreateButton, useQuery, Loading, Error
 } from 'react-admin'
 
-export const UserShow = (props) => (
-  <Show actions={< UserShowActions />} {...props}>
-      <SimpleShowLayout>
-        <TextField label="Full Name" source="name"/>
-        <TextField label="Payment confirmed" source="paymentVerified" />
-        <TextField label="DocuSign confirmed" source="docusignVerified"/>
-        <ArrayField label="Favorites" source="favorites">
-          <Datagrid>
-            <TextField label="ID" source="id"/>
-            <TextField label="Product Name" source="name" />
-            <TextField label="Category" source="category"/>
-            <TextField label="Price" source="price" />
-          </Datagrid>
-        </ArrayField>
-        <TextField label="Database ID" source="id" />
-        <TextField label='Google ID' source='googleID' /> 
-        <TextField label='goCardless ID' source='goCardlessID' />
-      </SimpleShowLayout>
-  </Show>
-);
+const GetUserOrders = userData => {
+  console.log(userData);
+  const { data, loading, error } = useQuery({ 
+    type: 'getManyReference',
+    resource: 'orders',
+    payload: { user: userData.id }
+  });
+  if (loading) return <Loading />;
+  if (error) return <Error />;
+  if (!data) return null;
+  return(
+    <ul>  
+        {data.map(item => {
+          return (
+            <li key={item.total}>
+                {item.products}
+            </li>
+          )
+         })}
+    </ul>
+  )
+}
+
+export const UserShow = (props) => {
+  return(
+    <Show actions={< UserShowActions />} {...props}>
+    <SimpleShowLayout>
+      <TextField label="Full Name" source="name"/>
+      <TextField label="Payment confirmed" source="paymentVerified" />
+      <TextField label="DocuSign confirmed" source="docusignVerified"/>
+      <ArrayField label="Favorites" source="favorites">
+        <Datagrid>
+          <TextField label="ID" source="id"/>
+          <TextField label="Product Name" source="name" />
+          <TextField label="Category" source="category"/>
+          <TextField label="Price" source="price" />
+        </Datagrid>
+      </ArrayField>
+      <ReferenceField label="Order History" source="id" reference="admin-orders" sortBy="user">
+          <TextField label="Total Price" source="total"/>
+      </ReferenceField>
+      <TextField label="Database ID" source="id" />
+      <TextField label='Google ID' source='googleID' /> 
+      <TextField label='goCardless ID' source='goCardlessID' />
+      {/* <Button color="primary">See Order History</Button> */}
+    </SimpleShowLayout>
+    </Show>
+  )
+};
 
 export const UserList = props => (
 <List {...props}>
@@ -71,10 +100,10 @@ export const UserEdit = props => (
 )
 
 // custom components
+
 const UserTitle = ({ record }) => {
   return <span>Post {record ? `"${record.name}"` : ''}</span>
 }
-
 const UserShowActions = ({ basePath, data, resource }) => (
   <TopToolbar>
     <EditButton basePath={basePath} record={data} />

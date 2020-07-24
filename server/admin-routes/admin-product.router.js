@@ -9,9 +9,9 @@ router.get("/", (req, res) => {
   const sortQuery = JSON.parse(req.query.sort);
   let sort = {};
   sort[sortQuery[0]] = sortQuery[1] === "ASC" ? 1 : -1;
-  console.log("query: ", req.query, " end query");
-  console.log(sortQuery);
-  console.log("sort", sort);
+  // console.log("query: ", req.query, " end query");
+  // console.log(sortQuery);
+  // console.log("sort", sort);
 
   Product.find()
     .sort(sort)
@@ -20,7 +20,7 @@ router.get("/", (req, res) => {
       //  each object needs to have an 'id' field in order for
       //  reactAdmin to parse
       products = JSON.parse(JSON.stringify(products).split('"_id":').join('"id":'));
-      console.log("parsed products: ", products[0], products[1], products[2])
+      // console.log("parsed products: ", products[0], products[1], products[2])
       res.json(products);
     })
     .catch((error) => {
@@ -50,7 +50,8 @@ router.get("/:id", async (req, res) => {
 // @desc    Posts new product
 // @access  Private
 router.post("/", (req, res) => {
-  console.log("price tiers: ", req.body.tiers)
+  console.log("images", req.body.images);
+  console.log("price tiers: ", req.body.priceTiers)
 
   const newProduct = new Product({
     name: req.body.name,
@@ -61,16 +62,18 @@ router.post("/", (req, res) => {
     imageData: req.body.imageData,
     draft: req.body.draft,
   });
-  newProduct
-    .save()
-    .then((product) => {
-      console.log("product: ", product)
-      product = JSON.parse(JSON.stringify(product).split('"_id":').join('"id":'));
-      console.log("priceTiers: ", product.priceTiers.tiers)
-      return res.json(product)
-    })
-    .catch((err) => console.log(err));
+  console.log('new product', newProduct);
+//   newProduct
+//     .save()
+//     .then((product) => {
+//       console.log("product: ", product)
+//       product = JSON.parse(JSON.stringify(product).split('"_id":').join('"id":'));
+//       console.log("priceTiers: ", product.priceTiers.tiers)
+//       return res.json(product)
+//     })
+//     .catch((err) => console.log(err));
 });
+
 
 // @route   POST /admin-products/edit/:id
 // @desc    Edit a product

@@ -41,9 +41,9 @@ app.use("/gc", gcRouter);
 app.use("/orders", orderRouter);
 app.use("/products", productRouter);
 
-app.use("/admin-products", adminProductRouter);
+app.use("/Products", adminProductRouter);
 app.use("/Customers", adminUserRouter);
-app.use("/Orders", adminOrderRouter);
+app.use("/admin-orders", adminOrderRouter);
 app.use("/Reviews", adminReviewRouter);
 // app.use("/admin-users", adminUserRouter);
 

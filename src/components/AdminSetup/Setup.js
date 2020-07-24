@@ -2,7 +2,6 @@ import * as React from "react";
 import { Provider } from "react-redux";
 import { createHashHistory } from "history";
 import { Admin, Resource } from "react-admin";
-import restProvider from "ra-data-simple-rest";
 import defaultMessages from "ra-language-english";
 import polyglotI18nProvider from "ra-i18n-polyglot";
 import createAdminStore from "./createAdminStore";
@@ -41,10 +40,10 @@ const AdminSetup = () => (
       title="My Admin"
     >
       <Resource name="Customers" list={UserList} edit={UserEdit} show={UserShow} icon={UserIcon} />
-      <Resource name="admin-products" list={ProductList} edit={ProductEdit} show={ProductShow} create={ProductCreate}/>
-      <Resource name="Orders" list={OrderList} show={OrderShow}/>
+      <Resource name="Products" list={ProductList} edit={ProductEdit} show={ProductShow} create={ProductCreate}/>
+      <Resource name="admin-orders" list={OrderList} show={OrderShow}/>
       <Resource name="Reviews" list={ReviewList} show={ReviewShow}/>
-    </Admin>n
+    </Admin>
   </Provider>
 );
 

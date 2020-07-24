@@ -15,18 +15,16 @@ const ProductSchema = new Schema({
   price: {
     type: Number
   },
-  priceTiers: {
-    tiers: [
-      {
-        price: {
-          type: Number
-        },
-        quantity: {
-          type: Number
-        }
+  priceTiers: [
+    {
+      price: {
+        type: Number
+      },
+      quantity: {
+        type: Number
       }
-    ]
-  },
+    }
+  ],
   metaData: {
     cbd: {
       quantity: {
@@ -34,7 +32,7 @@ const ProductSchema = new Schema({
       },
       unit: {
         type: String
-      },
+      }
     },
     thc: {
       quantity: {
@@ -42,7 +40,7 @@ const ProductSchema = new Schema({
       },
       unit: {
         type: String
-      },
+      }
     },
     units: {
       quantity: {
@@ -50,7 +48,7 @@ const ProductSchema = new Schema({
       },
       unit: {
         type: String
-      },
+      }
     },
     weight: {
       quantity: {
@@ -58,7 +56,7 @@ const ProductSchema = new Schema({
       },
       unit: {
         type: String
-      },
+      }
     }
   },
   imageData: [

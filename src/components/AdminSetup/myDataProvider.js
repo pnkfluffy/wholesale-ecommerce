@@ -19,12 +19,12 @@ const myDataProvider = {
     const formerImages = params.data.images.filter(
       p => !(p.rawFile instanceof File)
     )
-
+    console.log('titles', params.data)
     return Promise.all(newImages.map(convertFileToBase64))
       .then(base64images =>
-        base64images.map(picture64 => ({
+        base64images.map((picture64, index) => ({
           src: picture64,
-          title: `${params.data.title + '_' + Date.now()}`
+          title: `${Date.now() + '_' + params.data.images[index].title}`
         }))
       )
       .then(transformedNewImages =>

@@ -133,7 +133,7 @@ export const ProductCreate = props => {
           options={{ multiLine: true }}
         />
         <NumberInput label='Base Price Per Unit' source='price' />
-        <ArrayInput label='Price Tiers' source='priceTiers.tiers'>
+        <ArrayInput label='Price Tiers' source='priceTiers'>
           <SimpleFormIterator>
             <NumberInput label='Quantity' source='quantity' />
             <NumberInput label='Price per unit (USD)' source='price' />

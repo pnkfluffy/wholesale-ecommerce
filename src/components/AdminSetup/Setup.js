@@ -18,7 +18,7 @@ import createHistory from "history/createBrowserHistory";
 import PostIcon from "@material-ui/icons/Book";
 import UserIcon from "@material-ui/icons/Group";
 
-import myDataProvider from "./dataProvider";
+import myDataProvider from "./myDataProvider";
 const i18nProvider = polyglotI18nProvider((locale) => {
   return defaultMessages;
 });

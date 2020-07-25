@@ -62,7 +62,7 @@ export default {
 
   getMany: (resource, params) => {
     console.log("getMany", resource);
-    console.log("params: ", params)
+    console.log("getMany", resource, "params: ", params)
     // const { page, perPage } = params.pagination;
     // const { field, order } = params.sort;
     const query = {
@@ -79,7 +79,7 @@ export default {
   },
 
   getManyReference: (resource, params) => {
-    console.log("getManyReference");
+    console.log("getManyReference", resource);
 
     const { page, perPage } = params.pagination;
     const { field, order } = params.sort;

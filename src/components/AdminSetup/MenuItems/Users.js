@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { OrderList } from './Orders'
 import {
   List,
   Create,
@@ -10,8 +11,8 @@ import {
   TextInput,
   DateInput,
   ReferenceField,
-  LongTextInput,
   ReferenceManyField,
+  LongTextInput,
   Datagrid,
   TextField,
   DateField,
@@ -27,27 +28,10 @@ import {
   CreateButton,
   useQuery,
   Loading,
-  Error
+  Error,
+  SingleFieldList,
+  ChipField
 } from 'react-admin'
-
-const GetUserOrders = userData => {
-  console.log(userData)
-  const { data, loading, error } = useQuery({
-    type: 'getManyReference',
-    resource: 'orders',
-    payload: { user: userData.id }
-  })
-  if (loading) return <Loading />
-  if (error) return <Error />
-  if (!data) return null
-  return (
-    <ul>
-      {data.map(item => {
-        return <li key={item.total}>{item.products}</li>
-      })}
-    </ul>
-  )
-}
 
 export const UserShow = props => {
   console.log('usershow', props)
@@ -65,14 +49,18 @@ export const UserShow = props => {
             <TextField label='Price' source='price' />
           </Datagrid>
         </ArrayField>
-        <ReferenceField
+        <ReferenceManyField
           label='Order History'
           source='id'
           reference='admin-orders'
-          sortBy='user'
+          target='user'
         >
-          <TextField label='Total Price' source='total' />
-        </ReferenceField>
+          <Datagrid>
+            <TextField label="Total" source='total'/>
+            <TextField label="Date" source="date"/>
+            <TextField label="Product Purchased" source="products.length"/>
+          </Datagrid>
+        </ReferenceManyField>
         <TextField label='Database ID' source='id' />
         <TextField label='Google ID' source='googleID' />
         <TextField label='goCardless ID' source='goCardlessID' />

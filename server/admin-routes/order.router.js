@@ -14,26 +14,43 @@ router.get("/", (req, res) => {
   // console.log("req.query: ", req.query)
   // console.log("req.query.sort: ", req.query.sort)
   const sortQuery = JSON.parse(req.query.sort);
+  const filterQuery = JSON.parse(req.query.filter)
   let sort = {};
   sort[sortQuery[0]] = sortQuery[1] === "ASC" ? 1 : -1;
   console.log("query: ", req.query, " end query");
   console.log(sortQuery);
   console.log("sort", sort);
 
-  Order.find()
-    .sort(sort)
-    .then((orders) => {
-      res.set("content-range", JSON.stringify(orders.length + 1));
+  if(filterQuery.id){
+    console.log("filterquery: ", filterQuery)
+    Order.find({ user: filterQuery.id }).sort(sort)
+    .then((filteredOrders => {
+      res.set("content-range", JSON.stringify(filteredOrders.length + 1));
       //  each object needs to have an 'id' field in order for
       //  reactAdmin to parse
-      orders = JSON.parse(JSON.stringify(orders).split('"_id":').join('"id":'));
+      filteredOrders = JSON.parse(JSON.stringify(filteredOrders).split('"_id":').join('"id":'));
+      console.log("filterd parsed orders: ", filteredOrders)
       // console.log("parsed orders: ", orders)
-      res.json(orders);
-    })
-    .catch((error) => {
-      console.log(error);
-      res.status(500).send("no users found");
-    });
+      res.json(filteredOrders);
+    }))
+  }else{
+    Order.find()
+      .sort(sort)
+      .then((orders) => {
+        res.set("content-range", JSON.stringify(orders.length + 1));
+        //  each object needs to have an 'id' field in order for
+        //  reactAdmin to parse
+        orders = JSON.parse(JSON.stringify(orders).split('"_id":').join('"id":'));
+        console.log("parsed orders: ", orders)
+        // console.log("parsed orders: ", orders)
+        res.json(orders);
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(500).send("no users found");
+      });
+  }
+  
 });
 
 //getOne

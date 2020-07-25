@@ -84,7 +84,7 @@ class Product extends React.Component {
     const product = this.state.product;
     const totalPrice = getPriceByQuantity(
       product.priceTiers,
-      product.quantity,
+      this.state.quantity,
       product.price
     )
     return (

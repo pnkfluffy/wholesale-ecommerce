@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 
-import productImg from '../../resources/images/product_1.png'
+import blank_image from '../../resources/images/blank_image.jpg'
 
 class ProductCard extends React.Component {
   goToProduct = e => {
@@ -20,10 +20,17 @@ class ProductCard extends React.Component {
   }
 
   render () {
+    const product = this.props.product
+    const metaData = product.metaData
+    const image = product.imageData ? product.imageData[0].url : blank_image
+    const cbd_contents = metaData.cbd.quantity + metaData.cbd.unit
+    const thc_contents = metaData.thc.quantity + metaData.thc.unit
+    const units = metaData.units.quantity + metaData.units.unit
+
     return (
       <div className='product_card' onClick={this.goToProduct}>
         <div className='product_card_image'>
-          <img alt='product_image' src={productImg} />
+          <img alt='product_image' src={image} />
           <div className='product_card_heart'>
             <FavoriteBorderIcon onClick={this.favoriteProduct} />
           </div>
@@ -33,29 +40,19 @@ class ProductCard extends React.Component {
           <span>
             CBD
             <br />
-            <sub>
-              {/* ${this.props.product.metaData.cbd} */}
-              92.3%
-            </sub>
+            <sub>{cbd_contents}</sub>
           </span>{' '}
           |
           <span>
             THC
             <br />
-            <sub>
-              {/* ${this.props.product.metaData.thc} */}
-              12.34%
-            </sub>
+            <sub>{thc_contents}</sub>
           </span>{' '}
           |
           <span>
-            CT
+            QT
             <br />
-            <sub>
-              {/* ${this.props.product.metaData.units.quantity} */}
-              {/* ${this.props.product.metaData.units.unit} */}
-              30CT
-            </sub>
+            <sub>{units}</sub>
           </span>
         </div>
         <AddToCartButton product={this.props.product} />

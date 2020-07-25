@@ -36,34 +36,52 @@ class UserReviews extends React.Component {
   render () {
     return (
       <div className='user_reviews'>
-
-        {this.printReviews()}
-        {(() => {
-          if (this.state.page > 1) {
+        <div className="home_header_text">Reviews</div>
+        <div>
+          {this.printReviews()}
+        </div>
+        <div className="user_reviews_buttons_area">
+          {(() => {
+            if (this.state.page > 1) {
+              return (
+                  <GreenButton
+                      variant='contained'
+                      className='reviews_button'
+                      onClick={e => this.changePage(false)}
+                  >
+                    previous
+                  </GreenButton>
+              )
+            }
+          })()}
+          {(() => {
+          if (this.state.page * 3 >= this.props.reviews.length) {
             return (
-              <GreenButton
-                variant='contained'
-                className='product_button'
-                onClick={e => this.changePage(false)}
-              >
-                previous
-              </GreenButton>
+                <div className='reviews_button_ghost'/>
             )
           }
-        })()}
-        {(() => {
-          if (this.state.page * 3 < this.props.reviews.length) {
-            return (
-              <GreenButton
-                variant='contained'
-                className='product_button'
-                onClick={e => this.changePage(true)}
-              >
-                next
-              </GreenButton>
-            )
-          }
-        })()}
+          })()}
+          {(() => {
+            if (this.state.page == 1) {
+              return (
+                  <div className='reviews_button_ghost'/>
+              )
+            }
+          })()}
+          {(() => {
+            if (this.state.page * 3 < this.props.reviews.length) {
+              return (
+                  <GreenButton
+                      variant='contained'
+                      className='reviews_button'
+                      onClick={e => this.changePage(true)}
+                  >
+                    next
+                  </GreenButton>
+              )
+            }
+          })()}
+        </div>
       </div>
     )
   }

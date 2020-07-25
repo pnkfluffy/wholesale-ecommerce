@@ -71,12 +71,12 @@ class GCPay extends React.Component {
                                     postal_code: this.state.ClientPostalCode,
                                     }
                     })
-            .then(res => {
+            .then(() => {
                 this.setState({
                     loading: false,
                     paymentDone: true
                 });
-                store.dispatch({ type: 'SET_CART', payload: {} })
+                store.dispatch({ type: 'SET_CART', payload: [] })
             })
             .catch((err) => {
                 console.log(err);
@@ -139,7 +139,7 @@ class GCPay extends React.Component {
                                    type="text" />
                         </label>
                         <label>
-                            City
+                            State
                             <input onChange={this.onChange}
                                    value={this.state.ClientState}
                                    id="ClientState"

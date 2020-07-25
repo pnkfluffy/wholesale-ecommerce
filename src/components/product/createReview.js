@@ -88,22 +88,24 @@ class CreateReview extends React.Component {
                                   onChange={this.onChange}
                                   value={this.state.review}
                                   rows="5"></textarea>
-                        {this.printStars()}
-                        {(() => {
-                            if (this.state.loading) {
-                                return <img alt='loading' src={loading} />
-                            } else {
-                                return (
-                                <GreenButton
-                                    variant='contained'
-                                    className='product_button'
-                                    onClick={this.onSubmit}
-                                >
-                                    Create Review
-                                </GreenButton>
-                                )
-                            }
-                        })()}
+                        <div className="create_review_last_line">
+                            {this.printStars()}
+                            {(() => {
+                                if (this.state.loading) {
+                                    return <img alt='loading' src={loading} />
+                                } else {
+                                    return (
+                                        <GreenButton
+                                            variant='contained'
+                                            className='create_review_button'
+                                            onClick={this.onSubmit}
+                                        >
+                                            Create Review
+                                        </GreenButton>
+                                    )
+                                }
+                            })()}
+                        </div>
                     </form>
                 </div>
         )

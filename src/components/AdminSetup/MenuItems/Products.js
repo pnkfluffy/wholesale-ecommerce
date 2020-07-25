@@ -61,66 +61,44 @@ export const ProductShow = props => {
         <TextField label='Description' source='description' />
         <TextField label='Price' source='price' />
         <ArrayField label='Price Tiers' source='priceTiers'>
-          <SimpleFormIterator>
+          <Datagrid>
+            <TextField label='ID' source='id' />
             <TextField label='Quantity' source='quantity' />
             <TextField label='Price per unit (USD)' source='price' />
-          </SimpleFormIterator>
+          </Datagrid>
         </ArrayField>
-        <div className='product_create_metaData'>
-          <div className='product_create_cbd'>
-            <h2>CBD Contents</h2>
+        <FunctionField
+          label='CBD Contents'
+          render={record =>
+            `${record.metaData.cbd.quantity} ${record.metaData.cbd.unit}`
+          }
+        />
+        <FunctionField
+          label='THC Contents'
+          render={record =>
+            `${record.metaData.thc.quantity} ${record.metaData.thc.unit}`
+          }
+        />
+        <FunctionField
+          label='Product Contents'
+          render={record =>
+            `${record.metaData.units.quantity} ${record.metaData.units.unit}`
+          }
+        />
+        <FunctionField
+          label='Shipping Weight'
+          render={record =>
+            `${record.metaData.weight.quantity} ${record.metaData.weight.unit}`
+          }
+        />
 
-            <TextField
-              label='Quantity (number)'
-              source='metaData.cbd.quantity'
-            />
-            <TextField
-              label='Unit (%, mg, etc...)'
-              source='metaData.cbd.unit'
-            />
-          </div>
-          <div className='product_create_thc'>
-            <h2>THC Contents</h2>
-            <TextField
-              label='Quantity (number)'
-              source='metaData.thc.quantity'
-            />
-            <TextField
-              label='Unit (%, mg, etc...)'
-              source='metaData.thc.unit'
-            />
-          </div>
-          <div className='product_create_cbd'>
-            <h2>Single Unit Contents</h2>
-            <TextField
-              label='Quantity (number)'
-              source='metaData.units.quantity'
-            />
-            <TextField
-              label='Unit (mL, lbs, etc...)'
-              source='metaData.units.unit'
-            />
-          </div>
-          <div className='product_create_cbd'>
-            <h2>Product Weight</h2>
-            <p>used to calculate shipping costs</p>
-            <TextField
-              label='Weight (number)'
-              source='metaData.weight.quantity'
-            />
-            <TextField
-              label='Unit (lbs, oz, etc...)'
-              source='metaData.weight.unit'
-            />
-          </div>
-        </div>
         <ArrayField label='Images' source='imageData'>
-          <SimpleFormIterator>
+          <Datagrid>
             <ImageField source='url' title='key' />
             <TextField label='url' source='url' />
-          </SimpleFormIterator>
+          </Datagrid>
         </ArrayField>
-        {/* <DateField label='Release date' source='date' />  */}
+        <DateField label='Publish Date' source='date' /> 
       </SimpleShowLayout>
     </Show>
   )

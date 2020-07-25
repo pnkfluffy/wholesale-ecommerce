@@ -98,7 +98,7 @@ export const ProductShow = props => {
             <TextField label='url' source='url' />
           </Datagrid>
         </ArrayField>
-        <DateField label='Publish Date' source='date' /> 
+        <DateField label='Publish Date' source='date' />
       </SimpleShowLayout>
     </Show>
   )
@@ -117,15 +117,6 @@ export const ProductList = props => (
   </List>
 )
 
-const categories = [
-  'Flower',
-  'Edibles',
-  'Concentrates',
-  'Topicals',
-  'Pet Products',
-  'Accessories'
-]
-
 const productCategories = [
   { id: 'flower', name: 'Flower' },
   { id: 'edibles', name: 'Edibles' },
@@ -139,12 +130,16 @@ export const ProductCreate = props => {
   return (
     <Create {...props}>
       <SimpleForm>
-        <AutocompleteInput source='category' choices={productCategories} />
+        <AutocompleteInput
+          lablel='Category'
+          source='category'
+          choices={productCategories}
+        />
         <TextInput label='Product Name' source='name' />
         <TextInput
+          options={{ multiLine: true }}
           label='Description'
           source='description'
-          options={{ multiLine: true }}
         />
         <NumberInput label='Base Price Per Unit' source='price' />
         <ArrayInput label='Price Tiers' source='priceTiers'>
@@ -219,35 +214,30 @@ export const ProductCreate = props => {
   )
 }
 
-export const ProductEdit = props => {
-  const notify = useNotify()
-  const refresh = useRefresh()
-  const redirect = useRedirect()
+const PostTitle = () => <div>Edit Product</div>
 
-  const onSuccess = ({ data }) => {
-    notify(`Changes to product "${data.name}" saved`)
-    redirect('/admin-products')
-    refresh()
-  }
+export const ProductEdit = props => {
   return (
-    <Edit
-      onSuccess={onSuccess}
-      actions={<ProductEditActions />}
-      title={<ProductTitle />}
-      {...props}
-    >
+    <Edit undoable={false} title={<PostTitle />} {...props}>
       <SimpleForm>
         {/* {!} NEEDS TO BE DONE LATER TO EDIT ORDERS OF USERS */}
         {/* <ReferenceInput source="orderId" reference="orders"> */}
-        <TextInput label='Product Name' source='name' />
-        <TextInput label='Category' source='category' />
-        <TextInput
-          label='Description'
-          source='description'
-          options={{ multiLine: true }}
+        <TextInput disabled label='Id' source='id' />
+        <AutocompleteInput
+          lablel='Category'
+          source='category'
+          choices={productCategories}
         />
-        <NumberInput label='Price' source='price' />
-        {/* <ImageInput source="imageData"/> */}
+        <TextInput label='Product Name' source='name' />
+        <TextInput multiline label='Description' source='description' />
+        <NumberInput label='Base Price Per Unit' source='price' />
+
+        <ArrayInput label='Price Tiers' source='priceTiers'>
+          <SimpleFormIterator>
+            <NumberInput label='Quantity' source='quantity' />
+            <NumberInput label='Price per unit (USD)' source='price' />
+          </SimpleFormIterator>
+        </ArrayInput>
       </SimpleForm>
     </Edit>
   )

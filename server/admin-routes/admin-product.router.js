@@ -35,37 +35,21 @@ router.get('/', (req, res) => {
 })
 
 //getOne
-router.get("/:id", (req, res) => {
-  console.log("getOne product  hit. Id: ", req.params.id)
-  Product.findOne({_id: req.params.id})
-  .then((product) => {
-    product = JSON.parse(JSON.stringify(product).split('"_id":').join('"id":'));
-    console.log("parsed product: ", product)
-    res.json(product)
-  }).catch(err => {
-    console.log("error: ", err)
-    res.status(500).send("user not found.")
-  })
+router.get('/:id', (req, res) => {
+  Product.findOne({ _id: req.params.id })
+    .then(product => {
+      product = JSON.parse(
+        JSON.stringify(product)
+          .split('"_id":')
+          .join('"id":')
+      )
+      res.json(product)
+    })
+    .catch(err => {
+      console.log('error: ', err)
+      res.status(500).send('user not found.')
+    })
 })
-// router.get('/:id', async (req, res) => {
-//   console.log('req method :', req.method)
-//   console.log('req.data :', req.data)
-//   console.log('getOne hit. Id: ', req.params.id)
-//   await Product.findOne({ _id: req.params.id })
-//     .then(async product => {
-//       product = await JSON.parse(
-//         JSON.stringify(product)
-//           .split('"_id":')
-//           .join('"id":')
-//       )
-//       console.log('parsed product: ', product)
-//       res.json(product)
-//     })
-//     .catch(err => {
-//       console.log('error: ', err)
-//       res.status(500).send('user not found.')
-//     })
-// })
 
 // {!}  WRITE REJECTADMINUNAUTHENTICATED AND ADD TO ALL ADMIN ROUTES
 // @route   POST /admin-products
@@ -105,14 +89,13 @@ router.put('/:id', async (req, res) => {
   console.log('id: ', req.params.id)
   console.log('body: ', req.body)
   await Product.updateOne({ _id: req.params.id }, req.body)
-    .then(async product => {
-      product.save()
-      product = await JSON.parse(
+    .then(product => {
+      product = JSON.parse(
         JSON.stringify(product)
           .split('"_id":')
           .join('"id":')
       )
-      return res.status(200).json(product)
+      return res.json(product)
     })
     .catch(err => {
       console.log(err)

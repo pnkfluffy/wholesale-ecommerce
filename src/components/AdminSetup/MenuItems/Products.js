@@ -54,12 +54,12 @@ export const ProductShow = props => {
   return (
     <Show actions={<ProductShowActions />} {...props}>
       <SimpleShowLayout>
-        <TextField label='Product Name' source='name' />
-        <TextField label='Category' source='category' />
+        <TextField label='Product Name' source='name' /> 
+        {/* <TextField label='Category' source='category' />
         <TextField label='Description' source='description' />
         <TextField label='Price' source='price' />
-        <DateField label='Release date' source='date' />
-        <FunctionField
+        <DateField label='Release date' source='date' /> */} 
+        {/* <FunctionField
           label='Discount Intervals'
           render={record => {
             console.log('priceTiers: ', record.priceTiers)
@@ -76,7 +76,7 @@ export const ProductShow = props => {
               </ul>
             )
           }}
-        />
+        /> */}
         {/* <ArrayField label="Progessive Discounts" source="priceTiers[tiers]">
             <Datagrid>
               <TextField label='Quantity Interval' source="quantity" />

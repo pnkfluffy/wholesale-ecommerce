@@ -20,6 +20,7 @@ export default {
     // });
 
     // accept all username/password combinations
+    localStorage.setItem("username", username);
     return Promise.resolve();
   },
   // called when the user clicks on the logout button

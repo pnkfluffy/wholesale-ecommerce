@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 // const bcrypt = require("bcryptjs");
 const passport = require('../modules/passport')
-const { rejectUnauthenticated } = require('../modules/authentication-middleware')
+// const { rejectUnauthenticated } = require('../modules/authentication-middleware')
 const User = require("../schemas/userSchema");
 
 //Login

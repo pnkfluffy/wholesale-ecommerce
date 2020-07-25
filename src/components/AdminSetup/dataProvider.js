@@ -48,10 +48,15 @@ export default {
 
   getOne: (resource, params) => {
     console.log("getOne resource", resource);
+    console.log("getOne id: ", params.id)
+    console.log(`url: ${apiUrl}/${resource}/${params.id}`)
     return httpClient(`${apiUrl}/${resource}/${params.id}`)
     .then(({ json }) => {
-      console.log(json);
+      console.log("json: ", {data: json});
       return { data: json };
+    }).catch(err => {
+      console.log("getOne error: ", err)
+      return err
     })
   },
 

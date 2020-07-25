@@ -17,12 +17,10 @@ const displayErrorMessage = (props) => {
 
 export default {
   getList: (resource, params) => {
-    console.log("getList resource", resource);
 
     const { page, perPage } = params.pagination;
     const { field, order } = params.sort;
-    console.log("getList params: ", params)
-    console.log(page,  perPage, field, order, params.filter);
+    console.log("getlist stats", page,  perPage, field, order, params.filter);
 
     const query = {
       sort: JSON.stringify([field, order]),
@@ -30,9 +28,7 @@ export default {
       filter: JSON.stringify(params.filter),
     };
     const url = `${apiUrl}/${resource}?${stringify(query)}`;
-    console.log(url)
-    console.log("query", query);
-    console.log("url", url);
+    console.log("getList url", url)
     return httpClient(url).then(({ headers, json }) => {
       console.log("getList dataprovider method hit")
       // console.log("headers", headers);
@@ -47,9 +43,7 @@ export default {
   },
 
   getOne: (resource, params) => {
-    console.log("getOne resource", resource);
-    console.log("getOne id: ", params.id)
-    console.log(`url: ${apiUrl}/${resource}/${params.id}`)
+    console.log(`getOne url: ${apiUrl}/${resource}/${params.id}`)
     return httpClient(`${apiUrl}/${resource}/${params.id}`)
     .then(({ json }) => {
       console.log("json: ", {data: json});
@@ -105,7 +99,8 @@ export default {
   },
 
   update: (resource, params) => {
-    console.log("update", resource);
+    const url = `${apiUrl}/${resource}/${params.id}}`;
+    console.log("UPDATING UPDATING UPDATING", url);
     return httpClient(`${apiUrl}/${resource}/${params.id}`, {
       method: "PUT",
       body: JSON.stringify(params.data),

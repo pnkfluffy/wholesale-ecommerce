@@ -1,8 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import CartQuantity from './cartQuantity'
-import productImg from '../../resources/images/product_1.png'
-import HighlightOffIcon from '@material-ui/icons/HighlightOff'
+import blank_image from '../../resources/images/blank_image.jpg'
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -17,27 +16,22 @@ class OrderCard extends React.Component {
   }
 
   render () {
-    console.log('order', this.props.productInfo)
+    const product = this.props.product
+    const image = product.imageData ? product.imageData[0].url : blank_image
+
+    console.log('order', product)
     return (
       <div className='order_card'>
         <div className='order_card_image_container'>
-          <img
-            className='order_card_image'
-            src={productImg}
-            alt='product_image'
-          />
+          <img className='order_card_image' src={image} alt='product_image' />
         </div>
         <div className='order_card_contents'>
           <div className='order_content'>
-            <div className='order_card_product_name'>
-              {this.props.productInfo.name}
-            </div>
-            <div className='order_card_id'>
-              #{this.props.productInfo.product}
-            </div>
+            <div className='order_card_product_name'>{product.name}</div>
+            <div className='order_card_id'>#{product.product}</div>
           </div>
           <div className='order_card_quantities'>
-            <CartQuantity productInfo={this.props.productInfo} />
+            <CartQuantity productInfo={product} />
             <b>price: ${this.props.total}</b>
             <div className='remove_from_cart_text' onClick={this.deleteProduct}>
               REMOVE FROM CART

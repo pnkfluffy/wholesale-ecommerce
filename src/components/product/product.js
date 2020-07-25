@@ -1,9 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import product_image_one from '../../resources/images/test/oil_all_1.jpg'
-import product_image_two from '../../resources/images/test/oil_2500mg_1.jpg'
-import product_image_three from '../../resources/images/test/oil_2500mg_2.jpg'
-import productImg from '../../resources/images/product_1.png'
 import axios from 'axios'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
@@ -49,13 +45,7 @@ class Product extends React.Component {
             quantity: ''
           }
         },
-        priceTiers: [
-          { price: 10, quantity: 100 },
-          { price: 8, quantity: 200 },
-          { price: 7, quantity: 300 },
-          { price: 6.5, quantity: 500 },
-          { price: 5, quantity: 1000 }
-        ],
+        priceTiers: [],
         _id: ''
       },
       quantity: 1

@@ -26,7 +26,7 @@ class Cart extends React.Component {
       total += productTotal
 
       return (
-        <OrderCard productInfo={cartProduct} total={productTotal} key={v4()} />
+        <OrderCard product={cartProduct} total={productTotal} key={v4()} />
       )
     })
 

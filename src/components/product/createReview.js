@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import productImg from '../../resources/images/product_1.png'
 import axios from 'axios'
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import StarIcon from '@material-ui/icons/Star';

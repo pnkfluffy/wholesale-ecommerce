@@ -19,10 +19,6 @@ class Account extends React.Component {
          .catch(err => console.log(err))
   }
 
-  showUser = () => {
-console.log(this.props.state.user)
-  }
-
   render() {
     const favoriteProductList = this.props.state.user.favorites;
     const allProductsList = this.props.state.products.products;
@@ -39,18 +35,17 @@ console.log(this.props.state.user)
         }
       })
     return (
-      <div className="account">
+      <div>
         <h1>account</h1>
-        <div onClick={this.printPayments}>
+        <div className="account_container">
+        <div className="section_container" onClick={this.printPayments}>
             Order History
         </div>
-        <div onClick={this.showUser}>
-            Show User
-        </div>
-        <div>
+        <div className="section_container">
         <div>Favorites</div>
         {renderProduct}
         </div>
+      </div>
       </div>
     );
   }

@@ -1,11 +1,49 @@
 .getReceiptButton {
-    width: 20vw;
-    height: 3vh;
+    width: 8vw;
+    height: 1vw;
+    padding: 0.5vw 1vw 0.5vw 1vw;
+    border-radius: 8px;
+    text-align: center;
     background-color: var(--dark-hyperlink-green);
-    color: var(--background-grey);
+    cursor: pointer;
+}
+
+.getReceiptButton:first-child {
+    margin-right: 1vw;
 }
 
 .card_of_order {
     width: 60%;
     background-color: var(--searchbar-black);
+}
+
+/* EACH ORDER PAGE */
+.each_order_title {
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.each_order_id {
+    font-size: 1vw;
+}
+
+.each_order_title_right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.each_order_total {
+    font-size: 1.5vw;
+    margin-bottom: 0.5vw;
+}
+
+.each_order_buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-bottom: 1vw;
 }

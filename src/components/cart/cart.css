@@ -1,5 +1,16 @@
 /*** CART ***/
-.cart_body, .cart {
+
+.cart_page {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.cart {
+    width: 73.8%;
+}
+
+.cart_body {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -13,9 +24,11 @@
 .cart_button_area {
   display: flex;
   flex-direction: row;
+  justify-content: flex-end;
 }
 
 .checkout_button {
+    width: 90%;
     letter-spacing: 1px !important;
 }
 
@@ -115,31 +128,20 @@
     justify-content: flex-end;
 }
 
-/***  BUY ***/
+/*** Buy ***/
 .buy {
-  display: flex;
-  flex-direction: row;
-}
-
-/*** Process to make purchase ***/
-.process_buy {
-  width: 70%;
+  width: 24%;
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .gc_form {
   display: flex;
   flex-direction: column;
-}
-
-label {
-  width: 20vw;
-}
-
-input {
-  margin-bottom: 1vh;
-  width: 40vw;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 5%;
 }
 
 .confirm_order {

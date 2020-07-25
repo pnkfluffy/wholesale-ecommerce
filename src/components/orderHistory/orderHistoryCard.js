@@ -9,7 +9,7 @@ const mapStateToProps = state => ({
     state: state.reducer
 })
 
-class OrderCard extends React.Component {
+class OrderHistoryCard extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -31,7 +31,9 @@ class OrderCard extends React.Component {
                 Status: {this.props.payment.status}
                 <p>Will be charged: {this.props.payment.charge_date}</p>
                 <p>#{this.props.order._id}</p>
-                <GetInvoice products = {this.props.state.products} payment = {this.props.payment} order = {this.props.order}/>
+                <GetInvoice products = {this.props.state.products}
+                            payment = {this.props.payment}
+                            order = {this.props.order}/>
             </div>
         );
     }
@@ -40,4 +42,4 @@ class OrderCard extends React.Component {
 export default compose(
     withRouter,
     connect(mapStateToProps)
-)(OrderCard);
+)(OrderHistoryCard);

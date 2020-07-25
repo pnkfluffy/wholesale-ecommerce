@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import blank_image from "../../resources/images/blank_image.jpg";
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -7,14 +8,11 @@ const mapStateToProps = state => ({
 
 class ProductInOrderCard extends React.Component {
   render () {
+    const image = this.props.productInfo.imageData ? this.props.productInfo.imageData[0].url : blank_image
     return (
       <div className='order_card'>
         <div className='order_card_image_container'>
-          <img
-            className='order_card_image'
-            src={this.props.productInfo.imageData[0].src}
-            alt='product_image'
-          />
+          <img className='order_card_image' src={image} alt='product_image' />
         </div>
         <div className='order_card_contents'>
           <div className='order_content'>

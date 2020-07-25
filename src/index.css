@@ -87,6 +87,18 @@ input::-webkit-inner-spin-button {
   transform: rotate(180deg)
 }
 
+.full {
+  width: 100%;
+}
+
+.half {
+  width: 70%;
+}
+
+.input_input {
+  width: 90%;
+}
+
 @import url(//db.onlinewebfonts.com/c/d4f20dfedfdf197ed0ac52b09bf25551?family=GT+Walsheim+Pro+Medium);
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 

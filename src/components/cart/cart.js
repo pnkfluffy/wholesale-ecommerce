@@ -6,6 +6,7 @@ import OrderCard from './orderCard'
 import { getPriceByQuantity } from '../reuseable/getPriceByQuantity'
 import { v4 } from 'uuid'
 import { GreenButton } from '../reuseable/materialButtons'
+import GoCardless from "./goCardless";
 
 const mapStateToProps = state => {
   return {
@@ -31,28 +32,20 @@ class Cart extends React.Component {
     })
 
     return (
-      <div className='cart'>
-        <div className='top_cart_area'>
-          <h1>cart</h1>
-        </div>
-        {this.props.state.cart.length ? (
-          <div className='cart_body'>
-            <div className='cart_products'>{cartProducts}</div>
-            <div className='cart_button_area'>
-              <Link to='/buy' className='cart_button'>
-                <GreenButton
-                  variant='contained'
-                  className='checkout_button'
-                  onClick={this.addToCart}
-                >
-                  CHECK OUT: ${total}
-                </GreenButton>
-              </Link>
+        <div className="cart_page">
+          <div className='cart'>
+            <div className='top_cart_area'>
+              <h1>cart</h1>
             </div>
+            {this.props.state.cart.length ? (
+              <div className='cart_body'>
+                <div className='cart_products'>{cartProducts}</div>
+              </div>
+            ) : (
+              <b> Your cart is empty! </b>
+            )}
           </div>
-        ) : (
-          <b> Your cart is empty! </b>
-        )}
+          <GoCardless total={total}/>
       </div>
     )
   }

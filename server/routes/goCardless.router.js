@@ -280,7 +280,7 @@ router.post('/collectPayment', async (req, res) => {
 			deliveryInfo: req.body.delivery,
 			total: total
 		});
-
+		console.log(total);
 		newOrder
 			.save()
 			.catch((err) => console.log(err));

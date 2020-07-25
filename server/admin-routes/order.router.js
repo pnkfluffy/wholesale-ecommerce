@@ -11,8 +11,8 @@ router.get("/", (req, res) => {
   if(req.query.range === undefined){
     req.query.range = JSON.stringify([0,9])
   }
-  console.log("req.query: ", req.query)
-  console.log("req.query.sort: ", req.query.sort)
+  // console.log("req.query: ", req.query)
+  // console.log("req.query.sort: ", req.query.sort)
   const sortQuery = JSON.parse(req.query.sort);
   let sort = {};
   sort[sortQuery[0]] = sortQuery[1] === "ASC" ? 1 : -1;
@@ -27,7 +27,7 @@ router.get("/", (req, res) => {
       //  each object needs to have an 'id' field in order for
       //  reactAdmin to parse
       orders = JSON.parse(JSON.stringify(orders).split('"_id":').join('"id":'));
-      console.log("parsed orders: ", orders)
+      // console.log("parsed orders: ", orders)
       res.json(orders);
     })
     .catch((error) => {

@@ -6,7 +6,7 @@ const Product = require('../schemas/productSchema')
 
 //getList
 router.get('/', (req, res) => {
-  console.log('Product List backend hit')
+  // console.log('Product List backend hit')
   const sortQuery = JSON.parse(req.query.sort)
   let sort = {}
   sort[sortQuery[0]] = sortQuery[1] === 'ASC' ? 1 : -1
@@ -25,7 +25,7 @@ router.get('/', (req, res) => {
           .split('"_id":')
           .join('"id":')
       )
-      console.log("parsed products: ", products[0], products[1], products[2])
+      // console.log("parsed products: ", products[0], products[1], products[2])
       res.json(products)
     })
     .catch(error => {
@@ -36,7 +36,7 @@ router.get('/', (req, res) => {
 
 //getOne
 router.get("/:id", (req, res) => {
-  console.log("getOne hit. Id: ", req.params.id)
+  console.log("getOne product  hit. Id: ", req.params.id)
   Product.findOne({_id: req.params.id})
   .then((product) => {
     product = JSON.parse(JSON.stringify(product).split('"_id":').join('"id":'));

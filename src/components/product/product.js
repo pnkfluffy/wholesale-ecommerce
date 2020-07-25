@@ -80,8 +80,15 @@ class Product extends React.Component {
     this.setState({ quantity })
   }
 
+  addToCart = () => {
+    let product = this.state.product
+    product.quantity = this.state.quantity
+    product.product = this.state.product._id
+    addQuantityToCart(product)
+  }
+
   render () {
-    const product = this.state.product;
+    const product = this.state.product
     const totalPrice = getPriceByQuantity(
       product.priceTiers,
       this.state.quantity,
@@ -96,19 +103,14 @@ class Product extends React.Component {
               <div className='product_info'>
                 <div className='product_description_container'>
                   <div className='product_page_info_top'>
-                    <div className='product_title'>
-                      {product.name}
-                    </div>
+                    <div className='product_title'>{product.name}</div>
                     <ProductQuantity
                       productID={this.props.match.params.productID}
                       quantity={this.state.quantity}
                       changeQuantity={this.changeQuantity}
                     />
                   </div>
-                  <PriceTiers
-                    tiers={product.priceTiers}
-                    product={this.state}
-                  />
+                  <PriceTiers tiers={product.priceTiers} product={this.state} />
                 </div>
                 <div className='product_overview_container'>
                   <div className='product_overview_title'>Overview</div>
@@ -119,7 +121,7 @@ class Product extends React.Component {
                 <GreenButton
                   variant='contained'
                   className='product_button'
-                  onClick={() => addQuantityToCart(this.state.product)}
+                  onClick={this.addToCart}
                 >
                   Add To Cart
                 </GreenButton>

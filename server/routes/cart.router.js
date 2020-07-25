@@ -35,6 +35,7 @@ router.get('/', rejectUnauthenticated, async (req, res) => {
 
 router.post('/', rejectUnauthenticated, async (req, res) => {
   try {
+    console.log(req.body.cart);
     const user = await User.updateOne(
       { _id: req.user.id },
       {

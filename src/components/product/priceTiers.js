@@ -19,8 +19,6 @@ const PriceTierRow = ({ tier, addToCart }) => (
 class PriceTiers extends React.Component {
   addToCart = quantity => {
     let product = this.props.product.product
-    product.metaData = this.props.product.metaData
-    product.priceTiers = this.props.product.priceTiers
     product.quantity = quantity
     product.product = this.props.product.product._id
 

@@ -80,7 +80,6 @@ router.post('/', uploadProductPhotos, async (req, res) => {
           .split('"_id":')
           .join('"id":')
       )
-      console.log('priceTiers: ', product.priceTiers.tiers)
       return res.json(product)
     })
     .catch(err => console.log(err))

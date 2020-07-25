@@ -19,7 +19,7 @@ const uploadProductPhotos = async (req, res, next) => {
   if (!req.body.images || !req.body.images.length) {
     req.imageMetaData = []
     next()
-    return;
+    return
   }
 
   const b64Images = req.body.images

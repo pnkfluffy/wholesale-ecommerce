@@ -4,9 +4,10 @@ const myDataProvider = {
   ...dataProvider,
   create: (resource, params) => {
     console.log('create intercept')
-    if (resource !== 'admin-products' || !params.data.images) {
+    if (resource !== 'Products' || !params.data.images) {
       // fallback to the default implementation
       console.log('not product with images')
+      params.data.image = [];
       return dataProvider.create(resource, params)
     }
     /**

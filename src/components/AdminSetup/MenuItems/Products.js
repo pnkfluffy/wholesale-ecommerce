@@ -103,12 +103,22 @@ export const ProductList = props => (
   </List>
 )
 
+const categories = [
+  'Flower',
+  'Edibles',
+  'Concentrates',
+  'Topicals',
+  'Pet Products',
+  'Accessories'
+]
+
 const productCategories = [
-  { id: 'accessories', name: 'Accessories' },
-  { id: 'concentrates', name: 'Concentrates' },
-  { id: 'edibles', name: 'Edibles' },
   { id: 'flower', name: 'Flower' },
-  { id: 'vaporizers', name: 'Vaporizers' }
+  { id: 'edibles', name: 'Edibles' },
+  { id: 'concentrates', name: 'Concentrates' },
+  { id: 'topicals', name: 'Topicals' },
+  { id: 'pet_products', name: 'Pet Products' },
+  { id: 'accessories', name: 'Accessories' }
 ]
 
 export const ProductCreate = props => {
@@ -202,9 +212,9 @@ export const ProductEdit = props => {
 
   const onSuccess = ({ data }) => {
     notify(`Changes to product "${data.name}" saved`)
-    redirect('/admin-products');
-    refresh();
-  };
+    redirect('/admin-products')
+    refresh()
+  }
   return (
     <Edit
       onSuccess={onSuccess}

@@ -29,42 +29,35 @@ class Product extends React.Component {
         description: '',
         name: '',
         price: '',
-
+        //  needs to be moved back up into product
+        imageData: [],
+        metaData: {
+          cbd: {
+            unit: '',
+            quantity: ''
+          },
+          thc: {
+            unit: '',
+            quantity: ''
+          },
+          units: {
+            unit: '',
+            quantity: ''
+          },
+          weight: {
+            unit: '',
+            quantity: ''
+          }
+        },
+        priceTiers: [
+          { price: 10, quantity: 100 },
+          { price: 8, quantity: 200 },
+          { price: 7, quantity: 300 },
+          { price: 6.5, quantity: 500 },
+          { price: 5, quantity: 1000 }
+        ],
         _id: ''
       },
-      //  needs to be moved back up into product
-      imageData: [
-        { url: product_image_one },
-        { url: product_image_two },
-        { url: product_image_three },
-        { url: productImg }
-      ],
-      metaData: {
-        cbd: {
-          unit: 'mg',
-          quantity: 2500
-        },
-        thc: {
-          unit: '%',
-          quantity: 0
-        },
-        units: {
-          unit: 'mL',
-          quantity: 30
-        },
-        weight: {
-          unit: 'oz',
-          quantity: 5
-        }
-      },
-      priceTiers: [
-        { price: 10, quantity: 100 },
-        { price: 8, quantity: 200 },
-        { price: 7, quantity: 300 },
-        { price: 6.5, quantity: 500 },
-        { price: 5, quantity: 1000 }
-      ],
-
       quantity: 1
     }
   }
@@ -87,33 +80,24 @@ class Product extends React.Component {
     this.setState({ quantity })
   }
 
-  addToCart = () => {
-    let product = this.state.product
-    product.metaData = this.state.metaData
-    product.priceTiers = this.state.priceTiers
-    product.quantity = this.state.quantity
-    product.product = this.state.product._id
-
-    addQuantityToCart(product)
-  }
-
   render () {
+    const product = this.state.product;
     const totalPrice = getPriceByQuantity(
-      this.state.priceTiers,
-      this.state.quantity,
-      this.state.product.price
+      product.priceTiers,
+      product.quantity,
+      product.price
     )
     return (
       <div className='product_page'>
         <div className='product_page_main'>
           <div className='product_page_top'>
-            <ProductImages images={this.state.imageData} />
+            <ProductImages images={product.imageData} />
             <div className='product_page_info'>
               <div className='product_info'>
                 <div className='product_description_container'>
                   <div className='product_page_info_top'>
                     <div className='product_title'>
-                      {this.state.product.name}
+                      {product.name}
                     </div>
                     <ProductQuantity
                       productID={this.props.match.params.productID}
@@ -122,20 +106,20 @@ class Product extends React.Component {
                     />
                   </div>
                   <PriceTiers
-                    tiers={this.state.priceTiers}
+                    tiers={product.priceTiers}
                     product={this.state}
                   />
                 </div>
                 <div className='product_overview_container'>
                   <div className='product_overview_title'>Overview</div>
-                  <ProductMetaData metaData={this.state.metaData} />
+                  <ProductMetaData metaData={product.metaData} />
                 </div>
               </div>
               <div className='product_purchase'>
                 <GreenButton
                   variant='contained'
                   className='product_button'
-                  onClick={this.addToCart}
+                  onClick={() => addQuantityToCart(this.state.product)}
                 >
                   Add To Cart
                 </GreenButton>
@@ -145,7 +129,7 @@ class Product extends React.Component {
               </div>
             </div>
           </div>
-          <p>{this.state.product.description}</p>
+          <p>{product.description}</p>
         </div>
         <UserReviews productID={this.props.match.params.productID} />
       </div>

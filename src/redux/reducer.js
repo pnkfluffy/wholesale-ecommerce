@@ -9,9 +9,11 @@ const user = (state = initialUser, action) => {
     case 'GET_USER':
       return action.payload
     case 'ADD_FAVORITE_PRODUCT':
-      return { ...state, favorites: action.payload }
+      return [...state, action.payload]
     case 'DELETE_FAVORITE_PRODUCT':
-      return { ...state, favorites: action.payload }
+      let deleteItemIndex = state.favorites.findIndex(c => c.product === action.payload.id)
+      state.favorites.splice(deleteItemIndex, 1)
+      return {...state}
     default:
       return state
   }

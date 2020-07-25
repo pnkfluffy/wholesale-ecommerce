@@ -1,5 +1,5 @@
 function isFavorite(favoriteProducts, productId){
-  console.log("productID", productId)
+//  console.log("productID", productId)
     function checkIfIsFavorite(result){
       return result === productId;
      }

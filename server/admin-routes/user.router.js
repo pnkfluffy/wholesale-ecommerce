@@ -1,10 +1,28 @@
 const express = require("express");
 const router = express.Router();
+// const bcrypt = require("bcryptjs");
+const passport = require('../modules/passport')
+const { rejectUnauthenticated } = require('../modules/authentication-middleware')
 const User = require("../schemas/userSchema");
+
+//Login
+// router.post("/login",passport.authenticate("local", { failureRedirect: "/get-started" }), (req, res) => {
+//   console.log(req);
+//   res.sendStatus(200);
+// }
+// );
+
+
+//register
+
+
+
 
 //getList
 router.get("/", (req, res) => {
   console.log("User list backend hit")
+  // these conditionals manually put required values into the query 
+  // that aren't passed in from the react-admin getMany method
   if(req.query.sort === undefined){
     req.query.sort = JSON.stringify(["id","ASC"])
   }

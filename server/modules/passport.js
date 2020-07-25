@@ -1,6 +1,31 @@
 const passport = require('passport')
+const LocalStrategy = require('passport-local').Strategy;
 const GoogleStrategy = require('passport-google-oauth2')
 const User = require('../schemas/userSchema')
+
+passport.use(new LocalStrategy({
+	usernameField: 'username',
+	passwordField: 'password'
+},
+	function (username, password, cb) {
+		User.findOne({ name: username }, async (err, user) => {
+			if (err) { return cb(err); }
+			if (!user) {
+				return cb(null, false);
+			};
+			if (! await bcrypt.compare(password, user.password)) {
+				return cb(null, false);
+			}
+			if (user.disabled) {
+				accountDisabledEmail(email)
+				return cb(null, false);
+			}
+			else {
+				return cb(null, user);
+			}
+		});
+	}
+));
 
 passport.use(new GoogleStrategy({
 	clientID: process.env.GOOGLE_CLIENT_ID,

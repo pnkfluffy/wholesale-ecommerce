@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const User = require('../schemas/userSchema')
-const passport = require('../modules/passport')
 const { rejectUnauthenticated } = require('../modules/authentication-middleware')
+const passport = require('../modules/passport')
+
 
 router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
 	res.redirect((process.env.NODE_ENV === 'dev') ? 'http://localhost:3000/' : '/')

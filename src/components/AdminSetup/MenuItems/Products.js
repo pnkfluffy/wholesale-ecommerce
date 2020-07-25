@@ -51,40 +51,76 @@ import { makeStyles } from '@material-ui/core/styles'
 // const classes = useStyles()
 
 export const ProductShow = props => {
+  console.log('tryna show', props)
   return (
     <Show actions={<ProductShowActions />} {...props}>
       <SimpleShowLayout>
-        <TextField label='Product Name' source='name' /> 
-        {/* <TextField label='Category' source='category' />
+        <TextField label='Database ID' source='id' />
+        <TextField label='Product Name' source='name' />
+        <TextField label='Category' source='category' />
         <TextField label='Description' source='description' />
         <TextField label='Price' source='price' />
-        <DateField label='Release date' source='date' /> */} 
-        {/* <FunctionField
-          label='Discount Intervals'
-          render={record => {
-            console.log('priceTiers: ', record.priceTiers)
-            console.log('tiers: ', record.priceTiers.tiers)
-            return (
-              <ul>
-                {record.priceTiers.tiers.map(item => {
-                  return (
-                    <li key={item.quantity}>
-                      {item.id}: {item.ratio}{' '}
-                    </li>
-                  )
-                })}
-              </ul>
-            )
-          }}
-        /> */}
-        {/* <ArrayField label="Progessive Discounts" source="priceTiers[tiers]">
-            <Datagrid>
-              <TextField label='Quantity Interval' source="quantity" />
-              <TextField label="Discount Per Unit" source="ratio" />
-            </Datagrid>
-          </ArrayField> */}
-        {/* <ImageField source="imageData" /> */}
-        <TextField label='Database ID' source='id' />
+        <ArrayField label='Price Tiers' source='priceTiers'>
+          <SimpleFormIterator>
+            <TextField label='Quantity' source='quantity' />
+            <TextField label='Price per unit (USD)' source='price' />
+          </SimpleFormIterator>
+        </ArrayField>
+        <div className='product_create_metaData'>
+          <div className='product_create_cbd'>
+            <h2>CBD Contents</h2>
+
+            <TextField
+              label='Quantity (number)'
+              source='metaData.cbd.quantity'
+            />
+            <TextField
+              label='Unit (%, mg, etc...)'
+              source='metaData.cbd.unit'
+            />
+          </div>
+          <div className='product_create_thc'>
+            <h2>THC Contents</h2>
+            <TextField
+              label='Quantity (number)'
+              source='metaData.thc.quantity'
+            />
+            <TextField
+              label='Unit (%, mg, etc...)'
+              source='metaData.thc.unit'
+            />
+          </div>
+          <div className='product_create_cbd'>
+            <h2>Single Unit Contents</h2>
+            <TextField
+              label='Quantity (number)'
+              source='metaData.units.quantity'
+            />
+            <TextField
+              label='Unit (mL, lbs, etc...)'
+              source='metaData.units.unit'
+            />
+          </div>
+          <div className='product_create_cbd'>
+            <h2>Product Weight</h2>
+            <p>used to calculate shipping costs</p>
+            <TextField
+              label='Weight (number)'
+              source='metaData.weight.quantity'
+            />
+            <TextField
+              label='Unit (lbs, oz, etc...)'
+              source='metaData.weight.unit'
+            />
+          </div>
+        </div>
+        <ArrayField label='Images' source='imageData'>
+          <SimpleFormIterator>
+            <ImageField source='url' title='key' />
+            <TextField label='url' source='url' />
+          </SimpleFormIterator>
+        </ArrayField>
+        {/* <DateField label='Release date' source='date' />  */}
       </SimpleShowLayout>
     </Show>
   )

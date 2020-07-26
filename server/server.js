@@ -45,7 +45,7 @@ app.use("/admin-products", adminProductRouter);
 app.use("/Customers", adminUserRouter);
 app.use("/admin-orders", adminOrderRouter);
 app.use("/Reviews", adminReviewRouter);
-// app.use("/admin-users", adminUserRouter);
+app.use("/admin-users", adminUserRouter);
 
 app.get("/*", function (req, res) {
   res.sendFile(path.join(__dirname, "../build/index.html"), function (err) {

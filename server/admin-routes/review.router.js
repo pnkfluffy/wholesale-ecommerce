@@ -3,8 +3,10 @@ const router = express.Router();
 
 const review = require("../schemas/reviewSchema");
 const Order = require("../schemas/orderSchema");
+const { rejectNonAdmin } = require('../modules/authentication-middleware')
+
 //getList
-router.get("/", (req, res) => {
+router.get("/", rejectNonAdmin, (req, res) => {
   console.log("Review List backend hit")
   const sortQuery = JSON.parse(req.query.sort);
   let sort = {};
@@ -30,7 +32,7 @@ router.get("/", (req, res) => {
 });
 
 //getOne
-router.get("/:id", (req, res) => {
+router.get("/:id", rejectNonAdmin, (req, res) => {
   console.log("getOne hit. Id: ", req.params.id)
   review.findOne({_id: req.params.id})
   .then((review) => {

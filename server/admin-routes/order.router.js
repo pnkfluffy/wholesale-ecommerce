@@ -1,9 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const Order = require("../schemas/orderSchema");
+const { rejectNonAdmin } = require('../modules/authentication-middleware')
+
 
 //getList
-router.get("/", (req, res) => {
+router.get("/", rejectNonAdmin, (req, res) => {
   console.log("Order list backend hit")
   if(req.query.sort === undefined){
     req.query.sort = JSON.stringify(["id","ASC"])
@@ -53,7 +55,7 @@ router.get("/", (req, res) => {
 });
 
 //getOne
-router.get("/:id", (req, res) => {
+router.get("/:id", rejectNonAdmin, (req, res) => {
   console.log("Order getOne hit. Id: ", req.params.id)
   Order.findOne({_id: req.params.id})
   .then((order) => {

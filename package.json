@@ -40,7 +40,8 @@
     "react-scripts": "3.4.1",
     "redux": "^4.0.5",
     "redux-logger": "^3.0.6",
-    "redux-saga": "^1.1.3"
+    "redux-saga": "^1.1.3",
+    "universal-cookie": "^4.0.3"
   },
   "scripts": {
     "server": "env NODE_ENV=dev nodemon --watch server server/server.js",

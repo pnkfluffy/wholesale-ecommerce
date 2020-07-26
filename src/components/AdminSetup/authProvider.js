@@ -1,11 +1,13 @@
 import Cookies from 'universal-cookie'
+import shajs from 'sha.js'
 
 const cookie = new Cookies()
-const apiUrl = 'http://localhost:5000'
+const apiUrl = 'http://localhost:3000'
 
 export default {
   // called when the user attempts to log in
   login: ({ username, password }) => {
+    password = shajs('sha256').update(password).digest('hex')
     const request = new Request(`${apiUrl}/admin-users/login`, {
       method: 'POST',
       body: JSON.stringify({ username, password }),
@@ -14,15 +16,17 @@ export default {
     return fetch(request)
       .then(response => {
         if (response.status < 200 || response.status >= 300) {
-          throw new Error(response.statusText)
+          console.log('hi' + response.statusText);
+          
+          throw new Error(response.statusText);
         }
         cookie.set('sig', response.data)
         return Promise.resolve()
       })
-      .catch(err => {
-        // {!} SWAL ERROR MESSAGES
-        return Promise.reject()
-      })
+      // .catch(err => {
+      //   // {!} SWAL ERROR MESSAGES
+      //   return Promise.reject()
+      // })
   },
 
   // called when the user clicks on the logout button
@@ -47,9 +51,10 @@ export default {
   },
   // called when the user navigates to a new location, to check for authentication
   checkAuth: () => {
-    console.log(cookie.get('sig'))
-
-    return cookie.get('sig') ? Promise.resolve() : Promise.reject()
+    
+    return cookie.get("sig")
+      ? Promise.resolve()
+      : Promise.reject();
   },
   // called when the user navigates to a new location, to check for permissions / roles
   getPermissions: () => Promise.resolve()

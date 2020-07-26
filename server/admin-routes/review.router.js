@@ -11,9 +11,6 @@ router.get("/", rejectNonAdmin, (req, res) => {
   const sortQuery = JSON.parse(req.query.sort);
   let sort = {};
   sort[sortQuery[0]] = sortQuery[1] === "ASC" ? 1 : -1;
-  console.log("query: ", req.query, " end query");
-  console.log(sortQuery);
-  console.log("sort", sort);
 
   review.find()
     .sort(sort)
@@ -37,7 +34,6 @@ router.get("/:id", rejectNonAdmin, (req, res) => {
   review.findOne({_id: req.params.id})
   .then((review) => {
     review = JSON.parse(JSON.stringify(review).split('"_id":').join('"id":'));
-    console.log("parsed review: ", review)
     res.json(review)
   }).catch(err => {
     console.log("error: ", err)

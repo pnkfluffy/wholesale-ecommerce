@@ -1,37 +1,37 @@
-import { applyMiddleware, combineReducers, compose, createStore } from "redux";
-import { routerMiddleware, connectRouter } from "connected-react-router";
-import createSagaMiddleware from "redux-saga";
-import { all, fork } from "redux-saga/effects";
-import { adminReducer, adminSaga, USER_LOGOUT } from "react-admin";
+import { applyMiddleware, combineReducers, compose, createStore } from 'redux'
+import { routerMiddleware, connectRouter } from 'connected-react-router'
+import createSagaMiddleware from 'redux-saga'
+import { all, fork } from 'redux-saga/effects'
+import { adminReducer, adminSaga, USER_LOGOUT } from 'react-admin'
 
-export default ({ authProvider, userProvider, history }) => {
+export default ({ authProvider, dataProvider, history }) => {
   const reducer = combineReducers({
     admin: adminReducer,
-    router: connectRouter(history),
+    router: connectRouter(history)
     // add your own reducers here
-  });
+  })
   const resettableAppReducer = (state, action) =>
-    reducer(action.type !== USER_LOGOUT ? state : undefined, action);
+    reducer(action.type !== USER_LOGOUT ? state : undefined, action)
 
-  const saga = function* rootSaga() {
+  const saga = function * rootSaga () {
     yield all(
       [
-        adminSaga(authProvider, userProvider),
+        adminSaga(authProvider, dataProvider)
         // add your own sagas here
       ].map(fork)
-    );
-  };
-  const sagaMiddleware = createSagaMiddleware();
+    )
+  }
+  const sagaMiddleware = createSagaMiddleware()
 
   const composeEnhancers =
-    (process.env.NODE_ENV === "development" &&
-      typeof window !== "undefined" &&
+    (process.env.NODE_ENV === 'development' &&
+      typeof window !== 'undefined' &&
       window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ &&
       window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
         trace: true,
-        traceLimit: 25,
+        traceLimit: 25
       })) ||
-    compose;
+    compose
 
   const store = createStore(
     resettableAppReducer,
@@ -46,7 +46,7 @@ export default ({ authProvider, userProvider, history }) => {
       )
       // add your own enhancers here
     )
-  );
-  sagaMiddleware.run(saga);
-  return store;
-};
+  )
+  sagaMiddleware.run(saga)
+  return store
+}

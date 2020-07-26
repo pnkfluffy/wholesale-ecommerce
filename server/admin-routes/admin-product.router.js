@@ -7,13 +7,10 @@ const Product = require('../schemas/productSchema')
 
 //getList
 router.get('/', rejectNonAdmin, (req, res) => {
-  // console.log('Product List backend hit')
+  console.log('Product List backend hit')
   const sortQuery = JSON.parse(req.query.sort)
   let sort = {}
   sort[sortQuery[0]] = sortQuery[1] === 'ASC' ? 1 : -1
-  // console.log("query: ", req.query, " end query");
-  // console.log(sortQuery);
-  // console.log("sort", sort);
 
   Product.find()
     .sort(sort)
@@ -26,7 +23,6 @@ router.get('/', rejectNonAdmin, (req, res) => {
           .split('"_id":')
           .join('"id":')
       )
-      // console.log("parsed products: ", products[0], products[1], products[2])
       res.json(products)
     })
     .catch(error => {
@@ -67,11 +63,9 @@ router.post('/', rejectNonAdmin, uploadProductPhotos, async (req, res) => {
     imageData: req.imageMetaData,
     draft: req.body.draft
   })
-  console.log('new product', newProduct)
   newProduct
     .save()
     .then(product => {
-      console.log('product: ', product)
       product = JSON.parse(
         JSON.stringify(product)
           .split('"_id":')
@@ -86,9 +80,7 @@ router.post('/', rejectNonAdmin, uploadProductPhotos, async (req, res) => {
 // @desc    Edit a product
 // @access  Private
 router.put('/:id', rejectNonAdmin, async (req, res) => {
-  console.log('update hit')
-  console.log('id: ', req.params.id)
-  console.log('body: ', req.body)
+  console.log('update hit', req.params.id)
   await Product.updateOne({ _id: req.params.id }, req.body)
     .then(product => {
       product = JSON.parse(

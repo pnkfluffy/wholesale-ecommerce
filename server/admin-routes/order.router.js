@@ -20,10 +20,9 @@ router.get("/", (req, res) => {
   console.log("query: ", req.query, " end query");
   console.log(sortQuery);
   console.log("sort", sort);
-
-  if(filterQuery.id){
-    console.log("filterquery: ", filterQuery)
-    Order.find({ user: filterQuery.id }).sort(sort)
+  if(JSON.stringify(filterQuery) !== '{}'){
+    console.log(true)
+    Order.find(filterQuery).sort(sort)
     .then((filteredOrders => {
       res.set("content-range", JSON.stringify(filteredOrders.length + 1));
       //  each object needs to have an 'id' field in order for

@@ -82,7 +82,7 @@ router.post('/', rejectNonAdmin, uploadProductPhotos, async (req, res) => {
     .catch(err => console.log(err))
 })
 
-// @route   POST /admin-products/edit/:id
+// @route   PUT /admin-products/edit/:id
 // @desc    Edit a product
 // @access  Private
 router.put('/:id', rejectNonAdmin, async (req, res) => {

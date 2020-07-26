@@ -1,0 +1,149 @@
+/*** CART ***/
+.cart_body, .cart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.top_cart_area {
+    padding-left: 10%;
+}
+
+.cart_button_area {
+  display: flex;
+  flex-direction: row;
+}
+
+.checkout_button {
+    letter-spacing: 1px !important;
+}
+
+/** ORDER CARD **/
+.cart_products {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.order_card {
+  display: flex;
+  position: relative;
+  padding: 1.5vw;
+  flex-direction: row;
+  align-items: center;
+  width: 75%;
+  background-color: var(--searchbar-black);
+  margin-bottom: 2vh;
+  border-radius: 20px;
+  height: 14vh;
+}
+
+.order_card_image_container {
+  margin-right: 1.5vw;
+  height: 100%;
+  width: 20%;
+}
+
+.order_card_image {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  border-radius: 16px;
+}
+
+.order_card_contents {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+
+}
+
+.order_contents {
+    width: 60%;
+}
+
+.order_card_product_name {
+  font-size: 1.4vw;
+  width: 100%;
+  margin-bottom: 2%;
+}
+
+.order_card_id {
+  color: var(--nofocus-font-grey);
+  font-size: 0.8vw;
+}
+
+.order_card_quantities {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  width: 30%;
+  align-items: center;
+}
+
+.remove_from_cart_text {
+    color: rgb(255, 86, 86);
+    font-size: 0.8vw;
+    font-weight: 100;
+    font-family: Arial, Helvetica, sans-serif;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+}
+
+.remove_from_cart_text:hover {
+    color: red;
+}
+
+.cart_quantity {
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+  width: 50%;
+  border-radius: 10px;
+  height: 35%;
+  background-color: var(--background-grey);
+}
+
+.cart_button_area {
+    width: 80%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/***  BUY ***/
+.buy {
+  display: flex;
+  flex-direction: row;
+}
+
+/*** Process to make purchase ***/
+.process_buy {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+}
+
+.gc_form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  width: 20vw;
+}
+
+input {
+  margin-bottom: 1vh;
+  width: 40vw;
+}
+
+.confirm_order {
+  width: 20%;
+  display: flex;
+  flex-direction: column;
+}

@@ -1,19 +1,44 @@
-* {
-  box-sizing: border-box;
+/* :root {
+  --logo-green: #59BA47;
+  --light-hyperlink-green: #60944d;
+  --dark-hyperlink-green: #33743A;
+
+  --header-font-white: #000000;
+  --paragraph-font-grey: #1e1e1f;
+  --nofocus-font-grey: #393b3d;
+
+  --sidebar-black: #7d7f8a;
+  --searchbar-black: #5f5f5f;
+  --background-grey: #c2c2c2;
+} */
+
+:root {
+  --logo-green: #59BA47;
+  --light-hyperlink-green: #60944d;
+  --dark-hyperlink-green: #33743A;
+
+  --header-font-white: #cccccc;
+  --paragraph-font-grey: #B4B5B7;
+  --nofocus-font-grey: #75777A;
+
+  --sidebar-black: #16181D;
+  --searchbar-black: #1a1b20;
+  --background-grey: #1E2026;
 }
 
 body,
 html {
   height: 100%;
+  width: 100%;
   margin: 0px;
-  /* ADDING THIS MAKES IT IMPOSSIBLE TO SCROLL */
-  /* overflow: hidden; */
+  font-family: "GT Walsheim Pro Medium";
 }
 
 html {
-  background-color: #17181d;
-  color: #808183;
+  background-color: var(--sidebar-black);
+  color: var(--header-font-white);
 }
+
 
 body {
   box-shadow: 0 2px 10px rgba(14, 14, 14, 0.5);
@@ -22,24 +47,56 @@ body {
 
 .background {
   display: flex;
-  width: 100vw;
+  width: 100%;
   flex-direction: row;
   flex-wrap: nowrap;
 }
 
 .body {
-  background-color: #1f2025;
-  width: 90%;
+  background-color: var(--background-grey);
+  width: 95%;
+  padding: 6vh;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  border-radius: 50px 0px 0px 50px;
 }
 
-@import './components/sidebar/sidebar.css';
-@import './components/header/header.css';
-@import './components/home/home.css';
-@import './components/account/account.css';
-@import './components/auth/auth.css';
-@import './components/cart/cart.css';
-@import './components/settings/settings.css';
-@import './components/error/error.css';
+*:focus {
+  outline: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* materialUI buttons */
+.MuiButton-root {
+  text-transform: none !important;
+  border-radius: 8px !important;
+  letter-spacing: 1px !important;
+}
+
+.icon_upsidedown {
+  transform: rotate(180deg)
+}
+
+@import url(//db.onlinewebfonts.com/c/d4f20dfedfdf197ed0ac52b09bf25551?family=GT+Walsheim+Pro+Medium);
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+@import "./components/sidebar/sidebar.css";
+@import "./components/header/header.css";
+@import "./components/home/home.css";
+@import "./components/product/product.css";
+@import "./components/account/account.css";
+@import "./components/auth/auth.css";
+@import "./components/cart/cart.css";
+@import "./components/settings/settings.css";
+@import "./components/orderHistory/orderHistory.css";
+@import "./components/error/error.css";

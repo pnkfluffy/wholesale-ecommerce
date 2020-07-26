@@ -1,0 +1,11 @@
+.getReceiptButton {
+    width: 20vw;
+    height: 3vh;
+    background-color: var(--dark-hyperlink-green);
+    color: var(--background-grey);
+}
+
+.card_of_order {
+    width: 60%;
+    background-color: var(--searchbar-black);
+}

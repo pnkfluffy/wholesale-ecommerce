@@ -15,7 +15,7 @@ const rejectUnauthenticated = (req, res, next) => {
 };
 
 const rejectNonAdmin = async (req, res, next) => {
-	if (req.isAuthenticated()) {		
+	if (req.isAuthenticated()) {
 		let admin = await Admin.findOne({ _id: req.user._id })
 		console.log(admin);
 		

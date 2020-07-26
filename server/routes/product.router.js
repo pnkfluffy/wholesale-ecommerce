@@ -20,6 +20,21 @@ router.get('/all', (req, res) => {
     })
 })
 
+// @route   GET /products/categories
+// @desc    Returns all types of categories
+// @access  Private
+router.get("/categories", (req, res) => {
+    Product.distinct("category")
+        .then(categories => {
+            console.log(categories);
+            res.json(categories)
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).send("can't find categories");
+        });
+})
+
 // @route   GET /products/:id
 // @:id     id of product to get
 // @desc    Returns the order

@@ -1,17 +1,21 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import Products from "./products";
+import HomeUserReviews from "./homeUserReviews";
+
+const mapStateToProps = state => ({
+  state: state.reducer
+})
 
 class Home extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
+
+  render () {
     return (
-      <div className="header">
-        <h1>HOME</h1>
+      <div className='home'>
+        <Products />
+        <HomeUserReviews />
       </div>
-    );
+    )
   }
 }
-export default Home;
+export default connect(mapStateToProps)(Home)

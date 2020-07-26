@@ -19,6 +19,14 @@ router.get('/logout', (req, res) => {
   res.sendStatus(200)
 })
 
+router.get('/user', rejectNonAdmin, (req, res) => {
+  let user = {
+    name: req.user.name,
+    admin: true,
+  }
+  res.send(user)
+})
+
 //getList
 router.get('/', rejectNonAdmin, (req, res) => {
   console.log('User list backend hit')

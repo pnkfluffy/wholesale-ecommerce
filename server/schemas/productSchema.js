@@ -25,37 +25,38 @@ const ProductSchema = new Schema({
       }
     }
   ],
+
   metaData: {
     cbd: {
-      quantity: {
-        type: Number
-      },
       unit: {
         type: String
+      },
+      quantity: {
+        type: Number
       }
     },
     thc: {
-      quantity: {
-        type: Number
-      },
       unit: {
         type: String
+      },
+      quantity: {
+        type: Number
       }
     },
     units: {
-      quantity: {
-        type: Number
-      },
       unit: {
         type: String
+      },
+      quantity: {
+        type: Number
       }
     },
     weight: {
-      quantity: {
-        type: Number
-      },
       unit: {
         type: String
+      },
+      quantity: {
+        type: Number
       }
     }
   },

@@ -2,7 +2,7 @@ import Cookies from 'universal-cookie'
 import shajs from 'sha.js'
 
 const cookie = new Cookies()
-const apiUrl = 'http://localhost:3000'
+const apiUrl = 'http://localhost:5000'
 
 export default {
   // called when the user attempts to log in

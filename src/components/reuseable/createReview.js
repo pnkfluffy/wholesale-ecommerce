@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import StarIcon from '@material-ui/icons/Star';
-import { GreenButton } from '../reuseable/materialButtons';
+import { GreenButton } from './materialButtons';
 import loading from "../../resources/images/loading.svg";
 import store from "../../redux/store";
 

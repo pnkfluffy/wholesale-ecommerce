@@ -5,6 +5,8 @@ import { connect } from "react-redux";
 import ProductInOrderCard from "./productInOrderCard";
 import GetInvoice from "./getInvoice";
 import store from "../../redux/store";
+import products from "../home/products";
+import OrderInformation from "./orderInformation";
 
 const mapStateToProps = state => ({
     state: state.reducer
@@ -25,26 +27,35 @@ class Order extends React.Component {
     }
 
     printItems = products => {
-        return products.map(product => {
+        const productsWithInfo = products.map(product => {
             const productInfo = this.props.state.products.products.find(oneProduct => oneProduct._id === product.product);
             return <ProductInOrderCard productInfo = {productInfo} quantity = {product.quantity}></ProductInOrderCard>
         })
+        return productsWithInfo;
     }
 
     redoOrder = order => {
-        console.log(order);
+        const productsWithInfo =  order.products.map(product =>
+                                                                  {
+                                                                    const allInfo = this.props.state.products.products.find(p => p._id === product.product)
+                                                                    allInfo.quantity = product.quantity;
+                                                                    return allInfo;
+                                                                  })
         //add products to cart
-        store.dispatch({ type: 'SET_CART', payload: order.products })
+            store.dispatch({ type: 'SET_CART', payload: productsWithInfo})
 
         //redirect to cart
         const url = "/cart";
         this.props.history.push(url)
+
+        //save cart in db
+        axios.post('/cart/', {cart: order.products})
+             .catch(err => console.log(err))
     }
 
     render() {
         const payment = this.props.history.location.state.payment;
         const order = this.props.history.location.state.order;
-
         return (
             <div className="cart_page">
                 <div className="cart">
@@ -54,21 +65,21 @@ class Order extends React.Component {
                             <div className="each_order_total">TOTAL: ${order.total}</div>
                             <div className="each_order_buttons">
                                 <GetInvoice products = {this.props.state.products}
-                                            payment = {this.props.payment}
-                                            order = {this.props.order}/>
-                                <div className="getReceiptButton">
+                                            payment = {payment}
+                                            order = {order}/>
+                                <div className="getReceiptButton"
+                                     onClick={e => this.redoOrder(order)}
+                                    >
                                     Redo Order
                                 </div>
                             </div>
                         </div>
                     </div>
-                    {this.printItems(order.products)}
+                    <div className='cart_body'>
+                        {this.printItems(order.products)}
+                    </div>
                 </div>
-                <div className="buy">
-                    <h2>Payment Status: {payment.status}</h2>
-                    <p>Charging Date: {payment.charge_date}</p>
-                    <p>Delivery Scheduled for 2-4 days after payment confirmed</p>
-                </div>
+                <OrderInformation payment={payment} order={order} />
             </div>
         );
     }

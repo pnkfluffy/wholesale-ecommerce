@@ -7,6 +7,9 @@
     background-color: var(--dark-hyperlink-green);
     cursor: pointer;
 }
+.getReceiptButton:link {
+    color: var(--header-font-white)
+}
 
 .getReceiptButton:first-child {
     margin-right: 1vw;
@@ -20,6 +23,7 @@
 /* EACH ORDER PAGE */
 .each_order_title {
     width: 80%;
+    padding-left: 10%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -38,12 +42,71 @@
 
 .each_order_total {
     font-size: 1.5vw;
-    margin-bottom: 0.5vw;
+    margin-bottom: 5%;
 }
 
 .each_order_buttons {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
-    margin-bottom: 1vw;
+    margin-bottom: 5%;
+}
+
+/* PRODUCT IN ORDER */
+.product_in_order_card_values {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.product_in_order_card_math {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+}
+
+.product_in_order_card_quantity {
+    font-size: 1.3vw;
+}
+
+.product_in_order_card_small {
+    font-size: 0.8vw;
+}
+
+.product_in_order_card_multiply {
+    font-size: 1.3vw;
+    padding-right: 10% !important;
+    padding-left: 10% !important;
+}
+
+.product_in_order_card_total {
+    font-size: 1.3vw;
+    margin-bottom: 5%;
+}
+
+.product_in_order_card_buttons_area {
+    display: flex;
+    flex-direction: row;
+}
+
+.product_in_order_card_button {
+    width: 60%;
+}
+
+.product_in_order_card_button:first-child {
+    margin-right: 1vw;
+}
+
+/* ORDER INFORMATION */
+.order_information_card {
+    width: 100%;
+    border-radius: 8px;
+    padding: 0.5vw 1vw 0.5vw 1vw;
+    margin-top: 5%;
+    background-color: var(--searchbar-black);
+}
+.order_information_title {
+    font-size: 1.6vw;
+    line-height: 10%;
+    margin-top: 10%;
 }

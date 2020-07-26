@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import CreateReview from './createReview'
+import CreateReview from '../reuseable/createReview'
 import ReviewsCard from '../reuseable/reviewsCard'
 import UserReviews from '../reuseable/userReviews'
 

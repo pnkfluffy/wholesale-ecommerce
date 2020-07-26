@@ -90,9 +90,9 @@ class GCFillInfo extends React.Component {
                     <GreenButton
                         variant='contained'
                         className='checkout_button'
-                        onClick={this.collectPayment}
+                        onClick={this.addClients}
                     >
-                        CREATE ACCOUNT: %{this.props.total}
+                        CREATE ACCOUNT: ${this.props.total}
                     </GreenButton>
                 </div>
             </div>

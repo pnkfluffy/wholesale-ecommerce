@@ -42,6 +42,7 @@ class App extends React.Component {
     let loggedOutRoutes = (
       <Switch>
         <Route exact path="/" component={Login} />
+        <Route exact path="/admin" render={(props) => <Admin history={this.props.history} {...props} />}/>
         <Route exact path="/*" component={ErrorPage404} />
       </Switch>
     );
@@ -52,9 +53,6 @@ class App extends React.Component {
       <div className="App" >
         <Router>
           {routes}
-          <Switch>
-          <Route exact path="/admin" render={(props) => <Admin history={this.props.history} {...props} />}/>
-          </Switch>
         </Router>
       </div>
     );

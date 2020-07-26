@@ -3,7 +3,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const GoogleStrategy = require('passport-google-oauth2')
 const User = require('../schemas/userSchema')
 const Admin = require('../schemas/adminSchema')
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 
 passport.use(new LocalStrategy({
@@ -11,7 +11,7 @@ passport.use(new LocalStrategy({
 	passwordField: 'password'
 },
 	function (username, password, cb) {
-		Admin.findOne({ email: username }, (err, user) => {
+		Admin.findOne({ email: username }, async (err, user) => {
 			if (err) { 
 				console.log(err);
 				return cb(err); 
@@ -19,7 +19,7 @@ passport.use(new LocalStrategy({
 			if (!user) {
 				return cb(403);
 			}
-			if (password !== user.password) {
+			if (! await bcrypt.compare(password, user.password)) {
 				return cb(403);
 			}
 			else {

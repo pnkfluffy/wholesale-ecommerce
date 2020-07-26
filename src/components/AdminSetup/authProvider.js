@@ -1,4 +1,5 @@
 import Cookies from 'universal-cookie'
+import shajs from 'sha.js'
 
 const cookie = new Cookies()
 const apiUrl = "http://localhost:5000";
@@ -6,6 +7,7 @@ const apiUrl = "http://localhost:5000";
 export default {
   // called when the user attempts to log in
   login: ({ username, password }) => {
+    password = shajs('sha256').update(password).digest('hex')
     const request = new Request(`${apiUrl}/admin-users/login`, {
       method: 'POST',
       body: JSON.stringify({ username, password }),
@@ -14,6 +16,8 @@ export default {
     return fetch(request)
       .then(response => {
         if (response.status < 200 || response.status >= 300) {
+          console.log('hi' + response.statusText);
+          
           throw new Error(response.statusText);
         }
         cookie.set('sig', response.data)
@@ -44,7 +48,6 @@ export default {
   },
   // called when the user navigates to a new location, to check for authentication
   checkAuth: () => {
-    console.log(cookie.get("sig"));
     
     return cookie.get("sig")
       ? Promise.resolve()

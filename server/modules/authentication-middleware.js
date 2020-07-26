@@ -22,6 +22,7 @@ const rejectNonAdmin = async (req, res, next) => {
 		if (admin) {
 			next();
 		} else {
+			req.logout()
 			res.status(403).send("user not admin");
 		}
 	} else {

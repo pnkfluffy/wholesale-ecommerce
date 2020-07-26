@@ -250,7 +250,7 @@ const ProductTitle = ({ record }) => {
 
 const ProductShowActions = ({ basePath, data, resource }) => (
   <TopToolbar>
-    <EditButton basePath={basePath} record={data} />
+    <EditButton label="Edit" basePath={basePath} record={data} />
     <DeleteButton basePath={basePath} record={data} />
     <ListButton basePath={basePath} record={data} />
     {/* Add your custom actions */}

@@ -1,11 +1,12 @@
 const express = require('express')
 const router = express.Router()
 const uploadProductPhotos = require('../middleware/uploadphotosAWS')
+const { rejectNonAdmin } = require('../modules/authentication-middleware')
 
 const Product = require('../schemas/productSchema')
 
 //getList
-router.get('/', (req, res) => {
+router.get('/', rejectNonAdmin, (req, res) => {
   // console.log('Product List backend hit')
   const sortQuery = JSON.parse(req.query.sort)
   let sort = {}
@@ -35,7 +36,7 @@ router.get('/', (req, res) => {
 })
 
 //getOne
-router.get('/:id', (req, res) => {
+router.get('/:id', rejectNonAdmin, (req, res) => {
   Product.findOne({ _id: req.params.id })
     .then(product => {
       product = JSON.parse(
@@ -55,7 +56,7 @@ router.get('/:id', (req, res) => {
 // @route   POST /admin-products
 // @desc    Posts new product
 // @access  Private
-router.post('/', uploadProductPhotos, async (req, res) => {
+router.post('/', rejectNonAdmin, uploadProductPhotos, async (req, res) => {
   const newProduct = new Product({
     name: req.body.name,
     category: req.body.category,
@@ -84,7 +85,7 @@ router.post('/', uploadProductPhotos, async (req, res) => {
 // @route   PUT /admin-products/edit/:id
 // @desc    Edit a product
 // @access  Private
-router.put('/:id', async (req, res) => {
+router.put('/:id', rejectNonAdmin, async (req, res) => {
   console.log('update hit')
   console.log('id: ', req.params.id)
   console.log('body: ', req.body)
@@ -115,7 +116,7 @@ router.put('/:id', async (req, res) => {
 // @id      id of product
 // @desc    Delete a Product
 // @access  Private
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', rejectNonAdmin, async (req, res) => {
   console.log('Delete backend hit')
   console.log('params: ', req.params)
   console.log('id: ', req.params._id)

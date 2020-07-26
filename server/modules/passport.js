@@ -2,23 +2,25 @@ const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy;
 const GoogleStrategy = require('passport-google-oauth2')
 const User = require('../schemas/userSchema')
+const Admin = require('../schemas/adminSchema')
+const bcrypt = require("bcrypt");
+
 
 passport.use(new LocalStrategy({
 	usernameField: 'username',
 	passwordField: 'password'
 },
 	function (username, password, cb) {
-		User.findOne({ name: username }, async (err, user) => {
-			if (err) { return cb(err); }
-			if (!user) {
-				return cb(null, false);
-			};
-			if (! await bcrypt.compare(password, user.password)) {
-				return cb(null, false);
+		Admin.findOne({ email: username }, (err, user) => {
+			if (err) { 
+				console.log(err);
+				return cb(err); 
 			}
-			if (user.disabled) {
-				accountDisabledEmail(email)
-				return cb(null, false);
+			if (!user) {
+				return cb(403);
+			}
+			if (password !== user.password) {
+				return cb(403);
 			}
 			else {
 				return cb(null, user);
@@ -34,7 +36,6 @@ passport.use(new GoogleStrategy({
 	passReqToCallback: true
 },
 	function (request, accessToken, refreshToken, profile, done) {
-		console.log(profile);
 		User.findOne({ googleID: profile.id }, async (err, user) => {
 			if (err) {
 				console.log(err);
@@ -57,17 +58,12 @@ passport.use(new GoogleStrategy({
 ));
 
 
-passport.serializeUser(function (user, cb) {
-	cb(null, user.id);
+passport.serializeUser(function (user, cb) {	
+	cb(null, user);
 });
 
-passport.deserializeUser(function (id, cb) {
-	User.findOne({ _id: id }, function (err, user) {
-		if (err) {
-			return cb(err);
-		}
-		cb(null, user);
-	});
+passport.deserializeUser(function (obj, cb) {	
+	cb(null, obj);
 });
 
 

@@ -1,83 +1,106 @@
-const express = require("express");
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
+const uploadProductPhotos = require('../middleware/uploadphotosAWS')
 
-const Product = require("../schemas/productSchema");
+const Product = require('../schemas/productSchema')
 
 //getList
-router.get("/", (req, res) => {
-  console.log("Product List backend hit")
-  const sortQuery = JSON.parse(req.query.sort);
-  let sort = {};
-  sort[sortQuery[0]] = sortQuery[1] === "ASC" ? 1 : -1;
-  console.log("query: ", req.query, " end query");
-  console.log(sortQuery);
-  console.log("sort", sort);
+router.get('/', (req, res) => {
+  // console.log('Product List backend hit')
+  const sortQuery = JSON.parse(req.query.sort)
+  let sort = {}
+  sort[sortQuery[0]] = sortQuery[1] === 'ASC' ? 1 : -1
+  // console.log("query: ", req.query, " end query");
+  // console.log(sortQuery);
+  // console.log("sort", sort);
 
   Product.find()
     .sort(sort)
-    .then((products) => {
-      res.set("content-range", JSON.stringify(products.length));
+    .then(products => {
+      res.set('content-range', JSON.stringify(products.length))
       //  each object needs to have an 'id' field in order for
       //  reactAdmin to parse
-      products = JSON.parse(JSON.stringify(products).split('"_id":').join('"id":'));
-      console.log("parsed products: ", products)
-      res.json(products);
+      products = JSON.parse(
+        JSON.stringify(products)
+          .split('"_id":')
+          .join('"id":')
+      )
+      // console.log("parsed products: ", products[0], products[1], products[2])
+      res.json(products)
     })
-    .catch((error) => {
-      console.log(error);
-      res.status(500).send("no users found");
-    });
-});
+    .catch(error => {
+      console.log(error)
+      res.status(500).send('no users found')
+    })
+})
 
 //getOne
-router.get("/:id", (req, res) => {
-  console.log("getOne hit. Id: ", req.params.id)
-  Product.findOne({_id: req.params.id})
-  .then((product) => {
-    product = JSON.parse(JSON.stringify(product).split('"_id":').join('"id":'));
-    console.log("parsed product: ", product)
-    res.json(product)
-  }).catch(err => {
-    console.log("error: ", err)
-    res.status(500).send("user not found.")
-  })
+router.get('/:id', (req, res) => {
+  Product.findOne({ _id: req.params.id })
+    .then(product => {
+      product = JSON.parse(
+        JSON.stringify(product)
+          .split('"_id":')
+          .join('"id":')
+      )
+      res.json(product)
+    })
+    .catch(err => {
+      console.log('error: ', err)
+      res.status(500).send('user not found.')
+    })
 })
 
 // {!}  WRITE REJECTADMINUNAUTHENTICATED AND ADD TO ALL ADMIN ROUTES
 // @route   POST /admin-products
 // @desc    Posts new product
 // @access  Private
-router.post("/", (req, res) => {
+router.post('/', uploadProductPhotos, async (req, res) => {
   const newProduct = new Product({
     name: req.body.name,
+    category: req.body.category,
     description: req.body.description,
     price: req.body.price,
     priceTiers: req.body.priceTiers,
     metaData: req.body.metaData,
-    imageData: req.body.imageData,
-    draft: req.body.draft,
-  });
+    imageData: req.imageMetaData,
+    draft: req.body.draft
+  })
+  console.log('new product', newProduct)
   newProduct
     .save()
-    .then((product) => res.json(product))
-    .catch((err) => console.log(err));
-});
+    .then(product => {
+      console.log('product: ', product)
+      product = JSON.parse(
+        JSON.stringify(product)
+          .split('"_id":')
+          .join('"id":')
+      )
+      return res.json(product)
+    })
+    .catch(err => console.log(err))
+})
 
 // @route   POST /admin-products/edit/:id
 // @desc    Edit a product
 // @access  Private
-router.post("/zog/:id", async (req, res) => {
-  console.log("update hit")
-  console.log("id: ", req.params.id)
-  console.log("body: ", req.body)
-  Product.updateOne({_id: req.params.id}, req.body)
-  .then((product) => {
-    product = JSON.parse(JSON.stringify(product).split('"_id":').join('"id":'));
-    res.json(product)
-  }).catch(err => {
-    console.log(err)
-    res.send("Failed to update.")
-  })
+router.put('/:id', async (req, res) => {
+  console.log('update hit')
+  console.log('id: ', req.params.id)
+  console.log('body: ', req.body)
+  await Product.updateOne({ _id: req.params.id }, req.body)
+    .then(product => {
+      product = JSON.parse(
+        JSON.stringify(product)
+          .split('"_id":')
+          .join('"id":')
+      )
+      return res.json(product)
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).send('Failed to update.')
+    })
 })
 // router.post("/edit/:id", (req, res) => {
 //   Product.updateOne({_id: req.user.id}, req.body)
@@ -92,18 +115,19 @@ router.post("/zog/:id", async (req, res) => {
 // @id      id of product
 // @desc    Delete a Product
 // @access  Private
-router.delete("/:id", async (req, res) => {
-  console.log("Delete backend hit")
-  console.log("params: ", req.params)
-  console.log("id: ", req.params._id)
-  Product.deleteOne({_id: req.params._id})
-  .then(res => {
-    console.log(res)
-    res.status(200).send("item deleted")
-  }).catch(err => {
-    console.log(err)
-    res.status(500).send("Deletion failed!")
-  })
+router.delete('/:id', async (req, res) => {
+  console.log('Delete backend hit')
+  console.log('params: ', req.params)
+  console.log('id: ', req.params._id)
+  Product.deleteOne({ _id: req.params._id })
+    .then(res => {
+      console.log(res)
+      res.status(200).send('item deleted')
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).send('Deletion failed!')
+    })
 })
 // router.delete("/:id", (req, res) => {
 //   console.log("delete backend hit")
@@ -117,4 +141,4 @@ router.delete("/:id", async (req, res) => {
 //     })
 // });
 
-module.exports = router;
+module.exports = router

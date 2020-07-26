@@ -1,11 +1,38 @@
 const express = require("express");
 const router = express.Router();
+// const bcrypt = require("bcryptjs");
+const passport = require('../modules/passport')
+// const { rejectUnauthenticated } = require('../modules/authentication-middleware')
 const User = require("../schemas/userSchema");
+
+//Login
+// router.post("/login",passport.authenticate("local", { failureRedirect: "/get-started" }), (req, res) => {
+//   console.log(req);
+//   res.sendStatus(200);
+// }
+// );
+
+
+//register
+
+
+
 
 //getList
 router.get("/", (req, res) => {
-  console.log("list backend hit")
+  console.log("User list backend hit")
+  // these conditionals manually put required values into the query 
+  // that aren't passed in from the react-admin getMany method
+  if(req.query.sort === undefined){
+    req.query.sort = JSON.stringify(["id","ASC"])
+  }
+  if(req.query.range === undefined){
+    req.query.range = JSON.stringify([0,9])
+  }
+  console.log("req.query: ", req.query)
+  console.log("req.query.sort: ", req.query.sort)
   const sortQuery = JSON.parse(req.query.sort);
+  console.log("made sortQuery: ", sortQuery)
   let sort = {};
   sort[sortQuery[0]] = sortQuery[1] === "ASC" ? 1 : -1;
   console.log("query: ", req.query, " end query");
@@ -19,7 +46,7 @@ router.get("/", (req, res) => {
       //  each object needs to have an 'id' field in order for
       //  reactAdmin to parse
       users = JSON.parse(JSON.stringify(users).split('"_id":').join('"id":'));
-      console.log("parsed users: ", users)
+      // console.log("parsed users: ", users)
       res.json(users);
     })
     .catch((error) => {
@@ -30,7 +57,7 @@ router.get("/", (req, res) => {
 
 //getOne
 router.get("/:id", (req, res) => {
-  console.log("getOne hit. Id: ", req.params.id)
+  console.log("getOne user hit. Id: ", req.params.id)
   User.findOne({_id: req.params.id})
   .then((user) => {
     user = JSON.parse(JSON.stringify(user).split('"_id":').join('"id":'));
@@ -47,6 +74,7 @@ router.get("/:id", (req, res) => {
 //getMany
 
 //getManyReference
+
 
 //update
 router.put("/:id", async (req, res) => {

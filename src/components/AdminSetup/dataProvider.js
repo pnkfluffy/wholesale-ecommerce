@@ -17,11 +17,10 @@ const displayErrorMessage = (props) => {
 
 export default {
   getList: (resource, params) => {
-    console.log("getList resource", resource);
 
     const { page, perPage } = params.pagination;
     const { field, order } = params.sort;
-    console.log("params", page, perPage, field, order, params.filter);
+    console.log("getlist stats", page,  perPage, field, order, params.filter);
 
     const query = {
       sort: JSON.stringify([field, order]),
@@ -29,43 +28,52 @@ export default {
       filter: JSON.stringify(params.filter),
     };
     const url = `${apiUrl}/${resource}?${stringify(query)}`;
-    console.log(url)
-    console.log("query", query);
-    console.log("url", url);
+    console.log("getList url", url)
     return httpClient(url).then(({ headers, json }) => {
       console.log("getList dataprovider method hit")
       // console.log("headers", headers);
+      console.log("getList response: ", { data: json})
       return {
         data: json,
         total: parseInt(headers.get("content-range").split("/").pop(), 10),
       };
+    }).catch(err => {
+      console.log("getList error: ", err)
     });
   },
 
   getOne: (resource, params) => {
-    console.log("getOne resource", resource);
-    
-
+    console.log(`getOne url: ${apiUrl}/${resource}/${params.id}`)
     return httpClient(`${apiUrl}/${resource}/${params.id}`)
     .then(({ json }) => {
-      console.log(json);
+      console.log("json: ", {data: json});
       return { data: json };
+    }).catch(err => {
+      console.log("getOne error: ", err)
+      return err
     })
-
   },
 
   getMany: (resource, params) => {
-    //I think an array of ids is expected in params.
-    console.log("getMany");
+    console.log("getMany", resource);
+    console.log("getMany", resource, "params: ", params)
+    // const { page, perPage } = params.pagination;
+    // const { field, order } = params.sort;
     const query = {
-      filter: JSON.stringify({ id: params.ids }),
+      filter: JSON.stringify({ id: params.ids })
     };
     const url = `${apiUrl}/${resource}?${stringify(query)}`;
-    return httpClient(url).then(({ json }) => ({ data: json }));
+    console.log("url: ", url)
+    return httpClient(url).then(({ json }) => {
+      console.log("getMany response: ", {data: json})
+      return { data: json }
+    }).catch(err => {
+      console.log("getmany error: ", err)
+    })
   },
 
   getManyReference: (resource, params) => {
-    console.log("getManyReference");
+    console.log("getManyReference", resource);
 
     const { page, perPage } = params.pagination;
     const { field, order } = params.sort;
@@ -79,21 +87,24 @@ export default {
     };
     const url = `${apiUrl}/${resource}?${stringify(query)}`;
 
-    return httpClient(url).then(({ headers, json }) => {
+    return (httpClient(url).then(({ headers, json }) => {
       return {
         data: json,
         total: parseInt(headers.get("content-range").split("/").pop(), 10),
       };
-    })
+    }).catch(err => {
+      console.log("error: ", err)
+      return err
+    }))
   },
 
   update: (resource, params) => {
-    console.log("update");
-   return httpClient(`${apiUrl}/${resource}/zog/${params.id}`, {
-      method: "POST",
+    const url = `${apiUrl}/${resource}/${params.id}}`;
+    console.log("UPDATING UPDATING UPDATING", url);
+    return httpClient(`${apiUrl}/${resource}/${params.id}`, {
+      method: "PUT",
       body: JSON.stringify(params.data),
     }).then(({ json }) => {
-      // displayErrorMessage(json)
       return { data: json }
     }).catch(err => {
       return displayErrorMessage(err)

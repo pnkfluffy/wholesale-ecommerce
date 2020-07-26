@@ -1,73 +1,85 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 const ProductSchema = new Schema({
   name: {
     type: String,
-    required: true,
+    required: true
   },
   description: {
-    type: String,
+    type: String
+  },
+  category: {
+    type: String
   },
   price: {
-    type: Number,
+    type: Number
   },
-  priceTiers: {
-    default: {
-      type: Boolean,
-      default: true,
-    },
-    tiers: [
-      {
-        price: {
-          type: Number,
-        },
-        ratio: {
-          type: Number,
-        },
-      },
-    ],
-  },
-  metaData: {
-    cbd: {
-      type: Number,
-    },
-    thc: {
-      type: Number,
-    },
-    units: {
-      unit: {
-        type: String,
+  priceTiers: [
+    {
+      price: {
+        type: Number
       },
       quantity: {
-        type: Number,
+        type: Number
+      }
+    }
+  ],
+  metaData: {
+    cbd: {
+      quantity: {
+        type: Number
       },
+      unit: {
+        type: String
+      }
+    },
+    thc: {
+      quantity: {
+        type: Number
+      },
+      unit: {
+        type: String
+      }
+    },
+    units: {
+      quantity: {
+        type: Number
+      },
+      unit: {
+        type: String
+      }
     },
     weight: {
-      type: Number,
-    },
+      quantity: {
+        type: Number
+      },
+      unit: {
+        type: String
+      }
+    }
   },
   imageData: [
     {
       bucket: {
-        type: String,
+        type: String
       },
       key: {
-        type: String,
+        type: String
       },
       url: {
-        type: String,
-      },
-    },
+        type: String
+      }
+    }
   ],
   draft: {
     type: Boolean,
-    default: true,
+    default: true
   },
   date: {
     type: Date,
-    default: Date.now,
-  },
-});
+    default: Date.now
+  }
+})
 
-module.exports = Product = mongoose.model("product", ProductSchema);
+module.exports = Product = mongoose.model('product', ProductSchema)

@@ -28,9 +28,7 @@ class ProductImages extends React.Component {
     super(props)
     this.state = {
       active: 0,
-     isFavorite: isFavorite(this.props.state.user.favorites, this.props.ProductID)
     }
-    console.log("state",this.state.isFavorites)
   }
   selectImage = index => {
     this.setState({ active: index })

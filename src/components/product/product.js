@@ -10,7 +10,7 @@ import { addQuantityToCart } from '../reuseable/addQuantityToCart'
 import { getPriceByQuantity } from '../reuseable/getPriceByQuantity'
 import { GreenButton } from '../reuseable/materialButtons'
 
-import { addToCart } from '../cart/cartFunctions'
+//import { addToCart } from '../cart/cartFunctions'
 
 
 const mapStateToProps = state => ({

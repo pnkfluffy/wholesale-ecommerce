@@ -20,16 +20,16 @@ class ProductCard extends React.Component {
   render () {
     const product = this.props.product
     const metaData = product.metaData
-    const image = product.imageData ? product.imageData[0].url : blank_image
+    const image = product.imageData ? (product.imageData.length && product.imageData[0].url) : blank_image;
     const cbd_contents = metaData.cbd.quantity + metaData.cbd.unit
     const thc_contents = metaData.thc.quantity + metaData.thc.unit
     const units = metaData.units.quantity + metaData.units.unit
 
     return (
-      <div className='product_card'>
-        <div className='product_card_image' >
-          <img alt='product_image' src={productImg} onClick={this.goToProduct} />
-        </div>
+        <div className='product_card' onClick={this.goToProduct}>
+        <div className='product_card_image'>
+          <img alt='product_image' src={image} />
+          </div>
         <div className='product_name'>{this.props.product.name}</div>
         <div className='product_metadata'>
           <span>

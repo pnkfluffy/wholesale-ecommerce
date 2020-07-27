@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import removeFavoriteProduct from '../reuseable/removeFavoriteProduct'
-import productImg from '../../resources/images/product_1.png'
+import productImg from '../../resources/images/blank_image.jpg'
 
 const mapStateToProps = state => ({
   state: state.reducer

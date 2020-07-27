@@ -32,7 +32,7 @@ class ProductMetaData extends React.Component {
           unit={this.props.metaData.units.unit}
         />
         <MetaDataCard
-          title='CBD'
+          title='Weight'
           variable={this.props.metaData.weight.quantity}
           unit={this.props.metaData.weight.unit}
         />

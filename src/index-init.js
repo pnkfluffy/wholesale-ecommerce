@@ -9,8 +9,10 @@ export const initializeAllRequests = async () => {
   axios
     .get('/auth/user')
     .then(async res => {
+      //  only fires if user get successfull
       store.dispatch({ type: 'GET_USER', payload: res.data })
       await getUserCart()
+      await getAllOrders()
     })
     .catch(err => {
       store.dispatch({ type: 'APP_LOADED' })
@@ -36,16 +38,26 @@ export const getUserCart = () => {
     })
 }
 
+const categories = [
+  'Flower',
+  'Edibles',
+  'Concentrates',
+  'Topicals',
+  'Pet Products',
+  'Accessories'
+]
+
 const getAllCategories = () => {
-  return axios
-    .get('/products/categories')
-    .then(res => {
-      console.log('categories here', res.data)
-      store.dispatch({ type: 'SET_CATEGORIES', payload: res.data })
-    })
-    .catch(err => {
-      console.log(err)
-    })
+  store.dispatch({ type: 'SET_CATEGORIES', payload: categories })
+  // return axios
+  //   .get('/products/categories')
+  //   .then(res => {
+  //     console.log('categories here', res.data)
+  //   store.dispatch({ type: 'SET_CATEGORIES', payload: res.data })
+  // })
+  // .catch(err => {
+  //   console.log(err)
+  // })
 }
 
 export const getAllProducts = () => {
@@ -67,4 +79,16 @@ export const getAllReviews = () => {
       store.dispatch({ type: 'ADD_REVIEWS', payload: res.data })
     })
     .catch(err => console.log(err))
+}
+
+export const getAllOrders = () => {
+  //get all orders from user
+  return axios
+    .get('orders/from')
+    .then(res => {
+      store.dispatch({ type: 'ADD_ORDERS', payload: res.data })
+    })
+    .catch(err => {
+      console.log(err)
+    })
 }

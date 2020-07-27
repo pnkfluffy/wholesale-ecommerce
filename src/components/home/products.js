@@ -8,10 +8,9 @@ const mapStateToProps = state => ({
 })
 
 class Products extends React.Component {
-
-
   print_products = () => {
-    const category = this.props.state.categories.category
+    //  made lowercase for comparison
+    const category = this.props.state.categories.category.toLowerCase()
     const searchTerm = this.props.state.products.searchTerm
     let products = this.props.state.products.products
     let categorizedProducts = []
@@ -21,11 +20,12 @@ class Products extends React.Component {
     }
 
     //  filters by category
-    if (category === 'All') {
+    if (category === 'all') {
       categorizedProducts = products
     } else {
       products.forEach(product => {
-        if (category === product.category) categorizedProducts.push(product)
+        if (category === product.category.toLowerCase())
+          categorizedProducts.push(product)
       })
     }
 
@@ -47,7 +47,7 @@ class Products extends React.Component {
     }
   }
 
-  render() {
+  render () {
     const category =
       this.props.state.categories.category === 'All'
         ? 'Products'

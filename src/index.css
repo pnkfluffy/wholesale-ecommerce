@@ -1,3 +1,17 @@
+/* :root {
+  --logo-green: #59BA47;
+  --light-hyperlink-green: #60944d;
+  --dark-hyperlink-green: #33743A;
+
+  --header-font-white: #000000;
+  --paragraph-font-grey: #1e1e1f;
+  --nofocus-font-grey: #393b3d;
+
+  --sidebar-black: #7d7f8a;
+  --searchbar-black: #5f5f5f;
+  --background-grey: #c2c2c2;
+} */
+
 :root {
   --logo-green: #59BA47;
   --light-hyperlink-green: #60944d;
@@ -66,10 +80,23 @@ input::-webkit-inner-spin-button {
 .MuiButton-root {
   text-transform: none !important;
   border-radius: 8px !important;
+  letter-spacing: 1px !important;
 }
 
 .icon_upsidedown {
   transform: rotate(180deg)
+}
+
+.full {
+  width: 100%;
+}
+
+.half {
+  width: 70%;
+}
+
+.input_input {
+  width: 90%;
 }
 
 @import url(//db.onlinewebfonts.com/c/d4f20dfedfdf197ed0ac52b09bf25551?family=GT+Walsheim+Pro+Medium);
@@ -83,4 +110,5 @@ input::-webkit-inner-spin-button {
 @import "./components/auth/auth.css";
 @import "./components/cart/cart.css";
 @import "./components/settings/settings.css";
+@import "./components/orderHistory/orderHistory.css";
 @import "./components/error/error.css";

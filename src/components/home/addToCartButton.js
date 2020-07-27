@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { GreenButton } from '../reuseable/materialButtons'
-import { addToCart } from '../cart/cartFunctions'
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -17,9 +16,8 @@ class AddToCartButton extends React.Component {
   }
 
   addToCart = e => {
-    e.stopPropagation()
-
-    addToCart(this.props.product._id)
+    // e.stopPropagation()
+    // addToCart(this.props.product._id)
   }
 
   render () {
@@ -30,7 +28,7 @@ class AddToCartButton extends React.Component {
           className='add_to_cart_button'
           onClick={this.addToCart}
         >
-          Add To Cart : ${this.props.product.price}
+          UNIT PRICE : ${this.props.product.price}
         </GreenButton>
       </div>
     )

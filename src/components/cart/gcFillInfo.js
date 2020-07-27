@@ -1,9 +1,8 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import axios from "axios";
-
-import loading from "../../resources/images/loadingBig.svg"
+import InputField from "../reuseable/InputField";
+import {GreenButton} from "../reuseable/materialButtons";
 
 const mapStateToProps = (state) => ({
   state: state.reducer,
@@ -40,60 +39,62 @@ class GCFillInfo extends React.Component {
 
     onChange = e => {
         this.setState({
-            [e.target.id]: e.target.value,
+            [e.target.name]: e.target.value,
         })
     }
 
     render() {
         return (
             <div>
-                <h1>Fill Information</h1>
+                <h1>Payment Information</h1>
                 <form noValidate className="gc_form"
                                  onSubmit={this.addClients}>
-                    <label>
-                        First Name
-                        <input onChange={this.onChange}
-                               value={this.state.newClientName}
-                               id="newClientName"
-                               type="text" />
-                    </label>
-                    <label>
-                        Family Name
-                        <input onChange={this.onChange}
-                               value={this.state.newClientLastName}
-                               id="newClientLastName"
-                               type="text" />
-                    </label>
-                    <label>
-                        Email
-                        <input onChange={this.onChange}
-                               value={this.state.newClientEmail}
-                               id="newClientEmail"
-                               type="email" />
-                    </label>
-                    <label>
-                        Address
-                        <input onChange={this.onChange}
-                               value={this.state.newClientAddr}
-                               id="newClientAddr"
-                               type="email" />
-                    </label>
-                    <label>
-                        City
-                        <input onChange={this.onChange}
-                               value={this.state.newClientCity}
-                               id="newClientCity"
-                               type="email" />
-                    </label>
-                    <label>
-                        Postal Code
-                        <input onChange={this.onChange}
-                               value={this.state.newClientPostalCode}
-                               id="newClientPostalCode"
-                               type="email" />
-                    </label>
-                    <button> Create Client </button>
+                    <InputField widthCSS="gc_input"
+                                title="First Name"
+                                name="newClientName"
+                                value={this.state.newClientName}
+                                type="text" changeField={this.onChange}
+                                placeholder="" />
+                    <InputField widthCSS="gc_input"
+                                title="Family Name"
+                                name="newClientLastName"
+                                value={this.state.newClientLastName}
+                                type="text" changeField={this.onChange}
+                                placeholder="" />
+                    <InputField widthCSS="gc_input"
+                                title="Email"
+                                name="newClientEmail"
+                                value={this.state.newClientEmail}
+                                type="email" changeField={this.onChange}
+                                placeholder="" />
+                    <InputField widthCSS="gc_input"
+                                title="Address"
+                                name="newClientAddr"
+                                value={this.state.newClientAddr}
+                                type="text" changeField={this.onChange}
+                                placeholder="" />
+                    <InputField widthCSS="gc_input"
+                                title="City"
+                                name="newClientCity"
+                                value={this.state.newClientCity}
+                                type="text" changeField={this.onChange}
+                                placeholder="" />
+                    <InputField widthCSS="gc_input"
+                                title="Postal Code"
+                                name="newClientPostalCode"
+                                value={this.state.newClientPostalCode}
+                                type="text" changeField={this.onChange}
+                                placeholder="" />
                 </form>
+                <div className='cart_button_area'>
+                    <GreenButton
+                        variant='contained'
+                        className='checkout_button'
+                        onClick={this.addClients}
+                    >
+                        CREATE ACCOUNT: ${this.props.total}
+                    </GreenButton>
+                </div>
             </div>
         );
         }

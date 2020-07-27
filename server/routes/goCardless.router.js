@@ -143,7 +143,7 @@ router.post('/addClient', async (req, res) => {
 			description: "Cider Barrels",
 			//to go live we need to have a token generator for each client
 			session_token: req.user._id.toString(),
-			success_redirect_url: "http://localhost:3000/buy",
+			success_redirect_url: "http://localhost:3000/cart",
 
 			prefilled_customer: {
 				given_name: name,
@@ -244,23 +244,24 @@ const getTotal = async products => {
 
 // @route   POST gc/collectPayment/:orderID
 // @desc    Collect Payment of active user
+// @reqBody Delivery Information
 // @access  Private
 router.post('/collectPayment', async (req, res) => {
 	try {
-		console.log(req.user);
-		//get all the order information from DB
+		//get the cart
 		const order = req.user.cart
 
+		//initialize goCardless
 		const allClients =  await gocardless(
 			process.env.GC_ACCESS_TOKEN,
 			// Change this to constants.Environments.Live when you're ready to go live
 			constants.Environments.Sandbox,
 			{ raiseOnIdempotencyConflict: true },
 		);
-		const theClient = await allClients.customers.find(req.user.goCardlessID);
 
 		//set proper client currency to payment
 		//to go live needs to add other currencies
+		const theClient = await allClients.customers.find(req.user.goCardlessID);
 		const clientCountry = theClient.country_code;
 		let currency;
 		if (clientCountry === "US")
@@ -268,23 +269,26 @@ router.post('/collectPayment', async (req, res) => {
 		else if (clientCountry === "GB")
 			currency = "GBP";
 
-		//create order in orders DB
+		//do all the math to get total
+		//to go live needs all values to come with ,00 after the value
+		//or add a double zero to the total because of goCardless
 		const total = await getTotal(order)
 			.then(total => {return(total)})
 			.catch(err => console.log(err));
 
-		let orderToPay = {};
+		//create new order in db
 		const newOrder = new Order({
 			user: req.user._id,
 			products: order,
+			deliveryInfo: req.body.delivery,
 			total: total
 		});
+		console.log("TOTAL:" + total);
 
 		newOrder
 			.save()
 			.catch((err) => console.log(err));
 
-		console.log(newOrder);
 		const payment = await allClients.payments.create(
 			{
 				amount: newOrder.total,
@@ -302,10 +306,22 @@ router.post('/collectPayment', async (req, res) => {
 			newOrder._id.toString()
 		) .then (payment => {
 			newOrder.updateOne({$set: {"paymentID": payment.id}})
-				 .then(res.json(payment.id))
-				 .catch(err=>{
-				 	console.log(`Can't Update Database: ${err}`);
-				 })
+				    .then(() => {
+				    	//Clean the cart in db
+						User.updateOne(
+							{ _id: req.user.id },
+							{ cart: [] })
+							.catch(err => console.log("couldn't clean cart"))
+
+						//send order and payment information so can redirect to order's page
+				    	res.json({
+							order: newOrder,
+							payment: payment
+						})
+				    })
+				    .catch(err=>{
+				    	console.log(`Can't Update Database: ${err}`);
+				 	})
 		}) .catch(err => {
 			console.log(err);
 			res.status(500).send("Couldn't make payment")

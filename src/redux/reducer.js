@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux'
+import { updateCartServer } from './functions'
 
 const initialUser = {
   name: ''
@@ -33,14 +34,21 @@ const cart = (state = [], action) => {
     case 'SET_CART':
       return action.payload
     case 'ADD_TO_CART':
+      updateCartServer([...state, action.payload])
       return [...state, action.payload]
     case 'UPDATE_CART_ITEM':
-      let updateItemIndex = state.findIndex(c => c.product === action.payload.id)
+      let updateItemIndex = state.findIndex(
+        c => c.product === action.payload.id
+      )
       state[updateItemIndex].quantity = action.payload.quantity
+      updateCartServer([...state])
       return [...state]
     case 'DELETE_CART_ITEM':
-      let deleteItemIndex = state.findIndex(c => c.product === action.payload.id)
+      let deleteItemIndex = state.findIndex(
+        c => c.product === action.payload.id
+      )
       state.splice(deleteItemIndex, 1)
+      updateCartServer([...state])
       return [...state]
     default:
       return state
@@ -89,14 +97,14 @@ const products = (state = initialProducts, action) => {
   }
 }
 
-// const order = (state = [], action) => {
-//   switch (action.type) {
-//     case 'ADD_ORDER':
-//       return action.payload
-//     default:
-//       return state
-//   }
-// }
+ const orders = (state = [], action) => {
+   switch (action.type) {
+     case 'ADD_ORDERS':
+       return action.payload
+     default:
+       return state
+   }
+}
 
 const reviews = (state = [], action) => {
   switch (action.type) {
@@ -113,7 +121,7 @@ export default combineReducers({
   categories,
   cart,
   products,
-  // order,
+  orders,
   reviews,
   loaded
 })

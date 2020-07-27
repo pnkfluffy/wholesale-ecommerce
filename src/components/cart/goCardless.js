@@ -75,7 +75,7 @@ class GoCardless extends React.Component {
 
     confirmAccount = () => {
         let params = new URLSearchParams(window.location.href);
-        if (params.has("http://localhost:3000/buy?redirect_flow_id")) {
+        if (params.has("http://localhost:3000/cart?redirect_flow_id")) {
             this.setState({
                 loading: true
             })
@@ -88,7 +88,7 @@ class GoCardless extends React.Component {
                         hasClientID: true,
                         loading: false
                     })
-                    window.open("http://localhost:3000/buy", "_self");
+                    window.open("http://localhost:3000/cart", "_self");
                     localStorage.removeItem("gc");
                 })
                 .catch(err => {
@@ -96,7 +96,7 @@ class GoCardless extends React.Component {
                     this.setState({
                         loading: false
                     })
-                    window.open("http://localhost:3000/buy", "_self");
+                    window.open("http://localhost:3000/cart", "_self");
                 });
         } else if (localStorage.getItem("gc")) {
             const url = "https://pay-sandbox.gocardless.com/flow/" + localStorage.getItem("gc");
@@ -106,27 +106,22 @@ class GoCardless extends React.Component {
 
     render() {
         return (
-            <div className="buy">
-                <div className="process_buy">
+                <div className="buy">
                     {(() => {
                         if (this.state.loading) {
                             return (<img src = {loading} />)
                         }
                         else if (!this.state.hasClientID) {
-                            return (<GCFillInfo />)
+                            return (<GCFillInfo total = {this.props.total}/>)
                         }
                         else if (!this.state.hasMandate){
                             this.confirmAccount();
                         }
                         else {
-                            return <GCPay />
+                            return <GCPay total = {this.props.total}/>
                         }
                     })()}
                 </div>
-                <div className="confirm_order">
-                    <h2>Products In order</h2>
-                </div>
-            </div>
         );
         }
 }

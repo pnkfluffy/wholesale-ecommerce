@@ -11,7 +11,10 @@ const user = (state = initialUser, action) => {
     case 'GET_USER':
       return action.payload
     case 'ADD_FAVORITE_PRODUCT':
-      return {...state, favorites: [...state.favorites, action.payload]}
+      return {...state, favorites: action.payload}
+      //{...state, favorites: [...state.favorites, action.payload]}
+      //{...state, favorites: state.favorites.push(action.payload)}
+      //
     case 'DELETE_FAVORITE_PRODUCT':
       let deleteItemIndex = state.favorites.findIndex(c => c.product === action.payload.id)
       state.favorites.splice(deleteItemIndex, 1)

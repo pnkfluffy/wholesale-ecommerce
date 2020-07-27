@@ -96,14 +96,6 @@ router.put('/:id', rejectNonAdmin, uploadProductPhotos, async (req, res) => {
       res.status(500).send('Failed to update.')
     })
 })
-// router.post("/edit/:id", (req, res) => {
-//   Product.updateOne({_id: req.user.id}, req.body)
-//   .then((product) => res.json(product))
-//   .catch((error) => {
-//     console.log(error);
-//     res.status(500).send("error editing product");
-//   })
-// });
 
 // @route   DELETE /admin-products/:id
 // @id      id of product
@@ -115,23 +107,12 @@ router.delete('/:id', rejectNonAdmin, async (req, res) => {
   Product.deleteOne({ _id: req.params.id })
     .then(res => {
       console.log(res)
-      res.send('item deleted')
+      res.json('item deleted')
     })
     .catch(err => {
       console.log(err)
       res.status(500).send('Deletion failed!')
     })
 })
-// router.delete("/:id", (req, res) => {
-//   console.log("delete backend hit")
-//   console.log("id: ", req.user.id)
-//   Product.findById(req.user.id)
-//     .then((product) => product.remove().then(() => res.status(200).send("Product sucessfully deleted")))
-//     // .then((product) => product.remove().then(() => res.json({ success: true })))
-//     .catch((err) => {
-//       console.log(err);
-//       res.status(500).json("Can't delete product");
-//     })
-// });
 
 module.exports = router

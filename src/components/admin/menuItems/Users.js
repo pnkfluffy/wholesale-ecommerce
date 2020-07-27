@@ -56,9 +56,9 @@ export const UserShow = props => {
           target='user'
         >
           <Datagrid>
-            <TextField label="Total" source='total'/>
-            <TextField label="Date" source="date"/>
-            <TextField label="Product Purchased" source="products.length"/>
+            <TextField label='Total' source='total' />
+            <TextField label='Date' source='date' />
+            <TextField label='Product Purchased' source='products.length' />
           </Datagrid>
         </ReferenceManyField>
         <TextField label='Database ID' source='id' />
@@ -83,11 +83,14 @@ export const UserList = props => (
 )
 
 export const UserEdit = props => (
-  <Edit actions={<UserEditActions />} title={<UserTitle />} {...props}>
+  <Edit
+    undoable={false}
+    actions={<UserEditActions />}
+    title={<UserTitle />}
+    {...props}
+  >
     <SimpleForm>
       <TextInput disabled source='id' />
-      {/* {!} NEEDS TO BE DONE LATER TO EDIT ORDERS OF USERS */}
-      {/* <ReferenceInput source="orderId" reference="orders"> */}
 
       <TextInput label='name' source='name' />
       <BooleanInput

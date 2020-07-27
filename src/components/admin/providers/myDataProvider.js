@@ -1,5 +1,7 @@
 import dataProvider from './dataProvider'
 
+//  intercepts admin products with images to convert files
+//  into b64 strings before uploading
 const myDataProvider = {
   ...dataProvider,
   create: (resource, params) => {
@@ -30,7 +32,6 @@ const myDataProvider = {
       )
   },
   update: (resource, params) => {
-    // {!} NEEDS TO BE UPDATED
     if (resource !== 'admin-products' || !params.data.imageData) {
       return dataProvider.update(resource, params)
     }

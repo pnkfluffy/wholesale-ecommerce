@@ -90,7 +90,7 @@ class Product extends React.Component {
       <div className='product_page'>
         <div className='product_page_main'>
           <div className='product_page_top'>
-            <ProductImages images={product.imageData} />
+            <ProductImages images={product.imageData} productID={product._id}/>
             <div className='product_page_info'>
               <div className='product_info'>
                 <div className='product_description_container'>

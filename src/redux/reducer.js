@@ -2,7 +2,8 @@ import { combineReducers } from 'redux'
 import { updateCartServer } from './functions'
 
 const initialUser = {
-  name: ''
+  name: '',
+  favorites:[]
 }
 
 const user = (state = initialUser, action) => {
@@ -10,7 +11,7 @@ const user = (state = initialUser, action) => {
     case 'GET_USER':
       return action.payload
     case 'ADD_FAVORITE_PRODUCT':
-      return [...state, action.payload]
+      return {...state, favorites: [...state.favorites, action.payload]}
     case 'DELETE_FAVORITE_PRODUCT':
       let deleteItemIndex = state.favorites.findIndex(c => c.product === action.payload.id)
       state.favorites.splice(deleteItemIndex, 1)

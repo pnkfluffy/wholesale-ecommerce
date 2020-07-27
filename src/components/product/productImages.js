@@ -50,6 +50,11 @@ class ProductImages extends React.Component {
         activeIndex={this.state.active}
       />
     ))
+
+    if (!this.props.images.length) {
+      return null;
+    }
+
     return (
       <div className='product_page_images'>
         <div className='product_page_image'>

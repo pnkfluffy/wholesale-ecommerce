@@ -22,7 +22,7 @@ router.get('/logout', (req, res) => {
 router.get('/user', rejectNonAdmin, (req, res) => {
   let user = {
     name: req.user.name,
-    admin: true,
+    admin: true
   }
   res.send(user)
 })
@@ -39,10 +39,8 @@ router.get('/', rejectNonAdmin, (req, res) => {
     req.query.range = JSON.stringify([0, 9])
   }
   const sortQuery = JSON.parse(req.query.sort)
-  console.log('made sortQuery: ', sortQuery)
   let sort = {}
   sort[sortQuery[0]] = sortQuery[1] === 'ASC' ? 1 : -1
-  console.log('sort', sort)
 
   User.find()
     .sort(sort)

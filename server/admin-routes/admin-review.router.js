@@ -19,7 +19,6 @@ router.get("/", rejectNonAdmin, (req, res) => {
       //  each object needs to have an 'id' field in order for
       //  reactAdmin to parse
       reviews = JSON.parse(JSON.stringify(reviews).split('"_id":').join('"id":'));
-      console.log("parsed reviews: ", reviews)
       res.json(reviews);
     })
     .catch((error) => {

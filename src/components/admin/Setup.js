@@ -17,15 +17,14 @@ import { OrderList, OrderShow } from './MenuItems/Orders'
 import { ReviewList, ReviewShow } from './MenuItems/Reviews'
 // import { PostList, PostEdit, PostCreate } from "./MenuItems/Posts";
 import Dashboard from './MenuItems/Dashboard'
-import authProvider from './authProvider'
-import createHistory from 'history/createBrowserHistory'
+import authProvider from './providers/authProvider'
 
 import UserIcon from '@material-ui/icons/Group'
-import ProductIcon from '@material-ui/icons/LocalFlorist';
-import OrderIcon from '@material-ui/icons/AccountBalanceWallet';
-import ReviewIcon from '@material-ui/icons/LibraryBooks';
+import ProductIcon from '@material-ui/icons/LocalFlorist'
+import OrderIcon from '@material-ui/icons/AccountBalanceWallet'
+import ReviewIcon from '@material-ui/icons/LibraryBooks'
 
-import myDataProvider from './myDataProvider'
+import myDataProvider from './providers/myDataProvider'
 const i18nProvider = polyglotI18nProvider(locale => {
   return defaultMessages
 })
@@ -68,13 +67,14 @@ const AdminSetup = () => (
         options={{ label: 'Orders' }}
         list={OrderList}
         show={OrderShow}
-        
+        icon={OrderIcon}
       />
       <Resource
         name='admin-reviews'
         options={{ label: 'Reviews' }}
         list={ReviewList}
         show={ReviewShow}
+        admin={ReviewIcon}
       />
     </Admin>
   </Provider>

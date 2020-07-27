@@ -4,23 +4,19 @@ const myDataProvider = {
   ...dataProvider,
   create: (resource, params) => {
     console.log('create intercept')
-    if (resource !== 'admin-products' || !params.data.images) {
-      console.log('not product with images')
-      params.data.image = []
+    if (resource !== 'admin-products' || !params.data.imageData) {
+      console.log('no images')
+      params.data.imageData = []
       return dataProvider.create(resource, params)
     }
 
     // Freshly dropped images are File objects and must be converted to base64 strings
-    const newImages = params.data.images.filter(p => p.rawFile instanceof File)
-    const formerImages = params.data.images.filter(
-      p => !(p.rawFile instanceof File)
-    )
-    console.log('titles', params.data)
+    const newImages = params.data.imageData
     return Promise.all(newImages.map(convertFileToBase64))
       .then(base64images =>
         base64images.map((picture64, index) => ({
           src: picture64,
-          title: `${Date.now() + '_' + params.data.images[index].title}`
+          title: `${Date.now() + '_' + params.data.imageData[index].title}`
         }))
       )
       .then(transformedNewImages =>
@@ -28,37 +24,36 @@ const myDataProvider = {
           ...params,
           data: {
             ...params.data,
-            images: [...transformedNewImages, ...formerImages]
+            imageData: transformedNewImages
           }
         })
       )
   },
   update: (resource, params) => {
-
     // {!} NEEDS TO BE UPDATED
-    if (resource !== 'admin-products' || !params.data.pictures) {
+    if (resource !== 'admin-products' || !params.data.imageData) {
       return dataProvider.update(resource, params)
     }
-    const newPictures = params.data.pictures.filter(
+    const newImages = params.data.imageData.filter(
       p => p.rawFile instanceof File
     )
-    const formerPictures = params.data.pictures.filter(
+    const formerImages = params.data.imageData.filter(
       p => !(p.rawFile instanceof File)
     )
 
-    return Promise.all(newPictures.map(convertFileToBase64))
-      .then(base64Pictures =>
-        base64Pictures.map(picture64 => ({
+    return Promise.all(newImages.map(convertFileToBase64))
+      .then(base64Images =>
+        base64Images.map((picture64, index) => ({
           src: picture64,
-          title: `${params.data.title}`
+          title: `${Date.now() + '_' + params.data.imageData[index].title}`
         }))
       )
-      .then(transformedNewPictures =>
+      .then(transformedNewImages =>
         dataProvider.update(resource, {
           ...params,
           data: {
             ...params.data,
-            pictures: [...transformedNewPictures, ...formerPictures]
+            imageData: [...transformedNewImages, ...formerImages]
           }
         })
       )

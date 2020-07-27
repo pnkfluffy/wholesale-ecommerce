@@ -44,7 +44,6 @@ router.get('/', rejectNonAdmin, (req, res) => {
             .split('"_id":')
             .join('"id":')
         )
-        console.log('parsed orders: ', orders)
         // console.log("parsed orders: ", orders)
         res.json(orders)
       })

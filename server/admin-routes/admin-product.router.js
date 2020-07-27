@@ -79,8 +79,9 @@ router.post('/', rejectNonAdmin, uploadProductPhotos, async (req, res) => {
 // @route   PUT /admin-products/edit/:id
 // @desc    Edit a product
 // @access  Private
-router.put('/:id', rejectNonAdmin, async (req, res) => {
+router.put('/:id', rejectNonAdmin, uploadProductPhotos, async (req, res) => {
   console.log('update hit', req.params.id)
+  req.body.imageData = req.imageMetaData;
   await Product.updateOne({ _id: req.params.id }, req.body)
     .then(product => {
       product = JSON.parse(
@@ -111,11 +112,10 @@ router.put('/:id', rejectNonAdmin, async (req, res) => {
 router.delete('/:id', rejectNonAdmin, async (req, res) => {
   console.log('Delete backend hit')
   console.log('params: ', req.params)
-  console.log('id: ', req.params._id)
-  Product.deleteOne({ _id: req.params._id })
+  Product.deleteOne({ _id: req.params.id })
     .then(res => {
       console.log(res)
-      res.status(200).send('item deleted')
+      res.send('item deleted')
     })
     .catch(err => {
       console.log(err)

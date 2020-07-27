@@ -16,13 +16,12 @@ const uploadProductPhotos = async (req, res, next) => {
   console.log('tryna upload')
 
   //  checks if no images
-  if (!req.body.images || !req.body.images.length) {
-    req.imageMetaData = []
+  if (!req.body.imageData || !req.body.imageData.length) {
+    req.imageMetaData = req.body.imageData || []
     next()
     return
   }
 
-  const b64Images = req.body.images
   let s3bucket = new AWS.S3({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
@@ -31,37 +30,43 @@ const uploadProductPhotos = async (req, res, next) => {
 
   let responseData = []
   s3bucket.createBucket(function () {
-    b64Images.map(image => {
-      const buf = Buffer.from(
-        image.src.replace(/^data:image\/\w+;base64,/, ''),
-        'base64'
-      )
-      var params = {
-        Bucket: myBucket,
-        Key: image.title,
-        Body: buf,
-        ContentEncoding: 'base64',
-        ContentType: 'image/jpeg',
-        ACL: 'public-read'
-      }
-      s3bucket.upload(params, function (err, data) {
-        console.log('this')
-        if (err) {
-          console.log('ERROR UPLOADING IMAGES')
-          res.json({ error: true, Message: err })
-        } else {
-          responseData.push({
-            bucket: data.Bucket,
-            key: data.key,
-            url: data.Location
-          })
-          //  only fires on last image upload
-          if (responseData.length === b64Images.length) {
-            req.imageMetaData = responseData
-            next()
-          }
+    req.body.imageData.map(image => {
+      //  if image not new
+      if (!image.src) {
+        responseData.push(image)
+      } else {
+        console.log('title', image.title)
+        const buf = Buffer.from(
+          image.src.replace(/^data:image\/\w+;base64,/, ''),
+          'base64'
+        )
+        var params = {
+          Bucket: myBucket,
+          Key: image.title,
+          Body: buf,
+          ContentEncoding: 'base64',
+          ContentType: 'image/jpeg',
+          ACL: 'public-read'
         }
-      })
+        s3bucket.upload(params, function (err, data) {
+          console.log('this', data)
+          if (err) {
+            console.log('ERROR UPLOADING IMAGES')
+            res.json({ error: true, Message: err })
+          } else {
+            responseData.push({
+              bucket: data.Bucket,
+              key: data.Key,
+              url: data.Location
+            })
+            //  only fires on last image upload
+            if (responseData.length === req.body.imageData.length) {
+              req.imageMetaData = responseData
+              next()
+            }
+          }
+        })
+      }
     })
   })
 }

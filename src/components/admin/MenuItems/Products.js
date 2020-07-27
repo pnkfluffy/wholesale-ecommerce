@@ -197,12 +197,12 @@ export const ProductCreate = props => {
           </div>
         </div>
         <ImageInput
-          source='images'
+          source='imageData'
           label='Product Images'
           accept='image/*'
           multiple='true'
         >
-          <ImageField source='src' title='title' />
+          <ImageField source='url' title='title' />
         </ImageInput>
         <p>
           Please upload 1-5 product images. The first one uploaded will be the
@@ -214,11 +214,14 @@ export const ProductCreate = props => {
   )
 }
 
-const PostTitle = () => <div>Edit Product</div>
-
 export const ProductEdit = props => {
   return (
-    <Edit undoable={false} title={<PostTitle />} {...props}>
+    <Edit
+      undoable={false}
+      title={<ProductTitle />}
+      actions={<ProductEditActions />}
+      {...props}
+    >
       <SimpleForm>
         {/* {!} NEEDS TO BE DONE LATER TO EDIT ORDERS OF USERS */}
         {/* <ReferenceInput source="orderId" reference="orders"> */}
@@ -238,6 +241,62 @@ export const ProductEdit = props => {
             <NumberInput label='Price per unit (USD)' source='price' />
           </SimpleFormIterator>
         </ArrayInput>
+        <div className='product_create_metaData'>
+          <div className='product_create_cbd'>
+            <h2>CBD Contents</h2>
+
+            <NumberInput
+              label='Quantity (number)'
+              source='metaData.cbd.quantity'
+            />
+            <TextInput
+              label='Unit (%, mg, etc...)'
+              source='metaData.cbd.unit'
+            />
+          </div>
+          <div className='product_create_thc'>
+            <h2>THC Contents</h2>
+            <NumberInput
+              label='Quantity (number)'
+              source='metaData.thc.quantity'
+            />
+            <TextInput
+              label='Unit (%, mg, etc...)'
+              source='metaData.thc.unit'
+            />
+          </div>
+          <div className='product_create_cbd'>
+            <h2>Single Unit Contents</h2>
+            <NumberInput
+              label='Quantity (number)'
+              source='metaData.units.quantity'
+            />
+            <TextInput
+              label='Unit (mL, lbs, etc...)'
+              source='metaData.units.unit'
+            />
+          </div>
+          <div className='product_create_cbd'>
+            <h2>Product Weight</h2>
+            <p>used to calculate shipping costs</p>
+            <NumberInput
+              label='Weight (number)'
+              source='metaData.weight.quantity'
+            />
+            <TextInput
+              label='Unit (lbs, oz, etc...)'
+              source='metaData.weight.unit'
+            />
+          </div>
+        </div>
+        <ImageInput
+          source='imageData'
+          label='Product Images'
+          accept='image/*'
+          multiple='true'
+        >
+          <ImageField source='url' title='title' />
+        </ImageInput>
       </SimpleForm>
     </Edit>
   )
@@ -245,17 +304,18 @@ export const ProductEdit = props => {
 
 // custom components
 const ProductTitle = ({ record }) => {
-  return <span>Product {record ? `"${record.name}"` : ''}</span>
+  return <span>Edit Product: {record ? `"${record.name}"` : ''}</span>
 }
 
 const ProductShowActions = ({ basePath, data, resource }) => (
   <TopToolbar>
-    <EditButton label="Edit" basePath={basePath} record={data} />
+    <EditButton label='Edit' basePath={basePath} record={data} />
     <DeleteButton basePath={basePath} record={data} />
     <ListButton basePath={basePath} record={data} />
     {/* Add your custom actions */}
   </TopToolbar>
 )
+
 const ProductEditActions = ({ basePath, data, resource }) => (
   <TopToolbar>
     <ShowButton basePath={basePath} record={data} />
@@ -263,18 +323,15 @@ const ProductEditActions = ({ basePath, data, resource }) => (
     {/* Add your custom actions */}
   </TopToolbar>
 )
+
 const ListActions = props => {
   const { className, exporter, filters, maxResults, ...rest } = props
   const {
-    currentSort,
     resource,
     displayedFilters,
     filterValues,
-    hasCreate,
     basePath,
-    selectedIds,
-    showFilter,
-    total
+    showFilter
   } = useListContext()
   return (
     <TopToolbar className={className} {...sanitizeListRestProps(rest)}>
@@ -288,20 +345,14 @@ const ListActions = props => {
         })}
       <DeleteButton basePath={basePath} />
       <CreateButton basePath={basePath} />
-      <ExportButton
+      {/* <ExportButton
         disabled={total === 0}
         resource={resource}
         sort={currentSort}
         filterValues={filterValues}
         maxResults={maxResults}
-      />
+      /> */}
       {/* Add your custom actions */}
-      <Button
-        onClick={() => {
-          alert('Your custom action')
-        }}
-        label='Show calendar'
-      ></Button>
     </TopToolbar>
   )
 }

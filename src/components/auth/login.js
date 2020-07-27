@@ -27,6 +27,7 @@ class Login extends React.Component {
           devURI: res.data,
           loaded: true,
         });
+        console.log('login', res.data);
       })
       .catch((err) => {
         console.log(err);

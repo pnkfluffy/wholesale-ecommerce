@@ -13,12 +13,6 @@ class Account extends React.Component {
     super(props);
   }
 
-  printPayments = () => {
-    axios.get('/gc/payments/from')
-         .then(res => console.log(res))
-         .catch(err => console.log(err))
-  }
-
   render() {
     const favoriteProductList = this.props.state.user.favorites;
     const allProductsList = this.props.state.products.products;

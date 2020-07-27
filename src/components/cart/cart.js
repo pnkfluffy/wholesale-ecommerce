@@ -1,11 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { updateCartServer, editCartQuantity } from '../cart/cartFunctions'
 /*components*/
 import OrderCard from './orderCard'
-import { v4 } from 'uuid';
-
+import { getPriceByQuantity } from '../reuseable/getPriceByQuantity'
+import { v4 } from 'uuid'
+import { GreenButton } from '../reuseable/materialButtons'
+import GoCardless from "./goCardless";
 
 const mapStateToProps = state => {
   return {
@@ -13,49 +14,37 @@ const mapStateToProps = state => {
   }
 }
 
-
 class Cart extends React.Component {
-  render() {    
+  render () {
     let total = 0
-
+    console.log(this.props.state.cart);
     const cartProducts = this.props.state.cart.map((cartProduct, index) => {
-      const productTotal = cartProduct.quantity * cartProduct.price
+      const productTotal = getPriceByQuantity(
+        cartProduct.priceTiers,
+        cartProduct.quantity,
+        cartProduct.price
+      )
       total += productTotal
-
       return (
-        <OrderCard
-          productInfo={cartProduct}
-          total={productTotal}
-          key={v4()}
-          // updateQuantity={this.props.updateQuantity()}
-        />
+        <OrderCard product={cartProduct} total={productTotal} key={v4()} />
       )
     })
 
     return (
-      <div className='cart'>
-        <div className='top_cart_area'>
-          <h1>cart</h1>
-        </div>
-        {(() => {
-          if (this.props.state.cart.length > 0) {
-            return (
+        <div className="cart_page">
+          <div className='cart'>
+            <div className='top_cart_area'>
+              <h1>cart</h1>
+            </div>
+            {this.props.state.cart.length ? (
               <div className='cart_body'>
-                <div className='cart_button_area'>
-                  <Link to='/buy' className='cart_button'>
-                    Buy {total}
-                  </Link>
-                  <div className='cart_button' onClick={this.deleteCart}>
-                    Delete Cart
-                  </div>
-                </div>
-                <div>{cartProducts}</div>
+                <div className='cart_products'>{cartProducts}</div>
               </div>
-            )
-          } else {
-            return <b>Your cart is empty! =( </b>
-          }
-        })()}
+            ) : (
+              <b> Your cart is empty! </b>
+            )}
+          </div>
+          <GoCardless total={total}/>
       </div>
     )
   }

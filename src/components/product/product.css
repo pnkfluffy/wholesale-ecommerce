@@ -174,7 +174,7 @@
 
 /*Reviews*/
 .add_to_reviews_input {
-  width: 100%;
+  width: 98%;
   color: var(--paragraph-font-grey);
   resize: none;
   background-color: transparent;
@@ -273,4 +273,16 @@
   color: var(--light-hyperlink-green);
   margin-top: 1px;
   margin-bottom: -1px;
+  cursor: pointer;
+}
+
+.create_review_last_line {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.create_review_button {
+  width: 55%;
 }

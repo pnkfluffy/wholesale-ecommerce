@@ -1,10 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import { connect } from "react-redux";
 import axios from "axios";
-
 import loading from "../../resources/images/loadingBig.svg"
 import store from "../../redux/store";
+import InputField from "../reuseable/InputField";
+import {GreenButton} from "../reuseable/materialButtons";
+import {compose} from "redux";
 
 const mapStateToProps = (state) => ({
   state: state.reducer,
@@ -22,6 +24,7 @@ class GCPay extends React.Component {
             ClientAddr2: "",
             ClientCity: "",
             ClientPostalCode: "",
+            ClientState: "",
         }
     }
 
@@ -32,6 +35,7 @@ class GCPay extends React.Component {
         axios
             .get("gc/oneClient")
             .then(res => {
+                    console.log(res.data)
                     this.setState({
                         loading: false,
                         ClientName: res.data.given_name,
@@ -40,6 +44,7 @@ class GCPay extends React.Component {
                         ClientAddr2: res.data.address_line2,
                         ClientCity: res.data.city,
                         ClientPostalCode: res.data.postal_code,
+                        ClientState: res.data.region
                     })
             })
             .catch((err) => {
@@ -55,14 +60,38 @@ class GCPay extends React.Component {
         this.setState({
             loading: true
         })
+        const fullName = this.state.ClientName + " " + this.state.ClientLastName;
         axios
-            .post("gc/collectPayment/")
+            .post("gc/collectPayment/",
+                {
+                        delivery: {
+                                    ClientFullName: fullName,
+                                    ClientAddr1: this.state.ClientAddr1,
+                                    ClientAddr2: this.state.ClientAddr2,
+                                    city: this.state.ClientCity,
+                                    state: this.state.ClientState,
+                                    postal_code: this.state.ClientPostalCode,
+                                    }
+                    })
             .then(res => {
                 this.setState({
                     loading: false,
                     paymentDone: true
                 });
-                store.dispatch({ type: 'SET_CART', payload: {} })
+
+
+                //Clean the cart
+                store.dispatch({ type: 'SET_CART', payload: [] })
+
+                //Redirect to order page where all the information + receipt are available
+                const url = "/order/" + res.data.order._id;
+                this.props.history.push({
+                    pathname: url,
+                    state: {
+                        payment: res.data.payment,
+                        order: res.data.order
+                    }
+                })
             })
             .catch((err) => {
                 console.log(err);
@@ -72,9 +101,10 @@ class GCPay extends React.Component {
                 })
             });
     }
+
     onChange = e => {
         this.setState({
-            [e.target.id]: e.target.value,
+            [e.target.name]: e.target.value,
         })
     }
 
@@ -86,60 +116,81 @@ class GCPay extends React.Component {
         else if (!this.state.paymentDone) {
             return (
                 <div>
-                    <h1>Confirm Delivery Information</h1>
-                    <form noValidate className="gc_form"
-                          onSubmit={this.collectPayment}>
-                        <label>
-                            First Name
-                            <input onChange={this.onChange}
-                                   value={this.state.ClientName}
-                                   id="ClientName"
-                                   type="text" />
-                        </label>
-                        <label>
-                            Family Name
-                            <input onChange={this.onChange}
-                                   value={this.state.ClientLastName}
-                                   id="ClientLastName"
-                                   type="text" />
-                        </label>
-                        <label>
-                            Address Line 1
-                            <input onChange={this.onChange}
-                                   value={this.state.ClientAddr1}
-                                   id="ClientAddr"
-                                   type="text" />
-                        </label>
-                        <label>
-                            Address Line 2
-                            <input onChange={this.onChange}
-                                   value={this.state.ClientAddr2}
-                                   id="ClientAddr"
-                                   type="text" />
-                        </label>
-                        <label>
-                            City
-                            <input onChange={this.onChange}
-                                   value={this.state.ClientCity}
-                                   id="ClientCity"
-                                   type="text" />
-                        </label>
-                        <label>
-                            Postal Code
-                            <input onChange={this.onChange}
-                                   value={this.state.ClientPostalCode}
-                                   id="ClientPostalCode"
-                                   type="text" />
-                        </label>
-                        <button> Buy! </button>
+                    <h1>Delivery Information</h1>
+                    <form noValidate className="gc_form">
+                        <InputField widthCSS="full"
+                                    title="First Name"
+                                    name="ClientName"
+                                    value={this.state.ClientName}
+                                    type="text" changeField={this.onChange}
+                                    placeholder="" />
+                        <InputField widthCSS="full"
+                                    title="Family Name"
+                                    name="ClientLastName"
+                                    value={this.state.ClientLastName}
+                                    type="text" changeField={this.onChange}
+                                    placeholder="" />
+                        <InputField widthCSS="full"
+                                    title="Address Line 1"
+                                    name="ClientAddr1"
+                                    value={this.state.ClientAddr1}
+                                    type="text" changeField={this.onChange}
+                                    placeholder="" />
+                        <InputField widthCSS="full"
+                                    title="Address Line 2"
+                                    name="ClientAddr2"
+                                    value={this.state.ClientAddr2}
+                                    type="text" changeField={this.onChange}
+                                    placeholder="" />
+                        <InputField widthCSS="full"
+                                    title="City"
+                                    name="ClientCity"
+                                    value={this.state.ClientCity}
+                                    type="text" changeField={this.onChange}
+                                    placeholder="" />
+                        <InputField widthCSS="full"
+                                    title="State"
+                                    name="ClientState"
+                                    value={this.state.ClientState}
+                                    type="text" changeField={this.onChange}
+                                    placeholder="" />
+                        <InputField widthCSS="full"
+                                    title="Postal Code"
+                                    name="ClientPostalCode"
+                                    value={this.state.ClientPostalCode}
+                                    type="text" changeField={this.onChange}
+                                    placeholder="" />
                     </form>
+                    <div className='cart_button_area'>
+                        <GreenButton
+                            variant='contained'
+                            className='checkout_button'
+                            onClick={this.collectPayment}
+                        >
+                            CHECK OUT: ${this.props.total}
+                        </GreenButton>
+                    </div>
                 </div>
             );
         }
         else {
-            return (<h1>"Payment Done!"</h1>);
+            return (
+                <div>
+                    <h1>Payment Done!</h1>
+                    <p>Our payments take 3 days to get approved!</p>
+                    <GreenButton
+                        variant='contained'
+                        className='checkout_button'
+                        onClick={this.goToOrderPage}
+                    >
+                        CHECK PAYMENT STATUS
+                    </GreenButton>
+                </div>
+            );
         }
     }
 }
-
-export default connect(mapStateToProps)(GCPay);
+export default compose(
+    withRouter,
+    connect(mapStateToProps)
+)(GCPay);

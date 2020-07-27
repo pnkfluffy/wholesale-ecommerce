@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import FavoritesHeart from '../reuseable/favoritesHeart'
-import productImg from '../../resources/images/product_1.png'
+import productImg from '../../resources/images/blank_image.jpg'
 
 const mapStateToProps = state => ({
   state: state.reducer

@@ -31,7 +31,6 @@ class Account extends React.Component {
     return (
       <div>
         <h1>account</h1>
-<<<<<<< HEAD
         <div className="account_container">
         <div className="section_container" onClick={this.printPayments}>
             Order History
@@ -40,11 +39,6 @@ class Account extends React.Component {
         <div>Favorites</div>
         {renderProduct}
         </div>
-=======
-        <Link to='/orderHistory'>
-            Order Hirstory
-        </Link>
->>>>>>> master
       </div>
       </div>
     );

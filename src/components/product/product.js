@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
+
 import ProductQuantity from './productQuantity'
 import UserReviews from './productUserReviews'
 import ProductImages from './productImages'
@@ -10,7 +11,6 @@ import { addQuantityToCart } from '../reuseable/addQuantityToCart'
 import { getPriceByQuantity } from '../reuseable/getPriceByQuantity'
 import { GreenButton } from '../reuseable/materialButtons'
 
-//import { addToCart } from '../cart/cartFunctions'
 
 
 const mapStateToProps = state => ({
@@ -71,6 +71,14 @@ class Product extends React.Component {
   changeQuantity = quantity => {
     this.setState({ quantity })
   }
+
+  addToCart = () => {
+    let product = this.state.product
+    product.quantity = this.state.quantity
+    product.product = this.state.product._id
+    addQuantityToCart(product)
+  }
+
   render () {
     const product = this.state.product
     const totalPrice = getPriceByQuantity(
@@ -82,7 +90,7 @@ class Product extends React.Component {
       <div className='product_page'>
         <div className='product_page_main'>
           <div className='product_page_top'>
-            <ProductImages images={this.state.imageData} productID={this.state.product._id} />
+            <ProductImages images={product.imageData} />
             <div className='product_page_info'>
               <div className='product_info'>
                 <div className='product_description_container'>

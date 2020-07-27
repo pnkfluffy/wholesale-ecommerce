@@ -24,68 +24,48 @@ router.get(
 )
 
 router.get('/user', rejectUnauthenticated, (req, res) => {
-	let user = {
-		name: req.user.name,
-		favorites: req.user.favorites
-	}
-	res.send(user)
+  let user = {
+    name: req.user.name,
+    favorites: req.user.favorites
+  }
+  res.send(user)
 })
 
-router.post('/update-user', rejectUnauthenticated, async (req, res) => {	
-	try {
-		await User.updateOne({ _id: req.user.id }, {
-			positionX: req.body.x,
-			positionY: req.body.y,
-			locked: req.body.locked
-		})
-		res.sendStatus(200)
-	} catch (error) {
-		console.log(error);
-		res.status(500).send('error updating user')
-	}
+router.post('/update-user', rejectUnauthenticated, async (req, res) => {
+  try {
+    await User.updateOne(
+      { _id: req.user.id },
+      {
+        positionX: req.body.x,
+        positionY: req.body.y,
+        locked: req.body.locked
+      }
+    )
+    res.sendStatus(200)
+  } catch (error) {
+    console.log(error)
+    res.status(500).send('error updating user')
+  }
 })
 
-router.post('/addFavoriteProduct', rejectUnauthenticated, async (req, res) => {
-		const productID = req.body;
-		User.findById({ _id: req.user.id })
-		.then(user => {
-			const newFavoritesArray = req.user.favorites;
-			 if (newFavoritesArray.lenght > 0 && newFavoritesArray.indexOf(productID) === -1){
-			 	res.json(user.favorites);
-			 	console.log("Error: Product already exists on the array")
-			 	return;
-			 }
-			newFavoritesArray.push(productID);
-			user
-				.updateOne({ favorites: newFavoritesArray})
-				.then(() => res.json(user.favorites))
-				.catch(error => {
-					console.log(error)
-					res.status(500).send("Couldn't edit favorites products array")
-				})
-			})
-			.catch(error => {
-				console.log(error)
-				res.status(500).send("Couldn't edit favorites products array")
-			});
-	});
-
-	router.post('/deleteFavoriteProduct', rejectUnauthenticated, async (req, res) => {	
-		const productId = req.body;
-		User.findById({ _id: req.user.id })
-		.then(user => {
-			const index = req.user.favorites.indexOf(productId);
-			const newFavoritesArray = req.user.favorites;
-			newFavoritesArray.splice(index, 1)
-			user
-				.updateOne({ favorites: newFavoritesArray})
-				.then(() => res.json(user.favorites))
-				.catch(error => {
-					console.log(error)
-					res.status(500).send("Couldn't edit favorites products array")
-				})
-			});
-	});
+router.post('/updateFavorites', rejectUnauthenticated, async (req, res) => {
+  const favorites = req.body
+  console.log("update favs");
+  User.findById({ _id: req.user.id })
+    .then(user => {
+      user
+        .updateOne({ favorites })
+        .then(() => res.json(user.favorites))
+        .catch(error => {
+          console.log(error)
+          res.status(500).send("Couldn't edit favorites products array")
+        })
+    })
+    .catch(error => {
+      console.log(error)
+      res.status(500).send("Couldn't edit favorites products array")
+    })
+})
 
 router.get('/login-uri', (req, res) => {
   res.send(process.env.DEV_URI)

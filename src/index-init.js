@@ -9,7 +9,9 @@ export const initializeAllRequests = async () => {
   axios
     .get('/auth/user')
     .then(async res => {
-      store.dispatch({ type: 'GET_USER', payload: res.data })
+      console.log('login', res.data)
+      store.dispatch({ type: 'GET_USER', payload: res.data.name })
+      store.dispatch({ type: 'SET_FAVORITES', payload: res.data.favorites })
       await getUserCart()
     })
     .catch(err => {

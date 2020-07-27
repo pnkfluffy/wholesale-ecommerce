@@ -1,11 +1,6 @@
-import React from 'react';
+import React from 'react'
 import { connect } from 'react-redux'
-
-import FavoriteIcon from '@material-ui/icons/Favorite'
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
-import isFavorite from '../reuseable/isFavoriteProduct'
-import setAsFavoriteProduct from '../reuseable/setAsFavoriteProduct'
-import removeFavoriteProduct from '../reuseable/removeFavoriteProduct'
+import FavoritesHeart from '../reuseable/favoritesHeart'
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -27,18 +22,14 @@ class ProductImages extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      active: 0,
-     isFavorite: isFavorite(this.props.state.user.favorites, this.props.ProductID)
+      active: 0
     }
-    console.log("state",this.state.isFavorites)
   }
   selectImage = index => {
     this.setState({ active: index })
   }
 
-  changeStateValue = () =>{
-
-  }
+  changeStateValue = () => {}
 
   render () {
     const carouselImages = this.props.images.map((image, index) => (
@@ -50,6 +41,8 @@ class ProductImages extends React.Component {
         activeIndex={this.state.active}
       />
     ))
+
+    console.log('props', this.props)
     return (
       <div className='product_page_images'>
         <div className='product_page_image'>
@@ -58,13 +51,9 @@ class ProductImages extends React.Component {
             alt='product_image'
             src={this.props.images[this.state.active].url}
           />
-          <div className='product_card_heart'>
-            {
-            isFavorite(this.props.state.user.favorites, this.props.productID) ?
-            <FavoriteIcon onClick={() => removeFavoriteProduct(this.props.productID)}/> :
-            <FavoriteBorderIcon onClick={() => setAsFavoriteProduct(this.props.productID)}/>
-            }
-          </div>
+          {this.props.productID && (
+            <FavoritesHeart productID={this.props.productID} />
+          )}
         </div>
         <div className='product_images_carousel'>{carouselImages}</div>
       </div>

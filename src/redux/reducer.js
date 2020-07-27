@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux'
+import axios from 'axios'
 
 const initialUser = {
   name: ''
@@ -7,13 +8,7 @@ const initialUser = {
 const user = (state = initialUser, action) => {
   switch (action.type) {
     case 'GET_USER':
-      return action.payload
-    case 'ADD_FAVORITE_PRODUCT':
-      return [...state, action.payload]
-    case 'DELETE_FAVORITE_PRODUCT':
-      let deleteItemIndex = state.favorites.findIndex(c => c.product === action.payload.id)
-      state.favorites.splice(deleteItemIndex, 1)
-      return {...state}
+      return { name: action.payload }
     default:
       return state
   }
@@ -28,6 +23,27 @@ const loaded = (state = false, action) => {
   }
 }
 
+const favorites = (state = [], action) => {
+  switch (action.type) {
+    case 'SET_FAVORITES':
+      return action.payload
+    case 'ADD_FAVORITE':
+      const itemExists = state.find(c => c === action.payload)
+      console.log('exist', itemExists)
+      if (itemExists) return state
+      axios.post('/auth/updateFavorites', [...state, action.payload])
+
+      return [...state, action.payload]
+    case 'DELETE_FAVORITE':
+      const deleteItemIndex = state.findIndex(c => c === action.payload)
+      if (deleteItemIndex !== -1) state.splice(deleteItemIndex, 1)
+      axios.post('/auth/updateFavorites', state)
+      return state
+    default:
+      return state
+  }
+}
+
 const cart = (state = [], action) => {
   switch (action.type) {
     case 'SET_CART':
@@ -35,11 +51,15 @@ const cart = (state = [], action) => {
     case 'ADD_TO_CART':
       return [...state, action.payload]
     case 'UPDATE_CART_ITEM':
-      let updateItemIndex = state.findIndex(c => c.product === action.payload.id)
+      let updateItemIndex = state.findIndex(
+        c => c.product === action.payload.id
+      )
       state[updateItemIndex].quantity = action.payload.quantity
       return [...state]
     case 'DELETE_CART_ITEM':
-      let deleteItemIndex = state.findIndex(c => c.product === action.payload.id)
+      let deleteItemIndex = state.findIndex(
+        c => c.product === action.payload.id
+      )
       state.splice(deleteItemIndex, 1)
       return [...state]
     default:
@@ -110,6 +130,7 @@ const reviews = (state = [], action) => {
 
 export default combineReducers({
   user,
+  favorites,
   categories,
   cart,
   products,

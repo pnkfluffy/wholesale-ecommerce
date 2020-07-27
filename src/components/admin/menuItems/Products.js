@@ -223,7 +223,7 @@ export const ProductEdit = props => {
       {...props}
     >
       <SimpleForm>
-        <TextInput disabled label='Id' source='id' />
+        <TextInput disabled label='ID' source='id' />
         <AutocompleteInput
           lablel='Category'
           source='category'

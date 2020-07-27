@@ -35,6 +35,10 @@ const uploadProductPhotos = async (req, res, next) => {
       //  and a title field containing the name of the image
       if (!image.src) {
         responseData.push(image)
+        if (responseData.length === req.body.imageData.length) {
+          req.imageMetaData = responseData
+          next()
+        }
       } else {
         console.log('title', image.title)
         const buf = Buffer.from(

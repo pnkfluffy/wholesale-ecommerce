@@ -30,7 +30,10 @@ import {
   Loading,
   Error,
   SingleFieldList,
-  ChipField
+  ChipField,
+  ArrayInput,
+  SimpleFormIterator,
+  NumberInput
 } from 'react-admin'
 
 export const UserShow = props => {
@@ -73,7 +76,6 @@ export const UserShow = props => {
 export const UserList = props => (
   <List {...props}>
     <Datagrid rowClick='show'>
-      {/* <TextField label='ID' source='id' /> */}
       <TextField label='Name' source='name' />
       <TextField label='Database ID' source='id' />
       <ShowButton />
@@ -85,13 +87,12 @@ export const UserList = props => (
 export const UserEdit = props => (
   <Edit
     undoable={false}
-    actions={<UserEditActions />}
     title={<UserTitle />}
+    actions={<UserEditActions />}
     {...props}
   >
     <SimpleForm>
-      <TextInput disabled source='id' />
-
+      <TextInput disabled label='ID' source='id' />
       <TextInput label='name' source='name' />
       <BooleanInput
         disabled
@@ -103,6 +104,12 @@ export const UserEdit = props => (
         source='docusignVerified'
       />
       <TextInput disabled label='goCardless ID' source='goCardlessID' />
+      <ArrayInput label='Cart' source='cart'>
+        <SimpleFormIterator>
+          <TextInput disabled label='Product' source='product' />
+          <NumberInput label='Quantity' source='quantity' />
+        </SimpleFormIterator>
+      </ArrayInput>
     </SimpleForm>
   </Edit>
 )
@@ -112,6 +119,7 @@ export const UserEdit = props => (
 const UserTitle = ({ record }) => {
   return <span>Post {record ? `"${record.name}"` : ''}</span>
 }
+
 const UserShowActions = ({ basePath, data, resource }) => (
   <TopToolbar>
     <EditButton basePath={basePath} record={data} />

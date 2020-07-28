@@ -6,17 +6,17 @@ import defaultMessages from 'ra-language-english'
 import polyglotI18nProvider from 'ra-i18n-polyglot'
 import createAdminStore from './createAdminStore'
 
-import { UserList, UserEdit, UserShow } from './MenuItems/Users'
+import { UserList, UserEdit, UserShow } from './menuItems/Users'
 import {
   ProductList,
   ProductShow,
   ProductEdit,
   ProductCreate
-} from './MenuItems/Products'
-import { OrderList, OrderShow } from './MenuItems/Orders'
-import { ReviewList, ReviewShow } from './MenuItems/Reviews'
+} from './menuItems/Products'
+import { OrderList, OrderShow } from './menuItems/Orders'
+import { ReviewList, ReviewShow } from './menuItems/Reviews'
 // import { PostList, PostEdit, PostCreate } from "./MenuItems/Posts";
-import Dashboard from './MenuItems/Dashboard'
+import Dashboard from './menuItems/Dashboard'
 import authProvider from './providers/authProvider'
 
 import UserIcon from '@material-ui/icons/Group'

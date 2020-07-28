@@ -86,7 +86,7 @@ router.get('/:id', rejectNonAdmin, (req, res) => {
 
 //update
 router.put('/:id', rejectNonAdmin, async (req, res) => {
-  console.log('update hit')
+  console.log('update user hit')
   User.updateOne({ _id: req.params.id }, req.body)
     .then(user => {
       user = JSON.parse(

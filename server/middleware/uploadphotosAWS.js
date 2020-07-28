@@ -31,9 +31,14 @@ const uploadProductPhotos = async (req, res, next) => {
   let responseData = []
   s3bucket.createBucket(function () {
     req.body.imageData.map(image => {
-      //  if image not new
+      //  if image is new, it will have a src field containing the b64 data
+      //  and a title field containing the name of the image
       if (!image.src) {
         responseData.push(image)
+        if (responseData.length === req.body.imageData.length) {
+          req.imageMetaData = responseData
+          next()
+        }
       } else {
         console.log('title', image.title)
         const buf = Buffer.from(

@@ -228,9 +228,7 @@ export const ProductEdit = props => {
       {...props}
     >
       <SimpleForm>
-        {/* {!} NEEDS TO BE DONE LATER TO EDIT ORDERS OF USERS */}
-        {/* <ReferenceInput source="orderId" reference="orders"> */}
-        <TextInput disabled label='Id' source='id' />
+        <TextInput disabled label='ID' source='id' />
         <AutocompleteInput
           lablel='Category'
           source='category'

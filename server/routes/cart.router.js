@@ -10,9 +10,10 @@ const {
 router.get('/', rejectUnauthenticated, async (req, res) => {
   try {
     let cart = req.user.cart
+    console.log("get cart", cart)
     if (!cart) {
-      res.status(200).send("no cart");
-      return;
+      res.status(200).send('no cart')
+      return
     }
     let cartProductInfo = []
     for (let i = 0; i < cart.length; i++) {
@@ -39,14 +40,15 @@ router.get('/', rejectUnauthenticated, async (req, res) => {
 
 router.post('/', rejectUnauthenticated, async (req, res) => {
   try {
-    console.log(req.body.cart);
+    console.log(req.body.cart)
+    console.log(req.user._id)
     const user = await User.updateOne(
-      { _id: req.user.id },
+      { _id: req.user._id },
       {
         cart: req.body.cart
       }
     )
-    res.status(200).send(user.cart)
+    res.json(user.cart)
   } catch (error) {
     console.log(error)
     res.status(500).send('error updating cart')

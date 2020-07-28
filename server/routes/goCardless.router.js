@@ -10,6 +10,10 @@ const constants = require('gocardless-nodejs/constants')
 
 const initializeGoCardless = async () => {
 	const allClients = await gocardless(
+		// process.env.GC_LIVE_TOKEN,
+		// // Change this to constants.Environments.Live when you're ready to go live
+		// constants.Environments.Live,
+
 		process.env.GC_ACCESS_TOKEN,
 		// Change this to constants.Environments.Live when you're ready to go live
 		constants.Environments.Sandbox,

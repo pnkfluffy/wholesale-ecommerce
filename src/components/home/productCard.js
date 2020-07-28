@@ -31,9 +31,6 @@ class ProductCard extends React.Component {
       <div className='product_card' onClick={this.goToProduct}>
         <div className='product_card_image'>
           <img alt='product_image' src={image} />
-          <div className='product_card_heart'>
-            <FavoriteBorderIcon onClick={this.favoriteProduct} />
-          </div>
         </div>
         <div className='product_name'>{this.props.product.name}</div>
         <div className='product_metadata'>

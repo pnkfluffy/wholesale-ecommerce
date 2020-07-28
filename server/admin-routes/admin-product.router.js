@@ -7,28 +7,55 @@ const Product = require('../schemas/productSchema')
 
 //getList
 router.get('/', rejectNonAdmin, (req, res) => {
-  console.log('Product List backend hit')
-  const sortQuery = JSON.parse(req.query.sort)
+  // console.log('Product List backend hit')
+  // console.log("products req.query: ", req.query)
   let sort = {}
-  sort[sortQuery[0]] = sortQuery[1] === 'ASC' ? 1 : -1
+  if (!req.query.sort === undefined ) {
+    const sortQuery = JSON.parse(req.query.sort)
+    sort[sortQuery[0]] = sortQuery[1] === 'ASC' ? 1 : -1
+  }
+ 
+  const filterQuery = JSON.parse(req.query.filter)
 
-  Product.find()
-    .sort(sort)
-    .then(products => {
-      res.set('content-range', JSON.stringify(products.length))
-      //  each object needs to have an 'id' field in order for
-      //  reactAdmin to parse
-      products = JSON.parse(
-        JSON.stringify(products)
-          .split('"_id":')
-          .join('"id":')
-      )
-      res.json(products)
-    })
-    .catch(error => {
-      console.log(error)
-      res.status(500).send('no users found')
-    })
+  
+  if (JSON.stringify(filterQuery) !== '{}') {
+    if(filterQuery.id){
+       filterQuery._id = filterQuery.id
+       delete filterQuery.id
+    }
+    console.log("filterQuery: ", filterQuery)
+    Product.find(filterQuery).then(filteredProducts => {
+        res.set('content-range', JSON.stringify(filteredProducts.length + 1))
+        //  each object needs to have an 'id' field in order for
+        //  reactAdmin to parse
+        filteredProducts = JSON.parse(
+          JSON.stringify(filteredProducts)
+            .split('"_id":')
+            .join('"id":')
+        )
+        console.log("filtered Products: ", filteredProducts)
+        res.json(filteredProducts)
+      })
+  } else {
+    Product.find()
+      .sort(sort)
+      .then(products => {
+        res.set('content-range', JSON.stringify(products.length))
+        //  each object needs to have an 'id' field in order for
+        //  reactAdmin to parse
+        products = JSON.parse(
+          JSON.stringify(products)
+            .split('"_id":')
+            .join('"id":')
+        )
+        res.json(products)
+      })
+      .catch(error => {
+        console.log(error)
+        res.status(500).send('no users found')
+      })
+  }
+
 })
 
 //getOne
@@ -40,6 +67,7 @@ router.get('/:id', rejectNonAdmin, (req, res) => {
           .split('"_id":')
           .join('"id":')
       )
+      console.log("parsed_product: ", product)
       res.json(product)
     })
     .catch(err => {

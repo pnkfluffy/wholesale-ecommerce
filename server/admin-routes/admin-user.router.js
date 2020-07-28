@@ -32,15 +32,14 @@ router.get('/', rejectNonAdmin, (req, res) => {
   console.log('User list backend hit')
   // these conditionals manually put required values into the query
   // that aren't passed in from the react-admin getMany method
-  if (req.query.sort === undefined) {
-    req.query.sort = JSON.stringify(['id', 'ASC'])
-  }
-  if (req.query.range === undefined) {
-    req.query.range = JSON.stringify([0, 9])
-  }
-  const sortQuery = JSON.parse(req.query.sort)
   let sort = {}
-  sort[sortQuery[0]] = sortQuery[1] === 'ASC' ? 1 : -1
+  if (!req.query.sort === undefined) {
+    const sortQuery = JSON.parse(req.query.sort)
+    sort[sortQuery[0]] = sortQuery[1] === 'ASC' ? 1 : -1
+  }
+  // if (req.query.range === undefined) {
+  //   req.query.range = JSON.stringify([0, 9])
+  // }
 
   User.find()
     .sort(sort)

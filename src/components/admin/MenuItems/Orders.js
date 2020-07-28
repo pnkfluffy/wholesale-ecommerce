@@ -2,7 +2,7 @@ import * as React from 'react'
 import {
   CreateButton, ArrayField,
   List, Create, ReferenceField,
-  Edit, SimpleForm,
+  Edit, SimpleForm, NumberField,
   TopToolbar, Button,
   Datagrid, TextField,
   TextInput, DateInput,
@@ -20,17 +20,21 @@ export const OrderShow = (props) => (
         <TextField label="User" source="user"/>
         <TextField label="Order Total" source="total"/>
         <TextField label="Order ID" source="id"/>
-        <ArrayField label="Products" source="products">
-          <Datagrid>
-            <TextField label="ID" source="id"/>
-            <TextField label="Product Name" source="name" />
-            <TextField label="Category" source="category"/>
-            <TextField label="Price" source="price" />
+        <ArrayField label="Products Ordered" source="products">
+          <Datagrid rowClick="show">
+            <NumberField label="Quantity" source="quantity"/>
+            <ReferenceField label="Price Per Unit" source="product" reference="admin-products">
+              <NumberField label="Price Per Unit" options={{ style: 'currency', currency: 'USD' }} source="price" />
+            </ReferenceField>
+            <ReferenceField label="Product" source="product" reference="admin-products">
+              <TextField label="Product" source="name" />
+            </ReferenceField>
           </Datagrid>
         </ArrayField>
-        <ReferenceField label="User details" source="user" reference="Customers">
-          <TextField label="Name" source="name"/>
+        <ReferenceField label="User details" source="user" reference="admin-users">
+          <TextField label="Product" source="name"/>
         </ReferenceField>
+        
       </SimpleShowLayout>
   </Show>
 );
@@ -38,10 +42,11 @@ export const OrderShow = (props) => (
 export const OrderList = props => (
     <List {...props}>
         <Datagrid rowClick='show'>
-          {/* <TextField label='ID' source='id' /> */}
-          {/* <TextField label="User" source="user" />
+          <ReferenceField label="User details" link="show" source="user" reference="admin-users">
+            <TextField label="Name" source="name"/>
+          </ReferenceField>
           <TextField label="Total" source="total" />
-          <DateField label="Date" source="date" /> */}
+          <DateField label="Date" source="date" />
           < ShowButton />
         </Datagrid>
       </List>

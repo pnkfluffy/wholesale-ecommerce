@@ -57,8 +57,6 @@ export default {
   getMany: (resource, params) => {
     console.log("getMany", resource);
     console.log("getMany", resource, "params: ", params)
-    // const { page, perPage } = params.pagination;
-    // const { field, order } = params.sort;
     const query = {
       filter: JSON.stringify({ id: params.ids })
     };

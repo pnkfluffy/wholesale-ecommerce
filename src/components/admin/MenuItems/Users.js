@@ -34,7 +34,6 @@ import {
 } from 'react-admin'
 
 export const UserShow = props => {
-  console.log('usershow', props)
   return (
     <Show actions={<UserShowActions />} {...props}>
       <SimpleShowLayout>
@@ -54,8 +53,9 @@ export const UserShow = props => {
           source='id'
           reference='admin-orders'
           target='user'
+          link="show"
         >
-          <Datagrid>
+          <Datagrid rowClick="show">
             <TextField label="Total" source='total'/>
             <TextField label="Date" source="date"/>
             <TextField label="Product Purchased" source="products.length"/>

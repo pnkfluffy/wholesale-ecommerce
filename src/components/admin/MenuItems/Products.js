@@ -42,16 +42,8 @@ import {
 } from 'react-admin'
 import { makeStyles } from '@material-ui/core/styles'
 
-// const useStyles = makeStyles({
-//   CreateForm: {
-//       display: 'flex',
-//       flexWrap: 'wrap'
-//   },
-// });
-// const classes = useStyles()
 
 export const ProductShow = props => {
-  console.log('tryna show', props)
   return (
     <Show actions={<ProductShowActions />} {...props}>
       <SimpleShowLayout>
@@ -99,6 +91,19 @@ export const ProductShow = props => {
           </Datagrid>
         </ArrayField>
         <DateField label='Publish Date' source='date' />
+        <ReferenceManyField
+          label='Reviews Written for this product'
+          source='id'
+          reference='admin-reviews'
+          target='user'
+          link="show"
+        >
+          <Datagrid rowClick="show">
+            <TextField label="Stars" source='stars'/>
+            <TextField label="Date" source="date"/>
+            <TextField label="User" source="user"/>
+          </Datagrid>
+        </ReferenceManyField>
       </SimpleShowLayout>
     </Show>
   )

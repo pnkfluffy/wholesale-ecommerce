@@ -1,12 +1,12 @@
-const express = require("express");
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
 
-const User = require('../schemas/userSchema');
-const Order = require('../schemas/orderSchema');
+const User = require('../schemas/userSchema')
+const Order = require('../schemas/orderSchema')
 
 /*setup goCardless*/
-const gocardless = require("gocardless-nodejs");
-const constants = require("gocardless-nodejs/constants");
+const gocardless = require('gocardless-nodejs')
+const constants = require('gocardless-nodejs/constants')
 
 const initializeGoCardless = async () => {
 	const allClients = await gocardless(
@@ -145,15 +145,15 @@ router.post('/addClient', async (req, res) => {
 			session_token: req.user._id.toString(),
 			success_redirect_url: "http://localhost:3000/cart",
 
-			prefilled_customer: {
-				given_name: name,
-				family_name: lastName,
-				email: email,
-				address_line1: addr,
-				city: city,
-				postal_code: postalCode
-			}
-		});
+      prefilled_customer: {
+        given_name: name,
+        family_name: lastName,
+        email: email,
+        address_line1: addr,
+        city: city,
+        postal_code: postalCode
+      }
+    })
 
 		// The clientId will be saved in the database so It can
 		// be used to confirm the changes and
@@ -368,4 +368,4 @@ router.post('/changePayment/:orderID', async (req, res) => {
 	}
 });
 
-module.exports = router;
+module.exports = router

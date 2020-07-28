@@ -6,7 +6,7 @@ const { rejectNonAdmin } = require('../modules/authentication-middleware')
 //getList
 router.get('/', rejectNonAdmin, (req, res) => {
   console.log('Order list backend hit')
-  console.log("req.query: ", req.query)
+  // console.log("req.query: ", req.query)
   const sortQuery = JSON.parse(req.query.sort)
   const filterQuery = JSON.parse(req.query.filter)
   let sort = {}
@@ -24,6 +24,7 @@ router.get('/', rejectNonAdmin, (req, res) => {
             .split('"_id":')
             .join('"id":')
         )
+        console.log("filtered Orders: ", filteredOrders)
         res.json(filteredOrders)
       })
   } else {
@@ -38,7 +39,7 @@ router.get('/', rejectNonAdmin, (req, res) => {
             .split('"_id":')
             .join('"id":')
         )
-       // console.log("parsed orders: ", orders)
+       console.log("parsed orders: ", orders)
         res.json(orders)
       })
       .catch(error => {

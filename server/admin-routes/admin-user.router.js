@@ -37,28 +37,47 @@ router.get('/', rejectNonAdmin, (req, res) => {
     const sortQuery = JSON.parse(req.query.sort)
     sort[sortQuery[0]] = sortQuery[1] === 'ASC' ? 1 : -1
   }
-  // if (req.query.range === undefined) {
-  //   req.query.range = JSON.stringify([0, 9])
-  // }
+  const filterQuery = JSON.parse(req.query.filter)
 
-  User.find()
-    .sort(sort)
-    .then(users => {
-      res.set('content-range', JSON.stringify(users.length))
-      //  each object needs to have an 'id' field in order for
-      //  reactAdmin to parse
-      users = JSON.parse(
-        JSON.stringify(users)
-          .split('"_id":')
-          .join('"id":')
-      )
-      // console.log("parsed users: ", users)
-      res.json(users)
-    })
-    .catch(error => {
-      console.log(error)
-      res.status(500).send('no users found')
-    })
+  if (JSON.stringify(filterQuery) !== '{}') {
+    if( typeof filterQuery.id){
+       filterQuery._id = filterQuery.id
+       delete filterQuery.id
+    }
+    console.log("Users filterQuery: ", filterQuery)
+    User.find(filterQuery).then(filteredUsers => {
+        res.set('content-range', JSON.stringify(filteredUsers.length + 1))
+        //  each object needs to have an 'id' field in order for
+        //  reactAdmin to parse
+        filteredUsers = JSON.parse(
+          JSON.stringify(filteredUsers)
+            .split('"_id":')
+            .join('"id":')
+        )
+        console.log("filtered Users: ", filteredUsers)
+        res.json(filteredUsers)
+      })
+  } else {
+    User.find()
+      .sort(sort)
+      .then(users => {
+        console.log("raw users: ", users)
+        res.set('content-range', JSON.stringify(users.length))
+        //  each object needs to have an 'id' field in order for
+        //  reactAdmin to parse
+        users = JSON.parse(
+          JSON.stringify(users)
+            .split('"_id":')
+            .join('"id":')
+        )
+        //console.log("parsed users: ", users)
+        res.json(users)
+      })
+      .catch(error => {
+        console.log(error)
+        res.status(500).send('no users found')
+      })
+  }
 })
 
 //getOne

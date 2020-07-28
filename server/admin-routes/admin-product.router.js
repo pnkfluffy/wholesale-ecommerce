@@ -23,7 +23,7 @@ router.get('/', rejectNonAdmin, (req, res) => {
        filterQuery._id = filterQuery.id
        delete filterQuery.id
     }
-    console.log("filterQuery: ", filterQuery)
+    console.log("Products filterQuery: ", filterQuery)
     Product.find(filterQuery).then(filteredProducts => {
         res.set('content-range', JSON.stringify(filteredProducts.length + 1))
         //  each object needs to have an 'id' field in order for
@@ -48,6 +48,7 @@ router.get('/', rejectNonAdmin, (req, res) => {
             .split('"_id":')
             .join('"id":')
         )
+        console.log("products: ", products)
         res.json(products)
       })
       .catch(error => {

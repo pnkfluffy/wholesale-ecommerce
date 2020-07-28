@@ -47,7 +47,7 @@ router.get('/', rejectNonAdmin, (req, res) => {
         console.log(error)
         res.status(500).send('no users found')
       })
-  }np
+  }
 })
 // router.get("/", rejectNonAdmin, (req, res) => {
 //   console.log("Review List backend hit")

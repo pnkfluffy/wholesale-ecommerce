@@ -18,7 +18,7 @@ export const OrderShow = (props) => (
   <Show actions={< OrderActions />} {...props}>
       <SimpleShowLayout>
         <TextField label="User" source="user"/>
-        <TextField label="Order Total" source="total"/>
+        <NumberField label="Order Total" source="total" options={{ style: 'currency', currency: 'USD' }} />
         <TextField label="Order ID" source="id"/>
         <ArrayField label="Products Ordered" source="products">
           <Datagrid rowClick="show">
@@ -45,7 +45,7 @@ export const OrderList = props => (
           <ReferenceField label="User details" link="show" source="user" reference="admin-users">
             <TextField label="Name" source="name"/>
           </ReferenceField>
-          <TextField label="Total" source="total" />
+          <NumberField label="Total" source="total" options={{ style: 'currency', currency: 'USD' }}/>
           <DateField label="Date" source="date" />
           < ShowButton />
         </Datagrid>

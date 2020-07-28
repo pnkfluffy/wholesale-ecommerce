@@ -38,7 +38,8 @@ import {
   ExportButton,
   useListContext,
   sanitizeListRestProps,
-  AutocompleteInput
+  AutocompleteInput,
+  NumberField
 } from 'react-admin'
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -56,7 +57,7 @@ export const ProductShow = props => {
           <Datagrid>
             <TextField label='ID' source='id' />
             <TextField label='Quantity' source='quantity' />
-            <TextField label='Price per unit (USD)' source='price' />
+            <NumberField label='Price per unit' options={{ style: 'currency', currency: 'USD' }} source='price' />
           </Datagrid>
         </ArrayField>
         <FunctionField
@@ -112,10 +113,9 @@ export const ProductShow = props => {
 export const ProductList = props => (
   <List {...props}>
     <Datagrid actions={<ListActions />} rowClick='show'>
-      {/* <TextField label='ID' source='id' /> */}
       <TextField label='Name' source='name' />
       <TextField label='Category' source='category' />
-      <TextField label='Price' source='price' />
+      <NumberField label='Price' source='price' options={{ style: 'currency', currency: 'USD' }}/>
       <ShowButton basePath={props.basePath} record={props.data} />
       <DeleteButton />
     </Datagrid>

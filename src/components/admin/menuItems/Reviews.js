@@ -10,18 +10,22 @@ import {
   Show, SimpleShowLayout,
   DeleteButton, ListButton,
   RichTextField, ShowButton,
-  DisabledInput, BooleanInput,
+  DisabledInput, BooleanInput, ReferenceField,
   LongTextInput, ReferenceManyField,
 } from 'react-admin'
 
 export const ReviewShow = (props) => (
   <Show actions={< ReviewActions />} {...props}>
       <SimpleShowLayout>
-        <TextField label="Product" source="product"/>
+        <ReferenceField link="show" label="Product" reference="admin-products" source="product">
+            <TextField source="name"/>
+        </ReferenceField>
+        <ReferenceField link="show" label="User" reference="admin-users" source="user">
+            <TextField source="name"/>
+        </ReferenceField>
         <TextField label="Stars" source="stars"/>
         <TextField label="Comment" source="review"/>
         <TextField label="User" source="userName"/>
-        <TextField label="User ID" source="user"/>
         <TextField label="Review ID" source="id"/>
       </SimpleShowLayout>
   </Show>
@@ -30,8 +34,10 @@ export const ReviewShow = (props) => (
 export const ReviewList = props => (
     <List {...props}>
         <Datagrid rowClick='show'>
-          {/* <TextField label='ID' source='id' /> */}
-          <TextField label="Product" source="product" />
+          <ReferenceField link="false" label="Product" reference="admin-products" source="product">
+            <TextField source="name"/>
+          </ReferenceField>
+          <TextField label="Customer" source="userName"/>
           <TextField label="Stars" source="stars" />
           < ShowButton />
           < DeleteButton />

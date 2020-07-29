@@ -6,19 +6,13 @@ const { rejectNonAdmin } = require('../modules/authentication-middleware')
 //getList
 router.get('/', rejectNonAdmin, (req, res) => {
   console.log('Order list backend hit')
-  if (req.query.sort === undefined) {
-    req.query.sort = JSON.stringify(['id', 'ASC'])
-  }
-  if (req.query.range === undefined) {
-    req.query.range = JSON.stringify([0, 9])
-  }
   // console.log("req.query: ", req.query)
-  // console.log("req.query.sort: ", req.query.sort)
   const sortQuery = JSON.parse(req.query.sort)
   const filterQuery = JSON.parse(req.query.filter)
   let sort = {}
   sort[sortQuery[0]] = sortQuery[1] === 'ASC' ? 1 : -1
   if (JSON.stringify(filterQuery) !== '{}') {
+    console.log("orders filterQuery: ", filterQuery)
     Order.find(filterQuery)
       .sort(sort)
       .then(filteredOrders => {
@@ -30,6 +24,7 @@ router.get('/', rejectNonAdmin, (req, res) => {
             .split('"_id":')
             .join('"id":')
         )
+        console.log("filtered Orders: ", filteredOrders)
         res.json(filteredOrders)
       })
   } else {
@@ -44,7 +39,7 @@ router.get('/', rejectNonAdmin, (req, res) => {
             .split('"_id":')
             .join('"id":')
         )
-        // console.log("parsed orders: ", orders)
+       console.log("parsed orders: ", orders)
         res.json(orders)
       })
       .catch(error => {
@@ -73,11 +68,8 @@ router.get('/:id', rejectNonAdmin, (req, res) => {
 })
 
 // //https://marmelab.com/react-admin/doc/2.8/DataProviders.html
-// //getMany
 
-// //getManyReference
-
-// //update
+//update
 // router.put("/:id", async (req, res) => {
 //   console.log("update hit")
 //   console.log(req.params.id)

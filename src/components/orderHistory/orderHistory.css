@@ -62,6 +62,7 @@
 .product_in_order_card_math {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
     align-items: baseline;
 }
 
@@ -108,5 +109,5 @@
 .order_information_title {
     font-size: 1.6vw;
     line-height: 10%;
-    margin-top: 10%;
+    margin-top: 10%
 }

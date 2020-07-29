@@ -1,5 +1,4 @@
 /*** CART ***/
-
 .cart_page {
     width: 100%;
     display: flex;
@@ -129,6 +128,12 @@
 }
 
 /*** Buy ***/
+.gcpay_form_area {
+    background-color: var(--searchbar-black);
+    border-radius: 15px;
+    padding: 1% 0% 5% 5%;
+}
+
 .buy {
   width: 24%;
   display: flex;
@@ -141,6 +146,11 @@
   align-items: center;
   width: 100%;
   margin-bottom: 5%;
+}
+
+.gcpay_input {
+    width: 100%;
+    margin-bottom: 5%;
 }
 
 .confirm_order {

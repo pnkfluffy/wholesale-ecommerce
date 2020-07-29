@@ -45,7 +45,7 @@ class GCFillInfo extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="gcpay_form_area">
                 <h1>Payment Information</h1>
                 <form noValidate className="gc_form"
                                  onSubmit={this.addClients}>

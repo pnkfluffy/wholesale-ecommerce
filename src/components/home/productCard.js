@@ -22,7 +22,7 @@ class ProductCard extends React.Component {
   render () {
     const product = this.props.product
     const metaData = product.metaData
-    const image = product.imageData ? product.imageData[0].url : blank_image
+    const image =  (product.imageData.length && product.imageData[0].url) ? product.imageData[0].url : blank_image
     const cbd_contents = metaData.cbd.quantity + metaData.cbd.unit
     const thc_contents = metaData.thc.quantity + metaData.thc.unit
     const units = metaData.units.quantity + metaData.units.unit

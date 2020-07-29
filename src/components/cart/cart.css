@@ -18,7 +18,9 @@
 }
 
 .top_cart_area {
-    padding-left: 10%;
+    padding-left: 2%;
+    font-size: 2vw;
+    margin-bottom: 2vh;
 }
 
 .checkout_button {
@@ -40,7 +42,6 @@
   padding: 1.5vw;
   flex-direction: row;
   align-items: center;
-  width: 75%;
   background-color: var(--searchbar-black);
   margin-bottom: 2vh;
   border-radius: 20px;

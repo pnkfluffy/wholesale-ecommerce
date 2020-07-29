@@ -2,13 +2,16 @@ import { combineReducers } from 'redux'
 import { updateCartServer } from './functions'
 
 const initialUser = {
-  name: ''
+  name: '',
+  admin: false
 }
 
 const user = (state = initialUser, action) => {
   switch (action.type) {
     case 'GET_USER':
       return action.payload
+    case 'SET_ADMIN':
+      return { ...state, admin: action.payload }
     default:
       return state
   }
@@ -91,13 +94,13 @@ const products = (state = initialProducts, action) => {
   }
 }
 
- const orders = (state = [], action) => {
-   switch (action.type) {
-     case 'ADD_ORDERS':
-       return action.payload
-     default:
-       return state
-   }
+const orders = (state = [], action) => {
+  switch (action.type) {
+    case 'ADD_ORDERS':
+      return action.payload
+    default:
+      return state
+  }
 }
 
 const reviews = (state = [], action) => {

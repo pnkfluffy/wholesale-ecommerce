@@ -14,7 +14,7 @@
 
 :root {
   --logo-green: #59BA47;
-  --light-hyperlink-green: #60944d;
+  --light-hyperlink-green: #72bd57;
   --dark-hyperlink-green: #33743A;
 
   --header-font-white: #cccccc;
@@ -100,7 +100,7 @@ input::-webkit-inner-spin-button {
 }
 
 .raffle_input_title {
-  font-size: 1vw;
+  font-size: 0.9vw;
   padding-left: 3%;
 }
 

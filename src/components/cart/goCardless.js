@@ -30,11 +30,13 @@ class GoCardless extends React.Component {
     }
 
     checkClientCGID = () => {
+        console.log("checking client id")
         axios
             .get("gc/checkClientID")
             .then(res => {
                 if (res.data)
                 {
+                    console.log("got client id");
                     this.setState({
                         hasClientID: true,
                         loading: false
@@ -115,7 +117,7 @@ class GoCardless extends React.Component {
                             return (<GCFillInfo total = {this.props.total}/>)
                         }
                         else if (!this.state.hasMandate){
-                            this.confirmAccount();
+                            { this.confirmAccount() };
                         }
                         else {
                             return <GCPay total = {this.props.total}/>

@@ -7,28 +7,52 @@ const Product = require('../schemas/productSchema')
 
 //getList
 router.get('/', rejectNonAdmin, (req, res) => {
-  console.log('Product List backend hit')
-  const sortQuery = JSON.parse(req.query.sort)
+  // console.log('Product List backend hit')
+  // console.log("products req.query: ", req.query)
   let sort = {}
-  sort[sortQuery[0]] = sortQuery[1] === 'ASC' ? 1 : -1
-
-  Product.find()
-    .sort(sort)
-    .then(products => {
-      res.set('content-range', JSON.stringify(products.length))
+  if (!req.query.sort === undefined) {
+    const sortQuery = JSON.parse(req.query.sort)
+    sort[sortQuery[0]] = sortQuery[1] === 'ASC' ? 1 : -1
+  }
+  const filterQuery = JSON.parse(req.query.filter)
+  if (JSON.stringify(filterQuery) !== '{}') {
+    if (filterQuery.id) {
+      filterQuery._id = filterQuery.id
+      delete filterQuery.id
+    }
+    console.log("Products filterQuery: ", filterQuery)
+    Product.find(filterQuery).then(filteredProducts => {
+      res.set('content-range', JSON.stringify(filteredProducts.length + 1))
       //  each object needs to have an 'id' field in order for
       //  reactAdmin to parse
-      products = JSON.parse(
-        JSON.stringify(products)
+      filteredProducts = JSON.parse(
+        JSON.stringify(filteredProducts)
           .split('"_id":')
           .join('"id":')
       )
-      res.json(products)
+      console.log("filtered Products: ", filteredProducts)
+      res.json(filteredProducts)
     })
-    .catch(error => {
-      console.log(error)
-      res.status(500).send('no users found')
-    })
+  } else {
+    Product.find()
+      .sort(sort)
+      .then(products => {
+        res.set('content-range', JSON.stringify(products.length))
+        //  each object needs to have an 'id' field in order for
+        //  reactAdmin to parse
+        products = JSON.parse(
+          JSON.stringify(products)
+            .split('"_id":')
+            .join('"id":')
+        )
+        console.log("products: ", products)
+        res.json(products)
+      })
+      .catch(error => {
+        console.log(error)
+        res.status(500).send('no users found')
+      })
+  }
 })
 
 //getOne
@@ -71,9 +95,12 @@ router.post('/', rejectNonAdmin, uploadProductPhotos, async (req, res) => {
           .split('"_id":')
           .join('"id":')
       )
-      return res.json(product)
+      res.json(product)
     })
-    .catch(err => console.log(err))
+    .catch(err => {
+      console.log(err)
+      res.sendStatus(500)
+    })
 })
 
 // @route   PUT /admin-products/edit/:id
@@ -89,7 +116,7 @@ router.put('/:id', rejectNonAdmin, uploadProductPhotos, async (req, res) => {
           .split('"_id":')
           .join('"id":')
       )
-      return res.json(product)
+      res.json(product)
     })
     .catch(err => {
       console.log(err)

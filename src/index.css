@@ -14,7 +14,7 @@
 
 :root {
   --logo-green: #59BA47;
-  --light-hyperlink-green: #60944d;
+  --light-hyperlink-green: #72bd57;
   --dark-hyperlink-green: #33743A;
 
   --header-font-white: #cccccc;
@@ -24,6 +24,10 @@
   --sidebar-black: #16181D;
   --searchbar-black: #1a1b20;
   --background-grey: #1E2026;
+  --input-grey: #2d2f36;
+
+
+  --attention-red: #c10606;
 }
 
 body,
@@ -95,8 +99,39 @@ input::-webkit-inner-spin-button {
   width: 70%;
 }
 
+.raffle_input_title {
+  font-size: 0.9vw;
+  padding-left: 3%;
+}
+
+.input_container {
+  background-color: var(--input-grey);
+  width: 92%;
+  padding: 2% 4% 2% 4%;
+  border-radius: 6px;
+}
+
 .input_input {
-  width: 90%;
+  width: 100%;
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
+  color: var(--header-font-white);
+}
+
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  border: none;
+  -webkit-text-fill-color: white;
+  -webkit-box-shadow: 0 0 0px 1000px var(--input-grey) inset;
+  transition: background-color 5000s ease-in-out 0s;
 }
 
 @import url(//db.onlinewebfonts.com/c/d4f20dfedfdf197ed0ac52b09bf25551?family=GT+Walsheim+Pro+Medium);

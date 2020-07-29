@@ -4,21 +4,23 @@ import store from './redux/store'
 export const initializeAllRequests = async () => {
   console.log('redux initializing')
   await getAllCategories()
-  await getAllReviews()
   await getAllProducts()
   axios
     .get('/auth/user')
     .then(async res => {
-      console.log('login', res.data)
-      store.dispatch({ type: 'GET_USER', payload: res.data.name })
+      store.dispatch({ type: 'APP_LOADED' })
+      //  only fires if user get successfull
+      store.dispatch({ type: 'GET_USER', payload: res.data })
       store.dispatch({ type: 'SET_FAVORITES', payload: res.data.favorites })
+      await getAllReviews()
       await getUserCart()
       await getAllOrders()
     })
     .catch(err => {
       store.dispatch({ type: 'APP_LOADED' })
-      console.log(err)
+      console.log("not logged in or admin", err)
     })
+  
 }
 
 export const getUserCart = () => {
@@ -31,7 +33,6 @@ export const getUserCart = () => {
         })
 
         store.dispatch({ type: 'SET_CART', payload: filtered })
-        store.dispatch({ type: 'APP_LOADED' })
       }
     })
     .catch(err => {

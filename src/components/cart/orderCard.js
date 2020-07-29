@@ -11,15 +11,13 @@ class OrderCard extends React.Component {
   deleteProduct = () => {
     this.props.dispatch({
       type: 'DELETE_CART_ITEM',
-      payload: this.props.productInfo._id
+      payload: this.props.product._id
     })
   }
 
   render () {
     const product = this.props.product
     const image = product.imageData ? product.imageData[0].url : blank_image
-
-    console.log('order', product)
     return (
       <div className='order_card'>
         <div className='order_card_image_container'>
@@ -28,7 +26,7 @@ class OrderCard extends React.Component {
         <div className='order_card_contents'>
           <div className='order_content'>
             <div className='order_card_product_name'>{product.name}</div>
-            <div className='order_card_id'>#{product.product}</div>
+            <div className='order_card_id'>#{product._id}</div>
           </div>
           <div className='order_card_quantities'>
             <CartQuantity productInfo={product} />

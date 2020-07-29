@@ -8,6 +8,7 @@ const InputField = ({
   type,
   changeField,
   placeholder,
+  error,
 }) => {
   return (
     <div className={widthCSS}>

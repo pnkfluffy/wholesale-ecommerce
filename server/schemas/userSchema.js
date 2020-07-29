@@ -15,12 +15,6 @@ const UserSchema = new Schema({
   name: {
     type: String
   },
-  favorites: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'product'
-    }
-  ],
   paymentVerified: {
     type: Boolean,
     default: false
@@ -35,6 +29,12 @@ const UserSchema = new Schema({
   goCardlessMandate: {
     type: String
   },
+  favorites: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'product'
+    }
+  ],
   cart: [
     {
       product: {

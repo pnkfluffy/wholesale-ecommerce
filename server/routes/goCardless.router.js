@@ -1,15 +1,23 @@
-const express = require("express");
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
 
-const User = require('../schemas/userSchema');
-const Order = require('../schemas/orderSchema');
+const User = require('../schemas/userSchema')
+const Order = require('../schemas/orderSchema')
+
+/*validation*/
+const validateDeliverySizes = require('../validation/deliveryValidation');
+const USPS = require('usps-webtools');
 
 /*setup goCardless*/
-const gocardless = require("gocardless-nodejs");
-const constants = require("gocardless-nodejs/constants");
+const gocardless = require('gocardless-nodejs')
+const constants = require('gocardless-nodejs/constants')
 
 const initializeGoCardless = async () => {
 	const allClients = await gocardless(
+		// process.env.GC_LIVE_TOKEN,
+		// // Change this to constants.Environments.Live when you're ready to go live
+		// constants.Environments.Live,
+
 		process.env.GC_ACCESS_TOKEN,
 		// Change this to constants.Environments.Live when you're ready to go live
 		constants.Environments.Sandbox,
@@ -23,24 +31,34 @@ const initializeGoCardless = async () => {
 // @desc    Returns all clients
 // @access  Private
 router.get('/checkClientID', async (req, res) => {
-	if (req.user.goCardlessID)
-	{
-		res.send(true)
-	}
-	else
-		res.send(false)
+	User.findById(req.user._id)
+		.then(user => {
+			console.log(user);
+			if (user.goCardlessID)
+			{
+				res.send(true)
+			}
+			else
+				res.send(false)
+			res.json(true)
+		})
 });
 
 // @route   GET /gc/checkClient
 // @desc    Returns all clients
 // @access  Private
 router.get('/checkClientMandate', async (req, res) => {
-	if (req.user.goCardlessMandate)
-	{
-		res.send(true)
-	}
-	else
-		res.send(false)
+	User.findById(req.user._id)
+		.then(user => {
+			console.log(user);
+			if (user.goCardlessMandate)
+			{
+				res.send(true)
+			}
+			else
+				res.send(false)
+			res.json(true)
+		})
 });
 
 // @route   GET /gc/clients
@@ -145,15 +163,15 @@ router.post('/addClient', async (req, res) => {
 			session_token: req.user._id.toString(),
 			success_redirect_url: "http://localhost:3000/cart",
 
-			prefilled_customer: {
-				given_name: name,
-				family_name: lastName,
-				email: email,
-				address_line1: addr,
-				city: city,
-				postal_code: postalCode
-			}
-		});
+      prefilled_customer: {
+        given_name: name,
+        family_name: lastName,
+        email: email,
+        address_line1: addr,
+        city: city,
+        postal_code: postalCode
+      }
+    })
 
 		// The clientId will be saved in the database so It can
 		// be used to confirm the changes and
@@ -248,6 +266,41 @@ const getTotal = async products => {
 // @access  Private
 router.post('/collectPayment', async (req, res) => {
 	try {
+		//validate delivery sizes
+		const {errors, isValid} = validateDeliverySizes(req.body.delivery);
+		if (!isValid)
+		{
+			res.status(500).send({errors: errors});
+		} else {
+			const delivery = req.body.delivery;
+			const host = 'http://production.shippingapis.com/ShippingAPI.dll';
+			const userName = "314CBDDY8065";
+
+			const usps = new USPS({
+				server: host,
+				userId: userName,
+				ttl: 10000 //TTL in milliseconds for request
+			});
+
+			usps.zipCodeLookup({
+				street1: delivery.ClientAddr1,
+				street2: delivery.ClientAddr2,
+				city: delivery.city,
+				state: delivery.state,
+				zip: delivery.postal_code
+			}, async (err, address) => {
+				if (err !== null)
+				{
+					res.status(400).send({
+						errors:{
+							ClientAddr1: "Invalid Address. The problem may be also your postal code, state, city"
+						}
+					});
+					return;
+				}
+			});
+		}
+
 		//get the cart
 		const order = req.user.cart
 
@@ -321,14 +374,15 @@ router.post('/collectPayment', async (req, res) => {
 				    })
 				    .catch(err=>{
 				    	console.log(`Can't Update Database: ${err}`);
+						res.status(500).send({errors: {payment: "Your payment is done! But we couldn't connect to our database, contact us"}});
 				 	})
 		}) .catch(err => {
 			console.log(err);
-			res.status(500).send("Couldn't make payment")
+			res.status(500).send({errors: {payment: "Couldn't make payment"}})
 		})
 	} catch (error) {
 		console.log(error);
-		res.status(500).send('error making payment')
+		res.status(500).send({error: {payment: 'error making payment'}})
 	}
 });
 
@@ -338,6 +392,7 @@ router.post('/collectPayment', async (req, res) => {
 // @access  Private
 router.post('/changePayment/:orderID', async (req, res) => {
 	try {
+		//check validation
 		const allClients = await initializeGoCardless();
 
 		//get all the order information from DB
@@ -368,4 +423,4 @@ router.post('/changePayment/:orderID', async (req, res) => {
 	}
 });
 
-module.exports = router;
+module.exports = router

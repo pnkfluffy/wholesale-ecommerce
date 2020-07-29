@@ -364,14 +364,15 @@ router.post('/collectPayment', async (req, res) => {
 				    })
 				    .catch(err=>{
 				    	console.log(`Can't Update Database: ${err}`);
+						res.status(500).send({errors: {payment: "Your payment is done! But we couldn't connect to our database, contact us"}});
 				 	})
 		}) .catch(err => {
 			console.log(err);
-			res.status(500).send("Couldn't make payment")
+			res.status(500).send({errors: {payment: "Couldn't make payment"}})
 		})
 	} catch (error) {
 		console.log(error);
-		res.status(500).send('error making payment')
+		res.status(500).send({error: {payment: 'error making payment'}})
 	}
 });
 

@@ -108,7 +108,7 @@
 }
 
 .remove_from_cart_text:hover {
-    color: red;
+    color: var(--atention-red);
 }
 
 .cart_quantity {
@@ -157,4 +157,8 @@
   width: 20%;
   display: flex;
   flex-direction: column;
+}
+
+.err {
+    color: var(--atention-red);
 }

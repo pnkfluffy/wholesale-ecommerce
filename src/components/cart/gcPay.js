@@ -39,6 +39,7 @@ class GCPay extends React.Component {
                 postal_code: "",
                 state: "",
                 invalidAddr: "",
+                payment: "",
             }
         }
     }
@@ -247,6 +248,7 @@ class GCPay extends React.Component {
                             </div>
                         </form>
                         <div className='cart_button_area'>
+                            <span className="err">{this.state.err.payment}</span>
                             <GreenButton
                                 variant='contained'
                                 className='checkout_button'

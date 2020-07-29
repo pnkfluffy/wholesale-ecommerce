@@ -34,7 +34,7 @@ class Cart extends React.Component {
         <div className="cart_page">
           <div className='cart'>
             <div className='top_cart_area'>
-              <h1>cart</h1>
+              Cart
             </div>
             {this.props.state.cart.length ? (
               <div className='cart_body'>

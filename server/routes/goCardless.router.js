@@ -14,13 +14,9 @@ const constants = require('gocardless-nodejs/constants')
 
 const initializeGoCardless = async () => {
 	const allClients = await gocardless(
-		// process.env.GC_LIVE_TOKEN,
-		// // Change this to constants.Environments.Live when you're ready to go live
-		// constants.Environments.Live,
 
 		process.env.GC_ACCESS_TOKEN,
-		// Change this to constants.Environments.Live when you're ready to go live
-		constants.Environments.Sandbox,
+		constants.Environments.Live,
 		{ raiseOnIdempotencyConflict: true },
 	);
 
@@ -42,6 +38,7 @@ router.get('/checkClientID', async (req, res) => {
 				res.send(false)
 			res.json(true)
 		})
+		.catch(err => console.log(err))
 });
 
 // @route   GET /gc/checkClient
@@ -59,6 +56,7 @@ router.get('/checkClientMandate', async (req, res) => {
 				res.send(false)
 			res.json(true)
 		})
+		.catch(err => console.log(err))
 });
 
 // @route   GET /gc/clients
@@ -85,10 +83,10 @@ router.get('/clients', async (req, res) => {
 // @access  Private
 router.get('/oneClient', async (req, res) => {
 	try {
+		console.log(req.user);
 		const allClients =  await gocardless(
 			process.env.GC_ACCESS_TOKEN,
-			// Change this to constants.Environments.Live when you're ready to go live
-			constants.Environments.Sandbox,
+			constants.Environments.Live,
 			{ raiseOnIdempotencyConflict: true },
 		);
 		const theClient = await allClients.customers.find(req.user.goCardlessID)
@@ -159,7 +157,6 @@ router.post('/addClient', async (req, res) => {
 
 		const redirectFlow = await allClients.redirectFlows.create({
 			description: "Cider Barrels",
-			//to go live we need to have a token generator for each client
 			session_token: req.user._id.toString(),
 			success_redirect_url: "http://localhost:3000/cart",
 
@@ -266,6 +263,7 @@ const getTotal = async products => {
 // @access  Private
 router.post('/collectPayment', async (req, res) => {
 	try {
+		console.log(req.user);
 		//validate delivery sizes
 		const {errors, isValid} = validateDeliverySizes(req.body.delivery);
 		if (!isValid)
@@ -307,14 +305,18 @@ router.post('/collectPayment', async (req, res) => {
 		//initialize goCardless
 		const allClients =  await gocardless(
 			process.env.GC_ACCESS_TOKEN,
-			// Change this to constants.Environments.Live when you're ready to go live
-			constants.Environments.Sandbox,
+			constants.Environments.Live,
 			{ raiseOnIdempotencyConflict: true },
 		);
 
+
 		//set proper client currency to payment
 		//to go live needs to add other currencies
-		const theClient = await allClients.customers.find(req.user.goCardlessID);
+		const theClient = await allClients.customers.find(req.user.goCardlessID)
+													.catch(err => {
+																console.log("GC ID NOT FOUND");
+																res.status(500).send("GC id not found")
+															})
 		const clientCountry = theClient.country_code;
 		let currency;
 		if (clientCountry === "US")

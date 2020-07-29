@@ -33,11 +33,11 @@ import {
   ChipField,
   ArrayInput,
   SimpleFormIterator,
-  NumberInput
+  NumberInput,
+  NumberField
 } from 'react-admin'
 
 export const UserShow = props => {
-  console.log('usershow', props)
   return (
     <Show actions={<UserShowActions />} {...props}>
       <SimpleShowLayout>
@@ -57,17 +57,31 @@ export const UserShow = props => {
           source='id'
           reference='admin-orders'
           target='user'
+          link="show"
+        >
+          <Datagrid rowClick="show">
+            <TextField label="Total" source='total'/>
+            <TextField label="Date" source="date"/>
+            <TextField label="Product Purchased" source="products.length"/>
+          </Datagrid>
+        </ReferenceManyField>
+        <ReferenceManyField 
+          label="Reviews Written by this User"
+          source="id"
+          target="user"
+          reference="admin-reviews"
+          link="show"
         >
           <Datagrid>
-            <TextField label='Total' source='total' />
-            <TextField label='Date' source='date' />
-            <TextField label='Product Purchased' source='products.length' />
+            <ReferenceField label="Product" reference="admin-products" source="product">
+              <TextField source="name"/>
+            </ReferenceField>
+            <NumberField label="Rating" source="stars"/>
           </Datagrid>
         </ReferenceManyField>
         <TextField label='Database ID' source='id' />
         <TextField label='Google ID' source='googleID' />
         <TextField label='goCardless ID' source='goCardlessID' />
-        {/* <Button color="primary">See Order History</Button> */}
       </SimpleShowLayout>
     </Show>
   )
@@ -125,7 +139,6 @@ const UserShowActions = ({ basePath, data, resource }) => (
     <EditButton basePath={basePath} record={data} />
     <DeleteButton basePath={basePath} record={data} />
     <ListButton basePath={basePath} record={data} />
-    {/* Add your custom actions */}
   </TopToolbar>
 )
 const UserEditActions = ({ basePath, data, resource }) => (
@@ -133,6 +146,5 @@ const UserEditActions = ({ basePath, data, resource }) => (
     <ShowButton basePath={basePath} record={data} />
     <DeleteButton basePath={basePath} record={data} />
     <ListButton basePath={basePath} record={data} />
-    {/* Add your custom actions */}
   </TopToolbar>
 )

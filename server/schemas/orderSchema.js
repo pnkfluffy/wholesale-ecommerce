@@ -18,7 +18,7 @@ const OrderSchema = new Schema({
     },
   ],
   total: {
-    type: String,
+    type: Number,
   },
   deliveryInfo: {
     type: Object,

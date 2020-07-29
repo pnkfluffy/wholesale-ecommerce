@@ -114,9 +114,10 @@ class GCPay extends React.Component {
                if(err.response.data.errors){
                    this.setState({
                        err: err.response.data.errors,
-                       loading: false,
                    })
-                   console.log(this.state.err);
+               this.setState({
+                   loading: false
+               })
                }
             });
     }

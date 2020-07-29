@@ -31,24 +31,34 @@ const initializeGoCardless = async () => {
 // @desc    Returns all clients
 // @access  Private
 router.get('/checkClientID', async (req, res) => {
-	if (req.user.goCardlessID)
-	{
-		res.send(true)
-	}
-	else
-		res.send(false)
+	User.findById(req.user._id)
+		.then(user => {
+			console.log(user);
+			if (user.goCardlessID)
+			{
+				res.send(true)
+			}
+			else
+				res.send(false)
+			res.json(true)
+		})
 });
 
 // @route   GET /gc/checkClient
 // @desc    Returns all clients
 // @access  Private
 router.get('/checkClientMandate', async (req, res) => {
-	if (req.user.goCardlessMandate)
-	{
-		res.send(true)
-	}
-	else
-		res.send(false)
+	User.findById(req.user._id)
+		.then(user => {
+			console.log(user);
+			if (user.goCardlessMandate)
+			{
+				res.send(true)
+			}
+			else
+				res.send(false)
+			res.json(true)
+		})
 });
 
 // @route   GET /gc/clients

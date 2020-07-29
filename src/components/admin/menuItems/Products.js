@@ -14,6 +14,7 @@ import {
   NumberInput,
   DisabledInput,
   BooleanInput,
+  BooleanField,
   ImageInput,
   TextInput,
   DateInput,
@@ -113,6 +114,7 @@ export const ProductShow = props => {
 export const ProductList = props => (
   <List {...props}>
     <Datagrid actions={<ListActions />} rowClick='show'>
+      <BooleanField label="Draft" source="draft"/>
       <TextField label='Name' source='name' />
       <TextField label='Category' source='category' />
       <NumberField label='Price' source='price' options={{ style: 'currency', currency: 'USD' }}/>
@@ -229,6 +231,7 @@ export const ProductEdit = props => {
     >
       <SimpleForm>
         <TextInput disabled label='ID' source='id' />
+        <BooleanInput label="Draft (drafts are not displayed to users)" source="draft"/>
         <AutocompleteInput
           lablel='Category'
           source='category'

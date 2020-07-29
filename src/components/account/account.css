@@ -16,6 +16,7 @@ width: 50%;
 
 .favorite_product_card {
     display: flex;
+    min-height: 40px;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
@@ -39,9 +40,8 @@ width: 50%;
     object-fit: cover;
   }
   
-
-  
   .favorite_product_name {
+    margin-left: 15px;
     font-size: 1vw;
     width: 35%;
     color: var(--header-font-white);
@@ -71,13 +71,16 @@ width: 50%;
 
   .heart_container
   {
-    display: flex;
     border-radius: 50%;
     padding: 1vw;
     background-color: white;
     cursor: pointer;
   }
  
-  .heart_container > svg {
+  .favorite_product_heart{
     color: var(--logo-green);
+  }
+
+  .clean_css{
+    display: flex;
   }

@@ -1,6 +1,4 @@
 import React from "react";
-import axios from 'axios';
-import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import FavoriteProductCard from './favoriteProductCard'
 
@@ -10,24 +8,31 @@ const mapStateToProps = state => ({
 
 class Account extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
+    this.state = {
+      favoriteProductList: this.props.state.favorites
+    }
   }
 
-  render() {
-    const favoriteProductList = this.props.state.user.favorites;
+  renderProduct = (favoriteProductList) => {
     const allProductsList = this.props.state.products.products;
 
-    const renderProduct = allProductsList.map((product) => {
+    return allProductsList.map((product) => {
       if (favoriteProductList.indexOf(product._id) !== -1)
         {
           return (
           <FavoriteProductCard
           product={product}
           key={product._id}
+          images={product.imageData}
           />
           )
         }
       })
+  }
+
+
+  render() {
     return (
       <div>
         <h1>account</h1>
@@ -37,11 +42,12 @@ class Account extends React.Component {
         </div>
         <div className="section_container">
         <div>Favorites</div>
-        {renderProduct}
+        {this.renderProduct(this.props.state.favorites)}
         </div>
       </div>
       </div>
     );
   }
 }
+
 export default connect(mapStateToProps)(Account);

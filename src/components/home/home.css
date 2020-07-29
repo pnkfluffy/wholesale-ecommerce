@@ -71,9 +71,6 @@
   bottom: 0;
   margin: 5%;
   cursor: pointer;
-}
-
-.product_card_heart > svg {
   width: 8%;
   color: var(--logo-green);
 }

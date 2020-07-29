@@ -31,16 +31,14 @@ const favorites = (state = [], action) => {
       return action.payload
     case 'ADD_FAVORITE':
       const itemExists = state.find(c => c === action.payload)
-      console.log('exist', itemExists)
       if (itemExists) return state
       axios.post('/auth/updateFavorites', [...state, action.payload])
-
       return [...state, action.payload]
     case 'DELETE_FAVORITE':
       const deleteItemIndex = state.findIndex(c => c === action.payload)
       if (deleteItemIndex !== -1) state.splice(deleteItemIndex, 1)
-      axios.post('/auth/updateFavorites', state)
-      return state
+      axios.post('/auth/updateFavorites', state);
+      return [...state]
     default:
       return state
   }

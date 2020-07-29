@@ -11,8 +11,6 @@ import InputField from "../reuseable/InputField";
 import loading from "../../resources/images/loadingBig.svg"
 
 const USPS = require('usps-webtools');
-const validateDeliverySizes = require('./deliveryValidation');
-const objectIsEmpty = require('../reuseable/objectIsEmpty');
 
 const mapStateToProps = (state) => ({
   state: state.reducer,
@@ -72,92 +70,11 @@ class GCPay extends React.Component {
             });
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if(this.state.readyToPay)
-        {
-            console.log("ready to pay");
-            const fullName = this.state.ClientFirstName + " " + this.state.ClientLastName;
-            const delivery = {
-                ClientFirstName: this.state.ClientFirstName,
-                ClientLastName: this.state.ClientLastName,
-                ClientFullName: fullName,
-                ClientAddr1: this.state.ClientAddr1,
-                ClientAddr2: this.state.ClientAddr2,
-                city: this.state.ClientCity,
-                state: this.state.ClientState,
-                postal_code: this.state.ClientPostalCode,
-            }
-
-            axios
-                .post("gc/collectPayment/",
-                    {
-                        delivery: delivery
-                    })
-                .then(res => {
-                    this.setState({
-                        loading: false,
-                        paymentDone: true
-                    });
-
-                    //Clean the cart
-                    store.dispatch({ type: 'SET_CART', payload: [] })
-
-                    //Redirect to order page where all the information + receipt are available
-                    const url = "/order/" + res.data.order._id;
-                    this.props.history.push({
-                        pathname: url,
-                        state: {
-                            payment: res.data.payment,
-                            order: res.data.order
-                        }
-                    })
-                })
-                .catch((err) => {
-                    console.log(err.response.data);
-                    this.setState({
-                        err: err.response.data.errors,
-                        loading: false,
-                        paymentDone: false
-                    })
-                    console.log(this.state.err);
-                });
-        }
-    }
-    validateAddrInfo = async delivery => {
-        const host = 'http://production.shippingapis.com/ShippingAPI.dll';
-        const userName = "314CBDDY8065";
-
-        const usps = new USPS({
-            server: host,
-            userId: userName,
-            ttl: 10000 //TTL in milliseconds for request
-        });
-
-        usps.zipCodeLookup({
-            street1: delivery.ClientAddr1,
-            street2: delivery.ClientAddr2,
-            city: delivery.city,
-            state: delivery.state,
-            zip: delivery.postal_code
-        }, async (err, address) => {
-            if (err !== null)
-                this.setState({
-                    loading: false,
-                    err: {
-                        invalidAddr: "Invalid address. Check your postal code, address, city and state",
-                    }
-                });
-            else {
-                this.setState({
-                    err: {},
-                    readyToPay: true,
-                });
-            }
-        });
-    }
-
-    validateDeliveryInfo = async () =>
-    {
+    collectPayment = async e => {
+        e.preventDefault();
+        this.setState({
+            loading: true
+        })
         const fullName = this.state.ClientFirstName + " " + this.state.ClientLastName;
         const delivery = {
             ClientFirstName: this.state.ClientFirstName,
@@ -169,24 +86,39 @@ class GCPay extends React.Component {
             state: this.state.ClientState,
             postal_code: this.state.ClientPostalCode,
         }
-        const isValid = validateDeliverySizes(delivery);
-        if (!isValid.isValid)
-            this.setState({
-                err: isValid.errors,
-                loading: false
-            })
-        else {
-            //check for the address
-            await this.validateAddrInfo(delivery);
-        }
-    }
+        axios
+            .post("gc/collectPayment/",
+                {
+                    delivery: delivery
+                })
+            .then(res => {
+                this.setState({
+                    loading: false,
+                    paymentDone: true
+                });
 
-    collectPayment = async e => {
-        e.preventDefault();
-        this.setState({
-            loading: true
-        })
-        await this.validateDeliveryInfo();
+                //Clean the cart
+                store.dispatch({ type: 'SET_CART', payload: [] })
+
+                //Redirect to order page where all the information + receipt are available
+                const url = "/order/" + res.data.order._id;
+                this.props.history.push({
+                    pathname: url,
+                    state: {
+                        payment: res.data.payment,
+                        order: res.data.order
+                    }
+                })
+            })
+            .catch((err) => {
+               if(err.response.data.errors){
+                   this.setState({
+                       err: err.response.data.errors,
+                       loading: false,
+                   })
+                   console.log(this.state.err);
+               }
+            });
     }
 
     checkZipCode = zip => {

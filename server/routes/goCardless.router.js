@@ -4,6 +4,10 @@ const router = express.Router();
 const User = require('../schemas/userSchema');
 const Order = require('../schemas/orderSchema');
 
+/*validation*/
+const validateDeliverySizes = require('../validation/deliveryValidation');
+const USPS = require('usps-webtools');
+
 /*setup goCardless*/
 const gocardless = require("gocardless-nodejs");
 const constants = require("gocardless-nodejs/constants");
@@ -248,6 +252,41 @@ const getTotal = async products => {
 // @access  Private
 router.post('/collectPayment', async (req, res) => {
 	try {
+		//validate delivery sizes
+		const {errors, isValid} = validateDeliverySizes(req.body.delivery);
+		if (!isValid)
+		{
+			res.status(500).send({errors: errors});
+		} else {
+			const delivery = req.body.delivery;
+			const host = 'http://production.shippingapis.com/ShippingAPI.dll';
+			const userName = "314CBDDY8065";
+
+			const usps = new USPS({
+				server: host,
+				userId: userName,
+				ttl: 10000 //TTL in milliseconds for request
+			});
+
+			usps.zipCodeLookup({
+				street1: delivery.ClientAddr1,
+				street2: delivery.ClientAddr2,
+				city: delivery.city,
+				state: delivery.state,
+				zip: delivery.postal_code
+			}, async (err, address) => {
+				if (err !== null)
+				{
+					res.status(400).send({
+						errors:{
+							ClientAddr1: "Invalid Address. The problem may be also your postal code, state, city"
+						}
+					});
+					return;
+				}
+			});
+		}
+
 		//get the cart
 		const order = req.user.cart
 
@@ -338,6 +377,7 @@ router.post('/collectPayment', async (req, res) => {
 // @access  Private
 router.post('/changePayment/:orderID', async (req, res) => {
 	try {
+		//check validation
 		const allClients = await initializeGoCardless();
 
 		//get all the order information from DB

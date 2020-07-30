@@ -12,7 +12,7 @@ const Product = require('../schemas/productSchema')
 // @desc    Returns the order
 // @access  Private
 router.get('/oneOrder/:orderId', (req, res) => {
-  Order.findById(req.params.orderId)
+  Order.findById({_id: req.params.orderId, user: req.user._id}, { user: 0, paymentID: 0 })
     .then(order => res.json(order))
     .catch(error => {
       console.log(error)
@@ -24,7 +24,7 @@ router.get('/oneOrder/:orderId', (req, res) => {
 // @desc    Returns all orders from user
 // @access  Private
 router.get('/from', (req, res) => {
-  Order.find({ user: req.user._id })
+  Order.find({ user: req.user._id }, { user: 0, paymentID: 0 })
     .then(orders => {
         res.json(orders)
     })

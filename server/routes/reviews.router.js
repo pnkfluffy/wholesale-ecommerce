@@ -13,8 +13,10 @@ const Review = require('../schemas/reviewSchema')
 // @desc    Returns page_size reviews of page_number
 // @access  Private
 router.get('/all', (req, res) => {
-    Review.find().sort({date: -1})
-          .then(reviews => res.json(reviews))
+    Review.find({}, { user: 0}).sort({date: -1})
+          .then(reviews => {
+            res.json(reviews)
+          })
           .catch(error => {
              console.log(error)
              res.status(500).send('no reviews found')
@@ -24,14 +26,14 @@ router.get('/all', (req, res) => {
 // @route   GET /reviews/oneReview/:reviewId
 // @desc    Returns the specified review
 // @access  Private
-router.get('/oneReview/:reviewId', (req, res) => {
-    Order.findById(req.params.reviewId)
-        .then(review => res.json(review))
-        .catch(error => {
-            console.log(error)
-            res.status(500).send('review not found')
-        })
-})
+// router.get('/oneReview/:reviewId', (req, res) => {
+//     Order.findById(req.params.reviewId, { user: 0})
+//         .then(review => res.json(review))
+//         .catch(error => {
+//             console.log(error)
+//             res.status(500).send('review not found')
+//         })
+// })
 
 // @route   GET /reviews/from/
 // @desc    Returns page_size reviews of page_number from user
@@ -41,7 +43,7 @@ router.get('/oneReview/:reviewId', (req, res) => {
 router.get('/from/:page_size/:page_num', (req, res) => {
     const skips = req.params.page_size * (req.params.page_num - 1)
 
-    Review.find({ user: req.user._id })
+    Review.find({ user: req.user._id }, { user: 0})
         .skip(skips)
         .limit(parseInt(req.params.page_size, 10))
         .then(reviews => {
@@ -59,14 +61,14 @@ router.get('/from/:page_size/:page_num', (req, res) => {
 // @access  Private
 router.post('/newReview/:productID', (req, res) => {
     const userID = req.user._id
-    const userName = req.user.name
+    const userName = req.user.name.split(' ')
     const product = req.params.productID
     const review = req.body.review
     const stars = req.body.stars
 
     const newReview = new Review({
         user: userID,
-        userName: userName,
+        userName: userName[0],
         product: product,
         review: review,
         stars: stars
@@ -111,13 +113,13 @@ router.delete('/:reviewID', (req, res) => {
 // @route   DELETE /reviews/deleteAllReviewsFromUser
 // @desc    Deletes all the reviews made by active user
 // @access  Private
-router.delete('/deleteAllReviewsFromUser', (req, res) => {
-    Order.find({user: req.user._id})
-        .then(reviews => reviews.remove().then(() => res.json({ success: true })))
-        .catch(error => {
-            console.log(error)
-            res.status(500).send("Couldn't delete reviews")
-        })
-})
+// router.delete('/deleteAllReviewsFromUser', (req, res) => {
+//     Order.find({user: req.user._id})
+//         .then(reviews => reviews.remove().then(() => res.json({ success: true })))
+//         .catch(error => {
+//             console.log(error)
+//             res.status(500).send("Couldn't delete reviews")
+//         })
+// })
 
 module.exports = router

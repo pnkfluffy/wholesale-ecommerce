@@ -15,18 +15,22 @@ const rejectUnauthenticated = (req, res, next) => {
 }
 
 const rejectNonAdmin = async (req, res, next) => {
-	console.log(process.env.DEV_MODE);
+	console.log(req.isAuthenticated());
+	
+	if (process.env.DEV_MODE == 1) {
+		console.log('hi');
+
+		next()
+		return
+	}
 
 	if (req.isAuthenticated()) {
-		if (process.env.DEV_MODE === '1') {
-			console.log('hi');
-
-			next()
-		}
+		
 		let admin = await Admin.findOne({ _id: req.user._id })
 
 		if (admin) {
 			next()
+			return
 		} else {
 			req.logout()
 			res.status(403).send('user not admin')

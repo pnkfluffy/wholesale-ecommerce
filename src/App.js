@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 import Login from "./components/auth/login";
 import Logout from "./components/auth/logout";
 import ErrorPage404 from "./components/error/error404";
@@ -70,10 +70,12 @@ class App extends React.Component {
         <Switch>
           <Route
             exact
-            path='/admin'
+            path='/'
             render={props => <Admin history={this.props.history} {...props} />}
           />
-          <Route exact path='/*' component={AdminError404} />
+          <Route exact path='/*' component={AdminError404} >
+            <Redirect to="/" />
+          </Route>
         </Switch>
       </Router>
     )

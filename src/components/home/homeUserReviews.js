@@ -1,8 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { GreenButton } from '../reuseable/materialButtons'
-import ReviewsCard from "../reuseable/reviewsCard";
-import UserReviews from "../reuseable/userReviews";
+import ReviewsCard from '../reuseable/reviewsCard'
+import UserReviews from '../reuseable/userReviews'
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -18,37 +18,32 @@ class HomeUserReviews extends React.Component {
 
   printReviews = () => {
     const items = this.state.page * 5
-    let reviews = [];
+    let reviews = []
     /* paginate */
-    for (let i = items - 5; i < items; i++)
-    {
-      if (this.props.state.reviews[i])
-        reviews.push(this.props.state.reviews[i])
+    for (let i = items - 5; i < items; i++) {
+      if (this.props.state.reviews[i]) reviews.push(this.props.state.reviews[i])
     }
-    if (reviews[0])
-    {
+    if (reviews[0]) {
       return reviews.map(one => {
-        return <ReviewsCard review = {one}/>
+        return <ReviewsCard review={one} />
       })
     }
   }
 
   changePage = type => {
-    let page = this.state.page;
-    if (type)
-      page++;
-    else
-      page--;
+    let page = this.state.page
+    if (type) page++
+    else page--
     this.setState({
       page: page
     })
   }
   render () {
     return (
-        <div className="user_reviews_area">
-          <UserReviews reviews = {this.props.state.reviews}/>
-        </div>
+      <div className='user_reviews_area'>
+        <UserReviews reviews={this.props.state.reviews} />
+      </div>
     )
   }
 }
-export default connect(mapStateToProps)(HomeUserReviews);
+export default connect(mapStateToProps)(HomeUserReviews)

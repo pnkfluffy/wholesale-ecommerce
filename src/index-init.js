@@ -25,12 +25,13 @@ export const initializeAllRequests = async () => {
 
 export const getUserCart = () => {
   return axios
-    .get('/cart')
+    .get('/api/cart')
     .then(res => {
       if (res.data) {
         const filtered = res.data.filter(function (el) {
           return el != null
         })
+        console.log("getcart", res.data);
 
         store.dispatch({ type: 'SET_CART', payload: filtered })
       }
@@ -52,7 +53,7 @@ const categories = [
 const getAllCategories = () => {
   store.dispatch({ type: 'SET_CATEGORIES', payload: categories })
   // return axios
-  //   .get('/products/categories')
+  //   .get('/api/products/categories')
   //   .then(res => {
   //     console.log('categories here', res.data)
   //   store.dispatch({ type: 'SET_CATEGORIES', payload: res.data })
@@ -64,7 +65,7 @@ const getAllCategories = () => {
 
 export const getAllProducts = () => {
   return axios
-    .get('/products/all')
+    .get('/api/products/all')
     .then(res => {
       console.log(res)
       store.dispatch({ type: 'ADD_ALL_PRODUCTS', payload: res.data })
@@ -76,7 +77,7 @@ export const getAllProducts = () => {
 
 export const getAllReviews = () => {
   return axios
-    .get('/reviews/all')
+    .get('/api/reviews/all')
     .then(res => {
       store.dispatch({ type: 'ADD_REVIEWS', payload: res.data })
     })
@@ -86,7 +87,7 @@ export const getAllReviews = () => {
 export const getAllOrders = () => {
   //get all orders from user
   return axios
-    .get('orders/from')
+    .get('/api/orders/from')
     .then(res => {
       store.dispatch({ type: 'ADD_ORDERS', payload: res.data })
     })

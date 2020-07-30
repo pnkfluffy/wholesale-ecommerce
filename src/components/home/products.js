@@ -9,8 +9,10 @@ const mapStateToProps = state => ({
 
 class Products extends React.Component {
   print_products = () => {
-    //  made lowercase for comparison
-    const category = this.props.state.categories.category.toLowerCase()
+    //  made lowercase and replaces space with underscore
+    const category = this.props.state.categories.category
+      .toLowerCase()
+      .replace(/ /g, '_')
     const searchTerm = this.props.state.products.searchTerm
     let products = this.props.state.products.products
     let categorizedProducts = []

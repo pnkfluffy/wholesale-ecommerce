@@ -1,5 +1,6 @@
 import React from 'react'
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart'
+import Swal from 'sweetalert2'
 import { addQuantityToCart } from '../reuseable/addQuantityToCart'
 
 const PriceTierRow = ({ tier, addToCart }) => (
@@ -18,11 +19,20 @@ const PriceTierRow = ({ tier, addToCart }) => (
 
 class PriceTiers extends React.Component {
   addToCart = quantity => {
-    let product = this.props.product.product
-    product.quantity = quantity
-    product.product = this.props.product.product._id
-
-    addQuantityToCart(product)
+    Swal.fire({
+      title: `Add ${quantity} items to your cart`,
+      text: 'Are you sure?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#59BA47',
+    }).then(res => {
+      if (res.value) {
+        let product = this.props.product.product
+        product.quantity = quantity
+        product.product = this.props.product.product._id
+        addQuantityToCart(product)
+      }
+    })
   }
 
   render () {

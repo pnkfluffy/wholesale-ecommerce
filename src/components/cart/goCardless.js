@@ -73,7 +73,7 @@ class GoCardless extends React.Component {
 
   confirmAccount = () => {
     let params = new URLSearchParams(window.location.href)
-    if (params.has('http://localhost:3000/cart?redirect_flow_id')) {
+    if (params.has('https://wholesale-portal-testing.herokuapp.com/cart?redirect_flow_id')) {
       this.setState({
         loading: true
       })
@@ -98,10 +98,11 @@ class GoCardless extends React.Component {
           })
           this.props.history.push('/cart')
         })
-    } else if (localStorage.getItem('gc')) {
-      const url =
-        'https://pay.gocardless.com/flow/' + localStorage.getItem('gc')
-      window.open(url, '_self')
+    } else {
+      this.setState({
+        hasClientID: false,
+        loading: false
+      })
     }
   }
 
@@ -109,17 +110,17 @@ class GoCardless extends React.Component {
     return (
       <div className='buy'>
         {(() => {
-          if (this.state.loading) {
-            return <img src={loading} />
-          } else if (!this.state.hasClientID) {
-            return <GCFillInfo total={this.props.total} />
-          } else if (!this.state.hasMandate) {
-            {
-              this.confirmAccount()
-            }
-          } else {
+          // if (this.state.loading) {
+          //   return <img src={loading} />
+          // } else if (!this.state.hasClientID) {
+          //   return <GCFillInfo total={this.props.total} />
+          // } else if (!this.state.hasMandate) {
+          //   {
+          //     this.confirmAccount()
+          //   }
+          // } else {
             return <GCPay total={this.props.total} />
-          }
+          // }
         })()}
       </div>
     )

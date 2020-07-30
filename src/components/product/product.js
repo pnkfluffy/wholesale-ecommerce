@@ -11,12 +11,9 @@ import { addQuantityToCart } from '../reuseable/addQuantityToCart'
 import { getPriceByQuantity } from '../reuseable/getPriceByQuantity'
 import { GreenButton } from '../reuseable/materialButtons'
 
-
-
 const mapStateToProps = state => ({
   state: state.reducer
 })
-
 
 class Product extends React.Component {
   constructor (props) {
@@ -90,23 +87,23 @@ class Product extends React.Component {
       <div className='product_page'>
         <div className='product_page_main'>
           <div className='product_page_top'>
-            <ProductImages images={product.imageData} productID={product._id}/>
+            <ProductImages images={product.imageData} productID={product._id} />
             <div className='product_page_info'>
               <div className='product_info'>
-                <div className='product_description_container'>
-                  <div className='product_page_info_top'>
-                    <div className='product_title'>{product.name}</div>
-                    <ProductQuantity
-                      productID={this.props.match.params.productID}
-                      quantity={this.state.quantity}
-                      changeQuantity={this.changeQuantity}
-                    />
-                  </div>
-                  <PriceTiers tiers={product.priceTiers} product={this.state} />
+                <div className='product_page_info_top'>
+                  <div className='product_title'>{product.name}</div>
                 </div>
-                <div className='product_overview_container'>
-                  <div className='product_overview_title'>Overview</div>
-                  <ProductMetaData metaData={product.metaData} />
+                <ProductMetaData metaData={product.metaData} />
+                <PriceTiers tiers={product.priceTiers} product={this.state} />
+                <div className='product_quantity_container'>
+                  <div className='product_price'>
+                    $<div className='price_price'>{totalPrice}</div>
+                  </div>
+                  <ProductQuantity
+                    productID={this.props.match.params.productID}
+                    quantity={this.state.quantity}
+                    changeQuantity={this.changeQuantity}
+                  />
                 </div>
               </div>
               <div className='product_purchase'>
@@ -117,9 +114,6 @@ class Product extends React.Component {
                 >
                   Add To Cart
                 </GreenButton>
-                <div className='product_price'>
-                  $<div className='price_price'>{totalPrice}</div>
-                </div>
               </div>
             </div>
           </div>

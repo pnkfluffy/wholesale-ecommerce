@@ -99,7 +99,7 @@ class GCPay extends React.Component {
         })
 
         //Clean the cart
-        console.log("collecting payment");
+        console.log('collecting payment')
         store.dispatch({ type: 'EMPTY_CART', payload: [] })
 
         //Redirect to order page where all the information + receipt are available
@@ -170,109 +170,91 @@ class GCPay extends React.Component {
 
   render () {
     if (this.state.loading) {
-      return <img src={loading} />
+      return <img src={loading} alt='loading' />
     } else if (!this.state.paymentDone) {
       return (
         <div className='gcpay_form_area'>
-          <h1>Delivery Information</h1>
-          <div className='gcpay_center'>
-            <form noValidate className='gc_form'>
-              <div className='gcpay_input'>
-                <InputField
-                  widthCSS='full'
-                  title='First Name *'
-                  name='ClientFirstName'
-                  value={this.state.ClientFirstName}
-                  type='text'
-                  changeField={this.onChange}
-                  placeholder=''
-                />
-                <span className='err'>{this.state.err.ClientFirstName}</span>
-              </div>
-              <div className='gcpay_input'>
-                <InputField
-                  widthCSS='full'
-                  title='Family Name *'
-                  name='ClientLastName'
-                  value={this.state.ClientLastName}
-                  type='text'
-                  changeField={this.onChange}
-                  placeholder=''
-                />
-                <span className='err'>{this.state.err.ClientLastName}</span>
-              </div>
-              <div className='gcpay_input'>
-                <InputField
-                  widthCSS='full'
-                  title='Postal Code *'
-                  name='ClientPostalCode'
-                  value={this.state.ClientPostalCode}
-                  type='number'
-                  changeField={this.onChange}
-                  placeholder=''
-                />
-                <span className='err'>{this.state.err.postal_code}</span>
-              </div>
-              <div className='gcpay_input'>
-                <InputField
-                  widthCSS='full'
-                  title='Address Line 1 *'
-                  name='ClientAddr1'
-                  value={this.state.ClientAddr1}
-                  type='text'
-                  changeField={this.onChange}
-                  placeholder=''
-                />
-                <span className='err'>{this.state.err.ClientAddr1}</span>
-                <span className='err'>{this.state.err.invalidAddr}</span>
-              </div>
-              <div className='gcpay_input'>
-                <InputField
-                  widthCSS='full'
-                  title='Address Line 2'
-                  name='ClientAddr2'
-                  value={this.state.ClientAddr2}
-                  type='text'
-                  changeField={this.onChange}
-                  placeholder=''
-                />
-                <span className='err'>{this.state.err.ClientAddr2}</span>
-              </div>
-              <div className='gcpay_input'>
-                <InputField
-                  widthCSS='full'
-                  title='City *'
-                  name='ClientCity'
-                  value={this.state.ClientCity}
-                  type='text'
-                  changeField={this.onChange}
-                  placeholder=''
-                />
-                <span className='err'>{this.state.err.city}</span>
-              </div>
-              <div className='gcpay_input'>
-                <InputField
-                  widthCSS='full'
-                  title='State *'
-                  name='ClientState'
-                  value={this.state.ClientState}
-                  type='text'
-                  changeField={this.onChange}
-                  placeholder=''
-                />
-                <span className='err'>{this.state.err.state}</span>
-              </div>
-            </form>
-            <div className='cart_button_area'>
-              <span className='err'>{this.state.err.payment}</span>
-              <GreenButton
-                variant='contained'
-                className='checkout_button'
-                onClick={this.collectPayment}
-              >
-                CHECK OUT: ${this.props.total}
-              </GreenButton>
-            </div>
+          <div className='payment_header'>Delivery Information</div>
+          <form noValidate className='gc_form'>
+            <InputField
+              widthCSS='gc_input'
+              title='First Name'
+              name='ClientFirstName'
+              value={this.state.ClientFirstName}
+              type='text'
+              changeField={this.onChange}
+              placeholder=''
+              error={this.state.err.ClientFirstName}
+            />
+            <InputField
+              widthCSS='gc_input'
+              title='Last Name'
+              name='ClientLastName'
+              value={this.state.ClientLastName}
+              type='text'
+              changeField={this.onChange}
+              placeholder=''
+              error={this.state.err.ClientLastName}
+            />
+            <InputField
+              widthCSS='gc_input'
+              title='Postal Code'
+              name='ClientPostalCode'
+              value={this.state.ClientPostalCode}
+              type='number'
+              changeField={this.onChange}
+              placeholder=''
+              error={this.state.err.postal_code}
+            />
+            <InputField
+              widthCSS='gc_input'
+              title='Address Line 1'
+              name='ClientAddr1'
+              value={this.state.ClientAddr1}
+              type='text'
+              changeField={this.onChange}
+              placeholder=''
+              error={this.state.err.ClientAddr1}
+            />
+            <InputField
+              widthCSS='gc_input'
+              title='Address Line 2'
+              name='ClientAddr2'
+              value={this.state.ClientAddr2}
+              type='text'
+              changeField={this.onChange}
+              placeholder=''
+            />
+            <InputField
+              widthCSS='gc_input'
+              title='City'
+              name='ClientCity'
+              value={this.state.ClientCity}
+              type='text'
+              changeField={this.onChange}
+              placeholder=''
+              error={this.state.err.city}
+            />
+            <InputField
+              widthCSS='gc_input'
+              title='State'
+              name='ClientState'
+              value={this.state.ClientState}
+              type='text'
+              changeField={this.onChange}
+              placeholder=''
+              error={this.state.err.state}
+            />
+          </form>
+          <div className='cart_button_area'>
+            <span className='err'>{this.state.err.payment}</span>
+            <GreenButton
+              variant='contained'
+              className='checkout_button'
+              onClick={this.collectPayment}
+            >
+              CHECK OUT: ${this.props.total}
+            </GreenButton>
           </div>
         </div>
       )

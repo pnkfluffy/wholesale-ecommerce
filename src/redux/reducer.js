@@ -50,6 +50,7 @@ const favorites = (state = [], action) => {
 const cart = (state = [], action) => {
   switch (action.type) {
     case 'SET_CART':
+      updateCartServer([action.payload])
       return action.payload
     case 'ADD_TO_CART':
       updateCartServer([...state, action.payload])

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Provider } from 'react-redux'
-import { createHashHistory } from 'history'
+import createHistory from 'history/createBrowserHistory';
 import { Admin, Resource, fetchUtils } from 'react-admin'
 import defaultMessages from 'ra-language-english'
 import polyglotI18nProvider from 'ra-i18n-polyglot'
@@ -29,7 +29,7 @@ const i18nProvider = polyglotI18nProvider(locale => {
   return defaultMessages
 })
 
-const history = createHashHistory()
+const history = createHistory()
 
 const AdminSetup = () => (
   <Provider

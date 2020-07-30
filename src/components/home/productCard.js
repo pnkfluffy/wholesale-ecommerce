@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import AddToCartButton from './addToCartButton'
 import { withRouter } from 'react-router-dom'
 import FavoriteIcon from '@material-ui/icons/Favorite'

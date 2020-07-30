@@ -72,6 +72,7 @@ body {
 
 a {
   text-decoration: none;
+  color: inherit;
 }
 
 input::-webkit-outer-spin-button,
@@ -134,7 +135,7 @@ select:-webkit-autofill:focus {
   transition: background-color 5000s ease-in-out 0s;
 }
 
-@import url(//db.onlinewebfonts.com/c/d4f20dfedfdf197ed0ac52b09bf25551?family=GT+Walsheim+Pro+Medium);
+@import url('https://db.onlinewebfonts.com/c/d4f20dfedfdf197ed0ac52b09bf25551?family=GT+Walsheim+Pro+Medium');
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
 @import "./components/sidebar/sidebar.css";

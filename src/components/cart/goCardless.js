@@ -98,10 +98,11 @@ class GoCardless extends React.Component {
           })
           this.props.history.push('/cart')
         })
-    } else if (localStorage.getItem('gc')) {
-      const url =
-        'https://pay.gocardless.com/flow/' + localStorage.getItem('gc')
-      window.open(url, '_self')
+    } else {
+      this.setState({
+        hasClientID: false,
+        loading: false
+      })
     }
   }
 

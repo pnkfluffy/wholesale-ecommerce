@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { GreenButton } from './materialButtons'
 import ReviewsCard from './reviewsCard'
+import { withRouter } from 'react-router-dom'
 
 class UserReviews extends React.Component {
   constructor (props) {
@@ -34,50 +35,46 @@ class UserReviews extends React.Component {
     })
   }
   render () {
+    const onHomePage = Object.keys(this.props.match.params).length === 0
+
     return (
       <div className='user_reviews'>
-        <div className="home_header_text">Reviews</div>
-        <div>
-          {this.printReviews()}
-        </div>
-        <div className="user_reviews_buttons_area">
+        <div className='page_header'>{onHomePage && 'Recent '}Reviews</div>
+        <div>{this.printReviews()}</div>
+        <div className='user_reviews_buttons_area'>
           {(() => {
             if (this.state.page > 1) {
               return (
-                  <GreenButton
-                      variant='contained'
-                      className='reviews_button'
-                      onClick={e => this.changePage(false)}
-                  >
-                    previous
-                  </GreenButton>
+                <GreenButton
+                  variant='contained'
+                  className='reviews_button'
+                  onClick={e => this.changePage(false)}
+                >
+                  previous
+                </GreenButton>
               )
             }
           })()}
           {(() => {
-          if (this.state.page * 3 >= this.props.reviews.length) {
-            return (
-                <div className='reviews_button_ghost'/>
-            )
-          }
+            if (this.state.page * 3 >= this.props.reviews.length) {
+              return <div className='reviews_button_ghost' />
+            }
           })()}
           {(() => {
             if (this.state.page == 1) {
-              return (
-                  <div className='reviews_button_ghost'/>
-              )
+              return <div className='reviews_button_ghost' />
             }
           })()}
           {(() => {
             if (this.state.page * 3 < this.props.reviews.length) {
               return (
-                  <GreenButton
-                      variant='contained'
-                      className='reviews_button'
-                      onClick={e => this.changePage(true)}
-                  >
-                    next
-                  </GreenButton>
+                <GreenButton
+                  variant='contained'
+                  className='reviews_button'
+                  onClick={e => this.changePage(true)}
+                >
+                  next
+                </GreenButton>
               )
             }
           })()}
@@ -86,4 +83,4 @@ class UserReviews extends React.Component {
     )
   }
 }
-export default UserReviews
+export default withRouter(UserReviews)

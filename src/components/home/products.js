@@ -54,7 +54,7 @@ class Products extends React.Component {
         : this.props.state.categories.category
     return (
       <div className='products'>
-        <div className='home_header_text'>
+        <div className='home_header_text page_header'>
           Discover New&nbsp;
           <div className='home_header_category'>{category}</div>
         </div>

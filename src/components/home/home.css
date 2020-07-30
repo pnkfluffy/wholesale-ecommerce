@@ -12,9 +12,7 @@
 }
 
 .home_header_text {
-  font-size: 1.5vw;
   display: flex;
-  padding-bottom: 3vh;
 }
 
 .home_header_category {

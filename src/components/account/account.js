@@ -35,7 +35,7 @@ class Account extends React.Component {
   render() {
     return (
       <div>
-        <h1>account</h1>
+        <div className="page_header">Account</div>
         <div className="account_container">
         <div className="section_container" onClick={this.printPayments}>
             Order History

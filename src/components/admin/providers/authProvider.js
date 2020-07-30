@@ -11,7 +11,7 @@ export default {
   // called when the user attempts to log in
   login: ({ username, password }) => {
     password = shajs('sha256').update(password).digest('hex')
-    const request = new Request(`/admin-users/login`, {
+    const request = new Request(`/api/admin-users/login`, {
       method: 'POST',
       body: JSON.stringify({ username, password }),
       headers: new Headers({ 'Content-Type': 'application/json' })
@@ -23,6 +23,7 @@ export default {
           
           throw new Error(response.statusText);
         }
+        window.location.href = '/'
         cookie.set('sig', response.data)
         return Promise.resolve()
       })
@@ -34,12 +35,13 @@ export default {
 
   // called when the user clicks on the logout button
   logout: () => {
-    const request = new Request(`/admin-users/logout`, {
+    const request = new Request(`/api/admin-users/logout`, {
       method: 'GET',
       headers: new Headers({ 'Content-Type': 'application/json' })
     })
     return fetch(request).then(response => {
       cookie.remove('sig')
+      // window.location.href = '/admin'
       return Promise.resolve()
     })
   },

@@ -25,7 +25,7 @@ class CreateReview extends React.Component {
         this.setState({
             loading: true
         })
-        axios.post('/reviews/newReview/' + this.props.productID, this.state)
+        axios.post('/api/reviews/newReview/' + this.props.productID, this.state)
              .then(res => {
                  this.setState({
                      loading:false,

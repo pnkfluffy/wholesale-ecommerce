@@ -42,18 +42,18 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 /*Routers*/
-app.use('/gc', gcRouter)
+app.use('/api/gc', gcRouter)
 app.use('/auth', userRouter)
-app.use('/cart', cartRouter)
-app.use('/orders', orderRouter)
-app.use('/products', productRouter)
-app.use('/reviews', reviewRouter)
+app.use('/api/cart', cartRouter)
+app.use('/api/orders', orderRouter)
+app.use('/api/products', productRouter)
+app.use('/api/reviews', reviewRouter)
 
-app.use('/admin-products', adminProductRouter)
-app.use('/admin-users', adminUserRouter)
-app.use('/admin-orders', adminOrderRouter)
-app.use('/admin-reviews', adminReviewRouter)
-app.use('/admin-users', adminUserRouter)
+app.use('/api/admin-products', adminProductRouter)
+app.use('/api/admin-users', adminUserRouter)
+app.use('/api/admin-orders', adminOrderRouter)
+app.use('/api/admin-reviews', adminReviewRouter)
+app.use('/api/admin-users', adminUserRouter)
 
 app.get('/*', function (req, res) {
   res.sendFile(path.join(__dirname, '../build/index.html'), function (err) {

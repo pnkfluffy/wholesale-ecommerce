@@ -56,7 +56,7 @@ class Product extends React.Component {
 
   componentDidMount () {
     axios
-      .get('/products/' + this.props.match.params.productID)
+      .get('/api/products/' + this.props.match.params.productID)
       .then(res => {
         console.log('res', res.data)
         this.setState({

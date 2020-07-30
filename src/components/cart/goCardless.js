@@ -73,7 +73,7 @@ class GoCardless extends React.Component {
 
   confirmAccount = () => {
     let params = new URLSearchParams(window.location.href)
-    if (params.has('http://localhost:3000/cart?redirect_flow_id')) {
+    if (params.has('https://wholesale-portal-testing.herokuapp.com/cart?redirect_flow_id')) {
       this.setState({
         loading: true
       })
@@ -98,10 +98,11 @@ class GoCardless extends React.Component {
           })
           this.props.history.push('/cart')
         })
-    } else if (localStorage.getItem('gc')) {
-      const url =
-        'https://pay.gocardless.com/flow/' + localStorage.getItem('gc')
-      window.open(url, '_self')
+    } else {
+      this.setState({
+        hasClientID: false,
+        loading: false
+      })
     }
   }
 

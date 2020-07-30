@@ -83,13 +83,19 @@ router.get('/clients', async (req, res) => {
 // @access  Private
 router.get('/oneClient', async (req, res) => {
 	try {
-		console.log(req.user);
+		const activeUser = User.findById(req.user_id)
+								.catch(err => {
+									console.log(err);
+									res.status(500).send("Couldn't find user in db")}
+								);
+
 		const allClients =  await gocardless(
 			process.env.GC_LIVE_TOKEN,
 			constants.Environments.Live,
 			{ raiseOnIdempotencyConflict: true },
 		);
-		const theClient = await allClients.customers.find(req.user.goCardlessID)
+
+		const theClient = await allClients.customers.find(activeUser.goCardlessID)
 		res.send(theClient);
 	} catch (error) {
 		console.log(error);
@@ -158,7 +164,7 @@ router.post('/addClient', async (req, res) => {
 		const redirectFlow = await allClients.redirectFlows.create({
 			description: "Cider Barrels",
 			session_token: req.user._id.toString(),
-			success_redirect_url: process.env.REDIR_URL + "/cart",
+			success_redirect_url: "https://wholesale-portal-testing.herokuapp.com/cart",
 
       prefilled_customer: {
         given_name: name,
@@ -263,7 +269,6 @@ const getTotal = async products => {
 // @access  Private
 router.post('/collectPayment', async (req, res) => {
 	try {
-		console.log(req.user);
 		//validate delivery sizes
 		const {errors, isValid} = validateDeliverySizes(req.body.delivery);
 		if (!isValid)
@@ -299,8 +304,10 @@ router.post('/collectPayment', async (req, res) => {
 			});
 		}
 
+		const activeUser = await User.findById(req.user._id)
+									 .catch(err => console.log(err))
 		//get the cart
-		const order = req.user.cart
+		const order = activeUser.cart
 
 		//initialize goCardless
 		const allClients =  await gocardless(
@@ -312,7 +319,7 @@ router.post('/collectPayment', async (req, res) => {
 
 		//set proper client currency to payment
 		//to go live needs to add other currencies
-		const theClient = await allClients.customers.find(req.user.goCardlessID)
+		const theClient = await allClients.customers.find(activeUser.goCardlessID)
 													.catch(err => {
 																console.log("GC ID NOT FOUND");
 																res.status(500).send("GC id not found")
@@ -350,7 +357,7 @@ router.post('/collectPayment', async (req, res) => {
 				currency: currency,
 				links: {
 					//getting the mandate from database
-					mandate: req.user.goCardlessMandate
+					mandate: activeUser.goCardlessMandate
 				},
 				metadata: {
 					invoice_number: "001"
@@ -364,7 +371,7 @@ router.post('/collectPayment', async (req, res) => {
 				    .then(() => {
 				    	//Clean the cart in db
 						User.updateOne(
-							{ _id: req.user.id },
+							{ _id: req.user._id },
 							{ cart: [] })
 							.catch(err => console.log("couldn't clean cart"))
 

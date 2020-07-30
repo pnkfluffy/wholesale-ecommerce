@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux'
+import axios from 'axios'
 import { updateCartServer } from './functions'
 
 const initialUser = {
   name: '',
+  favorites:[],
   admin: false
 }
 
@@ -21,6 +23,25 @@ const loaded = (state = false, action) => {
   switch (action.type) {
     case 'APP_LOADED':
       return true
+    default:
+      return state
+  }
+}
+
+const favorites = (state = [], action) => {
+  switch (action.type) {
+    case 'SET_FAVORITES':
+      return action.payload
+    case 'ADD_FAVORITE':
+      const itemExists = state.find(c => c === action.payload)
+      if (itemExists) return state
+      axios.post('/auth/updateFavorites', [...state, action.payload])
+      return [...state, action.payload]
+    case 'DELETE_FAVORITE':
+      const deleteItemIndex = state.findIndex(c => c === action.payload)
+      if (deleteItemIndex !== -1) state.splice(deleteItemIndex, 1)
+      axios.post('/auth/updateFavorites', state);
+      return [...state]
     default:
       return state
   }
@@ -116,6 +137,7 @@ const reviews = (state = [], action) => {
 
 export default combineReducers({
   user,
+  favorites,
   categories,
   cart,
   products,

@@ -1,8 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
-import FavoriteIcon from '@material-ui/icons/Favorite'
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
+
 import ProductQuantity from './productQuantity'
 import UserReviews from './productUserReviews'
 import ProductImages from './productImages'
@@ -12,9 +11,12 @@ import { addQuantityToCart } from '../reuseable/addQuantityToCart'
 import { getPriceByQuantity } from '../reuseable/getPriceByQuantity'
 import { GreenButton } from '../reuseable/materialButtons'
 
+
+
 const mapStateToProps = state => ({
   state: state.reducer
 })
+
 
 class Product extends React.Component {
   constructor (props) {
@@ -88,7 +90,7 @@ class Product extends React.Component {
       <div className='product_page'>
         <div className='product_page_main'>
           <div className='product_page_top'>
-            <ProductImages images={product.imageData} />
+            <ProductImages images={product.imageData} productID={product._id}/>
             <div className='product_page_info'>
               <div className='product_info'>
                 <div className='product_description_container'>

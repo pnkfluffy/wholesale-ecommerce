@@ -25,9 +25,46 @@ router.get(
 
 router.get('/user', rejectUnauthenticated, (req, res) => {
   let user = {
-    name: req.user.name
+    name: req.user.name,
+    favorites: req.user.favorites
   }
   res.send(user)
+})
+
+router.post('/update-user', rejectUnauthenticated, async (req, res) => {
+  try {
+    await User.updateOne(
+      { _id: req.user.id },
+      {
+        positionX: req.body.x,
+        positionY: req.body.y,
+        locked: req.body.locked
+      }
+    )
+    res.sendStatus(200)
+  } catch (error) {
+    console.log(error)
+    res.status(500).send('error updating user')
+  }
+})
+
+router.post('/updateFavorites', rejectUnauthenticated, async (req, res) => {
+  const favorites = req.body
+  console.log("update favs", req.user._id);
+  User.findById({ _id: req.user._id })
+    .then(user => {
+      user
+        .updateOne({ favorites })
+        .then(() => res.json(user.favorites))
+        .catch(error => {
+          console.log(error)
+          res.status(500).send("Couldn't edit favorites products array")
+        })
+    })
+    .catch(error => {
+      console.log(error)
+      res.status(500).send("Couldn't edit favorites products array")
+    })
 })
 
 router.get('/login-uri', (req, res) => {

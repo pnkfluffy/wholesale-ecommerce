@@ -90,7 +90,8 @@ class GoCardless extends React.Component {
                         hasClientID: true,
                         loading: false
                     })
-                    window.open("http://localhost:3000/cart", "_self");
+                    this.props.history.push("/cart");
+                    this.props.history.push("/cart");
                     localStorage.removeItem("gc");
                 })
                 .catch(err => {
@@ -98,10 +99,10 @@ class GoCardless extends React.Component {
                     this.setState({
                         loading: false
                     })
-                    window.open("http://localhost:3000/cart", "_self");
+                    this.props.history.push("/cart");
                 });
         } else if (localStorage.getItem("gc")) {
-            const url = "https://pay-sandbox.gocardless.com/flow/" + localStorage.getItem("gc");
+            const url = "https://pay.gocardless.com/flow/" + localStorage.getItem("gc");
             window.open(url, "_self");
         }
     }

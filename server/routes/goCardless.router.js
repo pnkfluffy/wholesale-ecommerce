@@ -15,7 +15,7 @@ const constants = require('gocardless-nodejs/constants')
 const initializeGoCardless = async () => {
 	const allClients = await gocardless(
 
-		process.env.GC_ACCESS_TOKEN,
+		process.env.GC_LIVE_TOKEN,
 		constants.Environments.Live,
 		{ raiseOnIdempotencyConflict: true },
 	);
@@ -85,7 +85,7 @@ router.get('/oneClient', async (req, res) => {
 	try {
 		console.log(req.user);
 		const allClients =  await gocardless(
-			process.env.GC_ACCESS_TOKEN,
+			process.env.GC_LIVE_TOKEN,
 			constants.Environments.Live,
 			{ raiseOnIdempotencyConflict: true },
 		);
@@ -158,7 +158,7 @@ router.post('/addClient', async (req, res) => {
 		const redirectFlow = await allClients.redirectFlows.create({
 			description: "Cider Barrels",
 			session_token: req.user._id.toString(),
-			success_redirect_url: "http://localhost:3000/cart",
+			success_redirect_url: process.env.REDIR_URL + "/cart",
 
       prefilled_customer: {
         given_name: name,
@@ -304,7 +304,7 @@ router.post('/collectPayment', async (req, res) => {
 
 		//initialize goCardless
 		const allClients =  await gocardless(
-			process.env.GC_ACCESS_TOKEN,
+			process.env.GC_LIVE_TOKEN,
 			constants.Environments.Live,
 			{ raiseOnIdempotencyConflict: true },
 		);

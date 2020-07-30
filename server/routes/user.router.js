@@ -50,8 +50,8 @@ router.post('/update-user', rejectUnauthenticated, async (req, res) => {
 
 router.post('/updateFavorites', rejectUnauthenticated, async (req, res) => {
   const favorites = req.body
-  console.log("update favs");
-  User.findById({ _id: req.user.id })
+  console.log("update favs", req.user._id);
+  User.findById({ _id: req.user._id })
     .then(user => {
       user
         .updateOne({ favorites })

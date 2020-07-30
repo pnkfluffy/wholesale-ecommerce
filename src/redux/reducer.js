@@ -4,7 +4,7 @@ import { updateCartServer } from './functions'
 
 const initialUser = {
   name: '',
-  favorites:[]
+  favorites:[],
   admin: false
 }
 

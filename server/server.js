@@ -63,6 +63,6 @@ app.get('/*', function (req, res) {
   })
 })
 
-server.listen(PORT, () => {
+server.listen(process.env.PORT || 5000, () => {
   console.log(`listening on port: ${PORT}`)
 })

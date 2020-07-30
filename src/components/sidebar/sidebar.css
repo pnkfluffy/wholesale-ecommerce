@@ -85,7 +85,7 @@
     justify-content: space-between;
     font-size: 0.6vw;
 }
-.sidebar_footer_text > a {
+.light_green {
     color: var(--light-hyperlink-green);
 }
 

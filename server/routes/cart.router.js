@@ -10,7 +10,7 @@ const {
 router.get('/', rejectUnauthenticated, async (req, res) => {
   try {
     let cart = req.user.cart
-    console.log("get cart", cart)
+    console.log('get cart', cart)
     if (!cart) {
       res.status(200).send('no cart')
       return
@@ -48,6 +48,7 @@ router.post('/', rejectUnauthenticated, async (req, res) => {
         cart: req.body.cart
       }
     )
+    console.log(user);
     res.json(user.cart)
   } catch (error) {
     console.log(error)

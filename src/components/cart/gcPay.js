@@ -99,6 +99,7 @@ class GCPay extends React.Component {
         })
 
         //Clean the cart
+        console.log("collecting payment");
         store.dispatch({ type: 'SET_CART', payload: [] })
 
         //Redirect to order page where all the information + receipt are available

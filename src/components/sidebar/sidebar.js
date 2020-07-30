@@ -55,9 +55,22 @@ class Sidebar extends React.Component {
             accordance with the farm bill
           </p>
           <p className='sidebar_footer_text'>
-            <a>customer support</a>, <a>privacy policy</a>,
-            <a> terms and conditions</a>, 2020{' '}
-            <a className='dark_green'>Cbddy</a>, All rights reserved
+            <a className='light_green' href='tel:5551234567'>
+              customer support
+            </a>
+            ,{' '}
+            <a className='light_green' href='https://cbddy.com/privacy-policy/'>
+              privacy policy
+            </a>
+            ,
+            <a
+              className='light_green'
+              href='https://cbddy.com/terms-and-conditions/'
+            >
+              {' '}
+              terms and conditions
+            </a>
+            , 2020 <a className='dark_green'>Cbddy</a>, All rights reserved
           </p>
         </div>
       </div>

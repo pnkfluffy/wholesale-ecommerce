@@ -24,7 +24,7 @@ class Products extends React.Component {
       categorizedProducts = products
     } else {
       products.forEach(product => {
-        if (category === product.category.toLowerCase())
+        if (product.category && category === product.category.toLowerCase())
           categorizedProducts.push(product)
       })
     }

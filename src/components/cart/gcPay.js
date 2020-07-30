@@ -49,7 +49,7 @@ class GCPay extends React.Component {
       loading: true
     })
     axios
-      .get('gc/oneClient')
+      .get('/api/gc/oneClient')
       .then(res => {
         console.log(res.data)
         this.setState({
@@ -89,7 +89,7 @@ class GCPay extends React.Component {
       postal_code: this.state.ClientPostalCode
     }
     axios
-      .post('gc/collectPayment/', {
+      .post('/api/gc/collectPayment/', {
         delivery: delivery
       })
       .then(res => {

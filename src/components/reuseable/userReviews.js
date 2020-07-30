@@ -76,7 +76,7 @@ class UserReviews extends React.Component {
               }
             })()}
             {(() => {
-              if (this.state.page * this.state.perPage >= this.props.reviews.length) {
+              if (this.state.page * this.state.perPage >= this.props.reviews.length && this.state.page !== 1) {
                 return (
                   <div
                     className='reviews_button'

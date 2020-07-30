@@ -102,19 +102,11 @@
   flex-wrap: nowrap;
   flex-direction: row;
   justify-content: space-between;
-  margin-bottom: 5%;
 }
 
 .product_title,
 .product_overview_title {
   font-size: 1.4vw;
-}
-
-.product_overview_container {
-  height: 40%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
 }
 
 .product_overview_title {
@@ -124,7 +116,7 @@
 }
 
 .product_meta_data {
-  height: 60%;
+  height: 22%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -165,17 +157,24 @@
   font-size: 0.6vw;
 }
 
+.product_quantity_container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 10%;
+  padding-right: 10%;
+}
 
 .product_purchase {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   height: 15%;
   margin-top: 5%;
 }
 
 .product_button {
-  width: 60%;
+  width: 80%;
 }
 
 .product_price {
@@ -221,6 +220,7 @@
   flex-direction: row;
   justify-content: right;
   width: 20%;
+  min-width: 7vw;
   height: 100%;
   max-height: 44px;
   border-radius: 10px;
@@ -263,7 +263,12 @@
 .price_table {
   width: 100%;
   border-collapse: collapse;
-  color: var(--paragraph-font-grey)
+  color: var(--paragraph-font-grey);
+}
+
+tr > *:not(:last-child),
+th > *:not(:last-child) {
+  width: 29%;
 }
 
 .price_table_row > th,

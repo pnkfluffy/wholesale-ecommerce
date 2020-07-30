@@ -108,7 +108,7 @@ class GCFillInfo extends React.Component {
             className='checkout_button'
             onClick={this.addClients}
           >
-            CHECK OUT: ${this.props.total}
+            connect bank
           </GreenButton>
       </div>
     )

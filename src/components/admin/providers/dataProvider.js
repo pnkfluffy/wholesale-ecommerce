@@ -3,7 +3,6 @@ import * as React from 'react'
 import { stringify } from "query-string";
 import { ConnectionStates } from "mongoose";
 
-const apiUrl = "http://localhost:5000";
 const httpClient = fetchUtils.fetchJson;
 
 const displayErrorMessage = (props) => {
@@ -27,7 +26,7 @@ export default {
       range: JSON.stringify([(page - 1) * perPage, page * perPage - 1]),
       filter: JSON.stringify(params.filter),
     };
-    const url = `${apiUrl}/${resource}?${stringify(query)}`;
+    const url = `/${resource}?${stringify(query)}`;
     console.log("getList url", url)
     return httpClient(url).then(({ headers, json }) => {
       console.log("getList dataprovider method hit")
@@ -43,8 +42,8 @@ export default {
   },
 
   getOne: (resource, params) => {
-    console.log(`getOne url: ${apiUrl}/${resource}/${params.id}`)
-    return httpClient(`${apiUrl}/${resource}/${params.id}`)
+    console.log(`getOne url: /${resource}/${params.id}`)
+    return httpClient(`/${resource}/${params.id}`)
     .then(({ json }) => {
       console.log("json: ", {data: json});
       return { data: json };
@@ -60,7 +59,7 @@ export default {
     const query = {
       filter: JSON.stringify({ id: params.ids })
     };
-    const url = `${apiUrl}/${resource}?${stringify(query)}`;
+    const url = `/${resource}?${stringify(query)}`;
     console.log("url: ", url)
     return httpClient(url).then(({ json }) => {
       console.log("getMany response: ", {data: json})
@@ -83,7 +82,7 @@ export default {
         [params.target]: params.id,
       }),
     };
-    const url = `${apiUrl}/${resource}?${stringify(query)}`;
+    const url = `/${resource}?${stringify(query)}`;
 
     return (httpClient(url).then(({ headers, json }) => {
       return {
@@ -97,9 +96,9 @@ export default {
   },
 
   update: (resource, params) => {
-    const url = `${apiUrl}/${resource}/${params.id}}`;
+    const url = `/${resource}/${params.id}}`;
     console.log("UPDATING UPDATING UPDATING", url);
-    return httpClient(`${apiUrl}/${resource}/${params.id}`, {
+    return httpClient(`/${resource}/${params.id}`, {
       method: "PUT",
       body: JSON.stringify(params.data),
     }).then(({ json }) => {
@@ -115,7 +114,7 @@ export default {
     const query = {
       filter: JSON.stringify({ id: params.ids }),
     };
-    return httpClient(`${apiUrl}/${resource}?${stringify(query)}`, {
+    return httpClient(`/${resource}?${stringify(query)}`, {
       method: "PUT",
       body: JSON.stringify(params.data),
     }).then(({ json }) => {
@@ -126,7 +125,7 @@ export default {
   create: (resource, params) => {
     console.log("create");
 
-    return httpClient(`${apiUrl}/${resource}`, {
+    return httpClient(`/${resource}`, {
       method: "POST",
       body: JSON.stringify(params.data),
     }).then(({ json }) => {
@@ -138,7 +137,7 @@ export default {
   delete: (resource, params) => {
     console.log("delete");
 
-    return httpClient(`${apiUrl}/${resource}/${params.id}`, {
+    return httpClient(`/${resource}/${params.id}`, {
       method: "DELETE",
     }).then(({ json }) => {
      return {data: json};
@@ -151,7 +150,7 @@ export default {
     const query = {
       filter: JSON.stringify({ id: params.ids }),
     };
-    return httpClient(`${apiUrl}/${resource}?${stringify(query)}`, {
+    return httpClient(`/${resource}?${stringify(query)}`, {
       method: "DELETE",
       body: JSON.stringify(params.data),
     }).then(({ json }) => ({ data: json }));

@@ -39,8 +39,7 @@
 
 .product_images_carousel {
   display: flex;
-  flex-wrap: nowrap;
-  justify-content: space-between;
+  justify-content: left;
   height: 15%;
 }
 
@@ -49,13 +48,30 @@
   width: 18%;
   border-radius: 15px;
   border: 2px solid;
+  margin-left: 2.1vw;
 }
 
 .carousel_image_container {
   border-color: transparent;
+  margin-left: 2.1vw;
 }
 
 .carousel_image_container_active {
+  border-color: rgba(89, 186, 71, 1);
+}
+
+.static_carousel_image_container,
+.static_carousel_image_container_active {
+  width: 18%;
+  border-radius: 15px;
+  border: 2px solid;
+}
+
+.static_carousel_image_container {
+  border-color: transparent;
+}
+
+.static_carousel_image_container_active {
   border-color: rgba(89, 186, 71, 1);
 }
 

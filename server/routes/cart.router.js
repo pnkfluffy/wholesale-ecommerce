@@ -9,8 +9,8 @@ const {
 
 router.get('/', rejectUnauthenticated, async (req, res) => {
   try {
-    let cart = req.user.cart
-    console.log('get cart', cart)
+    const user = await User.findById(req.user._id)
+    const cart = user.cart;
     if (!cart) {
       res.status(200).send('no cart')
       return
@@ -42,13 +42,13 @@ router.post('/', rejectUnauthenticated, async (req, res) => {
   try {
     console.log(req.body.cart)
     console.log(req.user._id)
-    const user = await User.updateOne(
+    const user = await User.findOneAndUpdate(
       { _id: req.user._id },
       {
         cart: req.body.cart
       }
     )
-    console.log(user);
+    console.log(user)
     res.json(user.cart)
   } catch (error) {
     console.log(error)

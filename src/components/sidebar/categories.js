@@ -1,6 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
+import { withRouter } from 'react-router-dom'
+
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -8,6 +10,9 @@ const mapStateToProps = state => ({
 
 class Categories extends React.Component {
   setCategory = category => {
+    if (window.location !== '/') {
+      this.props.history.push('/')
+    }
     this.props.dispatch({ type: 'UPDATE_CATEGORY', payload: category })
   }
 
@@ -49,4 +54,4 @@ class Categories extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(Categories)
+export default withRouter(connect(mapStateToProps)(Categories))

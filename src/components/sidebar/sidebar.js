@@ -17,7 +17,7 @@ const mapStateToProps = state => ({
 })
 
 class Sidebar extends React.Component {
-  render () {
+  render() {
     const location = window.location.pathname
     console.log('location', location)
 
@@ -54,26 +54,29 @@ class Sidebar extends React.Component {
             all products contain <a className='dark_green'>&#60;0.3%</a> thc in
             accordance with the farm bill
           </p>
-          <p className='sidebar_footer_text'>
+          <p className='sidebar_subfooter_text'>
             <a className='light_green' href='tel:5551234567'>
               customer support
             </a>
-            ,{' '}
+          </p>
+          <p className='sidebar_subfooter_text'>
             <a className='light_green' href='https://cbddy.com/privacy-policy/'>
               privacy policy
             </a>
-            ,
+          </p>
+          <p className='sidebar_subfooter_text'>
             <a
               className='light_green'
               href='https://cbddy.com/terms-and-conditions/'
             >
-              {' '}
               terms and conditions
             </a>
-            , 2020 <a className='dark_green'>Cbddy</a>, All rights reserved
+          </p>
+          <p className='sidebar_subfooter_text'>
+            2020 <a className='dark_green'>Cbddy</a>, All rights reserved
           </p>
         </div>
-      </div>
+      </div >
     )
   }
 }

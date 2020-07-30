@@ -92,3 +92,7 @@
 .sidebar_footer_text > .dark_green {
     color: var(--dark-hyperlink-green)
 }
+
+.sidebar_subfooter_text {
+    margin: 2%;
+}

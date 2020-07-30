@@ -4,6 +4,7 @@ import { GreenButton } from './materialButtons'
 import ReviewsCard from './reviewsCard'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
+import FirstPageIcon from '@material-ui/icons/FirstPage';
 import { withRouter } from 'react-router-dom'
 
 class UserReviews extends React.Component {
@@ -82,7 +83,7 @@ class UserReviews extends React.Component {
                     className='reviews_button'
                     onClick={this.first}
                   >
-                    <NavigateBeforeIcon />
+                    <FirstPageIcon />
                   </div>
                 )
               }

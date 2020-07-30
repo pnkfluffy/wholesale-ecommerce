@@ -36,6 +36,7 @@ html {
   width: 100%;
   margin: 0px;
   font-family: "GT Walsheim Pro Medium";
+  overflow: hidden;
 }
 
 html {

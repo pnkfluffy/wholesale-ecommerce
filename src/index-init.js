@@ -31,6 +31,7 @@ export const getUserCart = () => {
         const filtered = res.data.filter(function (el) {
           return el != null
         })
+        console.log("getcart", res.data);
 
         store.dispatch({ type: 'SET_CART', payload: filtered })
       }

@@ -4,7 +4,7 @@ import { updateCartServer } from './functions'
 
 const initialUser = {
   name: '',
-  favorites:[],
+  favorites: [],
   admin: false
 }
 
@@ -40,7 +40,7 @@ const favorites = (state = [], action) => {
     case 'DELETE_FAVORITE':
       const deleteItemIndex = state.findIndex(c => c === action.payload)
       if (deleteItemIndex !== -1) state.splice(deleteItemIndex, 1)
-      axios.post('/auth/updateFavorites', state);
+      axios.post('/auth/updateFavorites', state)
       return [...state]
     default:
       return state
@@ -50,7 +50,7 @@ const favorites = (state = [], action) => {
 const cart = (state = [], action) => {
   switch (action.type) {
     case 'SET_CART':
-      updateCartServer([action.payload])
+    // if (action.payload.length) updateCartServer([action.payload])
       return action.payload
     case 'ADD_TO_CART':
       updateCartServer([...state, action.payload])

@@ -4,6 +4,7 @@ import { GreenButton } from './materialButtons'
 import ReviewsCard from './reviewsCard'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
+import { withRouter } from 'react-router-dom'
 
 class UserReviews extends React.Component {
   constructor(props) {
@@ -96,20 +97,5 @@ class UserReviews extends React.Component {
     )
   }
 }
-export default UserReviews
 
-
-// {(() => {
-//   if (this.state.page * 3 >= this.props.reviews.length) {
-//     return (
-//         <div className='reviews_button_ghost'/>
-//     )
-//   }
-//   })()}
-//   {(() => {
-//     if (this.state.page == 1) {
-//       return (
-//           <div className='reviews_button_ghost'/>
-//       )
-//     }
-//   })()}
+export default withRouter(UserReviews)

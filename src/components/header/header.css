@@ -67,6 +67,7 @@
   display: flex;
   justify-content: space-between;
   flex-wrap: nowrap;
+  border-radius: 8px;;
 }
 
 .header_username {
@@ -79,7 +80,7 @@
   background-color: var(--searchbar-black);
   top: 11vh;
   width: 9vw;
-  margin-left: 7.5vw;
+  margin-left: 9vw;
   border-radius: 0.5vw;
 }
 

@@ -13,7 +13,7 @@ const InputField = ({
   return (
     <div className={widthCSS}>
       <div className="raffle_input_title">{title}</div>
-      <div className="input_container">
+      <div className={`input_container  + ${error && "input_error"}`}>
         <input
           name={name}
           type={type}

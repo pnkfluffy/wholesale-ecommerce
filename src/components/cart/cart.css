@@ -153,6 +153,10 @@
   margin-bottom: 5%;
 }
 
+.cart_button_area {
+  width: 100%;
+}
+
 .checkout_button {
   width: 100%;
 }

@@ -110,17 +110,17 @@ class GoCardless extends React.Component {
     return (
       <div className='buy'>
         {(() => {
-          if (this.state.loading) {
-            return <img src={loading} />
-          } else if (!this.state.hasClientID) {
-            return <GCFillInfo total={this.props.total} />
-          } else if (!this.state.hasMandate) {
-            {
-              this.confirmAccount()
-            }
-          } else {
+          // if (this.state.loading) {
+          //   return <img src={loading} />
+          // } else if (!this.state.hasClientID) {
+          //   return <GCFillInfo total={this.props.total} />
+          // } else if (!this.state.hasMandate) {
+          //   {
+          //     this.confirmAccount()
+          //   }
+          // } else {
             return <GCPay total={this.props.total} />
-          }
+          // }
         })()}
       </div>
     )

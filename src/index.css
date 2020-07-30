@@ -13,19 +13,18 @@
 } */
 
 :root {
-  --logo-green: #59BA47;
+  --logo-green: #59ba47;
   --light-hyperlink-green: #72bd57;
-  --dark-hyperlink-green: #33743A;
+  --dark-hyperlink-green: #33743a;
 
   --header-font-white: #cccccc;
-  --paragraph-font-grey: #B4B5B7;
-  --nofocus-font-grey: #75777A;
+  --paragraph-font-grey: #b4b5b7;
+  --nofocus-font-grey: #75777a;
 
-  --sidebar-black: #16181D;
+  --sidebar-black: #16181d;
   --searchbar-black: #1a1b20;
-  --background-grey: #1E2026;
+  --background-grey: #1e2026;
   --input-grey: #2d2f36;
-
 
   --attention-red: #c10606;
 }
@@ -35,14 +34,13 @@ html {
   height: 100%;
   width: 100%;
   margin: 0px;
-  font-family: "GT Walsheim Pro Medium";
+  font-family: 'GT Walsheim Pro Medium';
 }
 
 html {
   background-color: var(--sidebar-black);
   color: var(--header-font-white);
 }
-
 
 body {
   box-shadow: 0 2px 10px rgba(14, 14, 14, 0.5);
@@ -89,7 +87,7 @@ input::-webkit-inner-spin-button {
 }
 
 .icon_upsidedown {
-  transform: rotate(180deg)
+  transform: rotate(180deg);
 }
 
 .full {
@@ -119,6 +117,10 @@ input::-webkit-inner-spin-button {
   color: var(--header-font-white);
 }
 
+.input_error {
+  border: 1px solid red;
+}
+
 .page_header {
   font-size: 1.5vw;
   margin-top: 1vh;
@@ -126,7 +128,7 @@ input::-webkit-inner-spin-button {
 }
 
 input:-webkit-autofill,
-input:-webkit-autofill:hover, 
+input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 textarea:-webkit-autofill,
 textarea:-webkit-autofill:hover,
@@ -140,24 +142,33 @@ select:-webkit-autofill:focus {
   transition: background-color 5000s ease-in-out 0s;
 }
 
-
-@font-face {font-family: "GT Walsheim Pro Medium";
-  src: url("https://db.onlinewebfonts.com/t/d4f20dfedfdf197ed0ac52b09bf25551.eot"); /* IE9*/
-  src: url("https://db.onlinewebfonts.com/t/d4f20dfedfdf197ed0ac52b09bf25551.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
-  url("https://db.onlinewebfonts.com/t/d4f20dfedfdf197ed0ac52b09bf25551.woff2") format("woff2"), /* chrome firefox */
-  url("https://db.onlinewebfonts.com/t/d4f20dfedfdf197ed0ac52b09bf25551.woff") format("woff"), /* chrome firefox */
-  url("https://db.onlinewebfonts.com/t/d4f20dfedfdf197ed0ac52b09bf25551.ttf") format("truetype"), /* chrome firefox opera Safari, Android, iOS 4.2+*/
-  url("https://db.onlinewebfonts.com/t/d4f20dfedfdf197ed0ac52b09bf25551.svg#GT Walsheim Pro Medium") format("svg"); /* iOS 4.1- */
+@font-face {
+  font-family: 'GT Walsheim Pro Medium';
+  src: url('https://db.onlinewebfonts.com/t/d4f20dfedfdf197ed0ac52b09bf25551.eot'); /* IE9*/
+  src: url('https://db.onlinewebfonts.com/t/d4f20dfedfdf197ed0ac52b09bf25551.eot?#iefix')
+      format('embedded-opentype'),
+    /* IE6-IE8 */
+      url('https://db.onlinewebfonts.com/t/d4f20dfedfdf197ed0ac52b09bf25551.woff2')
+      format('woff2'),
+    /* chrome firefox */
+      url('https://db.onlinewebfonts.com/t/d4f20dfedfdf197ed0ac52b09bf25551.woff')
+      format('woff'),
+    /* chrome firefox */
+      url('https://db.onlinewebfonts.com/t/d4f20dfedfdf197ed0ac52b09bf25551.ttf')
+      format('truetype'),
+    /* chrome firefox opera Safari, Android, iOS 4.2+*/
+      url('https://db.onlinewebfonts.com/t/d4f20dfedfdf197ed0ac52b09bf25551.svg#GT Walsheim Pro Medium')
+      format('svg'); /* iOS 4.1- */
 }
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
-@import "./components/sidebar/sidebar.css";
-@import "./components/header/header.css";
-@import "./components/home/home.css";
-@import "./components/product/product.css";
-@import "./components/account/account.css";
-@import "./components/auth/auth.css";
-@import "./components/cart/cart.css";
-@import "./components/settings/settings.css";
-@import "./components/orderHistory/orderHistory.css";
-@import "./components/error/error.css";
+@import './components/sidebar/sidebar.css';
+@import './components/header/header.css';
+@import './components/home/home.css';
+@import './components/product/product.css';
+@import './components/account/account.css';
+@import './components/auth/auth.css';
+@import './components/cart/cart.css';
+@import './components/settings/settings.css';
+@import './components/orderHistory/orderHistory.css';
+@import './components/error/error.css';

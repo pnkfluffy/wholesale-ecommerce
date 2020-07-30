@@ -50,7 +50,6 @@ const favorites = (state = [], action) => {
 const cart = (state = [], action) => {
   switch (action.type) {
     case 'SET_CART':
-    // if (action.payload.length) updateCartServer([action.payload])
       return action.payload
     case 'ADD_TO_CART':
       updateCartServer([...state, action.payload])
@@ -69,6 +68,9 @@ const cart = (state = [], action) => {
       state.splice(deleteItemIndex, 1)
       updateCartServer([...state])
       return [...state]
+    case 'EMPTY_CART':
+      updateCartServer([])
+      return []
     default:
       return state
   }

@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import FavoritesHeart from '../reuseable/favoritesHeart'
+import FavoritesHeart from './src/components/reuseable/favoritesHeart'
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -16,7 +16,7 @@ const CarouselImage = ({ image, select, index, activeIndex }) => {
       <img className='carousel_image' src={image} alt='single_product_image' />
     </div>
   )
-}
+
 
 class ProductImages extends React.Component {
   constructor (props) {
@@ -55,7 +55,7 @@ class ProductImages extends React.Component {
             src={this.props.images[this.state.active].url}
           />
           {this.props.productID && (
-            <FavoritesHeart productID={this.props.productID} chooseStyle={false}/>
+            <FavoritesHeart productID={this.props.productID} />
           )}
         </div>
         <div className='product_images_carousel'>{carouselImages}</div>

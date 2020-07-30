@@ -12,7 +12,7 @@ const Product = require('../schemas/productSchema')
 // @desc    Returns all products
 // @access  Private
 router.get('/all', (req, res) => {
-  Product.find()
+  Product.find({draft: false})
     .then(products => res.json(products))
     .catch(error => {
       console.log(error)
@@ -48,4 +48,5 @@ router.get('/:id', (req, res) => {
     })
 })
 
-module.exports = router
+
+module.exports = router;

@@ -1,22 +1,20 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import AddToCartButton from './addToCartButton'
+import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import FavoriteIcon from '@material-ui/icons/Favorite'
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 
 import blank_image from '../../resources/images/blank_image.jpg'
+
+const mapStateToProps = state => ({
+  state: state.reducer
+})
 
 class ProductCard extends React.Component {
   goToProduct = e => {
     const redirect_url = '/product/' + this.props.product._id.toString()
     e.stopPropagation()
     this.props.history.push(redirect_url)
-  }
-
-  favoriteProduct = e => {
-    e.stopPropagation()
-    //  {!} BUILD OUT!
   }
 
   render () {
@@ -28,7 +26,7 @@ class ProductCard extends React.Component {
     const units = metaData.units.quantity + metaData.units.unit
 
     return (
-      <div className='product_card' onClick={this.goToProduct}>
+        <div className='product_card' onClick={this.goToProduct}>
         <div className='product_card_image'>
           <img alt='product_image' src={image} />
         </div>
@@ -57,4 +55,4 @@ class ProductCard extends React.Component {
     )
   }
 }
-export default withRouter(ProductCard)
+export default connect(mapStateToProps)(withRouter(ProductCard))

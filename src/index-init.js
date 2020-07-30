@@ -11,6 +11,7 @@ export const initializeAllRequests = async () => {
       store.dispatch({ type: 'APP_LOADED' })
       //  only fires if user get successfull
       store.dispatch({ type: 'GET_USER', payload: res.data })
+      store.dispatch({ type: 'SET_FAVORITES', payload: res.data.favorites })
       await getAllReviews()
       await getUserCart()
       await getAllOrders()

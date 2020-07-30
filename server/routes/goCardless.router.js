@@ -164,7 +164,7 @@ router.post('/addClient', async (req, res) => {
 		const redirectFlow = await allClients.redirectFlows.create({
 			description: "Cider Barrels",
 			session_token: req.user._id.toString(),
-			success_redirect_url: process.env.REDIR_URL + "/cart",
+			success_redirect_url: "https://wholesale-portal-testing.herokuapp.com/cart",
 
       prefilled_customer: {
         given_name: name,

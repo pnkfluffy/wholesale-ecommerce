@@ -18,7 +18,7 @@ class Order extends React.Component {
     }
 
     componentDidMount() {
-        axios.get('/gc/payments/from')
+        axios.get('/api/gc/payments/from')
             .then(res => this.setState({
                                  payments: res.data
                             })
@@ -49,7 +49,7 @@ class Order extends React.Component {
         this.props.history.push(url)
 
         //save cart in db
-        axios.post('/cart/', {cart: order.products})
+        axios.post('/api/cart/', {cart: order.products})
              .catch(err => console.log(err))
     }
 

@@ -17,7 +17,7 @@ class OrderHistory extends React.Component {
     }
 
     componentDidMount() {
-        axios.get('/gc/payments/from')
+        axios.get('/api/gc/payments/from')
             .then(res => this.setState({
                                  payments: res.data
                             })

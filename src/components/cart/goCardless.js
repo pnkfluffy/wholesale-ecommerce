@@ -32,7 +32,7 @@ class GoCardless extends React.Component {
   checkClientCGID = () => {
     console.log('checking client id')
     axios
-      .get('gc/checkClientID')
+      .get('/api/gc/checkClientID')
       .then(res => {
         if (res.data) {
           console.log('got client id')
@@ -53,7 +53,7 @@ class GoCardless extends React.Component {
 
   checkClientMandate = () => {
     axios
-      .get('gc/checkClientMandate')
+      .get('/api/gc/checkClientMandate')
       .then(res => {
         if (res.data) {
           this.setState({
@@ -80,7 +80,7 @@ class GoCardless extends React.Component {
       const id = localStorage.getItem('gc')
       console.log(id)
       axios
-        .post('/gc/completeRedirect', { id: id })
+        .post('/api/gc/completeRedirect', { id: id })
         .then(res => {
           this.setState({
             hasMandate: true,

@@ -10,15 +10,16 @@ class UserReviews extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      page: 1
+      page: 1,
+      perPage: 5,
     }
   }
 
   printReviews = () => {
-    const items = this.state.page * 3
+    const items = this.state.page * this.state.perPage
     let reviews = []
     /* paginate */
-    for (let i = items - 3; i < items; i++) {
+    for (let i = items - this.state.perPage; i < items; i++) {
       if (this.props.reviews[i]) reviews.push(this.props.reviews[i])
     }
     if (reviews[0]) {
@@ -54,7 +55,7 @@ class UserReviews extends React.Component {
           Reviews
           <div>
             {(() => {
-              if (this.state.page * 3 < this.props.reviews.length) {
+              if (this.state.page * this.state.perPage < this.props.reviews.length) {
                 return (
                   <div className='reviews_button' onClick={this.forward}>
                     <NavigateNextIcon />
@@ -63,7 +64,7 @@ class UserReviews extends React.Component {
               }
             })()}
             {(() => {
-              if (this.state.page > 1 && this.state.page * 3 < this.props.reviews.length) {
+              if (this.state.page > 1 && this.state.page * this.state.perPage < this.props.reviews.length) {
                 return (
                   <div
                     className='reviews_button'
@@ -75,7 +76,7 @@ class UserReviews extends React.Component {
               }
             })()}
             {(() => {
-              if (this.state.page * 3 === this.props.reviews.length) {
+              if (this.state.page * this.state.perPage >= this.props.reviews.length) {
                 return (
                   <div
                     className='reviews_button'

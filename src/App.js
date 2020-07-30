@@ -68,16 +68,13 @@ class App extends React.Component {
     let adminRoutes = (
       <Router>
         <Switch>
-          <Route exact path='/'>
-            <Redirect to="/admin" />
-          </Route>
           <Route
             exact
-            path='/admin'
+            path='/'
             render={props => <Admin history={this.props.history} {...props} />}
           />
           <Route exact path='/*' component={AdminError404} >
-            <Redirect to="/admin" />
+            <Redirect to="/" />
           </Route>
         </Switch>
       </Router>

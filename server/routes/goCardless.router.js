@@ -37,9 +37,11 @@ router.get('/checkClientID', async (req, res) => {
 			}
 			else
 				res.send(false)
-			res.json(true)
 		})
-		.catch(err => console.log(err))
+		.catch(err => {
+			console.log(err)
+			res.status(500).send('error getting client ID')
+		})
 });
 
 // @route   GET /gc/checkClient
@@ -55,9 +57,11 @@ router.get('/checkClientMandate', async (req, res) => {
 			}
 			else
 				res.send(false)
-			res.json(true)
 		})
-		.catch(err => console.log(err))
+		.catch(err => {
+		console.log(err)
+		res.status(500).send('error getting client ID')
+	})
 });
 
 // @route   GET /gc/clients

@@ -1,6 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import store from '../../redux/store'
+import Swal from 'sweetalert2'
 
 import { GreenButton } from '../reuseable/materialButtons'
 import { compose } from 'redux'
@@ -114,10 +115,9 @@ class GCPay extends React.Component {
       })
       .catch(err => {
         if (err.response.data.errors) {
+          Swal.fire('ERROR:', err.response.data.errors, 'error')
           this.setState({
-            err: err.response.data.errors
-          })
-          this.setState({
+            err: err.response.data.errors,
             loading: false
           })
         }

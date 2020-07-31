@@ -1,7 +1,7 @@
 import React from 'react'
-import AddToCartButton from './addToCartButton'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
+import { GreenButton } from '../reuseable/materialButtons'
 
 import blank_image from '../../resources/images/blank_image.jpg'
 
@@ -49,7 +49,15 @@ class ProductCard extends React.Component {
             <sub>{units}</sub>
           </span>
         </div>
-        <AddToCartButton product={this.props.product} />
+        <div className='product_card_button_container'>
+        <GreenButton
+          variant='contained'
+          className='add_to_cart_button'
+          onClick={this.addToCart}
+        >
+          VIEW ITEM : ${this.props.product.price}
+        </GreenButton>
+      </div>
       </div>
     )
   }

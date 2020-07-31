@@ -2,8 +2,12 @@ import React from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
 import logo from '../../resources/images/cbddy_logo_small.png'
+import AuthField from './AuthField'
 import shajs from 'sha.js'
 import googleIcon from '../../resources/images/google_button_icon.png'
+import MailOutlineIcon from '@material-ui/icons/MailOutline'
+import VpnKeyIcon from '@material-ui/icons/VpnKey'
+import { LightGreenButton } from '../reuseable/materialButtons'
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -16,22 +20,25 @@ class Login extends React.Component {
     this.state = {
       username: '',
       password: '',
+      error: false
     }
   }
 
   login = event => {
     event.preventDefault()
-    console.log(this.state);
-    axios.post('/auth/login', {
-      username: this.state.username,
-      password: this.state.password
-    }).then(res => {
-      console.log(res.status);
-      window.location.href = '/'
-    }).catch(err => {
-      console.log(err);
-      
-    })
+    console.log(this.state)
+    axios
+      .post('/auth/login', {
+        username: this.state.username,
+        password: this.state.password
+      })
+      .then(res => {
+        console.log(res.status)
+        window.location.href = '/'
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   inputUsername = event => {
@@ -43,6 +50,11 @@ class Login extends React.Component {
   inputPassword = event => {
     this.setState({
       password: event.target.value
+    })
+  }
+  onChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value
     })
   }
 
@@ -72,13 +84,36 @@ class Login extends React.Component {
             <img className='login_logo' src={logo} alt='login_logo' />
             <div className='login_wholesale'>WHOLESALE</div>
           </div>
-          <div className='login_fields'>
-            <form onSubmit={this.login}>
-              <input type="text" placeholder="email" onChange={this.inputUsername}/>
-              <input type="text" placeholder="password" onChange={this.inputPassword}/>
-              <input type="submit" />
-            </form>
-          </div>
+          <form className='login_form' onSubmit={this.login}>
+            <AuthField
+              widthCSS='full'
+              name='username'
+              value={this.state.username}
+              type='text'
+              changeField={this.onChange}
+              icon={<MailOutlineIcon className='auth_icon' />}
+              placeholder='Email@example.com'
+              error={this.state.error}
+            />
+            <AuthField
+              widthCSS='full'
+              name='password'
+              value={this.state.password}
+              type='password'
+              changeField={this.onChange}
+              icon={<VpnKeyIcon className='auth_icon' />}
+              placeholder='Password'
+              error={this.state.error}
+            />
+            <input type="submit" className="no_display"/>
+            <LightGreenButton
+              variant='contained'
+              className='full'
+              onClick={this.login}
+            >
+              LOGIN
+            </LightGreenButton>
+          </form>
         </div>
         <div className='login_footer sidebar_footer_text'>
           <a className='light_green' href='tel:5551234567'>

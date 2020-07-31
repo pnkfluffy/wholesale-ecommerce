@@ -12,6 +12,16 @@ export const GreenButton = withStyles((theme) => ({
   },
 }))(Button);
 
+export const LightGreenButton = withStyles((theme) => ({
+  root: {
+    color: theme.palette.getContrastText(grey[900]),
+    backgroundColor: green[600],
+    "&:hover": {
+      backgroundColor: green[900],
+    },
+  },
+}))(Button);
+
 export const greyButton = withStyles((theme) => ({
   root: {
     color: theme.palette.getContrastText(grey[900]),

@@ -265,7 +265,7 @@ const getTotal = async products => {
 			.catch(err => console.log(err));
 		total = total + (productInfo.price * products[i].quantity);
 	}
-	return (total);
+	return (total * 100);
 }
 
 // @route   POST gc/collectPayment/:orderID

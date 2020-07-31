@@ -89,7 +89,6 @@ class GoCardless extends React.Component {
             loading: false
           })
           this.props.history.push('/cart')
-          this.props.history.push('/cart')
           localStorage.removeItem('gc')
         })
         .catch(err => {

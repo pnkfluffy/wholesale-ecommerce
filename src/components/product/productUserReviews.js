@@ -40,6 +40,18 @@ class ProductUserReviews extends React.Component {
     }
   }
 
+  boughtProduct = () => {
+    const orders = this.props.state.orders;
+    let i = 0;
+    while (i < orders.length)
+    {
+      let find = orders[i].products.find(product => product.product === this.props.productID)
+      if (find)
+        return true
+    }
+    return false
+  }
+
   render () {
     return (
       <div className='user_reviews_area'>
@@ -48,7 +60,14 @@ class ProductUserReviews extends React.Component {
             review => review.product === this.props.productID
           )}
         />
-        <CreateReview productID={this.props.productID} />
+        {(() => {
+          if (this.boughtProduct()) {
+            return <CreateReview productID={this.props.productID} />
+          }
+          else {
+            return <p>Buy this product to leave a review!</p>
+          }
+        })()}
       </div>
     )
   }

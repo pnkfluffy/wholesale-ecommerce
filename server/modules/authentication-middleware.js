@@ -1,4 +1,3 @@
-const Admin = require('../schemas/adminSchema')
 
 const rejectUnauthenticated = (req, res, next) => {
 	// check if logged in
@@ -15,27 +14,17 @@ const rejectUnauthenticated = (req, res, next) => {
 }
 
 const rejectNonAdmin = async (req, res, next) => {
-	console.log(req.isAuthenticated());
-	
-	if (process.env.DEV_MODE == 1) {
-		console.log('hi');
 
+	// if (process.env.DEV_MODE == 1) {
+	// 	console.log('hi');
+
+	// 	next()
+	// 	return
+	// }
+
+	if (req.isAuthenticated() && req.user.isAdmin) {
 		next()
 		return
-	}
-
-	if (req.isAuthenticated()) {
-		
-		let admin = await Admin.findOne({ _id: req.user._id })
-
-		if (admin) {
-			next()
-			return
-		} else {
-			req.logout()
-			res.status(403).send('user not admin')
-			return
-		}
 	} else {
 		// failure best handled on the server. do redirect here.
 		res.status(403).send('user not authenticated')

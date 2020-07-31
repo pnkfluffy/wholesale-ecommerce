@@ -3,7 +3,7 @@ import axios from 'axios'
 import { updateCartServer } from './functions'
 
 const initialUser = {
-  name: '',
+  email: '',
   favorites: [],
   admin: false
 }

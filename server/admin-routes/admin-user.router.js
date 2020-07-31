@@ -4,15 +4,14 @@ const router = express.Router()
 const passport = require('../modules/passport')
 const { rejectNonAdmin } = require('../modules/authentication-middleware')
 const User = require('../schemas/userSchema')
+const shajs = require('sha.js')
+const { newUserEmail } = require('../modules/nodemailer')
+const bcrypt = require('bcrypt')
 
 //Login
-router.post(
-  '/login',
-  passport.authenticate('local', { failureRedirect: '/login' }),
-  (req, res) => {
-    res.sendStatus(201)
-  }
-)
+router.post('/login', passport.authenticate('local', { failureRedirect: '/login' }), (req, res) => {
+  res.sendStatus(201)
+})
 
 router.get('/logout', (req, res) => {
   req.logout()
@@ -21,10 +20,53 @@ router.get('/logout', (req, res) => {
 
 router.get('/user', rejectNonAdmin, (req, res) => {
   let user = {
-    name: req.user.name,
+    email: req.user.email,
     admin: true
   }
   res.send(user)
+})
+
+// router.post('/create-user', rejectNonAdmin, async (req, res) => {
+//   try {
+//     let user = new User({
+//       email: req.body.email,
+//       password: shajs('sha256').update(this.state.email + Date.now()).digest('hex'),
+//     })
+//     await user.save()
+//     // make comprehensive url here
+//     newUserEmail(user, "")
+//     res.sendStatus(200)
+//   } catch (error) {
+//     console.log(error);
+//     res.sendStatus(500)
+//   }
+// })
+
+router.post('/', rejectNonAdmin, async (req, res) => {
+  const pass = 'sf\?QX6WmP{`tB=s'
+  const salt = await bcrypt.genSalt(10);
+  const saltedPass = await bcrypt.hash(pass, salt);
+  User.create({
+    email: req.body.name,
+    password: saltedPass,
+  })
+    .then(newUser => {
+      console.log(newUser)
+      newUser = JSON.parse(
+        JSON.stringify(newUser)
+          .split('"_id":')
+          .join('"id":')
+      )
+      newUserEmail({
+        email: req.body.name,
+        password: pass
+      }, "")
+      res.status(200).json(newUser)
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).send('Creation failed.')
+    })
 })
 
 //getList
@@ -40,23 +82,23 @@ router.get('/', rejectNonAdmin, (req, res) => {
   const filterQuery = JSON.parse(req.query.filter) || {}
 
   if (JSON.stringify(filterQuery) !== '{}') {
-    if( typeof filterQuery.id){
-       filterQuery._id = filterQuery.id
-       delete filterQuery.id
+    if (typeof filterQuery.id) {
+      filterQuery._id = filterQuery.id
+      delete filterQuery.id
     }
     console.log("Users filterQuery: ", filterQuery)
     User.find(filterQuery).then(filteredUsers => {
-        res.set('content-range', JSON.stringify(filteredUsers.length + 1))
-        //  each object needs to have an 'id' field in order for
-        //  reactAdmin to parse
-        filteredUsers = JSON.parse(
-          JSON.stringify(filteredUsers)
-            .split('"_id":')
-            .join('"id":')
-        )
-        console.log("filtered Users: ", filteredUsers)
-        res.json(filteredUsers)
-      })
+      res.set('content-range', JSON.stringify(filteredUsers.length + 1))
+      //  each object needs to have an 'id' field in order for
+      //  reactAdmin to parse
+      filteredUsers = JSON.parse(
+        JSON.stringify(filteredUsers)
+          .split('"_id":')
+          .join('"id":')
+      )
+      console.log("filtered Users: ", filteredUsers)
+      res.json(filteredUsers)
+    })
   } else {
     User.find()
       .sort(sort)
@@ -145,22 +187,6 @@ router.put('/', rejectNonAdmin, async (req, res) => {
 })
 
 //create
-router.post('/', rejectNonAdmin, async (req, res) => {
-  User.create(req.body.body)
-    .then(newUser => {
-      console.log(newUser)
-      newUser = JSON.parse(
-        JSON.stringify(newUser)
-          .split('"_id":')
-          .join('"id":')
-      )
-      res.status(200).json(newUser)
-    })
-    .catch(err => {
-      console.log(err)
-      res.status(500).send('Creation failed.')
-    })
-})
 
 //delete
 router.delete('/:id', rejectNonAdmin, async (req, res) => {

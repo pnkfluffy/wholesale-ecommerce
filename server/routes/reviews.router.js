@@ -61,14 +61,14 @@ router.get('/from/:page_size/:page_num', (req, res) => {
 // @access  Private
 router.post('/newReview/:productID', (req, res) => {
     const userID = req.user._id
-    const userName = req.user.name.split(' ')
+    const userName = req.user.email
     const product = req.params.productID
     const review = req.body.review
     const stars = req.body.stars
 
     const newReview = new Review({
         user: userID,
-        userName: userName[0],
+        userName: userName,
         product: product,
         review: review,
         stars: stars

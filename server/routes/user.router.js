@@ -6,26 +6,14 @@ const {
   rejectUnauthenticated
 } = require('../modules/authentication-middleware')
 
-router.get(
-  '/google/callback',
-  passport.authenticate('google', { failureRedirect: '/login' }),
-  (req, res) => {
-    res.redirect(
-      process.env.NODE_ENV === 'dev' ? 'http://localhost:3000/' : '/'
-    )
-  }
-)
-
-router.get(
-  '/login/google',
-  passport.authenticate('google', {
-    scope: ['https://www.googleapis.com/auth/plus.login']
-  })
-)
+router.post("/login", passport.authenticate("local", { failureRedirect: "/login" }), (req, res) => {
+  console.log('hi');
+  res.sendStatus(201)
+});
 
 router.get('/user', rejectUnauthenticated, (req, res) => {
   let user = {
-    name: req.user.name,
+    email: req.user.email,
     favorites: req.user.favorites
   }
   res.send(user)

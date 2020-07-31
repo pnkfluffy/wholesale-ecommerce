@@ -93,6 +93,6 @@
     color: var(--dark-hyperlink-green)
 }
 
-.sidebar_subfooter_text {
-    margin: 2%;
+.sidebar_footer > * {
+    margin-bottom: 3%;
 }

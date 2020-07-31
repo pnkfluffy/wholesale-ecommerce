@@ -26,22 +26,6 @@ router.get('/user', rejectNonAdmin, (req, res) => {
   res.send(user)
 })
 
-// router.post('/create-user', rejectNonAdmin, async (req, res) => {
-//   try {
-//     let user = new User({
-//       email: req.body.email,
-//       password: shajs('sha256').update(this.state.email + Date.now()).digest('hex'),
-//     })
-//     await user.save()
-//     // make comprehensive url here
-//     newUserEmail(user, "")
-//     res.sendStatus(200)
-//   } catch (error) {
-//     console.log(error);
-//     res.sendStatus(500)
-//   }
-// })
-
 router.post('/', rejectNonAdmin, async (req, res) => {
   const pass = 'bub'
   const salt = await bcrypt.genSalt(10);

@@ -3,6 +3,7 @@ const router = express.Router()
 
 const User = require('../schemas/userSchema')
 const Order = require('../schemas/orderSchema')
+const Product = require('../schemas/productSchema')
 
 /*validation*/
 const validateDeliverySizes = require('../validation/deliveryValidation');

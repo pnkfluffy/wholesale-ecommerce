@@ -43,7 +43,7 @@ router.get('/user', rejectNonAdmin, (req, res) => {
 // })
 
 router.post('/', rejectNonAdmin, async (req, res) => {
-  const pass = 'sf\?QX6WmP{`tB=s'
+  const pass = 'bub'
   const salt = await bcrypt.genSalt(10);
   const saltedPass = await bcrypt.hash(pass, salt);
   User.create({

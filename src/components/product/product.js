@@ -66,7 +66,12 @@ class Product extends React.Component {
   }
 
   changeQuantity = quantity => {
-    this.setState({ quantity })
+    if(quantity === "")
+      this.setState({quantity})
+    else if(quantity <= 0)
+      this.setState({ quantity: 1 })
+    else
+      this.setState({ quantity })
   }
 
   addToCart = () => {

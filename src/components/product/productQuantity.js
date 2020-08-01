@@ -8,7 +8,6 @@ const mapStateToProps = state => ({
 
 class ProductQuantity extends React.Component {
 
-
   render () {
     const quantity = this.props.quantity ? this.props.quantity : "";
     return (

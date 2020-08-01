@@ -183,16 +183,8 @@ export function Invoice(props) {
                     <View style={styles.right}>
                         <View style={styles.totalArea}>
                             <View style={styles.item}>
-                                <Text style={styles.totalTitle}>Subtotal</Text>
-                                <Text style={styles.totalValue}>{props.data.subtotal}</Text>
-                            </View>
-                            <View style={styles.item}>
-                                <Text style={styles.totalTitle}>Taxes</Text>
-                                <Text style={styles.totalValue}>+ 10%</Text>
-                            </View>
-                            <View style={styles.item}>
                                 <Text style={styles.totalTitle}>Total</Text>
-                                <Text style={styles.totalValue}>{props.data.total}</Text>
+                                <Text style={styles.totalValue}>${props.data.subtotal}</Text>
                             </View>
                         </View>
                     </View>

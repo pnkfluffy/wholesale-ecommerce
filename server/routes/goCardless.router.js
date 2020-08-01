@@ -95,7 +95,16 @@ router.get('/oneClient', async (req, res) => {
 			constants.Environments.Sandbox,
 		);
 		const theClient = await allClients.customers.find(activeUser.goCardlessID);
-		res.send(theClient);
+		res.json({
+			given_name: theClient.given_name,
+			family_name: theClient.family_name,
+			company_name: theClient.company_name,
+			address_line1: theClient.address_line1,
+			address_line2: theClient.address_line2,
+			city: theClient.city,
+			region: theClient.region,
+			postal_code: theClient.postal_code,
+		});
 	} catch (error) {
 		console.log(error);
 		res.status(500).send('client not found')

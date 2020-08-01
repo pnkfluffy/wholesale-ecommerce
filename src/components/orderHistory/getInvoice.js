@@ -18,16 +18,19 @@ class GetInvoice extends React.Component {
   getClientInfo = async () => {
     /*organize all shipping information*/
     const clientInfo = await axios
-      .get('/gc/oneClient')
+      .get('/api/gc/oneClient')
       .then(res => {
         return res.data
       })
       .catch(err => console.log(err))
+    console.log(clientInfo);
     const fullName = clientInfo.given_name + ' ' + clientInfo.family_name
     let addr_2 = ''
-    if (clientInfo.address_line2) addr_2 = ', ' + clientInfo.address_line2
+    if (clientInfo.address_line2)
+      addr_2 = ', ' + clientInfo.address_line2
     const client = {
       name: fullName,
+      company_name: clientInfo.company_name,
       address_line1: clientInfo.address_line1,
       address_line2: addr_2,
       city: clientInfo.city,

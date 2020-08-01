@@ -3,10 +3,11 @@ const router = express.Router()
 
 const User = require('../schemas/userSchema')
 const Order = require('../schemas/orderSchema')
+const Product = require('../schemas/productSchema')
 
 /*validation*/
-const validateDeliverySizes = require('../validation/deliveryValidation');
-const USPS = require('usps-webtools');
+const validateDeliverySizes = require('../validation/deliveryValidation')
+const USPS = require('usps-webtools')
 
 /*setup goCardless*/
 const gocardless = require('gocardless-nodejs')
@@ -19,7 +20,7 @@ const initializeGoCardless = async () => {
 		{ raiseOnIdempotencyConflict: true },
 	);
 
-	return (allClients);
+  return allClients
 }
 
 // @route   GET /gc/checkClient
@@ -29,13 +30,14 @@ router.get('/checkClientID', async (req, res) => {
 	User.findById(req.user._id)
 		.then(user => {
 			if (user.goCardlessID)
-			{
 				res.send(true)
-			}
 			else
 				res.send(false)
 		})
-		.catch(err => console.log(err))
+        .catch(err => {
+            console.log(err)
+            res.status(500).send('error getting client ID')
+        })
 });
 
 // @route   GET /gc/checkClient
@@ -45,35 +47,34 @@ router.get('/checkClientMandate', async (req, res) => {
 	User.findById(req.user._id)
 		.then(user => {
 			if (user.goCardlessMandate)
-			{
 				res.send(true)
-			}
 			else
-			{
 				res.send(false)
-			}
 		})
-		.catch(err => console.log(err))
+        .catch(err => {
+            console.log(err)
+            res.status(500).send('error getting client ID')
+        })
 });
 
 // @route   GET /gc/clients
 // @desc    Returns all clients
 // @access  Private
 router.get('/clients', async (req, res) => {
-	try {
-		// Initialize the GoCardLess client.
-		const allClients = await initializeGoCardless()
-		const listResponse = await allClients.customers.list();
-		const customers = listResponse.customers;
-		res.json({
-			success:true,
-			customers: customers
-		});
-	} catch (error) {
-		console.log(error);
-		res.status(500).send('error getting clients')
-	}
-});
+  try {
+    // Initialize the GoCardLess client.
+    const allClients = await initializeGoCardless()
+    const listResponse = await allClients.customers.list()
+    const customers = listResponse.customers
+    res.json({
+      success: true,
+      customers: customers
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500).send('error getting clients')
+  }
+})
 
 // @route   GET /gc/oneClient
 // @desc    Returns client by id
@@ -91,7 +92,6 @@ router.get('/oneClient', async (req, res) => {
 			// Change this to constants.Environments.Live when you're ready to go live
 			constants.Environments.Sandbox,
 		);
-		console.log(activeUser)
 		const theClient = await allClients.customers.find(activeUser.goCardlessID);
 		res.send(theClient);
 	} catch (error) {
@@ -104,43 +104,43 @@ router.get('/oneClient', async (req, res) => {
 // @desc    Returns all payments
 // @access  Private
 router.get('/payments', async (req, res) => {
-	try {
-		// Initialize the GoCardLess client.
-		const allClients = await initializeGoCardless()
-		const payments = await allClients.payments.list();
-		res.send(payments.payments);
-	} catch (error) {
-		console.log(error);
-		res.status(500).send('payments not found')
-	}
-});
+  try {
+    // Initialize the GoCardLess client.
+    const allClients = await initializeGoCardless()
+    const payments = await allClients.payments.list()
+    res.send(payments.payments)
+  } catch (error) {
+    console.log(error)
+    res.status(500).send('payments not found')
+  }
+})
 
 // @route   GET /gc/payments
 // @desc    Returns all payments from user
 // @access  Private
 router.get('/payments/from', async (req, res) => {
-	try {
-		const	allClients = await initializeGoCardless()
-		const	paymentsList = await allClients.payments.list();
-		const	payments = paymentsList.payments;
+  try {
+    const allClients = await initializeGoCardless()
+    const paymentsList = await allClients.payments.list()
+    const payments = paymentsList.payments
 
-		Order.find({ user: req.user._id })
-			 .then(orders => {
-			 	const paidOrders = orders.filter(order => order.paymentID);
-			 	const userPayments = paidOrders.map(order => {
-					return payments.find(payment => payment.id === order.paymentID)
-			 	})
-				res.json(userPayments);
-			 })
-			 .catch(error => {
-			 	console.log(error)
-			 	res.status(500).send('Error finding orders')
-			 })
-	} catch (error) {
-		console.log(error);
-		res.status(500).send('payments not found')
-	}
-});
+    Order.find({ user: req.user._id })
+      .then(orders => {
+        const paidOrders = orders.filter(order => order.paymentID)
+        const userPayments = paidOrders.map(order => {
+          return payments.find(payment => payment.id === order.paymentID)
+        })
+        res.json(userPayments)
+      })
+      .catch(error => {
+        console.log(error)
+        res.status(500).send('Error finding orders')
+      })
+  } catch (error) {
+    console.log(error)
+    res.status(500).send('payments not found')
+  }
+})
 
 // @route   POST gc/addClient
 // @:id		Active User ID

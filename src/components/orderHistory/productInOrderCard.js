@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import {withRouter} from "react-router-dom";
 import blank_image from "../../resources/images/blank_image.jpg";
-import AddToCartButton from "../home/addToCartButton";
 import {GreenButton} from "../reuseable/materialButtons";
 import {compose} from "redux";
 

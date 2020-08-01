@@ -1,6 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import store from '../../redux/store'
+import Swal from 'sweetalert2'
 
 import { GreenButton } from '../reuseable/materialButtons'
 import { compose } from 'redux'
@@ -51,7 +52,6 @@ class GCPay extends React.Component {
     axios
       .get('/api/gc/oneClient')
       .then(res => {
-        console.log("got user!")
         console.log(res.data)
         this.setState({
           loading: false,
@@ -109,16 +109,15 @@ class GCPay extends React.Component {
           pathname: url,
           state: {
             payment: res.data.payment,
-            order: res.data.order,
+            order: res.data.order
           }
         })
       })
       .catch(err => {
         if (err.response.data.errors) {
+          Swal.fire('ERROR:', err.response.data.errors, 'error')
           this.setState({
-            err: err.response.data.errors
-          })
-          this.setState({
+            err: err.response.data.errors,
             loading: false
           })
         }

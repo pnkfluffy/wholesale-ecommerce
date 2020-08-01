@@ -7,9 +7,6 @@ import loading from '../../resources/images/loadingBig.svg'
 import GCFillInfo from './gcFillInfo'
 import GCPay from './gcPay'
 
-import createHistory from 'history/createBrowserHistory'
-const history = createHistory()
-
 const mapStateToProps = state => ({
   state: state.reducer
 })
@@ -48,7 +45,6 @@ class GoCardless extends React.Component {
       .get('/api/gc/checkClientMandate')
       .then(res => {
         if (res.data) {
-          console.log("got mandate");
           this.setState({
             hasMandate: true,
             loading: false
@@ -59,6 +55,7 @@ class GoCardless extends React.Component {
         console.log(err)
       })
   }
+
   checkForIdOrMandate = async () => {
       await this.checkClientCGID();
       await this.checkClientMandate();
@@ -67,8 +64,8 @@ class GoCardless extends React.Component {
         loading: false
       })
   }
+
   confirmAccount = () => {
-    console.log("confirming account");
     let params = new URLSearchParams(window.location.href)
     /*(!) TO GO LIVE
     const url = 'https://wholesale-portal-testing.herokuapp.com/cart?redirect_flow_id';
@@ -91,7 +88,6 @@ class GoCardless extends React.Component {
           window.open("http://localhost:3000/cart", "_self");
         })
         .catch(err => {
-          console.log("have an error");
           console.log(err)
           this.setState({
             hasCheckedUrl: true,
@@ -104,7 +100,6 @@ class GoCardless extends React.Component {
         hasCheckedUrl: true,
         loading: false
       })
-      return <GCFillInfo total={this.props.total} />
     }
   }
 

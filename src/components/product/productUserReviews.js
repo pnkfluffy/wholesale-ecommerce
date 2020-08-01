@@ -12,8 +12,15 @@ class ProductUserReviews extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      page: 1
+      page: 1,
+      boughtProduct: false
     }
+  }
+
+  componentDidMount () {
+    this.setState({
+      boughtProduct: true
+    })
   }
 
   printReviews = () => {
@@ -41,15 +48,20 @@ class ProductUserReviews extends React.Component {
   }
 
   boughtProduct = () => {
-    const orders = this.props.state.orders;
-    let i = 0;
-    while (i < orders.length)
+    const orders = this.props.state.orders
+    if (orders)
     {
-      let find = orders[i].products.find(product => product.product === this.props.productID)
-      if (find)
-        return true
+      console.log(orders);
+      let i = 0;
+      while (i < orders.length)
+      {
+        let find = orders[i].products.find(product => product.product == this.props.productID)
+        if (find)
+          return true;
+        i++;
+      }
     }
-    return false
+    return false;
   }
 
   render () {

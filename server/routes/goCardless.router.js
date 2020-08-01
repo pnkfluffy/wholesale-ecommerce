@@ -128,7 +128,14 @@ router.get('/payments/from', async (req, res) => {
       .then(orders => {
         const paidOrders = orders.filter(order => order.paymentID)
         const userPayments = paidOrders.map(order => {
-          return payments.find(payment => payment.id === order.paymentID)
+          	let payment = payments.find(payment => payment.id === order.paymentID);
+          	return {
+				amount: payment.amount,
+				charge_date: payment.charge_date,
+				created_at: payment.created_at,
+				currency: payment.currency,
+				status: payment.status
+			}
         })
         res.json(userPayments)
       })
@@ -140,6 +147,37 @@ router.get('/payments/from', async (req, res) => {
     console.log(error)
     res.status(500).send('payments not found')
   }
+})
+
+// @route   GET /gc/payments
+// @desc    Returns all payments from user
+// @access  Private
+router.get('/payments/onePayment/:orderID', async (req, res) => {
+	try {
+		const order = await Order.findById(req.params.orderID)
+			                     .catch(err => {
+			                     		console.log(err);
+									 	res.status(500).send('order not found');
+								 		})
+		const allClients = await initializeGoCardless();
+		await allClients.payments.find(order.paymentID)
+								 .then(payment => {
+									res.json({
+										amount: payment.amount,
+										charge_date: payment.charge_date,
+										created_at: payment.created_at,
+										currency: payment.currency,
+										status: payment.status
+									})
+								})
+								.catch(err => {
+									console.log(err);
+									res.status(500).send('payment not found');
+								})
+	} catch (error) {
+		console.log(error)
+		res.status(500).send('payment not found')
+	}
 })
 
 // @route   POST gc/addClient

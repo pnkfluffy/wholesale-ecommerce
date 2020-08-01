@@ -62,9 +62,19 @@ class Order extends React.Component {
       .catch(err => console.log(err))
   }
 
+  organizeTotal = total => {
+    const str = total.toString();
+    const index = str.length - 2;
+    const beforeComma = str.substring(0, index);
+    const afterComma = str.substring(index);
+    const totalOrganized = beforeComma + "," + afterComma;
+    return totalOrganized;
+  }
+
   render () {
     const payment = this.props.history.location.state.payment
     const order = this.props.history.location.state.order
+    const total = this.organizeTotal(order.total)
     return (
       <div className='cart_page'>
         <div className='cart'>
@@ -88,7 +98,7 @@ class Order extends React.Component {
                   Order Again
                 </GreenButton>
               </div>
-              <div className='single_order_total'>TOTAL: ${order.total}</div>
+              <div className='single_order_total'>TOTAL: ${total}</div>
             </div>
             <div className='order_product_fields_container'>
               <div className='order_product_fields'>

@@ -33,14 +33,14 @@ class OrderCard extends React.Component {
             quantity: quantity
           }
         })
-        return (false);
+        return false;
       }
       else if (res.value) {
         this.props.dispatch({
           type: 'DELETE_CART_ITEM',
           payload: { id: this.props.product._id }
         })
-        return (true);
+        return true;
       }
     })
     return res;

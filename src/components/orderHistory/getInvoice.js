@@ -71,6 +71,15 @@ class GetInvoice extends React.Component {
     return fullDate
   }
 
+  organizeTotal = () => {
+    const str = this.props.order.total.toString();
+    const index = str.length - 2;
+    const beforeComma = str.substring(0, index);
+    const afterComma = str.substring(index);
+    const total = beforeComma + "," + afterComma;
+    return total;
+  }
+
   generateInvoice = async e => {
     e.stopPropagation()
     this.setState({
@@ -82,10 +91,8 @@ class GetInvoice extends React.Component {
       ClientAddr2: ', ' + this.props.order.deliveryInfo.ClientAddr2
     }
     const items = await this.getItems()
-    const subtotal = this.props.order.total
-    const total =
-      parseInt(this.props.order.total, 10) +
-      parseInt(this.props.order.total, 10) * 0.01
+    const subtotal = this.organizeTotal();
+
     const invoice_nr = this.props.order._id
     const chargingDate = this.props.payment.charge_date
     const date = await this.getDate()
@@ -94,7 +101,6 @@ class GetInvoice extends React.Component {
       shipping: shipping,
       items: items,
       subtotal: subtotal,
-      total: total,
       invoice_nr: invoice_nr,
       date: date,
       chargingDate: chargingDate,

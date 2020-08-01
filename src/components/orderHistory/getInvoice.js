@@ -4,6 +4,7 @@ import { PDFDownloadLink } from '@react-pdf/renderer'
 import { GreenButton } from '../reuseable/materialButtons'
 import { Invoice } from './invoice'
 import loading from '../../resources/images/loading.svg'
+import {getPriceByQuantity} from "../reuseable/getPriceByQuantity";
 
 class GetInvoice extends React.Component {
   constructor (props) {
@@ -53,7 +54,7 @@ class GetInvoice extends React.Component {
         item: wholeProductInfo.name,
         quantity: product.quantity,
         price: wholeProductInfo.price,
-        amount: wholeProductInfo.price * product.quantity
+        amount: getPriceByQuantity(wholeProductInfo.priceTiers, product.quantity, wholeProductInfo.price)
       }
     })
     return productsWithTotal

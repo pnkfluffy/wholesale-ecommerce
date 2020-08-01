@@ -309,8 +309,15 @@ const getTotal = async products => {
 				return (info)
 			})
 			.catch(err => console.log(err));
-		total = total + (productInfo.price * products[i].quantity);
+		let price = productInfo.price;
+		for (let x = 0; x < productInfo.priceTiers.length; x++) {
+			if (products[i].quantity >= productInfo.priceTiers[x].quantity && price > productInfo.priceTiers[x].price) {
+				price = productInfo.priceTiers[x].price
+			}
+		}
+		total = total + (price * products[i].quantity);
 	}
+	console.log(total);
 	total = total * 100;
 	return (total);
 }

@@ -44,7 +44,10 @@ class Cart extends React.Component {
               <b> Your cart is empty! </b>
             )}
           </div>
-          <GoCardless total={total}/>
+          {(() => {
+            if (this.props.state.cart.length)
+              return <GoCardless total={total}/>
+          })()}
       </div>
     )
   }

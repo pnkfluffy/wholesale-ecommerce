@@ -171,8 +171,8 @@ export function Invoice(props) {
                             <Text style={styles.itemNumbers}>Unit Price</Text>
                             <Text style={styles.itemNumbers}>Total</Text>
                         </View>
-                        {props.data.items.map(item => {
-                            return <View style={styles.item}>
+                        {props.data.items.map((item,index) => {
+                            return <View style={styles.item} key={index}>
                                 <Text style={styles.itemName}>{item.item}</Text>
                                 <Text style={styles.itemNumbers}>{item.quantity}</Text>
                                 <Text style={styles.itemNumbers}>{item.price}</Text>

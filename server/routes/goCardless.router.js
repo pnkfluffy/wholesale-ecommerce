@@ -95,7 +95,16 @@ router.get('/oneClient', async (req, res) => {
 			constants.Environments.Sandbox,
 		);
 		const theClient = await allClients.customers.find(activeUser.goCardlessID);
-		res.send(theClient);
+		res.json({
+			given_name: theClient.given_name,
+			family_name: theClient.family_name,
+			company_name: theClient.company_name,
+			address_line1: theClient.address_line1,
+			address_line2: theClient.address_line2,
+			city: theClient.city,
+			region: theClient.region,
+			postal_code: theClient.postal_code,
+		});
 	} catch (error) {
 		console.log(error);
 		res.status(500).send('client not found')
@@ -300,8 +309,15 @@ const getTotal = async products => {
 				return (info)
 			})
 			.catch(err => console.log(err));
-		total = total + (productInfo.price * products[i].quantity);
+		let price = productInfo.price;
+		for (let x = 0; x < productInfo.priceTiers.length; x++) {
+			if (products[i].quantity >= productInfo.priceTiers[x].quantity && price > productInfo.priceTiers[x].price) {
+				price = productInfo.priceTiers[x].price
+			}
+		}
+		total = total + (price * products[i].quantity);
 	}
+	console.log(total);
 	total = total * 100;
 	return (total);
 }

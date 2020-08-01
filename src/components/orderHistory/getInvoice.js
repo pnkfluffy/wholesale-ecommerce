@@ -4,6 +4,7 @@ import { PDFDownloadLink } from '@react-pdf/renderer'
 import { GreenButton } from '../reuseable/materialButtons'
 import { Invoice } from './invoice'
 import loading from '../../resources/images/loading.svg'
+import {getPriceByQuantity} from "../reuseable/getPriceByQuantity";
 
 class GetInvoice extends React.Component {
   constructor (props) {
@@ -18,16 +19,19 @@ class GetInvoice extends React.Component {
   getClientInfo = async () => {
     /*organize all shipping information*/
     const clientInfo = await axios
-      .get('/gc/oneClient')
+      .get('/api/gc/oneClient')
       .then(res => {
         return res.data
       })
       .catch(err => console.log(err))
+    console.log(clientInfo);
     const fullName = clientInfo.given_name + ' ' + clientInfo.family_name
     let addr_2 = ''
-    if (clientInfo.address_line2) addr_2 = ', ' + clientInfo.address_line2
+    if (clientInfo.address_line2)
+      addr_2 = ', ' + clientInfo.address_line2
     const client = {
       name: fullName,
+      company_name: clientInfo.company_name,
       address_line1: clientInfo.address_line1,
       address_line2: addr_2,
       city: clientInfo.city,
@@ -50,7 +54,7 @@ class GetInvoice extends React.Component {
         item: wholeProductInfo.name,
         quantity: product.quantity,
         price: wholeProductInfo.price,
-        amount: wholeProductInfo.price * product.quantity
+        amount: getPriceByQuantity(wholeProductInfo.priceTiers, product.quantity, wholeProductInfo.price)
       }
     })
     return productsWithTotal

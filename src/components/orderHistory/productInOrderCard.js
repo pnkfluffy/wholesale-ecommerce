@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter, Link } from 'react-router-dom'
 import blank_image from '../../resources/images/blank_image.jpg'
 import { compose } from 'redux'
+import {getPriceByQuantity} from "../reuseable/getPriceByQuantity";
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -46,7 +47,7 @@ class ProductInOrderCard extends React.Component {
                 {this.props.quantity}
               </div>
               {(() => {
-                const total = this.props.quantity * this.props.productInfo.price
+                const total = getPriceByQuantity(this.props.productInfo.priceTiers, this.props.quantity, this.props.productInfo.price)
                 return (
                   <div className='product_in_order_card_total'>${total}</div>
                 )

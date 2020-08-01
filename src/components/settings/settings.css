@@ -1,0 +1,36 @@
+.settings_container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.edit_account_container {
+  width: 80%;
+  margin: 2vh auto 3vh auto;
+}
+
+.edit_auth_field {
+  margin-top: 2.5vh;
+}
+
+.edit_header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.dropdown_active {
+  color: var(--logo-green);
+}
+
+.edit_address_input {
+  width: 100%;
+  margin-top: 2vh;
+  margin-bottom: 2vh;
+}
+
+.edit_address_input:last-child {
+  margin-bottom: 4vh;
+}

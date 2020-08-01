@@ -7,11 +7,16 @@ const User = require('../schemas/userSchema')
 const shajs = require('sha.js')
 const { newUserEmail } = require('../modules/nodemailer')
 const bcrypt = require('bcrypt')
+const { restart } = require('nodemon')
 
 //Login
-router.post('/login', passport.authenticate('local', { failureRedirect: '/login' }), (req, res) => {
-  res.sendStatus(201)
-})
+router.post(
+  '/login',
+  passport.authenticate('local', { failureRedirect: '/login' }),
+  (req, res) => {
+    res.sendStatus(201)
+  }
+)
 
 router.get('/logout', (req, res) => {
   req.logout()
@@ -26,13 +31,22 @@ router.get('/user', rejectNonAdmin, (req, res) => {
   res.send(user)
 })
 
+router.get('/perms', (req, res) => {
+  console.log('get perms', req.user)
+  if (req.user.isOwner) {
+    res.status(200).json({ perms: 'owner' })
+  } else if (req.user.isAdmin) {
+    res.status(200).json({ perms: 'admin' })
+  }
+})
+
 router.post('/', rejectNonAdmin, async (req, res) => {
   const pass = 'bub'
-  const salt = await bcrypt.genSalt(10);
-  const saltedPass = await bcrypt.hash(pass, salt);
+  const salt = await bcrypt.genSalt(10)
+  const saltedPass = await bcrypt.hash(pass, salt)
   User.create({
     email: req.body.name,
-    password: saltedPass,
+    password: saltedPass
   })
     .then(newUser => {
       console.log(newUser)
@@ -41,10 +55,13 @@ router.post('/', rejectNonAdmin, async (req, res) => {
           .split('"_id":')
           .join('"id":')
       )
-      newUserEmail({
-        email: req.body.name,
-        password: pass
-      }, "")
+      newUserEmail(
+        {
+          email: req.body.name,
+          password: pass
+        },
+        ''
+      )
       res.status(200).json(newUser)
     })
     .catch(err => {
@@ -70,7 +87,7 @@ router.get('/', rejectNonAdmin, (req, res) => {
       filterQuery._id = filterQuery.id
       delete filterQuery.id
     }
-    console.log("Users filterQuery: ", filterQuery)
+    console.log('Users filterQuery: ', filterQuery)
     User.find(filterQuery).then(filteredUsers => {
       res.set('content-range', JSON.stringify(filteredUsers.length + 1))
       //  each object needs to have an 'id' field in order for
@@ -80,14 +97,14 @@ router.get('/', rejectNonAdmin, (req, res) => {
           .split('"_id":')
           .join('"id":')
       )
-      console.log("filtered Users: ", filteredUsers)
+      console.log('filtered Users: ', filteredUsers)
       res.json(filteredUsers)
     })
   } else {
     User.find()
       .sort(sort)
       .then(users => {
-        console.log("raw users: ", users)
+        console.log('raw users: ', users)
         res.set('content-range', JSON.stringify(users.length))
         //  each object needs to have an 'id' field in order for
         //  reactAdmin to parse

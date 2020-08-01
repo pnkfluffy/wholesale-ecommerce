@@ -122,9 +122,15 @@ input::-webkit-inner-spin-button {
 }
 
 .page_header {
-  font-size: 1.5vw;
+  font-size: 2vw;
+  margin-left: 2%;
   margin-top: 1vh;
   margin-bottom: 2vh;
+}
+
+.page_subheader {
+  margin-top: 1vh;
+  font-size: 1.4vw;
 }
 
 .no_display {

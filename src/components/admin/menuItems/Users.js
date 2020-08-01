@@ -57,26 +57,30 @@ export const UserShow = props => {
           source='id'
           reference='admin-orders'
           target='user'
-          link="show"
+          link='show'
         >
-          <Datagrid rowClick="show">
-            <TextField label="Total" source='total'/>
-            <TextField label="Date" source="date"/>
-            <TextField label="Product Purchased" source="products.length"/>
+          <Datagrid rowClick='show'>
+            <TextField label='Total' source='total' />
+            <TextField label='Date' source='date' />
+            <TextField label='Product Purchased' source='products.length' />
           </Datagrid>
         </ReferenceManyField>
-        <ReferenceManyField 
-          label="Reviews Written by this User"
-          source="id"
-          target="user"
-          reference="admin-reviews"
-          link="show"
+        <ReferenceManyField
+          label='Reviews Written by this User'
+          source='id'
+          target='user'
+          reference='admin-reviews'
+          link='show'
         >
           <Datagrid>
-            <ReferenceField label="Product" reference="admin-products" source="product">
-              <TextField source="name"/>
+            <ReferenceField
+              label='Product'
+              reference='admin-products'
+              source='product'
+            >
+              <TextField source='name' />
             </ReferenceField>
-            <NumberField label="Rating" source="stars"/>
+            <NumberField label='Rating' source='stars' />
           </Datagrid>
         </ReferenceManyField>
         <TextField label='Database ID' source='id' />

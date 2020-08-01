@@ -7,6 +7,7 @@ import { withRouter } from 'react-router-dom'
 import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined'
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined'
+import SettingsIcon from '@material-ui/icons/Settings'
 
 /*images*/
 import logo from '../../resources/images/cbddy_logo_small.png'
@@ -46,6 +47,14 @@ class Sidebar extends React.Component {
             to='/cart'
           >
             <ShoppingCartIcon /> Cart
+          </Link>
+          <Link
+            className={`menu_link + ${location === '/settings' &&
+              'menu_active'}`}
+            to='/settings'
+          >
+            <SettingsIcon />
+            Settings
           </Link>
         </div>
         <Categories />

@@ -22,7 +22,7 @@ class DropDown extends React.Component {
   }
   handleClick = e => {
     // if (!this.dropdownRef.current.contains(e.target)) {
-      this.props.closeDropdown()
+    this.props.closeDropdown()
     // }
   }
 
@@ -30,15 +30,11 @@ class DropDown extends React.Component {
     return (
       <div ref={this.dropdownRef} className='dropdown'>
         <Link className='dropdown_link' to='/settings'>
-          <div className='dropdown_option dropdown_first' onClick={this.cloneRaffle}>
-            <SettingsIcon /> Settings
-          </div>
+          <SettingsIcon /> Settings
         </Link>
         <Link className='dropdown_link' to='/logout'>
-          <div className='dropdown_option dropdown_last' onClick={this.deleteRaffle}>
-            <ExitToAppIcon />
-            Logout
-          </div>
+          <ExitToAppIcon />
+          Logout
         </Link>
       </div>
     )

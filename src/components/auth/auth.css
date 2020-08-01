@@ -185,12 +185,11 @@
   border-radius: 6px;
   margin-bottom: 7%;
   box-shadow: 0 0 5px 0.1px var(--logo-green);
-
 }
 
 .auth_icon {
   width: 8% !important;
-  padding: 2.5%;
+  padding: 2%;
 }
 
 .auth_input {

@@ -1,6 +1,6 @@
 import { Button } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
-import { green, grey } from "@material-ui/core/colors";
+import { green, grey, red } from "@material-ui/core/colors";
 
 export const GreenButton = withStyles((theme) => ({
   root: {
@@ -18,6 +18,16 @@ export const LightGreenButton = withStyles((theme) => ({
     backgroundColor: green[600],
     "&:hover": {
       backgroundColor: green[900],
+    },
+  },
+}))(Button);
+
+export const RedButton = withStyles((theme) => ({
+  root: {
+    color: theme.palette.getContrastText(red[900]),
+    backgroundColor: red[600],
+    "&:hover": {
+      backgroundColor: red[900],
     },
   },
 }))(Button);

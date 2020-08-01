@@ -15,21 +15,20 @@ export default {
       body: JSON.stringify({ username, password }),
       headers: new Headers({ 'Content-Type': 'application/json' })
     })
-    return fetch(request)
-      .then(response => {
-        if (response.status < 200 || response.status >= 300) {
-          console.log('hi' + response.statusText);
-          
-          throw new Error(response.statusText);
-        }
-        window.location.href = '/'
-        cookie.set('sig', response.data)
-        return Promise.resolve()
-      })
-      // .catch(err => {
-      //   // {!} SWAL ERROR MESSAGES
-      //   return Promise.reject()
-      // })
+    return fetch(request).then(response => {
+      if (response.status < 200 || response.status >= 300) {
+        console.log('hi' + response.statusText)
+
+        throw new Error(response.statusText)
+      }
+      window.location.href = '/'
+      cookie.set('sig', response.data)
+      return Promise.resolve()
+    })
+    // .catch(err => {
+    //   // {!} SWAL ERROR MESSAGES
+    //   return Promise.reject()
+    // })
   },
 
   // called when the user clicks on the logout button
@@ -55,11 +54,27 @@ export default {
   },
   // called when the user navigates to a new location, to check for authentication
   checkAuth: () => {
-    
-    return cookie.get("sig")
-      ? Promise.resolve()
-      : Promise.reject();
+    return cookie.get('sig') ? Promise.resolve() : Promise.reject()
   },
   // called when the user navigates to a new location, to check for permissions / roles
+  // getPermissions: () => {
+  //   const request = new Request(`/api/admin-users/perms`, {
+  //     method: 'GET'
+  //   })
+  //   return fetch(request)
+  //     .then(response => {
+  //       if (response.status < 200 || response.status >= 300) {
+  //         console.log('hi' + response.statusText)
+
+  //         throw new Error(response.statusText)
+  //       }
+  //       console.log("response", response.data)
+  //       return Promise.resolve(response.data)
+  //     })
+  //     .catch(err => {
+  //       // {!} SWAL ERROR MESSAGES
+  //       return Promise.reject()
+  //     })
+  // }
   getPermissions: () => Promise.resolve()
 }

@@ -1,9 +1,11 @@
 import React from 'react'
 import SearchIcon from '@material-ui/icons/Search'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import DropDown from './dropdown'
+import SettingsIcon from '@material-ui/icons/Settings'
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -57,10 +59,13 @@ class Header extends React.Component {
         </div>
         <div className='header_navcard'>
           <div className='header_username'>{this.props.state.user.name}</div>
-          <MoreHorizIcon onClick={this.openDropdown} />
+          {/* <Link className='settings_link' to='/settings'>
+            <SettingsIcon />
+          </Link> */}
+          {/* <MoreHorizIcon onClick={this.openDropdown} />
           {this.state.dropdown && (
             <DropDown closeDropdown={this.closeDropdown} />
-          )}
+          )} */}
         </div>
       </div>
     )

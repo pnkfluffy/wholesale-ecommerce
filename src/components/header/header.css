@@ -114,3 +114,14 @@
   color: var(--nofocus-font-grey);
   margin-right: 5%;
 }
+
+.settings_link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.settings_link > svg {
+  width: 20px !important;
+  margin-bottom: 4px;
+}

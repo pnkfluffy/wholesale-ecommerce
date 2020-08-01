@@ -49,13 +49,21 @@ class FavoritesHeart extends React.Component {
   }
 
   render () {
-    const variableCSS= this.props.chooseStyle ? 'favorite_product_heart' : 'product_card_heart'
+    const variableCSS = this.props.chooseStyle
+      ? 'favorite_product_heart'
+      : 'product_card_heart'
     return (
-      <div className="clean_css">
+      <div className='clean_css'>
         {this.state.isFavorite ? (
-          <FavoriteIcon onClick={this.toggleFavorites} className={variableCSS}/>
+          <FavoriteIcon
+            onClick={this.toggleFavorites}
+            className={variableCSS}
+          />
         ) : (
-          <FavoriteBorderIcon onClick={this.toggleFavorites} className={variableCSS}/>
+          <FavoriteBorderIcon
+            onClick={this.toggleFavorites}
+            className={variableCSS}
+          />
         )}
       </div>
     )

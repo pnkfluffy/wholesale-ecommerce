@@ -33,6 +33,9 @@ class CartQuantity extends React.Component {
   }
 
   reduceQuantity = event => {
+    if (this.state.quantity === 1) {
+      this.props.deleteProduct()
+    }
     this.setState(
       {
         quantity: this.state.quantity - 1

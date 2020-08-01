@@ -1,57 +1,65 @@
-import React from "react";
-import axios from 'axios';
-import { Link } from "react-router-dom";
-import { connect } from "react-redux";
-import OrderCard from "./orderHistoryCard";
+import React from 'react'
+import axios from 'axios'
+import { connect } from 'react-redux'
+import OrderHistoryCard from './orderHistoryCard'
+import loading from '../../resources/images/loadingBig.svg'
 
 const mapStateToProps = state => ({
-    state: state.reducer
+  state: state.reducer
 })
 
 class OrderHistory extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            payments: []
+  constructor (props) {
+    super(props)
+    this.state = {
+      loading: true,
+      payments: []
+    }
+  }
+
+  componentDidMount () {
+    axios
+      .get('/api/gc/payments/from')
+      .then(res => {
+        console.log(res.data)
+        this.setState({
+          payments: res.data,
+          loading: false
+        })
+      })
+      .catch(err => console.log(err))
+  }
+
+  printOrders = () => {
+    const orders = this.props.state.orders
+    if (orders[0]) {
+      let i = 0
+      let ordersAndPay = []
+      const payments = this.state.payments
+      if (payments) {
+        while (i < orders.length) {
+          ordersAndPay.push(
+            <OrderHistoryCard order={orders[i]} payment={payments[i]} />
+          )
+          i++
         }
+      }
+      return ordersAndPay
+    } else {
+      return <h1>No orders yet</h1>
     }
+  }
 
-    componentDidMount() {
-        axios.get('/api/gc/payments/from')
-            .then(res => this.setState({
-                                 payments: res.data
-                            })
-            )
-            .catch(err => console.log(err))
-    }
-
-
-    printOrders = () => {
-        const orders = this.props.state.orders;
-        if (orders[0])
-        {
-            return orders.map(order => {
-                const paymentRelated = this.state.payments.find(payment => payment.id === order.paymentID)
-                console.log(paymentRelated);
-                if (paymentRelated)
-                {
-                    return (
-                        <OrderCard order = {order} payment = {paymentRelated}/>
-                    );
-                }
-            })
-        } else {
-            return <h1>No orders yet</h1>
-        }
-    }
-
-    render() {
-        return (
-            <div className="account">
-                <h1>Order History</h1>
-                {this.printOrders()}
-            </div>
-        );
-    }
+  render () {
+    return (
+      <div className='order_history'>
+        {this.state.loading ? (
+          <img src={loading} alt='loading' />
+        ) : (
+          this.printOrders()
+        )}
+      </div>
+    )
+  }
 }
-export default connect(mapStateToProps)(OrderHistory);
+export default connect(mapStateToProps)(OrderHistory)

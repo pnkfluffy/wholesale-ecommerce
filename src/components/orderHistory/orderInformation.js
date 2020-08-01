@@ -1,45 +1,67 @@
-import React from "react";
-import axios from 'axios';
-import { Link } from "react-router-dom";
-import { connect } from "react-redux";
-import ProductInOrderCard from "./productInOrderCard";
-import GetInvoice from "./getInvoice";
-import store from "../../redux/store";
-import products from "../home/products";
+import React from 'react'
+import moment from 'moment'
+import { connect } from 'react-redux'
 
 const mapStateToProps = state => ({
-    state: state.reducer
+  state: state.reducer
 })
 
 class OrderInformation extends React.Component {
-    constructor(props) {
-        super(props);
-    }
+  render () {
+    const payment = this.props.payment
+    const order = this.props.order
+    const address = order.deliveryInfo
+    console.log('order', order)
+    const orderDate = moment(order.date).format('L')
+    const chargeDate = moment(payment.charge_date).format('L')
 
-    render() {
-        const payment = this.props.payment;
-        const order = this.props.order;
-        console.log(order);
-        return (
-                <div className="buy">
-                    <div className="order_information_card">
-                        <div className="order_information_title">Payment Information</div>
-                        <p>Payment Status: {payment.status}</p>
-                        <div className="order_information_dates">
-                            <p>Order made on {order.date}</p>
-                            <p>Charging Date: {payment.charge_date}</p>
-                        </div>
-                    </div>
-                    <div className="order_information_card">
-                        <div className="order_information_delivery">
-                            <div className="order_information_title">Delivery Information</div>
-                            <p>Delivery 2-4 days after charging date</p>
-                            <p>{order.deliveryInfo.ClientFullName}</p>
-                            <p>{order.deliveryInfo.ClientAddr1}, {order.deliveryInfo.ClientAddr2}</p>
-                        </div>
-                    </div>
-                </div>
-        );
-    }
+    return (
+      <div className='buy'>
+        <div className='order_info_card'>
+          <div className='order_info_delivery'>
+            <div className='order_info_title'>Tracking Number</div>
+            <div className='order_info_content'>
+              Please check back soon. <br />
+              <br />
+              Tracking information will be added within 24 hours of payment
+              being processed.
+            </div>
+          </div>
+        </div>
+
+        <div className='order_info_card'>
+          <div className='order_info_delivery'>
+            <div className='order_info_title'>Shipping Address</div>
+            <div className='order_info_address'>{address.ClientFullName}</div>
+            <div className='order_info_address'>{address.ClientAddr1},</div>
+            {address.ClientAddr2 && (
+              <div className='order_info_address'>
+                {address.ClientAddr2 + ','}
+              </div>
+            )}
+            <div className='order_info_address'>
+              {address.city} {address.state},
+            </div>
+            <div className='order_info_address'>{address.postal_code}</div>
+          </div>
+        </div>
+        <div className='order_info_card'>
+          <div className='order_info_title'>Payment Information</div>
+          <div className='order_info_split'>
+            <div className='order_info_content'>Status:</div>
+            <div className='order_info_content'>{payment.status}</div>
+          </div>
+          <div className='order_info_split'>
+            <div className='order_info_content'>Ordered on: </div>
+            <div className='order_info_content'>{orderDate} </div>
+          </div>
+          <div className='order_info_split'>
+            <div className='order_info_content'>Charged on:</div>
+            <div className='order_info_content'>{chargeDate}</div>
+          </div>
+        </div>
+      </div>
+    )
+  }
 }
-export default connect(mapStateToProps)(OrderInformation);
+export default connect(mapStateToProps)(OrderInformation)

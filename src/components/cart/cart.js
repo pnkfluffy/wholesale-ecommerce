@@ -33,7 +33,7 @@ class Cart extends React.Component {
     return (
         <div className="cart_page">
           <div className='cart'>
-            <div className='top_cart_area'>
+            <div className='page_header'>
               Cart
             </div>
             {this.props.state.cart.length ? (

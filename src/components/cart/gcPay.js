@@ -1,6 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import store from '../../redux/store'
+import Swal from 'sweetalert2'
 
 import { GreenButton } from '../reuseable/materialButtons'
 import { compose } from 'redux'
@@ -98,6 +99,12 @@ class GCPay extends React.Component {
           paymentDone: true
         })
 
+        //add order to redux state orders
+        let allOrders = this.props.state.orders;
+        allOrders.push(res.data.order);
+        console.log(allOrders);
+        store.dispatch({type: 'ADD_ORDERS', payload: allOrders})
+        
         //Clean the cart
         console.log('collecting payment')
         store.dispatch({ type: 'EMPTY_CART', payload: [] })
@@ -113,56 +120,17 @@ class GCPay extends React.Component {
         })
       })
       .catch(err => {
-        if (err.response.data.errors) {
+        if (err.response && err.response.data.errors) {
+          Swal.fire('ERROR:', err.response.data.errors, 'error')
           this.setState({
-            err: err.response.data.errors
-          })
-          this.setState({
+            err: err.response.data.errors,
             loading: false
           })
         }
       })
   }
 
-  checkZipCode = zip => {
-    const host = 'http://production.shippingapis.com/ShippingAPI.dll'
-    const userName = '314CBDDY8065'
-
-    if (zip.length === 5 && !isNaN(zip)) {
-      const usps = new USPS({
-        server: host,
-        userId: userName,
-        ttl: 10000 //TTL in milliseconds for request
-      })
-
-      usps.cityStateLookup(zip, (err, result) => {
-        if (result) {
-          let city = result.city.toLowerCase()
-          city = city.replace(/^./, city[0].toUpperCase())
-          this.setState({
-            ClientCity: city,
-            ClientState: result.state,
-            err: {
-              ClientPostalCode: ''
-            }
-          })
-        } else {
-          this.setState({
-            err: {
-              postal_code: 'invalid postal code'
-            }
-          })
-        }
-      })
-    }
-  }
-
   onChange = e => {
-    //check city and state for postal code
-    if (e.target.name === 'ClientPostalCode') {
-      const zip = e.target.value
-      this.checkZipCode(zip)
-    }
     this.setState({
       [e.target.name]: e.target.value
     })

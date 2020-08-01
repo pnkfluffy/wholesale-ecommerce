@@ -3,10 +3,11 @@ const router = express.Router()
 
 const User = require('../schemas/userSchema')
 const Order = require('../schemas/orderSchema')
+const Product = require('../schemas/productSchema')
 
 /*validation*/
-const validateDeliverySizes = require('../validation/deliveryValidation');
-const USPS = require('usps-webtools');
+const validateDeliverySizes = require('../validation/deliveryValidation')
+const USPS = require('usps-webtools')
 
 /*setup goCardless*/
 const gocardless = require('gocardless-nodejs')
@@ -16,13 +17,12 @@ const { confirmOrderEmail } = require('../modules/nodemailer')
 
 const initializeGoCardless = async () => {
 	const allClients = await gocardless(
-
-		process.env.GC_LIVE_TOKEN,
-		constants.Environments.Live,
+		process.env.GC_ACCESS_TOKEN,
+		constants.Environments.Sandbox,
 		{ raiseOnIdempotencyConflict: true },
 	);
 
-	return (allClients);
+  return allClients
 }
 
 // @route   GET /gc/checkClient
@@ -31,14 +31,15 @@ const initializeGoCardless = async () => {
 router.get('/checkClientID', async (req, res) => {
 	User.findById(req.user._id)
 		.then(user => {
-			console.log(user);
-			if (user.goCardlessID) {
+			if (user.goCardlessID)
 				res.send(true)
-			}
 			else
 				res.send(false)
 		})
-		.catch(err => console.log(err))
+        .catch(err => {
+            console.log(err)
+            res.status(500).send('error getting client ID')
+        })
 });
 
 // @route   GET /gc/checkClient
@@ -47,55 +48,53 @@ router.get('/checkClientID', async (req, res) => {
 router.get('/checkClientMandate', async (req, res) => {
 	User.findById(req.user._id)
 		.then(user => {
-			console.log(user);
-			if (user.goCardlessMandate) {
+			if (user.goCardlessMandate)
 				res.send(true)
-			}
 			else
 				res.send(false)
-			res.json(true)
 		})
-		.catch(err => console.log(err))
+        .catch(err => {
+            console.log(err)
+            res.status(500).send('error getting client ID')
+        })
 });
 
 // @route   GET /gc/clients
 // @desc    Returns all clients
 // @access  Private
 router.get('/clients', async (req, res) => {
-	try {
-		// Initialize the GoCardLess client.
-		const allClients = await initializeGoCardless()
-		const listResponse = await allClients.customers.list();
-		const customers = listResponse.customers;
-		res.json({
-			success: true,
-			customers: customers
-		});
-	} catch (error) {
-		console.log(error);
-		res.status(500).send('error getting clients')
-	}
-});
+  try {
+    // Initialize the GoCardLess client.
+    const allClients = await initializeGoCardless()
+    const listResponse = await allClients.customers.list()
+    const customers = listResponse.customers
+    res.json({
+      success: true,
+      customers: customers
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500).send('error getting clients')
+  }
+})
 
 // @route   GET /gc/oneClient
 // @desc    Returns client by id
 // @access  Private
 router.get('/oneClient', async (req, res) => {
 	try {
-		const activeUser = User.findById(req.user_id)
-			.catch(err => {
-				console.log(err);
-				res.status(500).send("Couldn't find user in db")
-			}
-			);
+		const activeUser = await User.findById(req.user._id)
+								.catch(err => {
+									console.log(err);
+									res.status(500).send("Couldn't find user in db")}
+								);
 
-		const allClients = await gocardless(
-			process.env.GC_LIVE_TOKEN,
-			constants.Environments.Live,
-			{ raiseOnIdempotencyConflict: true },
+		const allClients =  await gocardless(
+			process.env.GC_ACCESS_TOKEN,
+			// Change this to constants.Environments.Live when you're ready to go live
+			constants.Environments.Sandbox,
 		);
-
-		const theClient = await allClients.customers.find(activeUser.goCardlessID)
+		const theClient = await allClients.customers.find(activeUser.goCardlessID);
 		res.send(theClient);
 	} catch (error) {
 		console.log(error);
@@ -107,43 +106,81 @@ router.get('/oneClient', async (req, res) => {
 // @desc    Returns all payments
 // @access  Private
 router.get('/payments', async (req, res) => {
-	try {
-		// Initialize the GoCardLess client.
-		const allClients = await initializeGoCardless()
-		const payments = await allClients.payments.list();
-		res.send(payments.payments);
-	} catch (error) {
-		console.log(error);
-		res.status(500).send('payments not found')
-	}
-});
+  try {
+    // Initialize the GoCardLess client.
+    const allClients = await initializeGoCardless()
+    const payments = await allClients.payments.list()
+    res.send(payments.payments)
+  } catch (error) {
+    console.log(error)
+    res.status(500).send('payments not found')
+  }
+})
 
 // @route   GET /gc/payments
 // @desc    Returns all payments from user
 // @access  Private
 router.get('/payments/from', async (req, res) => {
-	try {
-		const allClients = await initializeGoCardless()
-		const paymentsList = await allClients.payments.list();
-		const payments = paymentsList.payments;
+  try {
+    const allClients = await initializeGoCardless()
+    const paymentsList = await allClients.payments.list()
+    const payments = paymentsList.payments
 
-		Order.find({ user: req.user._id })
-			.then(orders => {
-				const paidOrders = orders.filter(order => order.paymentID);
-				const userPayments = paidOrders.map(order => {
-					return payments.find(payment => payment.id === order.paymentID)
-				})
-				res.json(userPayments);
-			})
-			.catch(error => {
-				console.log(error)
-				res.status(500).send('Error finding orders')
-			})
+    Order.find({ user: req.user._id })
+      .then(orders => {
+        const paidOrders = orders.filter(order => order.paymentID)
+        const userPayments = paidOrders.map(order => {
+          	let payment = payments.find(payment => payment.id === order.paymentID);
+          	return {
+				amount: payment.amount,
+				charge_date: payment.charge_date,
+				created_at: payment.created_at,
+				currency: payment.currency,
+				status: payment.status
+			}
+        })
+        res.json(userPayments)
+      })
+      .catch(error => {
+        console.log(error)
+        res.status(500).send('Error finding orders')
+      })
+  } catch (error) {
+    console.log(error)
+    res.status(500).send('payments not found')
+  }
+})
+
+// @route   GET /gc/payments
+// @desc    Returns all payments from user
+// @access  Private
+router.get('/payments/onePayment/:orderID', async (req, res) => {
+	try {
+		const order = await Order.findById(req.params.orderID)
+			                     .catch(err => {
+			                     		console.log(err);
+									 	res.status(500).send('order not found');
+								 		})
+		const allClients = await initializeGoCardless();
+		await allClients.payments.find(order.paymentID)
+								 .then(payment => {
+									res.json({
+										amount: payment.amount,
+										charge_date: payment.charge_date,
+										created_at: payment.created_at,
+										currency: payment.currency,
+										status: payment.status
+									})
+								})
+								.catch(err => {
+									console.log(err);
+									res.status(500).send('payment not found');
+								})
 	} catch (error) {
-		console.log(error);
-		res.status(500).send('payments not found')
+		console.log(error)
+		res.status(500).send('payment not found')
 	}
-});
+})
 
 // @route   POST gc/addClient
 // @:id		Active User ID
@@ -164,7 +201,10 @@ router.post('/addClient', async (req, res) => {
 		const redirectFlow = await allClients.redirectFlows.create({
 			description: "Cider Barrels",
 			session_token: req.user._id.toString(),
+			/*(!) TO GO LIVE
 			success_redirect_url: "https://wholesale-portal-testing.herokuapp.com/cart",
+			 */
+			success_redirect_url: "http://localhost:3000/cart",
 
 			prefilled_customer: {
 				given_name: name,
@@ -181,7 +221,6 @@ router.post('/addClient', async (req, res) => {
 		// be used to get the client information later
 		User.findById(req.user._id)
 			.then(user => {
-				console.log(user);
 				if (!user) {
 					console.log("no user with this id");
 					res.status(500).send('no user with this id')
@@ -214,6 +253,7 @@ router.post('/addClient', async (req, res) => {
 // @access  Private
 router.post('/completeRedirect/', async (req, res) => {
 	try {
+		console.log("redirect")
 		const allClients = await initializeGoCardless();
 		//get activeUser from database
 		const activeUser = await User.findById(req.user._id)
@@ -233,7 +273,6 @@ router.post('/completeRedirect/', async (req, res) => {
 		);
 
 		/*save mandate to database*/
-		console.log(redirectFlow);
 		activeUser
 			.updateOne({
 				$set: {
@@ -263,6 +302,7 @@ const getTotal = async products => {
 			.catch(err => console.log(err));
 		total = total + (productInfo.price * products[i].quantity);
 	}
+	total = total * 100;
 	return (total);
 }
 
@@ -311,9 +351,15 @@ router.post('/collectPayment', async (req, res) => {
 		const order = activeUser.cart
 
 		//initialize goCardless
-		const allClients = await gocardless(
-			process.env.GC_LIVE_TOKEN,
-			constants.Environments.Live,
+		/*(!) TO GO LIVE
+		const allClients =  await gocardless(
+				process.env.GC_LIVE_TOKEN,
+				constants.Environments.Live,
+				{ raiseOnIdempotencyConflict: true },
+			);*/
+		const allClients =  await gocardless(
+			process.env.GC_ACCESS_TOKEN,
+			constants.Environments.Sandbox,
 			{ raiseOnIdempotencyConflict: true },
 		);
 
@@ -431,4 +477,4 @@ router.post('/changePayment/:orderID', async (req, res) => {
 	}
 });
 
-module.exports = router
+module.exports = router;

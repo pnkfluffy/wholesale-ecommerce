@@ -58,7 +58,11 @@ const UserSchema = new Schema({
         type: Number
       }
     }
-  ]
+  ],
+  associatedAdmin: {
+    type: Schema.Types.ObjectId,
+    ref: 'user'
+  }
 })
 
 module.exports = User = mongoose.model('user', UserSchema)

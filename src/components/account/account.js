@@ -7,18 +7,16 @@ const mapStateToProps = state => ({
 })
 
 class Account extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       favoriteProductList: this.props.state.favorites
     }
   }
 
-  renderProduct = favoriteProductList => {
-    const allProductsList = this.props.state.products.products
-
-    return allProductsList.map(product => {
-      if (favoriteProductList.indexOf(product._id) !== -1) {
+  render() {
+    let favorites = this.props.state.products.products.map(product => {
+      if (this.props.state.products.products.indexOf(product._id) !== -1) {
         return (
           <FavoriteProductCard
             product={product}
@@ -28,9 +26,7 @@ class Account extends React.Component {
         )
       }
     })
-  }
 
-  render () {
     return (
       <div>
         <div className='account_container'>
@@ -41,13 +37,13 @@ class Account extends React.Component {
           <div className='section_container'>
             <div className='page_subheader'>Favorites</div>
             {this.props.state.favorites.length ? (
-              this.renderProduct(this.props.state.favorites)
+              favorites
             ) : (
-              <div className='no_items_message'>
-                Seems like you haven't favorited any items yet. Add favorites by
-                clicking the heart on product page!
-              </div>
-            )}
+                <div className='no_items_message'>
+                  Seems like you haven't favorited any items yet. Add favorites by
+                  clicking the heart on product page!
+                </div>
+              )}
           </div>
         </div>
       </div>

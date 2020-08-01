@@ -14,10 +14,23 @@ const newUserEmail = (user, url) => {
 		to: user.email,
 		subject: `Welcome to CBDDY Wholesale!`,
 		text: `
-			We've created your account, login with 
-			${user.email}
-			${user.password}
-			${url}
+		We've created your account, login with 
+		${user.email}
+		${user.password}
+		${url}
+		`
+	})
+}
+
+const confirmOrderEmail = (user, order, payment) => {
+	transporter.sendMail({
+		from: process.env.NODE_MAILER_USERNAME,
+		to: user.email,
+		subject: `Purchase Confirmed!`,
+		text: ` 
+		${user.email}
+		${JSON.stringify(order)}
+		${JSON.stringify(payment)}
 		`
 	})
 }
@@ -25,4 +38,4 @@ const newUserEmail = (user, url) => {
 // order confirm email
 
 
-module.exports = { newUserEmail }
+module.exports = { newUserEmail, confirmOrderEmail }

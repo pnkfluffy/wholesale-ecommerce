@@ -8,6 +8,7 @@ import {
   ArrayField,
   DisabledInput,
   BooleanInput,
+  BooleanField,
   TextInput,
   DateInput,
   ReferenceField,
@@ -41,9 +42,13 @@ export const UserShow = props => {
   return (
     <Show actions={<UserShowActions />} {...props}>
       <SimpleShowLayout>
+        <TextField label='User Email' source='email' />
         <TextField label='Full Name' source='name' />
+        <BooleanField
+          label='is admin?'
+          source='isAdmin'
+        />
         <TextField label='Payment confirmed' source='paymentVerified' />
-        <TextField label='DocuSign confirmed' source='docusignVerified' />
         <ArrayField label='Favorites' source='favorites'>
           <Datagrid>
             <TextField label='ID' source='id' />
@@ -60,12 +65,12 @@ export const UserShow = props => {
           link="show"
         >
           <Datagrid rowClick="show">
-            <TextField label="Total" source='total'/>
-            <TextField label="Date" source="date"/>
-            <TextField label="Product Purchased" source="products.length"/>
+            <TextField label="Total" source='total' />
+            <TextField label="Date" source="date" />
+            <TextField label="Product Purchased" source="products.length" />
           </Datagrid>
         </ReferenceManyField>
-        <ReferenceManyField 
+        <ReferenceManyField
           label="Reviews Written by this User"
           source="id"
           target="user"
@@ -74,9 +79,9 @@ export const UserShow = props => {
         >
           <Datagrid>
             <ReferenceField label="Product" reference="admin-products" source="product">
-              <TextField source="name"/>
+              <TextField source="name" />
             </ReferenceField>
-            <NumberField label="Rating" source="stars"/>
+            <NumberField label="Rating" source="stars" />
           </Datagrid>
         </ReferenceManyField>
         <TextField label='Database ID' source='id' />
@@ -90,8 +95,12 @@ export const UserShow = props => {
 export const UserList = props => (
   <List {...props}>
     <Datagrid rowClick='show'>
-      <TextField label='Name' source='name' />
+      <TextField label='User Email' source='email' />
       <TextField label='Database ID' source='id' />
+      <BooleanField
+        label='is admin?'
+        source='isAdmin'
+      />
       <ShowButton />
       <DeleteButton />
     </Datagrid>
@@ -106,16 +115,13 @@ export const UserEdit = props => (
     {...props}
   >
     <SimpleForm>
-      <TextInput disabled label='ID' source='id' />
+      <TextField disabled label='ID' source='id' />
+      <TextField disabled label='email' source='email' />
       <TextInput label='name' source='name' />
       <BooleanInput
         disabled
         label='Payment Verified'
         source='paymentVerified'
-      />
-      <BooleanInput
-        label='Enable Purchases (form signed)'
-        source='docusignVerified'
       />
       <TextInput disabled label='goCardless ID' source='goCardlessID' />
       <ArrayInput label='Cart' source='cart'>
@@ -132,7 +138,12 @@ export const UserCreate = props => {
   return (
     <Create {...props}>
       <SimpleForm>
-        <TextInput label='User Email' source='name' />
+        <TextInput label='User Email' source='email' />
+        <TextInput label='Full Name' source='name' />
+        <BooleanInput
+          label='Make Admin User'
+          source='isAdmin'
+        />
       </SimpleForm>
     </Create>
   )

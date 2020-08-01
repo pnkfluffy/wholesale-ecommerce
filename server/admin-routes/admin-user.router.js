@@ -30,12 +30,18 @@ router.post('/', rejectNonAdmin, async (req, res) => {
   const pass = 'bub'
   const salt = await bcrypt.genSalt(10);
   const saltedPass = await bcrypt.hash(pass, salt);
+  if (req.body.isAdmin && !req.user.isOwner) {
+    res.status(403).send('Insufficient Permissions')
+  }
   User.create({
-    email: req.body.name,
+    email: req.body.email,
+    name: req.body.name,
+    isAdmin: req.body.isAdmin,
     password: saltedPass,
   })
     .then(newUser => {
       console.log(newUser)
+      newUser.password = null;
       newUser = JSON.parse(
         JSON.stringify(newUser)
           .split('"_id":')

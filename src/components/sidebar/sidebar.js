@@ -7,6 +7,7 @@ import { withRouter } from 'react-router-dom'
 import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined'
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined'
+import Badge from '@material-ui/core/Badge';
 
 /*images*/
 import logo from '../../resources/images/cbddy_logo_small.png'
@@ -45,7 +46,14 @@ class Sidebar extends React.Component {
             className={`menu_link + ${location === '/cart' && 'menu_active'}`}
             to='/cart'
           >
-            <ShoppingCartIcon /> Cart
+            {this.props.state.cart.length > 0 ? (
+              <Badge badgeContent={this.props.state.cart.length} color="primary" style={{ transform: 'scale(0.8)', marginRight: "20%" }}>
+                <ShoppingCartIcon />
+              </Badge>
+            ) : (
+              <ShoppingCartIcon />
+            )}
+            Cart
           </Link>
         </div>
         <Categories />

@@ -12,6 +12,8 @@ const USPS = require('usps-webtools');
 const gocardless = require('gocardless-nodejs')
 const constants = require('gocardless-nodejs/constants')
 
+const { confirmOrderEmail } = require('../modules/nodemailer')
+
 const initializeGoCardless = async () => {
 	const allClients = await gocardless(
 
@@ -30,13 +32,11 @@ router.get('/checkClientID', async (req, res) => {
 	User.findById(req.user._id)
 		.then(user => {
 			console.log(user);
-			if (user.goCardlessID)
-			{
+			if (user.goCardlessID) {
 				res.send(true)
 			}
 			else
 				res.send(false)
-			res.json(true)
 		})
 		.catch(err => console.log(err))
 });
@@ -48,8 +48,7 @@ router.get('/checkClientMandate', async (req, res) => {
 	User.findById(req.user._id)
 		.then(user => {
 			console.log(user);
-			if (user.goCardlessMandate)
-			{
+			if (user.goCardlessMandate) {
 				res.send(true)
 			}
 			else
@@ -69,7 +68,7 @@ router.get('/clients', async (req, res) => {
 		const listResponse = await allClients.customers.list();
 		const customers = listResponse.customers;
 		res.json({
-			success:true,
+			success: true,
 			customers: customers
 		});
 	} catch (error) {
@@ -84,12 +83,13 @@ router.get('/clients', async (req, res) => {
 router.get('/oneClient', async (req, res) => {
 	try {
 		const activeUser = User.findById(req.user_id)
-								.catch(err => {
-									console.log(err);
-									res.status(500).send("Couldn't find user in db")}
-								);
+			.catch(err => {
+				console.log(err);
+				res.status(500).send("Couldn't find user in db")
+			}
+			);
 
-		const allClients =  await gocardless(
+		const allClients = await gocardless(
 			process.env.GC_LIVE_TOKEN,
 			constants.Environments.Live,
 			{ raiseOnIdempotencyConflict: true },
@@ -123,22 +123,22 @@ router.get('/payments', async (req, res) => {
 // @access  Private
 router.get('/payments/from', async (req, res) => {
 	try {
-		const	allClients = await initializeGoCardless()
-		const	paymentsList = await allClients.payments.list();
-		const	payments = paymentsList.payments;
+		const allClients = await initializeGoCardless()
+		const paymentsList = await allClients.payments.list();
+		const payments = paymentsList.payments;
 
 		Order.find({ user: req.user._id })
-			 .then(orders => {
-			 	const paidOrders = orders.filter(order => order.paymentID);
-			 	const userPayments = paidOrders.map(order => {
+			.then(orders => {
+				const paidOrders = orders.filter(order => order.paymentID);
+				const userPayments = paidOrders.map(order => {
 					return payments.find(payment => payment.id === order.paymentID)
-			 	})
+				})
 				res.json(userPayments);
-			 })
-			 .catch(error => {
-			 	console.log(error)
-			 	res.status(500).send('Error finding orders')
-			 })
+			})
+			.catch(error => {
+				console.log(error)
+				res.status(500).send('Error finding orders')
+			})
 	} catch (error) {
 		console.log(error);
 		res.status(500).send('payments not found')
@@ -166,15 +166,15 @@ router.post('/addClient', async (req, res) => {
 			session_token: req.user._id.toString(),
 			success_redirect_url: "https://wholesale-portal-testing.herokuapp.com/cart",
 
-      prefilled_customer: {
-        given_name: name,
-        family_name: lastName,
-        email: email,
-        address_line1: addr,
-        city: city,
-        postal_code: postalCode
-      }
-    })
+			prefilled_customer: {
+				given_name: name,
+				family_name: lastName,
+				email: email,
+				address_line1: addr,
+				city: city,
+				postal_code: postalCode
+			}
+		})
 
 		// The clientId will be saved in the database so It can
 		// be used to confirm the changes and
@@ -187,20 +187,21 @@ router.post('/addClient', async (req, res) => {
 					res.status(500).send('no user with this id')
 				} else {
 					user.updateOne({
-						$set: {"goCardlessID": redirectFlow.id}
+						$set: { "goCardlessID": redirectFlow.id }
 					})
 						.then(
-								res.json({
-									success:true,
-									url: redirectFlow.redirect_url
-								})
+							res.json({
+								success: true,
+								url: redirectFlow.redirect_url
+							})
 						)
 				}
 			})
 			.catch(err => {
-							console.log(err);
-							res.status(500).send("error updating database")}
-							);
+				console.log(err);
+				res.status(500).send("error updating database")
+			}
+			);
 	} catch (error) {
 		console.log(error);
 		res.status(500).send('error creating client')
@@ -235,13 +236,15 @@ router.post('/completeRedirect/', async (req, res) => {
 		console.log(redirectFlow);
 		activeUser
 			.updateOne({
-				$set: {"goCardlessMandate": redirectFlow.links.mandate,
-						"goCardlessID": redirectFlow.links.customer}
+				$set: {
+					"goCardlessMandate": redirectFlow.links.mandate,
+					"goCardlessID": redirectFlow.links.customer
+				}
 			})
 			.then(
 				res.json({
-				success:true,
-			}));
+					success: true,
+				}));
 	} catch (error) {
 		console.log(error);
 		res.status(500).send('error completing client')
@@ -270,10 +273,9 @@ const getTotal = async products => {
 router.post('/collectPayment', async (req, res) => {
 	try {
 		//validate delivery sizes
-		const {errors, isValid} = validateDeliverySizes(req.body.delivery);
-		if (!isValid)
-		{
-			res.status(500).send({errors: errors});
+		const { errors, isValid } = validateDeliverySizes(req.body.delivery);
+		if (!isValid) {
+			res.status(500).send({ errors: errors });
 		} else {
 			const delivery = req.body.delivery;
 			const host = 'http://production.shippingapis.com/ShippingAPI.dll';
@@ -292,10 +294,9 @@ router.post('/collectPayment', async (req, res) => {
 				state: delivery.state,
 				zip: delivery.postal_code
 			}, async (err, address) => {
-				if (err !== null)
-				{
+				if (err !== null) {
 					res.status(400).send({
-						errors:{
+						errors: {
 							ClientAddr1: "Invalid Address. The problem may be also your postal code, state, city"
 						}
 					});
@@ -305,12 +306,12 @@ router.post('/collectPayment', async (req, res) => {
 		}
 
 		const activeUser = await User.findById(req.user._id)
-									 .catch(err => console.log(err))
+			.catch(err => console.log(err))
 		//get the cart
 		const order = activeUser.cart
 
 		//initialize goCardless
-		const allClients =  await gocardless(
+		const allClients = await gocardless(
 			process.env.GC_LIVE_TOKEN,
 			constants.Environments.Live,
 			{ raiseOnIdempotencyConflict: true },
@@ -320,10 +321,10 @@ router.post('/collectPayment', async (req, res) => {
 		//set proper client currency to payment
 		//to go live needs to add other currencies
 		const theClient = await allClients.customers.find(activeUser.goCardlessID)
-													.catch(err => {
-																console.log("GC ID NOT FOUND");
-																res.status(500).send("GC id not found")
-															})
+			.catch(err => {
+				console.log("GC ID NOT FOUND");
+				res.status(500).send("GC id not found")
+			})
 		const clientCountry = theClient.country_code;
 		let currency;
 		if (clientCountry === "US")
@@ -335,7 +336,7 @@ router.post('/collectPayment', async (req, res) => {
 		//to go live needs all values to come with ,00 after the value
 		//or add a double zero to the total because of goCardless
 		const total = await getTotal(order)
-			.then(total => {return(total)})
+			.then(total => { return (total) })
 			.catch(err => console.log(err));
 
 		//create new order in db
@@ -347,9 +348,7 @@ router.post('/collectPayment', async (req, res) => {
 		});
 		console.log("TOTAL:" + total);
 
-		newOrder
-			.save()
-			.catch((err) => console.log(err));
+		await newOrder.save().catch((err) => console.log(err));
 
 		const payment = await allClients.payments.create(
 			{
@@ -366,32 +365,33 @@ router.post('/collectPayment', async (req, res) => {
 			//Idempotency-Key is going to be the order _id generated by mongoDB
 			//This guarantees that the order won't be charged twice
 			newOrder._id.toString()
-		) .then (payment => {
-			newOrder.updateOne({$set: {"paymentID": payment.id}})
-				    .then(() => {
-				    	//Clean the cart in db
-						User.updateOne(
-							{ _id: req.user._id },
-							{ cart: [] })
-							.catch(err => console.log("couldn't clean cart"))
+		).then(payment => {
+			newOrder.updateOne({ $set: { "paymentID": payment.id } })
+				.then(() => {
+					//Clean the cart in db
+					User.updateOne(
+						{ _id: req.user._id },
+						{ cart: [] })
+						.catch(err => console.log("couldn't clean cart"))
 
-						//send order and payment information so can redirect to order's page
-				    	res.json({
-							order: newOrder,
-							payment: payment
-						})
-				    })
-				    .catch(err=>{
-				    	console.log(`Can't Update Database: ${err}`);
-						res.status(500).send({errors: {payment: "Your payment is done! But we couldn't connect to our database, contact us"}});
-				 	})
-		}) .catch(err => {
+					confirmOrderEmail(req.user, newOrder, payment)
+					//send order and payment information so can redirect to order's page
+					res.json({
+						order: newOrder,
+						payment: payment
+					})
+				})
+				.catch(err => {
+					console.log(`Can't Update Database: ${err}`);
+					res.status(500).send({ errors: { payment: "Your payment is done! But we couldn't connect to our database, contact us" } });
+				})
+		}).catch(err => {
 			console.log(err);
-			res.status(500).send({errors: {payment: "Couldn't make payment"}})
+			res.status(500).send({ errors: { payment: "Couldn't make payment" } })
 		})
 	} catch (error) {
 		console.log(error);
-		res.status(500).send({error: {payment: 'error making payment'}})
+		res.status(500).send({ error: { payment: 'error making payment' } })
 	}
 });
 
@@ -407,7 +407,7 @@ router.post('/changePayment/:orderID', async (req, res) => {
 		//get all the order information from DB
 		const order = await Order.findById(req.params.orderID)
 			.then(order => {
-				if(!order){
+				if (!order) {
 					console.log("order not found");
 					res.status(500).send('no order with this id')
 				} else {
@@ -415,8 +415,7 @@ router.post('/changePayment/:orderID', async (req, res) => {
 				}
 			})
 
-		if (req.body.type === "cancel")
-		{
+		if (req.body.type === "cancel") {
 			const cancelPayment = await allClients.payments.cancel(order.paymentID);
 			console.log(`Cancel Payment Status: ${cancelPayment.status}`);
 		} else {

@@ -20,9 +20,14 @@ const UserSchema = new Schema({
     default: false,
     required: true
   },
-  // name: {
-  //   type: String
-  // },
+  isOwner: {
+    type: Boolean,
+    default: false,
+    required: true
+  },
+  name: {
+    type: String
+  },
   paymentVerified: {
     type: Boolean,
     default: false

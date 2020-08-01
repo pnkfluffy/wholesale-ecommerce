@@ -2,6 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
+const mapStateToProps = state => ({
+  state: state.reducer
+})
 class Settings extends React.Component {
   constructor(props) {
     super(props);
@@ -18,8 +21,9 @@ class Settings extends React.Component {
         <div onClick={this.showUser}>
             Show User
         </div>
+        <Link className='dropdown_link' to='/logout'>Logout</Link>
       </div>
     );
   }
 }
-export default Settings;
+export default connect(mapStateToProps)(Settings);

@@ -3,7 +3,7 @@ import SearchIcon from '@material-ui/icons/Search'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
-import DropDown from './dropdown'
+import SettingsIcon from '@material-ui/icons/Settings';
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -20,20 +20,12 @@ const mapDispatchToProps = dispatch => {
 class Header extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {
-      dropdown: false
-    }
   }
   // {!} IMPLIMENT SEARCH USING THIS LIBRARY:
   //  https://github.com/joehdodd/react-filter-search
 
-  openDropdown = () => {
-    this.setState({ dropdown: true })
-  }
-
-  closeDropdown = () => {
-    console.log('closing!!!')
-    this.setState({ dropdown: false })
+  toSettings = () => {
+    this.props.history.push('/settings')
   }
 
   render () {
@@ -56,11 +48,8 @@ class Header extends React.Component {
           </div>
         </div>
         <div className='header_navcard'>
-          <div className='header_username'>{this.props.state.user.name}</div>
-          <MoreHorizIcon onClick={this.openDropdown} />
-          {this.state.dropdown && (
-            <DropDown closeDropdown={this.closeDropdown} />
-          )}
+          <div className='header_username'>{this.props.state.user.email}</div>
+          <SettingsIcon onClick={this.toSettings} style={{ cursor: 'pointer' }} />
         </div>
       </div>
     )

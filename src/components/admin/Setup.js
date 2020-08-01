@@ -6,7 +6,7 @@ import defaultMessages from 'ra-language-english'
 import polyglotI18nProvider from 'ra-i18n-polyglot'
 import createAdminStore from './createAdminStore'
 
-import { UserList, UserEdit, UserShow } from './menuItems/Users'
+import { UserList, UserEdit, UserShow, UserCreate } from './menuItems/Users'
 import {
   ProductList,
   ProductShow,
@@ -51,6 +51,7 @@ const AdminSetup = () => (
         list={UserList}
         edit={UserEdit}
         show={UserShow}
+        create={UserCreate}
         icon={UserIcon}
       />
       <Resource

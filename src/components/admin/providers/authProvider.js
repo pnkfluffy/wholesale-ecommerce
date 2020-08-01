@@ -10,7 +10,6 @@ const cookie = new Cookies()
 export default {
   // called when the user attempts to log in
   login: ({ username, password }) => {
-    password = shajs('sha256').update(password).digest('hex')
     const request = new Request(`/api/admin-users/login`, {
       method: 'POST',
       body: JSON.stringify({ username, password }),

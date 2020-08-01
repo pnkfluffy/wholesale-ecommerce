@@ -128,6 +128,16 @@ export const UserEdit = props => (
   </Edit>
 )
 
+export const UserCreate = props => {
+  return (
+    <Create {...props}>
+      <SimpleForm>
+        <TextInput label='User Email' source='name' />
+      </SimpleForm>
+    </Create>
+  )
+}
+
 // custom components
 
 const UserTitle = ({ record }) => {

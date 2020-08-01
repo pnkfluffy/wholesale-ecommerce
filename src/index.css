@@ -127,6 +127,10 @@ input::-webkit-inner-spin-button {
   margin-bottom: 2vh;
 }
 
+.no_display {
+  display: none;
+}
+
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,

@@ -81,7 +81,7 @@ class App extends React.Component {
     )
 
     let routes = loggedOutRoutes
-    if (this.props.state.user.name) routes = loggedInRoutes
+    if (this.props.state.user.email) routes = loggedInRoutes
     if (cookie.get('sig')) routes = adminRoutes
 
     return (

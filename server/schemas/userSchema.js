@@ -2,27 +2,35 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const UserSchema = new Schema({
-  googleID: {
+  // googleID: {
+  //   type: String,
+  //   default: null
+  // },
+  email: {
     type: String,
-    default: null
+    required: true,
+    unique: true
   },
-  //   email: {
-  //     type: String,
-  //   },
-  //   password: {
-  //     type: String,
-  //   },
-  name: {
-    type: String
+  password: {
+    type: String,
+    required: true
   },
+  isAdmin: {
+    type: Boolean,
+    default: false,
+    required: true
+  },
+  // name: {
+  //   type: String
+  // },
   paymentVerified: {
     type: Boolean,
     default: false
   },
-  docusignVerified: {
-    type: Boolean,
-    default: false
-  },
+  // docusignVerified: {
+  //   type: Boolean,
+  //   default: false
+  // },
   goCardlessID: {
     type: String
   },

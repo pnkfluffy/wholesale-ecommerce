@@ -40,8 +40,8 @@ router.get('/', rejectUnauthenticated, async (req, res) => {
 
 router.post('/', rejectUnauthenticated, async (req, res) => {
   try {
-    console.log(req.body.cart)
-    console.log(req.user._id)
+    // console.log(req.body.cart)
+    // console.log(req.user._id)
     const user = await User.findOneAndUpdate(
       { _id: req.user._id },
       {

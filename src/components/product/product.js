@@ -94,7 +94,17 @@ class Product extends React.Component {
                   <div className='product_title'>{product.name}</div>
                 </div>
                 <ProductMetaData metaData={product.metaData} />
-                <PriceTiers tiers={product.priceTiers} product={this.state} />
+                {product.priceTiers.length ? (
+                  <PriceTiers tiers={product.priceTiers} product={this.state} />
+                ) : (
+                  <div className='no_priceTiers_message'>
+                    No bulk discounts have been listed for this product. Want to
+                    negotiate something?{' '}
+                    <a className='light_green' href='tel:5551234567'>
+                      Reach out!
+                    </a>
+                  </div>
+                )}
                 <div className='product_quantity_container'>
                   <div className='product_price'>
                     $<div className='price_price'>{totalPrice}</div>

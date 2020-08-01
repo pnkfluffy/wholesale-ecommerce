@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import Swal from 'sweetalert2'
 import CartQuantity from './cartQuantity'
 import blank_image from '../../resources/images/blank_image.jpg'
 
@@ -9,9 +10,22 @@ const mapStateToProps = state => ({
 
 class OrderCard extends React.Component {
   deleteProduct = () => {
-    this.props.dispatch({
-      type: 'DELETE_CART_ITEM',
-      payload: this.props.product._id
+    let product = this.props.product
+    Swal.fire({
+      title: `Removing ${product.name} from your cart`,
+      text: 'Are you sure?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'remove',
+      cancelButtonText: 'nevermind',
+      confirmButtonColor: 'rgb(255, 102, 102)'
+    }).then(res => {
+      if (res.value) {
+        this.props.dispatch({
+          type: 'DELETE_CART_ITEM',
+          payload: { id: this.props.product._id }
+        })
+      }
     })
   }
 
@@ -29,7 +43,10 @@ class OrderCard extends React.Component {
             <div className='order_card_id'>#{product._id}</div>
           </div>
           <div className='order_card_quantities'>
-            <CartQuantity productInfo={product} />
+            <CartQuantity
+              productInfo={product}
+              deleteProduct={this.deleteProduct}
+            />
             <b>price: ${this.props.total}</b>
             <div className='remove_from_cart_text' onClick={this.deleteProduct}>
               REMOVE FROM CART

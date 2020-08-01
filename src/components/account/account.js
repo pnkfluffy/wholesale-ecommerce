@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import FavoriteProductCard from './favoriteProductCard'
 import OrderHistory from '../orderHistory/orderHistory'
+
 const mapStateToProps = state => ({
   state: state.reducer
 })
@@ -9,22 +10,18 @@ const mapStateToProps = state => ({
 class Account extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      favoriteProductList: this.props.state.favorites
-    }
   }
 
-  render() {
-    let favorites = this.props.state.products.products.map(product => {
-      if (this.props.state.products.products.indexOf(product._id) !== -1) {
-        return (
-          <FavoriteProductCard
-            product={product}
-            key={product._id}
-            images={product.imageData}
-          />
-        )
-      }
+  render() {    
+    let favorites = this.props.state.favorites.map(favorite => {
+      let productInfo = this.props.state.products.products.find(product => product._id === favorite)
+      return (
+        <FavoriteProductCard
+          product={productInfo}
+          key={productInfo._id}
+          images={productInfo.imageData}
+        />
+      )
     })
 
     return (

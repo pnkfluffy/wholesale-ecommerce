@@ -8,14 +8,13 @@ export const initializeAllRequests = async () => {
   axios
     .get('/auth/user')
     .then(async res => {
-      store.dispatch({ type: 'APP_LOADED' })
       //  only fires if user get successfull
       store.dispatch({ type: 'GET_USER', payload: res.data })
-      store.dispatch({ type: 'SET_FAVORITES', payload: res.data.favorites })
       await getAllReviews()
       await getUserCart()
       await getUserFavorites()
       await getAllOrders()
+      store.dispatch({ type: 'APP_LOADED' })
     })
     .catch(err => {
       store.dispatch({ type: 'APP_LOADED' })

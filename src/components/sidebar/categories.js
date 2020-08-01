@@ -25,6 +25,7 @@ class Categories extends React.Component {
             className={`category + ${this.props.state.categories.category ===
               category && 'category_active'}`}
             onClick={() => this.setCategory(category)}
+            key={category}
           >
             {this.props.state.categories.category === category && (
               <div className='category_active_dash' />

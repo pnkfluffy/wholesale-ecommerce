@@ -44,11 +44,11 @@ class ReviewsCard extends React.Component {
     let i = 0
     let stars = []
     while (i < this.props.review.stars) {
-      stars.push(<StarIcon fontSize='inherit'></StarIcon>)
+      stars.push(<StarIcon fontSize='inherit' key={i}></StarIcon>)
       i++
     }
     while (i < 5) {
-      stars.push(<StarBorderIcon fontSize='inherit'></StarBorderIcon>)
+      stars.push(<StarBorderIcon fontSize='inherit' key={i}></StarBorderIcon>)
       i++
     }
     return stars

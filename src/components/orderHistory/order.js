@@ -34,6 +34,7 @@ class Order extends React.Component {
         <ProductInOrderCard
           productInfo={productInfo}
           quantity={product.quantity}
+          key={productsWithInfo._id}
         ></ProductInOrderCard>
       )
     })

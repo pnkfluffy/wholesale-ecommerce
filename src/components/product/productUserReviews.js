@@ -39,7 +39,7 @@ class ProductUserReviews extends React.Component {
       if (reviews[0]) {
         return reviews.map(one => {
           console.log(one)
-          return <ReviewsCard review={one} />
+          return <ReviewsCard review={one} key={one._id}/>
         })
       }
     } else {

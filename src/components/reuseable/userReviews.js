@@ -24,8 +24,8 @@ class UserReviews extends React.Component {
       if (this.props.reviews[i]) reviews.push(this.props.reviews[i])
     }
     if (reviews[0]) {
-      return reviews.map((one, index) => {
-        return <ReviewsCard key={index} review={one} />
+      return reviews.map((one) => {
+        return <ReviewsCard key={one._id} review={one} />
       })
     }
   }

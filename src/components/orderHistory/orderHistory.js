@@ -39,7 +39,7 @@ class OrderHistory extends React.Component {
       if (payments) {
         while (i < orders.length) {
           ordersAndPay.push(
-            <OrderHistoryCard order={orders[i]} payment={payments[i]} />
+            <OrderHistoryCard order={orders[i]} payment={payments[i]} key={i} />
           )
           i++
         }

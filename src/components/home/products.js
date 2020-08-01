@@ -38,13 +38,13 @@ class Products extends React.Component {
           value={searchTerm}
           data={categorizedProducts}
           renderResults={results =>
-            results.map(product => <ProductCard product={product} />)
+            results.map(product => <ProductCard product={product} key={product._id}/>)
           }
         />
       )
     } else {
       return categorizedProducts.map(product => (
-        <ProductCard product={product} />
+        <ProductCard product={product} key={product._id}/>
       ))
     }
   }

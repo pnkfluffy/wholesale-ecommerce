@@ -14,9 +14,6 @@ const mapStateToProps = state => ({
   state: state.reducer
 })
 
-const mapStateToProps = state => ({
-  state: state.reducer
-})
 class Settings extends React.Component {
   constructor (props) {
     super(props)
@@ -233,7 +230,6 @@ class Settings extends React.Component {
             </Link>
           </div>
         </div>
-        <Link className='dropdown_link' to='/logout'>Logout</Link>
       </div>
     )
   }

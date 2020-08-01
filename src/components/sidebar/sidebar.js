@@ -56,14 +56,6 @@ class Sidebar extends React.Component {
             )}
             Cart
           </Link>
-          <Link
-            className={`menu_link + ${location === '/settings' &&
-              'menu_active'}`}
-            to='/settings'
-          >
-            <SettingsIcon />
-            Settings
-          </Link>
         </div>
         <Categories />
         <div className='sidebar_footer'>

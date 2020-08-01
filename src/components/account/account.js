@@ -33,7 +33,6 @@ class Account extends React.Component {
   render () {
     return (
       <div>
-        <div className='page_header'>Account</div>
         <div className='account_container'>
           <div className='section_container'>
             <div className='page_subheader'>Order History</div>

@@ -30,33 +30,25 @@ class OrderHistory extends React.Component {
       .catch(err => console.log(err))
   }
 
-  printOrders = () => {
-    const orders = this.props.state.orders
-    if (orders[0]) {
-      let i = 0
-      let ordersAndPay = []
-      const payments = this.state.payments
-      if (payments) {
-        while (i < orders.length) {
-          ordersAndPay.push(
-            <OrderHistoryCard order={orders[i]} payment={payments[i]} key={i} />
-          )
-          i++
-        }
-      }
-      return ordersAndPay
-    } else {
-      return <h1>No orders yet</h1>
-    }
-  }
-
   render () {
+    let ordersAndPay
+    if (this.props.state.orders.length > 0 && this.state.payments.length > 0) {
+      ordersAndPay = this.props.state.orders.map((order, index) => {
+        return (
+          <OrderHistoryCard order={order} payment={this.state.payments[index]} key={index} />
+        )
+      })
+    }
+    else {
+      ordersAndPay = "No orders yet"
+    }
+
     return (
       <div className='order_history'>
         {this.state.loading ? (
           <img src={loading} alt='loading' />
         ) : (
-          this.printOrders()
+          ordersAndPay
         )}
       </div>
     )

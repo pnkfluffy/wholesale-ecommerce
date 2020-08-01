@@ -1,5 +1,10 @@
+.order_history {
+    display: flex;
+    flex-direction: column-reverse;
+}
+
 .getReceiptButton {
-    width: 8vw;
+    width: 9vw;
     height: 1vw;
     padding: 0.5vw 1vw 0.5vw 1vw;
     border-radius: 8px;
@@ -16,8 +21,9 @@
 }
 
 .card_of_order {
-    width: 60%;
+    width: 90%;
     background-color: var(--searchbar-black);
+    margin-bottom: 5%;
 }
 
 /* EACH ORDER PAGE */

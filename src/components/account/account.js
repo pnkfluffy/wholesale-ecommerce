@@ -36,7 +36,7 @@ class Account extends React.Component {
         <div className='page_header'>Account</div>
         <div className='account_container'>
           <div className='section_container'>
-            Order History
+            <div className='page_subheader'>Order History</div>
             <OrderHistory />
           </div>
           <div className='section_container'>

@@ -46,7 +46,7 @@
 .carousel_image_container,
 .carousel_image_container_active {
   width: 18%;
-  border-radius: 15px;
+  border-radius: 16px;
   border: 2px solid;
   margin-left: 2.1vw;
 }
@@ -63,7 +63,7 @@
 .static_carousel_image_container,
 .static_carousel_image_container_active {
   width: 18%;
-  border-radius: 15px;
+  border-radius: 16px;
   border: 2px solid;
 }
 

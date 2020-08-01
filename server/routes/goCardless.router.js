@@ -14,9 +14,8 @@ const constants = require('gocardless-nodejs/constants')
 
 const initializeGoCardless = async () => {
 	const allClients = await gocardless(
-
-		process.env.GC_LIVE_TOKEN,
-		constants.Environments.Live,
+		process.env.GC_ACCESS_TOKEN,
+		constants.Environments.Sandbox,
 		{ raiseOnIdempotencyConflict: true },
 	);
 
@@ -29,14 +28,12 @@ const initializeGoCardless = async () => {
 router.get('/checkClientID', async (req, res) => {
 	User.findById(req.user._id)
 		.then(user => {
-			console.log(user);
 			if (user.goCardlessID)
 			{
 				res.send(true)
 			}
 			else
 				res.send(false)
-			res.json(true)
 		})
 		.catch(err => console.log(err))
 });
@@ -47,14 +44,14 @@ router.get('/checkClientID', async (req, res) => {
 router.get('/checkClientMandate', async (req, res) => {
 	User.findById(req.user._id)
 		.then(user => {
-			console.log(user);
 			if (user.goCardlessMandate)
 			{
 				res.send(true)
 			}
 			else
+			{
 				res.send(false)
-			res.json(true)
+			}
 		})
 		.catch(err => console.log(err))
 });
@@ -83,19 +80,19 @@ router.get('/clients', async (req, res) => {
 // @access  Private
 router.get('/oneClient', async (req, res) => {
 	try {
-		const activeUser = User.findById(req.user_id)
+		const activeUser = await User.findById(req.user._id)
 								.catch(err => {
 									console.log(err);
 									res.status(500).send("Couldn't find user in db")}
 								);
 
 		const allClients =  await gocardless(
-			process.env.GC_LIVE_TOKEN,
-			constants.Environments.Live,
-			{ raiseOnIdempotencyConflict: true },
+			process.env.GC_ACCESS_TOKEN,
+			// Change this to constants.Environments.Live when you're ready to go live
+			constants.Environments.Sandbox,
 		);
-
-		const theClient = await allClients.customers.find(activeUser.goCardlessID)
+		console.log(activeUser)
+		const theClient = await allClients.customers.find(activeUser.goCardlessID);
 		res.send(theClient);
 	} catch (error) {
 		console.log(error);
@@ -164,7 +161,10 @@ router.post('/addClient', async (req, res) => {
 		const redirectFlow = await allClients.redirectFlows.create({
 			description: "Cider Barrels",
 			session_token: req.user._id.toString(),
+			/*(!) TO GO LIVE
 			success_redirect_url: "https://wholesale-portal-testing.herokuapp.com/cart",
+			 */
+			success_redirect_url: "http://localhost:3000/cart",
 
       prefilled_customer: {
         given_name: name,
@@ -181,7 +181,6 @@ router.post('/addClient', async (req, res) => {
 		// be used to get the client information later
 		User.findById(req.user._id)
 			.then(user => {
-				console.log(user);
 				if (!user) {
 					console.log("no user with this id");
 					res.status(500).send('no user with this id')
@@ -213,6 +212,7 @@ router.post('/addClient', async (req, res) => {
 // @access  Private
 router.post('/completeRedirect/', async (req, res) => {
 	try {
+		console.log("redirect")
 		const allClients = await initializeGoCardless();
 		//get activeUser from database
 		const activeUser = await User.findById(req.user._id)
@@ -232,7 +232,6 @@ router.post('/completeRedirect/', async (req, res) => {
 		);
 
 		/*save mandate to database*/
-		console.log(redirectFlow);
 		activeUser
 			.updateOne({
 				$set: {"goCardlessMandate": redirectFlow.links.mandate,
@@ -260,6 +259,7 @@ const getTotal = async products => {
 			.catch(err => console.log(err));
 		total = total + (productInfo.price * products[i].quantity);
 	}
+	total = total * 100;
 	return (total);
 }
 
@@ -310,9 +310,15 @@ router.post('/collectPayment', async (req, res) => {
 		const order = activeUser.cart
 
 		//initialize goCardless
+		/*(!) TO GO LIVE
 		const allClients =  await gocardless(
-			process.env.GC_LIVE_TOKEN,
-			constants.Environments.Live,
+				process.env.GC_LIVE_TOKEN,
+				constants.Environments.Live,
+				{ raiseOnIdempotencyConflict: true },
+			);*/
+		const allClients =  await gocardless(
+			process.env.GC_ACCESS_TOKEN,
+			constants.Environments.Sandbox,
 			{ raiseOnIdempotencyConflict: true },
 		);
 
@@ -324,6 +330,7 @@ router.post('/collectPayment', async (req, res) => {
 																console.log("GC ID NOT FOUND");
 																res.status(500).send("GC id not found")
 															})
+
 		const clientCountry = theClient.country_code;
 		let currency;
 		if (clientCountry === "US")
@@ -432,4 +439,4 @@ router.post('/changePayment/:orderID', async (req, res) => {
 	}
 });
 
-module.exports = router
+module.exports = router;

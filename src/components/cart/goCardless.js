@@ -7,6 +7,9 @@ import loading from '../../resources/images/loadingBig.svg'
 import GCFillInfo from './gcFillInfo'
 import GCPay from './gcPay'
 
+import createHistory from 'history/createBrowserHistory'
+const history = createHistory()
+
 const mapStateToProps = state => ({
   state: state.reducer
 })
@@ -15,18 +18,12 @@ class GoCardless extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      loading: false,
+      loading: true,
       hasClientID: false,
-      hasMandate: false
+      hasMandate: false,
+      hasCheckedUrl: false,
+      hasCheckedClient: false
     }
-  }
-
-  componentDidMount () {
-    this.setState({
-      loading: true
-    })
-    this.checkClientCGID()
-    this.checkClientMandate()
   }
 
   checkClientCGID = () => {
@@ -38,11 +35,6 @@ class GoCardless extends React.Component {
           console.log('got client id')
           this.setState({
             hasClientID: true,
-            loading: false
-          })
-        } else {
-          this.setState({
-            loading: false
           })
         }
       })
@@ -56,12 +48,9 @@ class GoCardless extends React.Component {
       .get('/api/gc/checkClientMandate')
       .then(res => {
         if (res.data) {
+          console.log("got mandate");
           this.setState({
             hasMandate: true,
-            loading: false
-          })
-        } else {
-          this.setState({
             loading: false
           })
         }
@@ -70,57 +59,71 @@ class GoCardless extends React.Component {
         console.log(err)
       })
   }
-
+  checkForIdOrMandate = async () => {
+      await this.checkClientCGID();
+      await this.checkClientMandate();
+      this.setState({
+        hasCheckedClient: true,
+        loading: false
+      })
+  }
   confirmAccount = () => {
+    console.log("confirming account");
     let params = new URLSearchParams(window.location.href)
-    if (params.has('https://wholesale-portal-testing.herokuapp.com/cart?redirect_flow_id')) {
+    /*(!) TO GO LIVE
+    const url = 'https://wholesale-portal-testing.herokuapp.com/cart?redirect_flow_id';
+    */
+    const url = 'http://localhost:3000/cart?redirect_flow_id'
+    if (params.has(url)) {
       this.setState({
         loading: true
       })
-      const id = localStorage.getItem('gc')
-      console.log(id)
+      const redirect = params.get(url)
       axios
-        .post('/api/gc/completeRedirect', { id: id })
+        .post('/api/gc/completeRedirect', redirect)
         .then(res => {
           this.setState({
             hasMandate: true,
             hasClientID: true,
+            hasCheckedUrl: true,
             loading: false
           })
-          this.props.history.push('/cart')
-          this.props.history.push('/cart')
-          localStorage.removeItem('gc')
+          window.open("http://localhost:3000/cart", "_self");
         })
         .catch(err => {
+          console.log("have an error");
           console.log(err)
           this.setState({
+            hasCheckedUrl: true,
             loading: false
           })
-          this.props.history.push('/cart')
+          window.open("http://localhost:3000/cart", "_self");
         })
     } else {
       this.setState({
-        hasClientID: false,
+        hasCheckedUrl: true,
         loading: false
       })
+      return <GCFillInfo total={this.props.total} />
     }
   }
 
   render () {
+    if (!this.state.hasCheckedClient)
+      this.checkForIdOrMandate()
+    if (this.state.hasClientID && !this.state.hasCheckedUrl)
+      this.confirmAccount()
     return (
       <div className='buy'>
         {(() => {
-          // if (this.state.loading) {
-          //   return <img src={loading} />
-          // } else if (!this.state.hasClientID) {
-          //   return <GCFillInfo total={this.props.total} />
-          // } else if (!this.state.hasMandate) {
-          //   {
-          //     this.confirmAccount()
-          //   }
-          // } else {
+          if (this.state.loading) {
+              return <img src={loading} />
+          }
+          else if (!this.state.hasMandate) {
+            return <GCFillInfo total={this.props.total} />
+          } else {
             return <GCPay total={this.props.total} />
-          // }
+         }
         })()}
       </div>
     )

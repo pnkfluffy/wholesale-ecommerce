@@ -51,6 +51,7 @@ class GCPay extends React.Component {
     axios
       .get('/api/gc/oneClient')
       .then(res => {
+        console.log("got user!")
         console.log(res.data)
         this.setState({
           loading: false,
@@ -108,7 +109,7 @@ class GCPay extends React.Component {
           pathname: url,
           state: {
             payment: res.data.payment,
-            order: res.data.order
+            order: res.data.order,
           }
         })
       })
@@ -124,45 +125,7 @@ class GCPay extends React.Component {
       })
   }
 
-  checkZipCode = zip => {
-    const host = 'http://production.shippingapis.com/ShippingAPI.dll'
-    const userName = '314CBDDY8065'
-
-    if (zip.length === 5 && !isNaN(zip)) {
-      const usps = new USPS({
-        server: host,
-        userId: userName,
-        ttl: 10000 //TTL in milliseconds for request
-      })
-
-      usps.cityStateLookup(zip, (err, result) => {
-        if (result) {
-          let city = result.city.toLowerCase()
-          city = city.replace(/^./, city[0].toUpperCase())
-          this.setState({
-            ClientCity: city,
-            ClientState: result.state,
-            err: {
-              ClientPostalCode: ''
-            }
-          })
-        } else {
-          this.setState({
-            err: {
-              postal_code: 'invalid postal code'
-            }
-          })
-        }
-      })
-    }
-  }
-
   onChange = e => {
-    //check city and state for postal code
-    if (e.target.name === 'ClientPostalCode') {
-      const zip = e.target.value
-      this.checkZipCode(zip)
-    }
     this.setState({
       [e.target.name]: e.target.value
     })

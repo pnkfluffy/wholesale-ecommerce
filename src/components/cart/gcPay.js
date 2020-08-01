@@ -99,6 +99,12 @@ class GCPay extends React.Component {
           paymentDone: true
         })
 
+        //add order to redux state orders
+        let allOrders = this.props.state.orders;
+        allOrders.push(res.data.order);
+        console.log(allOrders);
+        store.dispatch({type: 'ADD_ORDERS', payload: allOrders})
+        
         //Clean the cart
         console.log('collecting payment')
         store.dispatch({ type: 'EMPTY_CART', payload: [] })
@@ -114,7 +120,7 @@ class GCPay extends React.Component {
         })
       })
       .catch(err => {
-        if (err.response.data.errors) {
+        if (err.response && err.response.data.errors) {
           Swal.fire('ERROR:', err.response.data.errors, 'error')
           this.setState({
             err: err.response.data.errors,

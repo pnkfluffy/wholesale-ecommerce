@@ -9,9 +9,9 @@ const mapStateToProps = state => ({
 })
 
 class OrderCard extends React.Component {
-  deleteProduct = () => {
+  deleteProduct = async () => {
     let product = this.props.product
-    Swal.fire({
+    const res = await Swal.fire({
       title: `Removing ${product.name} from your cart`,
       text: 'Are you sure?',
       icon: 'warning',
@@ -20,13 +20,30 @@ class OrderCard extends React.Component {
       cancelButtonText: 'nevermind',
       confirmButtonColor: 'rgb(255, 102, 102)'
     }).then(res => {
-      if (res.value) {
+      console.log(res);
+      if (res.isDismissed) {
+        let quantity = this.props.product.quantity;
+        console.log(quantity);
+        if (!quantity)
+          quantity = 1;
+        this.props.dispatch({
+          type: 'UPDATE_CART_ITEM',
+          payload: {
+            id: this.props.product._id,
+            quantity: quantity
+          }
+        })
+        return (false);
+      }
+      else if (res.value) {
         this.props.dispatch({
           type: 'DELETE_CART_ITEM',
           payload: { id: this.props.product._id }
         })
+        return (true);
       }
     })
+    return res;
   }
 
   render () {

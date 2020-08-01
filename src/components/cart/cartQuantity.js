@@ -32,24 +32,49 @@ class CartQuantity extends React.Component {
     )
   }
 
-  reduceQuantity = event => {
+  reduceQuantity = async event => {
     if (this.state.quantity === 1) {
-      this.props.deleteProduct()
+      const res = await this.props.deleteProduct()
+      if (!res)
+        this.setState(
+            {
+          quantity: 1
+        },
+        () => {
+          this.dispatchQuantity()
+        })
     }
-    this.setState(
-      {
-        quantity: this.state.quantity - 1
-      },
-      () => {
-        this.dispatchQuantity()
-      }
-    )
+    else {
+      this.setState(
+          {
+            quantity: this.state.quantity - 1
+          },
+          () => {
+            this.dispatchQuantity()
+          }
+      )
+    }
   }
 
-  inputQuantity = event => {
-    this.setState({
-      quantity: parseInt(event.target.value, 10)
-    })
+  inputQuantity = async event => {
+    if (parseInt(event.target.value, 10) <= 0) {
+      const res =  await this.props.deleteProduct()
+      if(!res)
+      {
+        this.setState(
+            {
+              quantity: 1
+            },
+            () => {
+              this.dispatchQuantity()
+            })
+      }
+    }
+    else {
+      this.setState({
+        quantity: parseInt(event.target.value, 10)
+      })
+    }
   }
 
   onBlur = () => {
@@ -57,7 +82,6 @@ class CartQuantity extends React.Component {
   }
 
   dispatchQuantity = () => {
-    console.log(this.state)
     this.props.dispatch({
       type: 'UPDATE_CART_ITEM',
       payload: {

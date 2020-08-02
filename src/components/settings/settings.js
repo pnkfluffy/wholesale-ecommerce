@@ -78,7 +78,7 @@ class Settings extends React.Component {
   render () {
     return (
       <div className='settings'>
-        <div className='page_header'>Settings</div>
+        {/* <div className='page_header'>Settings</div> */}
         <div className='settings_container'>
           <div className='section_container'>
             <div className='page_subheader'>Edit Account</div>

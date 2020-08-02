@@ -1,7 +1,7 @@
 import store from '../../redux/store'
 
 export const addQuantityToCart = product => {
-  console.log(product);
+  console.log(store.getState().reducer);
   let productInCart = store
     .getState()
     .reducer.cart.find(c => c.product === product._id)

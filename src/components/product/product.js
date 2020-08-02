@@ -10,13 +10,14 @@ import PriceTiers from './priceTiers'
 import { addQuantityToCart } from '../reuseable/addQuantityToCart'
 import { getPriceByQuantity } from '../reuseable/getPriceByQuantity'
 import { GreenButton } from '../reuseable/materialButtons'
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 
 const mapStateToProps = state => ({
   state: state.reducer
 })
 
 class Product extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       product: {
@@ -47,11 +48,12 @@ class Product extends React.Component {
         priceTiers: [],
         _id: ''
       },
-      quantity: 1
+      quantity: 1,
+      buttonActive: true,
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     axios
       .get('/api/products/' + this.props.match.params.productID)
       .then(res => {
@@ -66,22 +68,26 @@ class Product extends React.Component {
   }
 
   changeQuantity = quantity => {
-    if(quantity === "")
-      this.setState({quantity})
-    else if(quantity <= 0)
+    if (quantity === "")
+      this.setState({ quantity })
+    else if (quantity <= 0)
       this.setState({ quantity: 1 })
     else
       this.setState({ quantity })
   }
 
-  addToCart = () => {
-    let product = this.state.product
-    product.quantity = this.state.quantity
-    product.product = this.state.product._id
-    addQuantityToCart(product)
+  addToCart = (quantity) => {
+    this.setState({
+      buttonActive: false
+    }, () => {
+      let product = this.state.product
+      product.quantity = quantity
+      product.product = this.state.product._id
+      addQuantityToCart(product)
+    })
   }
 
-  render () {
+  render() {
     const product = this.state.product
     const totalPrice = getPriceByQuantity(
       product.priceTiers,
@@ -100,16 +106,16 @@ class Product extends React.Component {
                 </div>
                 <ProductMetaData metaData={product.metaData} />
                 {product.priceTiers.length ? (
-                  <PriceTiers tiers={product.priceTiers} product={this.state} />
+                  <PriceTiers tiers={product.priceTiers} product={this.state} addToCart={this.addToCart} />
                 ) : (
-                  <div className='no_priceTiers_message'>
-                    No bulk discounts have been listed for this product. Want to
+                    <div className='no_priceTiers_message'>
+                      No bulk discounts have been listed for this product. Want to
                     negotiate something?{' '}
-                    <a className='light_green' href='tel:5551234567'>
-                      Reach out!
+                      <a className='light_green' href='tel:5551234567'>
+                        Reach out!
                     </a>
-                  </div>
-                )}
+                    </div>
+                  )}
                 <div className='product_quantity_container'>
                   <div className='product_price'>
                     $<div className='price_price'>{totalPrice}</div>
@@ -122,13 +128,25 @@ class Product extends React.Component {
                 </div>
               </div>
               <div className='product_purchase'>
-                <GreenButton
-                  variant='contained'
-                  className='product_button'
-                  onClick={this.addToCart}
-                >
-                  Add To Cart
-                </GreenButton>
+                {this.state.buttonActive ? (
+                  <GreenButton
+                    variant='contained'
+                    className='product_button'
+                    onClick={() => this.addToCart(this.state.quantity)}
+                  >
+                    Add To Cart
+                  </GreenButton>
+                ) : (
+                    <GreenButton
+                      variant='contained'
+                      className='product_button'
+                      disabled={true}
+                      style={{color: 'white'}}
+                    >
+                      <CheckCircleOutlineIcon />
+                      Added!
+                    </GreenButton>
+                  )}
               </div>
             </div>
           </div>

@@ -27,10 +27,7 @@ class PriceTiers extends React.Component {
       confirmButtonColor: '#59BA47',
     }).then(res => {
       if (res.value) {
-        let product = this.props.product.product
-        product.quantity = quantity
-        product.product = this.props.product.product._id
-        addQuantityToCart(product)
+        this.props.addToCart(quantity)
       }
     })
   }

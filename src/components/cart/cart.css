@@ -74,6 +74,7 @@
 }
 
 .order_card_product_name {
+  cursor: pointer;
   font-size: 1.4vw;
   width: 100%;
   margin-bottom: 2%;

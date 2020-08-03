@@ -148,6 +148,7 @@
   margin-bottom: 5%;
   background-color: var(--searchbar-black);
   border-radius: 8px;
+  cursor: default;
 }
 
 .reviews_card_info {

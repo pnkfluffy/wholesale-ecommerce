@@ -222,7 +222,7 @@ class Settings extends React.Component {
             <Link to='/logout'>
               <RedButton
                 variant='contained'
-                className='half'
+                className='half logout_button'
                 startIcon={<ExitToAppIcon />}
               >
                 Logout

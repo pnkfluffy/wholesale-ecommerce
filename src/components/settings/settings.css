@@ -35,3 +35,7 @@
 .edit_address_input:last-child {
   margin-bottom: 4vh;
 }
+
+.logout_button {
+  margin-top: 34vh !important ;
+}

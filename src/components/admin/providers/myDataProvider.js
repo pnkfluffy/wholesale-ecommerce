@@ -54,7 +54,7 @@ const myDataProvider = {
           ...params,
           data: {
             ...params.data,
-            imageData: [...transformedNewImages, ...formerImages]
+            imageData: [...formerImages, ...transformedNewImages]
           }
         })
       )

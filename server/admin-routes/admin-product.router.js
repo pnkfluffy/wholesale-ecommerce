@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const uploadProductPhotos = require('../middleware/uploadphotosAWS')
+const uploadProductPhotos = require('../modules/uploadphotosAWS')
 const { rejectNonAdmin } = require('../modules/authentication-middleware')
 
 const Product = require('../schemas/productSchema')

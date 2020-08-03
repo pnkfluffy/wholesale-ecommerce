@@ -112,6 +112,7 @@ class ReviewsCard extends React.Component {
     const reviewDate = this.fixDateFormat()
     const onHomePage = Object.keys(this.props.match.params).length === 0
     const review = this.props.review.review
+
     return (
       <div className='reviews_card' onClick={this.goToProduct}>
         <div className='reviews_card_info'>

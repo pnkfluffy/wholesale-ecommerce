@@ -136,8 +136,8 @@ router.delete('/:id', rejectNonAdmin, async (req, res) => {
   console.log('Delete backend hit')
   console.log('params: ', req.params)
   Product.deleteOne({ _id: req.params.id })
-    .then(res => {
-      console.log(res)
+    .then(result => {
+      console.log(result)
       res.json('item deleted')
     })
     .catch(err => {

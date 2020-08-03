@@ -10,7 +10,7 @@ passport.use(
       passwordField: 'password',
       passReqToCallback: true
     },
-    function (req, username, password, cb) {
+    function (req, username, password, cb) {		
       User.findOne({ email: username }, async (err, user) => {
         if (err) {
           console.log(err)

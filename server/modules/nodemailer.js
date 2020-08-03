@@ -13,11 +13,10 @@ const newUserEmail = (user, url) => {
 		from: process.env.NODE_MAILER_USERNAME,
 		to: user.email,
 		subject: `Welcome to CBDDY Wholesale!`,
-		text: `
-		We've created your account, login with 
-		${user.email}
+		text:
+		`We've created your account, your temporary password is:
 		${user.password}
-		${url}
+		Login at https://cbddy-wholesale-portal.herokuapp.com/
 		`
 	})
 }

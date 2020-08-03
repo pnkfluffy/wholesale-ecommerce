@@ -10,13 +10,9 @@ const bcrypt = require('bcrypt')
 const { restart } = require('nodemon')
 
 //Login
-router.post(
-  '/login',
-  passport.authenticate('local', { failureRedirect: '/login' }),
-  (req, res) => {
-    res.sendStatus(201)
-  }
-)
+router.post('/login', passport.authenticate('local', { failureRedirect: '/login' }), (req, res) => {
+  res.sendStatus(201)
+})
 
 router.get('/logout', (req, res) => {
   req.logout()
@@ -41,11 +37,13 @@ router.get('/perms', (req, res) => {
 })
 
 router.post('/', rejectNonAdmin, async (req, res) => {
-  const pass = 'bub'
+  let pass = shajs('sha256').update(`${req.body.email}${req.body.name}${Date.now()}${Math.random() * 100}`).digest('hex')
+  pass = pass.substring(0, 10)
   const salt = await bcrypt.genSalt(10);
   const saltedPass = await bcrypt.hash(pass, salt);
   if (req.body.isAdmin && !req.user.isOwner) {
     res.status(403).send('Insufficient Permissions')
+    return
   }
   User.create({
     email: req.body.email,
@@ -63,10 +61,10 @@ router.post('/', rejectNonAdmin, async (req, res) => {
       )
       newUserEmail(
         {
-          email: req.body.name,
-          password: pass
+          email: req.body.email,
+          password: pass,
         },
-        ''
+        ""
       )
       res.status(200).json(newUser)
     })
@@ -198,8 +196,8 @@ router.put('/', rejectNonAdmin, async (req, res) => {
 //delete
 router.delete('/:id', rejectNonAdmin, async (req, res) => {
   User.deleteOne({ _id: req.params.id })
-    .then(res => {
-      console.log(res)
+    .then(result => {
+      console.log(result)
       res.status(200).send('item deleted')
     })
     .catch(err => {
@@ -214,8 +212,8 @@ router.delete('/', rejectNonAdmin, async (req, res) => {
   console.log(req.query.ids)
   for (let i = 0; i < req.query.ids.length; i++) {
     await User.deleteOne({ _id: req.params.id })
-      .then(res => {
-        console.log(res)
+      .then(result => {
+        console.log(result)
       })
       .catch(err => {
         console.log(err)

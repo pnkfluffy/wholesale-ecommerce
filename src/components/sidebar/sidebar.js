@@ -48,7 +48,7 @@ class Sidebar extends React.Component {
             to='/cart'
           >
             {this.props.state.cart.length > 0 ? (
-              <Badge badgeContent={this.props.state.cart.length} color="primary" style={{ transform: 'scale(0.8)', marginRight: "20%" }}>
+              <Badge badgeContent={this.props.state.cart.length} color="primary" style={{ transform: 'scale(0.7)', marginRight: "10%", marginLeft: 0 }}>
                 <ShoppingCartIcon />
               </Badge>
             ) : (

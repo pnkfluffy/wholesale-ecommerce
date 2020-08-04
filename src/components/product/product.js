@@ -96,10 +96,11 @@ handleClose = (event, reason) => {
       buttonActive: false
     }, () => {
       let product = this.state.product
+      console.log("PRODUCT", product)
       product.quantity = quantity
       product.product = this.state.product._id
       addQuantityToCart(product)
-      this.setSnackbar("success", "Your product has been added to your cart");
+      this.setSnackbar("success", product.quantity + product.metaData.units.unit + " " + product.name + " added to your cart");
     })
   }
   
@@ -139,7 +140,8 @@ handleClose = (event, reason) => {
         </div>
         <div className='product_page_main'>
           <div className='product_page_top'>
-            <ProductImages images={product.imageData} productID={product._id} />
+            <ProductImages 
+            images={product.imageData} productID={product._id} />
             <div className='product_page_info'>
               <div className='product_info'>
                 <div className='product_page_info_top'>

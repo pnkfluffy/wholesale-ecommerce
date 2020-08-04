@@ -37,6 +37,7 @@ class ProductImages extends React.Component {
       active: 0
     }
   }
+  
   selectImage = index => {
     this.setState({ active: index })
   }

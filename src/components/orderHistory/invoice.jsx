@@ -75,6 +75,15 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderStyle: 'solid',
     },
+    itemId: {
+        width: 100,
+        height: 15,
+        flexDirection: 'row',
+        borderColor: '#52ff4d',
+        borderWidth: 1,
+        borderStyle: 'solid',
+        fontSize: '7',
+    },
     itemName: {
         width: 370,
         height: 15,

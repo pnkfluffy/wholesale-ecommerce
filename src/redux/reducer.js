@@ -14,6 +14,8 @@ const user = (state = initialUser, action) => {
       return action.payload
     case 'SET_ADMIN':
       return { ...state, admin: action.payload }
+    case 'UPDATE_EMAIL':
+      return { ...state, email: action.payload }
     default:
       return state
   }

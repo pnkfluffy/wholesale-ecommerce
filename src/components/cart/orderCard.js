@@ -31,7 +31,8 @@ class OrderCard extends React.Component {
           type: 'UPDATE_CART_ITEM',
           payload: {
             id: this.props.product._id,
-            quantity: quantity
+            quantity: quantity,
+            name: this.props.product.name
           }
         })
         return false;

@@ -120,13 +120,19 @@ class GCPay extends React.Component {
         })
       })
       .catch(err => {
+        console.log("error!!")
         if (err.response && err.response.data.errors) {
-          Swal.fire('ERROR:', err.response.data.errors, 'error')
           this.setState({
             err: err.response.data.errors,
-            loading: false
           })
+        } else if (err.response && err.response.data === "addr_1") {
+          Swal.fire('ERROR:', "Something is wrong with your address! Check your ZIP code, address line 1, city and state!", 'error')
+        } else if (err.response) {
+          Swal.fire('ERROR:', err.response.data, 'error')
         }
+        this.setState({
+          loading: false
+        })
       })
   }
 

@@ -1,7 +1,6 @@
 import axios from 'axios'
 
 export const updateCartServer = cart => {
-  console.log('updatecart server', cart)
   axios
     .post('/api/cart', { cart })
     .then(res => {

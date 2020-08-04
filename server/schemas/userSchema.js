@@ -52,7 +52,10 @@ const UserSchema = new Schema({
       },
       quantity: {
         type: Number
-      }
+      },
+      name: {
+        type: String
+      },
     }
   ],
   representative: {

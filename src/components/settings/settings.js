@@ -1,4 +1,5 @@
 import React from 'react'
+import axios from 'axios'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
@@ -9,6 +10,9 @@ import MailOutlineIcon from '@material-ui/icons/MailOutline'
 import VpnKeyIcon from '@material-ui/icons/VpnKey'
 import AuthField from '../auth/AuthField'
 import InputField from '../reuseable/InputField'
+import Swal from 'sweetalert2'
+import store from "../../redux/store";
+import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -21,12 +25,22 @@ class Settings extends React.Component {
       openTab: '',
       originalEmail: '',
       newEmail: '',
+      oldPass: '',
       newPass: '',
+      newPassConfirm: '',
       ClientAddr1: '',
       ClientAddr2: '',
       ClientCity: '',
       ClientPostalCode: '',
-      ClientState: ''
+      ClientState: '',
+      emailButtonActive: true,
+      pswdButtonActive: true,
+      err: {
+        email: false,
+        oldPass: false,
+        newPass: false,
+        newPassConfirm: false
+      }
     }
   }
 
@@ -64,11 +78,65 @@ class Settings extends React.Component {
   }
 
   editEmail = () => {
-    // {!} EDIT EMAIL FUNCTIONALITY
+    axios.post('/auth/editEmail', {email: this.state.newEmail})
+         .then(res => {
+           store.dispatch({ type: 'UPDATE_EMAIL', payload: this.state.newEmail })
+           this.setState({
+             originalEmail: this.state.newEmail,
+             newEmail: '',
+             emailButtonActive: false,
+           })
+         })
+         .catch(error => {
+           console.log(error.response.data)
+           if (error.response && error.response.data)
+           {
+             Swal.fire('ERROR:', error.response.data, 'error')
+             this.setState({
+               err: {
+                 email: true
+               }
+             })
+           }
+         })
   }
 
   editPass = () => {
-    // {!} EDIT PASSWORD FUNCTIONALITY
+    axios.post('/auth/editPassword', { oldPass: this.state.oldPass,
+                                                newPass: this.state.newPass,
+                                                newPassConfirm: this.state.newPassConfirm
+                                              })
+        .then(res => {
+          console.log(res.data);
+          this.setState({
+            oldPass: '',
+            newPass: '',
+            newPassConfirm: '',
+            err: {
+              oldPass: false,
+              newPass: false,
+              newPassConfirm: false
+            },
+            pswdButtonActive: false,
+          })
+        })
+        .catch(error => {
+          console.log(error.response.data)
+          if (error.response && error.response.data[0])
+          {
+            const errorKey = error.response.data[0];
+            const errorMessage = error.response.data[1];
+            this.setState({
+              oldPass: '',
+              newPass: '',
+              newPassConfirm: '',
+              err: {
+                [errorKey]: true,
+              }
+            })
+            Swal.fire('ERROR:',errorMessage, 'error')
+          }
+        })
   }
 
   editAddress = () => {
@@ -104,14 +172,27 @@ class Settings extends React.Component {
                     changeField={this.onChange}
                     icon={<MailOutlineIcon className='auth_icon' />}
                     placeholder={this.state.originalEmail}
+                    error={this.state.err.email}
                   />
-                  <GreenButton
-                    variant='contained'
-                    className='full'
-                    onClick={this.editEmail}
-                  >
-                    SAVE
-                  </GreenButton>
+                  {this.state.emailButtonActive ? (
+                      <GreenButton
+                          variant='contained'
+                          className='full'
+                          onClick={this.editEmail}
+                      >
+                        SAVE
+                      </GreenButton>
+                  ) : (
+                      <GreenButton
+                          variant='contained'
+                          className='full'
+                          disabled={true}
+                          style={{color: 'white'}}
+                      >
+                        <CheckCircleOutlineIcon />
+                        EMAIL CHANGED
+                      </GreenButton>
+                  )}
                 </div>
               )}
             </div>
@@ -129,26 +210,59 @@ class Settings extends React.Component {
               </div>
               {this.state.openTab === 'password' && (
                 <div>
-                  <AuthField
+                  <InputField
                     widthCSS='edit_auth_field'
-                    name='newPass'
-                    value={this.state.newPass}
+                    name='oldPass'
+                    title='Current Password'
+                    value={this.state.oldPass}
                     type='password'
                     changeField={this.onChange}
-                    icon={<VpnKeyIcon className='auth_icon' />}
                     placeholder='********'
+                    error={this.state.err.oldPass}
                   />
-                  <GreenButton
-                    variant='contained'
-                    className='full'
-                    onClick={this.editPass}
-                  >
-                    SAVE
-                  </GreenButton>
+                  <InputField
+                      widthCSS='edit_auth_field'
+                      name='newPass'
+                      value={this.state.newPass}
+                      title='New Password'
+                      type='password'
+                      changeField={this.onChange}
+                      placeholder='********'
+                      error={this.state.err.newPass}
+                  />
+                  <InputField
+                      widthCSS='edit_auth_field'
+                      name='newPassConfirm'
+                      value={this.state.newPassConfirm}
+                      type='password'
+                      title='Confirm New Password'
+                      changeField={this.onChange}
+                      placeholder='********'
+                      error={this.state.err.newPassConfirm}
+                  />
+                  {this.state.pswdButtonActive ? (
+                      <GreenButton
+                          variant='contained'
+                          className='full'
+                          onClick={this.editPass}
+                      >
+                        SAVE
+                      </GreenButton>
+                  ) : (
+                      <GreenButton
+                          variant='contained'
+                          className='full'
+                          disabled={true}
+                          style={{color: 'white'}}
+                      >
+                        <CheckCircleOutlineIcon />
+                        PASSWORD CHANGED
+                      </GreenButton>
+                  )}
                 </div>
               )}
-            </div>
-            <div className='edit_account_container'>
+              </div>
+            {/* <div className='edit_account_container'>
               <div
                 className='edit_header'
                 onClick={() => this.openTab('address')}
@@ -160,7 +274,7 @@ class Settings extends React.Component {
                   <ExpandLessIcon className='dropdown_active' />
                 )}
               </div>
-              {this.state.openTab === 'address' && (
+             {this.state.openTab === 'address' && (
                 <div className="edit_address_fields">
                   <InputField
                     widthCSS='edit_address_input'
@@ -216,7 +330,7 @@ class Settings extends React.Component {
                   </GreenButton>
                 </div>
               )}
-            </div>
+            </div>*/}
           </div>
           <div className='section_container'>
             <Link to='/logout'>

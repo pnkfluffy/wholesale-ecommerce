@@ -44,10 +44,7 @@ export const UserShow = props => {
       <SimpleShowLayout>
         <TextField label='User Email' source='email' />
         <TextField label='Full Name' source='name' />
-        <BooleanField
-          label='is admin?'
-          source='isAdmin'
-        />
+        <BooleanField label='is admin?' source='isAdmin' />
         <TextField label='Payment confirmed' source='paymentVerified' />
         <ArrayField label='Favorites' source='favorites'>
           <Datagrid>
@@ -100,12 +97,17 @@ export const UserList = props => (
   <List {...props}>
     <Datagrid rowClick='show'>
       <TextField label='User Email' source='email' />
-      <TextField label='Database ID' source='id' />
-      <BooleanField
-        label='is admin?'
-        source='isAdmin'
-      />
-      <ShowButton />
+      <ReferenceField
+        label='Representative'
+        link='show'
+        source='representative'
+        reference='admin-users'
+      >
+        <TextField label='Name' source='email' />
+      </ReferenceField>
+      {/* <TextField label='Database ID' source='id' /> */}
+      <BooleanField label='Is Admin' source='isAdmin' />
+      <ShowButton basePath={props.basePath} record={props.data} />
       <DeleteButton />
     </Datagrid>
   </List>
@@ -144,10 +146,16 @@ export const UserCreate = props => {
       <SimpleForm>
         <TextInput label='User Email' source='email' />
         <TextInput label='Full Name' source='name' />
+        <BooleanInput label='Make Admin User' source='isAdmin' />
         <BooleanInput
-          label='Make Admin User'
-          source='isAdmin'
+          label='Make Me User Representative'
+          source='makeRepresentative'
+          initialValue={true}
         />
+        <p>
+          The user will be automatically emailed with a randomly generated
+          password. This password can be changed by the user.
+        </p>
       </SimpleForm>
     </Create>
   )

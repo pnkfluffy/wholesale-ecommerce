@@ -23,7 +23,10 @@ const OrderSchema = new Schema({
       },
       productTotal: {
         type: Number
-      }
+      },
+      unitPrice: {
+        type: Number
+      },
     }
   ],
   total: {

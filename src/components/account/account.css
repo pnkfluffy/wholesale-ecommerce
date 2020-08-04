@@ -55,16 +55,16 @@ width: 50%;
       width: 40%;
   }
   .favorite_product_button{
-    margin-right: 2vw;
-    width: 13vw;
-    padding: 4px;
-    border-radius: 3px;
-    font-size: min(1vw, 16px);
-    text-align: center;
-    background-color: rgb(22, 36, 28);
+    margin-right: 2vw !important;
+    width: 13vw !important;
+    padding: 4px !important;
+    border-radius: 3px !important;
+    font-size: min(0.85vw, 16px) !important;
+    text-align: center !important;
     cursor: pointer;
   }
   .outside_heart_container{
+    margin-top: 0.6vh;
     position: absolute;
     top: 0;
     right: 0;
@@ -74,7 +74,7 @@ width: 50%;
   {
     border-radius: 50%;
     padding: 0.65vw;
-    background-color: white;
+    background-color: rgb(26,24,32);
     cursor: pointer;
   }
  

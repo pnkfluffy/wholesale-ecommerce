@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import FavoritesHeart from '../reuseable/favoritesHeart'
+import { GreenButton } from '../reuseable/materialButtons'
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -33,9 +34,12 @@ class favoriteProductCard extends React.Component {
             </div>
           </div>
           <span className='empty_space'></span>
-          <div className='favorite_product_button' onClick={this.goToProduct}>
-            Go to Product
-          </div>
+          <GreenButton
+          variant='contained'
+          className='favorite_product_button'
+          onClick={this.goToProduct}
+        > Go to Product
+        </GreenButton>
         </div>
         <div className='outside_heart_container'>
           <div className='heart_container'>

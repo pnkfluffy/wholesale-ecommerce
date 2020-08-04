@@ -32,10 +32,6 @@ const UserSchema = new Schema({
     type: Boolean,
     default: false
   },
-  // docusignVerified: {
-  //   type: Boolean,
-  //   default: false
-  // },
   goCardlessID: {
     type: String
   },

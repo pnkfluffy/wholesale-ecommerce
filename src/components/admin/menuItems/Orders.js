@@ -65,37 +65,34 @@ export const OrderShow = props => (
       <ReferenceField label='Email' source='user' reference='admin-users'>
         <TextField label='Email' source='email' />
       </ReferenceField>
-
+      <TextField label='Order ID' source='id' />
+      <ArrayField label='Products Ordered' source='products'>
+        <Datagrid rowClick='show'>
+          <ReferenceField
+            label='Product'
+            source='productId'
+            reference='admin-products'
+          >
+            <TextField label='Product' source='name' />
+          </ReferenceField>
+          <NumberField label='Quantity' source='productQuantity' />
+          <NumberField
+            label='Price Per Unit'
+            options={{ style: 'currency', currency: 'USD' }}
+            source='productPrice'
+          />
+          <NumberField
+            label='Final Price'
+            options={{ style: 'currency', currency: 'USD' }}
+            source='productTotal'
+          />
+        </Datagrid>
+      </ArrayField>
       <NumberField
         label='Order Total'
         source='total'
         options={{ style: 'currency', currency: 'USD' }}
       />
-      <TextField label='Order ID' source='id' />
-      <ArrayField label='Products Ordered' source='products'>
-        <Datagrid rowClick='show'>
-          <NumberField label='Quantity' source='quantity' />
-          <ReferenceField
-            label='Price Per Unit'
-            source='product'
-            reference='admin-products'
-          >
-            <NumberField
-              label='Price Per Unit'
-              options={{ style: 'currency', currency: 'USD' }}
-              source='price'
-            />
-          </ReferenceField>
-          <ReferenceField
-            label='Product'
-            source='product'
-            reference='admin-products'
-          >
-            <TextField label='Product' source='name' />
-          </ReferenceField>
-        </Datagrid>
-      </ArrayField>
-
       <h2>Tracking Information</h2>
       <TextField label='Shipping Company' source='tracking.company' />
       <TextField label='Tracking Number' source='tracking.number' />

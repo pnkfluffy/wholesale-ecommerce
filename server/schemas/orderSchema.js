@@ -24,9 +24,6 @@ const OrderSchema = new Schema({
       productTotal: {
         type: Number
       },
-      unitPrice: {
-        type: Number
-      },
     }
   ],
   total: {
@@ -44,6 +41,10 @@ const OrderSchema = new Schema({
   },
   deliveryInfo: {
     type: Object
+  },
+  representative: {
+    type: Schema.Types.ObjectId,
+    ref: 'user'
   },
   date: {
     type: Date,

@@ -49,7 +49,7 @@ export const UserList = props => (
         source='representative'
         reference='admin-users'
       >
-        <TextField label='Name' source='email' />
+        <TextField label='Name' source='name' />
       </ReferenceField>
       {/* <TextField label='Database ID' source='id' /> */}
       <BooleanField label='Is Admin' source='isAdmin' />
@@ -64,9 +64,9 @@ export const UserShow = props => {
   return (
     <Show actions={<UserShowActions />} {...props}>
       <SimpleShowLayout>
-        <TextField label='User' source='name' />
-
+        <TextField label='Name' source='name' />
         <TextField label='Email' source='email' />
+        <TextField label='Database ID' source='id' />
         <BooleanField label='is admin?' source='isAdmin' />
         <ReferenceField
           label='Representative'
@@ -77,14 +77,11 @@ export const UserShow = props => {
           <TextField label='Name' source='email' />
         </ReferenceField>
         <TextField label='Payment confirmed' source='paymentVerified' />
-        <ArrayField label='Favorites' source='favorites'>
-          <Datagrid>
-            <TextField label='ID' source='id' />
-            <TextField label='Product Name' source='name' />
-            <TextField label='Category' source='category' />
-            <TextField label='Price' source='price' />
-          </Datagrid>
-        </ArrayField>
+        {/* <ArrayField label='Favorites' source='favorites'>
+            <ReferenceField label='Product' reference='admin-products'>
+              <TextField label='Product' source='name' />
+            </ReferenceField>
+        </ArrayField> */}
         <ReferenceManyField
           label='Order History'
           source='id'
@@ -116,8 +113,6 @@ export const UserShow = props => {
             <NumberField label='Rating' source='stars' />
           </Datagrid>
         </ReferenceManyField>
-        <TextField label='Database ID' source='id' />
-        <TextField label='Google ID' source='googleID' />
         <TextField label='goCardless ID' source='goCardlessID' />
       </SimpleShowLayout>
     </Show>

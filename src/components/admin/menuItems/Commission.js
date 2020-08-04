@@ -40,15 +40,21 @@ export const CommissionList = props => (
         source='user'
         reference='admin-users'
       >
-        <TextField label='Name' source='email' />
+        <TextField label='Name' source='name' />
       </ReferenceField>
       <ReferenceField
         label='Representative'
-        link='show'
-        source='representative'
+        source='user'
         reference='admin-users'
       >
-        <TextField label='Name' source='email' />
+        <ReferenceField
+          label='Representative'
+          source='representative'
+          reference='admin-users'
+          link='none'
+        >
+          <TextField label='Name' source='name' />
+        </ReferenceField>
       </ReferenceField>
       <NumberField
         label='Total'
@@ -64,7 +70,6 @@ export const CommissionList = props => (
 export const CommissionShow = props => (
   <Show actions={<CommissionShowActions />} {...props}>
     <SimpleShowLayout>
-      {/* <TextField label="User" source="user" reference="admin-users"/> */}
       <ReferenceField label='User Email' source='user' reference='admin-users'>
         <TextField label='email' source='email' />
       </ReferenceField>
@@ -77,37 +82,36 @@ export const CommissionShow = props => (
         source='representative'
         reference='admin-users'
       >
-        <TextField label='Email' source='email' />
+        <TextField label='Name' source='name' />
       </ReferenceField>
+      <TextField label='Order ID' source='id' />
+      <ArrayField label='Products Ordered' source='products'>
+        <Datagrid rowClick='show'>
+          <ReferenceField
+            label='Product'
+            source='productId'
+            reference='admin-products'
+          >
+            <TextField label='Product' source='name' />
+          </ReferenceField>
+          <NumberField label='Quantity' source='productQuantity' />
+          <NumberField
+            label='Price Per Unit'
+            options={{ style: 'currency', currency: 'USD' }}
+            source='productPrice'
+          />
+          <NumberField
+            label='Final Price'
+            options={{ style: 'currency', currency: 'USD' }}
+            source='productTotal'
+          />
+        </Datagrid>
+      </ArrayField>
       <NumberField
         label='Order Total'
         source='total'
         options={{ style: 'currency', currency: 'USD' }}
       />
-      <TextField label='Order ID' source='id' />
-      <ArrayField label='Products Prdereded' source='products'>
-        <Datagrid rowClick='show'>
-          <NumberField label='Quantity' source='quantity' />
-          <ReferenceField
-            label='Price Per Unit'
-            source='product'
-            reference='admin-products'
-          >
-            <NumberField
-              label='Price Per Unit'
-              options={{ style: 'currency', currency: 'USD' }}
-              source='price'
-            />
-          </ReferenceField>
-          <ReferenceField
-            label='Product'
-            source='product'
-            reference='admin-products'
-          >
-            <TextField label='Product' source='name' />
-          </ReferenceField>
-        </Datagrid>
-      </ArrayField>
       <h2>Tracking Information</h2>
       <TextField label='Shipping Company' source='tracking.company' />
       <TextField label='Tracking Number' source='tracking.number' />

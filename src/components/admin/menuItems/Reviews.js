@@ -45,10 +45,9 @@ export const ReviewShow = props => (
       >
         <TextField source='name' />
       </ReferenceField>
+      <TextField label='Review ID' source='id' />
       <TextField label='Stars' source='stars' />
       <TextField label='Comment' source='review' />
-      <TextField label='User' source='userName' />
-      <TextField label='Review ID' source='id' />
     </SimpleShowLayout>
   </Show>
 )

@@ -14,7 +14,10 @@ const OrderSchema = new Schema({
       },
       quantity: {
         type: Number
-      }
+      },
+      unitPrice: {
+        type: Number
+      },
     }
   ],
   total: {
@@ -22,10 +25,12 @@ const OrderSchema = new Schema({
   },
   tracking: {
     number: {
-      type: String
+      type: String,
+      default: '',
     },
-    service: {
-      type: String
+    company: {
+      type: String,
+      default: '',
     }
   },
   deliveryInfo: {

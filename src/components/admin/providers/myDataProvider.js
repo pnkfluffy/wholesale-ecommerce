@@ -58,6 +58,21 @@ const myDataProvider = {
           }
         })
       )
+  },
+
+  getList: (resource, params) => {
+    if (resource === 'admin-commissions') {
+      return dataProvider.getList('admin-orders', params)
+    } else {
+      return dataProvider.getList(resource, params)
+    }
+  },
+  getOne: (resource, params) => {
+    if (resource === 'admin-commissions') {
+      return dataProvider.getOne('admin-orders', params)
+    } else {
+      return dataProvider.getOne(resource, params)
+    }
   }
 }
 

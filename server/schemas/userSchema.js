@@ -32,10 +32,6 @@ const UserSchema = new Schema({
     type: Boolean,
     default: false
   },
-  // docusignVerified: {
-  //   type: Boolean,
-  //   default: false
-  // },
   goCardlessID: {
     type: String
   },
@@ -59,7 +55,7 @@ const UserSchema = new Schema({
       }
     }
   ],
-  associatedAdmin: {
+  representative: {
     type: Schema.Types.ObjectId,
     ref: 'user'
   }

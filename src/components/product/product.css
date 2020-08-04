@@ -47,7 +47,7 @@
 .carousel_image_container_active {
   width: 18%;
   border-radius: 16px;
-  border: 2px solid;
+  border: 2px solid; 
   margin-left: 2.1vw;
 }
 
@@ -266,8 +266,7 @@
   color: var(--paragraph-font-grey);
 }
 
-tr > *:not(:last-child),
-th > *:not(:last-child) {
+.price_table_row > *:not(:last-child) {
   width: 29%;
 }
 

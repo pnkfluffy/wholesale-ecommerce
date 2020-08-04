@@ -15,6 +15,7 @@ import {
 } from './menuItems/Products'
 import { OrderList, OrderShow, OrderEdit } from './menuItems/Orders'
 import { ReviewList, ReviewShow } from './menuItems/Reviews'
+import { CommissionList, CommissionShow } from './menuItems/Commission'
 // import { PostList, PostEdit, PostCreate } from "./MenuItems/Posts";
 import Dashboard from './menuItems/Dashboard'
 import authProvider from './providers/authProvider'
@@ -23,6 +24,7 @@ import UserIcon from '@material-ui/icons/Group'
 import ProductIcon from '@material-ui/icons/LocalFlorist'
 import OrderIcon from '@material-ui/icons/AccountBalanceWallet'
 import ReviewIcon from '@material-ui/icons/LibraryBooks'
+import MonetizationOnIcon from '@material-ui/icons/MonetizationOn'
 
 import myDataProvider from './providers/myDataProvider'
 const i18nProvider = polyglotI18nProvider(locale => {
@@ -76,7 +78,14 @@ const AdminSetup = () => (
         options={{ label: 'Reviews' }}
         list={ReviewList}
         show={ReviewShow}
-        admin={ReviewIcon}
+        icon={ReviewIcon}
+      />
+      <Resource
+        name='admin-commissions'
+        options={{ label: 'Commission' }}
+        list={CommissionList}
+        show={CommissionShow}
+        icon={MonetizationOnIcon}
       />
     </Admin>
   </Provider>

@@ -52,11 +52,13 @@ router.post('/', rejectNonAdmin, async (req, res) => {
     res.status(403).send('Insufficient Permissions')
     return
   }
+  const representative = req.body.makeRepresentative ? req.user._id : null
   User.create({
     email: req.body.email,
     name: req.body.name,
     isAdmin: req.body.isAdmin,
-    password: saltedPass
+    password: saltedPass,
+    representative
   })
     .then(newUser => {
       console.log(newUser)

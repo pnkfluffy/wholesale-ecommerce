@@ -55,7 +55,7 @@ const UserSchema = new Schema({
       }
     }
   ],
-  associatedAdmin: {
+  representative: {
     type: Schema.Types.ObjectId,
     ref: 'user'
   }

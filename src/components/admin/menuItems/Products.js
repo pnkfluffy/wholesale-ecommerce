@@ -15,6 +15,7 @@ import {
   DisabledInput,
   BooleanInput,
   BooleanField,
+  ChipField,
   ImageInput,
   TextInput,
   DateInput,
@@ -114,10 +115,10 @@ export const ProductShow = props => {
 export const ProductList = props => (
   <List {...props}>
     <Datagrid actions={<ListActions />} rowClick='show'>
-      <BooleanField label="Draft" source="draft"/>
-      <TextField label='Name' source='name' />
-      <TextField label='Category' source='category' />
+      <TextField label='Product' source='name' />
+      <ChipField label='Category' source='category' />
       <NumberField label='Price' source='price' options={{ style: 'currency', currency: 'USD' }}/>
+      <BooleanField label="Is Draft" source="draft"/>
       <ShowButton basePath={props.basePath} record={props.data} />
       <DeleteButton />
     </Datagrid>

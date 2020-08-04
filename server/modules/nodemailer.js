@@ -34,7 +34,19 @@ const confirmOrderEmail = (user, order, payment) => {
 	})
 }
 
+const trackingAddedEmail = (user, order, payment, tracking) => {
+	transporter.sendMail({
+		from: process.env.NODE_MAILER_USERNAME,
+		to: user.email,
+		subject: `Your order has shipped!`,
+		text: `
+		${JSON.stringify(order, payment)}
+		${tracking}
+		`
+	})
+}
+
 // order confirm email
 
 
-module.exports = { newUserEmail, confirmOrderEmail }
+module.exports = { newUserEmail, confirmOrderEmail, trackingAddedEmail }

@@ -16,8 +16,8 @@ const mapStateToProps = state => {
 
 class Cart extends React.Component {
   render () {
+    console.log(this.props.state.cart)
     let total = 0
-    console.log(this.props.state.cart);
     const cartProducts = this.props.state.cart.map((cartProduct, index) => {
       const productTotal = getPriceByQuantity(
         cartProduct.priceTiers,

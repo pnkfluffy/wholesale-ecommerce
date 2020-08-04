@@ -47,14 +47,12 @@ class GetInvoice extends React.Component {
     let allProducts = this.props.products.products
     let productsInOrder = this.props.order.products
     const productsWithTotal = productsInOrder.map(product => {
-      const wholeProductInfo = allProducts.find(
-        productAllInfo => productAllInfo._id === product.product
-      )
       return {
-        item: wholeProductInfo.name,
-        quantity: product.quantity,
-        price: wholeProductInfo.price,
-        amount: getPriceByQuantity(wholeProductInfo.priceTiers, product.quantity, wholeProductInfo.price)
+        item: product.productName,
+        id: product.productId.toString(),
+        quantity: product.productQuantity,
+        price: product.productPrice,
+        amount: product.productTotal
       }
     })
     return productsWithTotal

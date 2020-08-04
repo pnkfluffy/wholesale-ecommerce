@@ -17,11 +17,13 @@ class ProductInOrderCard extends React.Component {
   }
 
   render () {
-    const image = this.props.productInfo.imageData
-      ? this.props.productInfo.imageData[0].url
+    const image = this.props.imageData
+      ? this.props.imageData[0].url
       : blank_image
 
-    const productLink = '/product/' + this.props.productInfo._id.toString()
+    const productLink = this.props.available
+      ? '/product/' + this.props.product.productId.toString()
+      : ''
 
     return (
       <Link to={productLink} title='go to product'>
@@ -36,22 +38,17 @@ class ProductInOrderCard extends React.Component {
           <div className='order_card_contents'>
             <div className='order_content'>
               <div className='order_card_product_name'>
-                {this.props.productInfo.name}
+                {this.props.product.productName}
               </div>
-              <div className='order_card_id'>#{this.props.productInfo._id}</div>
+              <div className='order_card_id'>#{this.props.product.productId}</div>
             </div>
 
             <div className='product_in_order_card_values'>
-              <div>${this.props.productInfo.price}</div>
+              <div>${this.props.product.productPrice}</div>
               <div className='product_in_order_card_quantity'>
-                {this.props.quantity}
+                {this.props.product.productQuantity}
               </div>
-              {(() => {
-                const total = getPriceByQuantity(this.props.productInfo.priceTiers, this.props.quantity, this.props.productInfo.price)
-                return (
-                  <div className='product_in_order_card_total'>${total}</div>
-                )
-              })()}
+                  <div className='product_in_order_card_total'>${this.props.product.productTotal}</div>
             </div>
           </div>
         </div>

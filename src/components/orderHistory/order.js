@@ -28,38 +28,55 @@ class Order extends React.Component {
   printItems = products => {
     const productsWithInfo = products.map(product => {
       const productInfo = this.props.state.products.products.find(
-        oneProduct => oneProduct._id === product.product
+        oneProduct => oneProduct._id === product.productId
       )
+
       return (
         <ProductInOrderCard
-          productInfo={productInfo}
-          quantity={product.quantity}
-          key={productInfo._id}
+          product={product}
+          imageData={productInfo ? productInfo.imageData : false}
+          key={product.productId}
+          available={!!productInfo}
         />
       )
     })
     return productsWithInfo
   }
 
-  redoOrder = order => {
-    const productsWithInfo = order.products.map(product => {
+  redoOrder = async order => {
+    let orderToCartDB = [];
+    const productsWithInfo = await order.products.map(product => {
       const allInfo = this.props.state.products.products.find(
-        p => p._id === product.product
+        p => p._id === product.productId
       )
-      allInfo.quantity = product.quantity
+      if (allInfo)
+      {
+          orderToCartDB.push({
+            id: product.productId,
+            quantity: product.productQuantity,
+            name: product.productName
+          });
+          allInfo.quantity = product.productQuantity
+      }
       return allInfo
     })
+    console.log(productsWithInfo);
     //add products to cart
     store.dispatch({ type: 'SET_CART', payload: productsWithInfo })
+    //save cart in db
+    console.log(orderToCartDB)
+    axios
+        .post('/api/cart', {cart: orderToCartDB})
+        .then(res => {
+          console.log('CART UPDATED', res.data)
+        })
+        .catch(err => {
+          console.log(err)
+        })
 
     //redirect to cart
     const url = '/cart'
     this.props.history.push(url)
-
-    //save cart in db
-    axios
-      .post('/api/cart/', { cart: order.products })
-      .catch(err => console.log(err))
   }
 
   organizeTotal = total => {

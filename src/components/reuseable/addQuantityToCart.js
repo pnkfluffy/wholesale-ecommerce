@@ -12,7 +12,8 @@ export const addQuantityToCart = product => {
       type: 'UPDATE_CART_ITEM',
       payload: {
         id: product._id,
-        quantity: newQuantity
+        quantity: newQuantity,
+        name: product.name
       }
     })
   } else {

@@ -13,7 +13,7 @@ import {
   ProductEdit,
   ProductCreate
 } from './menuItems/Products'
-import { OrderList, OrderShow } from './menuItems/Orders'
+import { OrderList, OrderShow, OrderEdit } from './menuItems/Orders'
 import { ReviewList, ReviewShow } from './menuItems/Reviews'
 // import { PostList, PostEdit, PostCreate } from "./MenuItems/Posts";
 import Dashboard from './menuItems/Dashboard'
@@ -68,6 +68,7 @@ const AdminSetup = () => (
         options={{ label: 'Orders' }}
         list={OrderList}
         show={OrderShow}
+        edit={OrderEdit}
         icon={OrderIcon}
       />
       <Resource

@@ -68,7 +68,7 @@ const confirmOrderEmail = (user, order, payment) => {
 //pass array of products into an html table
 function productsToTable (products){
 	let i = 0;
-	let table = "<table style=\"border:1px solid #59ba47;margin-left:auto;margin-right:auto;\"><thead><tr><th style=\"border:1px solid #59ba47;\">ID</th><th style=\"border:1px solid #59ba47; width: 100%;\">Product</th><th style=\"border:1px solid #59ba47;\">Price</th><th style=\"border:1px solid #59ba47;\">Total</th></tr></thead><tbody>"
+	let table = "<table style=\"border:1px solid #59ba47;margin-left:auto;margin-right:auto;\"><thead><tr><th style=\"border:1px solid #59ba47;\">ID</th><th style=\"border:1px solid #59ba47; width: 40%;\">Product</th><th style=\"border:1px solid #59ba47;\">Price</th><th style=\"border:1px solid #59ba47;\">Total</th></tr></thead><tbody>"
 	while (i < products.length)
 	{
 		let product = products[i]

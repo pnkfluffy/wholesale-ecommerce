@@ -45,6 +45,19 @@ import {
 } from 'react-admin'
 import { makeStyles } from '@material-ui/core/styles'
 
+export const ProductList = props => (
+  <List {...props}>
+    <Datagrid actions={<ListActions />} rowClick='show'>
+      <TextField label='Product' source='name' />
+      <ChipField label='Category' source='category' />
+      <NumberField label='Price' source='price' options={{ style: 'currency', currency: 'USD' }}/>
+      <BooleanField label="Is Draft" source="draft"/>
+      <DateField label='Created' source='date' />
+      <ShowButton basePath={props.basePath} record={props.data} />
+      <DeleteButton />
+    </Datagrid>
+  </List>
+)
 
 export const ProductShow = props => {
   return (
@@ -111,19 +124,6 @@ export const ProductShow = props => {
     </Show>
   )
 }
-
-export const ProductList = props => (
-  <List {...props}>
-    <Datagrid actions={<ListActions />} rowClick='show'>
-      <TextField label='Product' source='name' />
-      <ChipField label='Category' source='category' />
-      <NumberField label='Price' source='price' options={{ style: 'currency', currency: 'USD' }}/>
-      <BooleanField label="Is Draft" source="draft"/>
-      <ShowButton basePath={props.basePath} record={props.data} />
-      <DeleteButton />
-    </Datagrid>
-  </List>
-)
 
 const productCategories = [
   { id: 'flower', name: 'Flower' },

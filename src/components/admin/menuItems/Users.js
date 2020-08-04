@@ -38,6 +38,28 @@ import {
   NumberField
 } from 'react-admin'
 
+export const UserList = props => (
+  <List {...props}>
+    <Datagrid rowClick='show'>
+      <TextField label='User' source='name' />
+      <TextField label='Email' source='email' />
+      <ReferenceField
+        label='Representative'
+        link='show'
+        source='representative'
+        reference='admin-users'
+      >
+        <TextField label='Name' source='email' />
+      </ReferenceField>
+      {/* <TextField label='Database ID' source='id' /> */}
+      <BooleanField label='Is Admin' source='isAdmin' />
+      <DateField label='Created' source='date' />
+      <ShowButton basePath={props.basePath} record={props.data} />
+      <DeleteButton />
+    </Datagrid>
+  </List>
+)
+
 export const UserShow = props => {
   return (
     <Show actions={<UserShowActions />} {...props}>
@@ -101,28 +123,6 @@ export const UserShow = props => {
     </Show>
   )
 }
-
-export const UserList = props => (
-  <List {...props}>
-    <Datagrid rowClick='show'>
-      <TextField label='User' source='name' />
-      <TextField label='Email' source='email' />
-      <ReferenceField
-        label='Representative'
-        link='show'
-        source='representative'
-        reference='admin-users'
-      >
-        <TextField label='Name' source='email' />
-      </ReferenceField>
-      {/* <TextField label='Database ID' source='id' /> */}
-      <BooleanField label='Is Admin' source='isAdmin' />
-      <DateField label='Created' source='date' />
-      <ShowButton basePath={props.basePath} record={props.data} />
-      <DeleteButton />
-    </Datagrid>
-  </List>
-)
 
 export const UserEdit = props => (
   <Edit

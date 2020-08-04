@@ -12,7 +12,7 @@ router.get('/', rejectNonAdmin, (req, res) => {
   let sort = {}
   sort[sortQuery[0]] = sortQuery[1] === 'ASC' ? 1 : -1
   if (JSON.stringify(filterQuery) !== '{}') {
-    console.log("orders filterQuery: ", filterQuery)
+    console.log('orders filterQuery: ', filterQuery)
     Order.find(filterQuery)
       .sort(sort)
       .then(filteredOrders => {
@@ -24,7 +24,7 @@ router.get('/', rejectNonAdmin, (req, res) => {
             .split('"_id":')
             .join('"id":')
         )
-        console.log("filtered Orders: ", filteredOrders)
+        console.log('filtered Orders: ', filteredOrders)
         res.json(filteredOrders)
       })
   } else {
@@ -39,7 +39,6 @@ router.get('/', rejectNonAdmin, (req, res) => {
             .split('"_id":')
             .join('"id":')
         )
-       console.log("parsed orders: ", orders)
         res.json(orders)
       })
       .catch(error => {
@@ -69,19 +68,49 @@ router.get('/:id', rejectNonAdmin, (req, res) => {
 
 // //https://marmelab.com/react-admin/doc/2.8/DataProviders.html
 
-//update
-// router.put("/:id", async (req, res) => {
-//   console.log("update hit")
-//   console.log(req.params.id)
-//   console.log(req.body)
-//   User.updateOne({_id: req.params.id}, req.body)
-//   .then((user) => {
-//     user = JSON.parse(JSON.stringify(user).split('"_id":').join('"id":'));
-//     res.json(user)
-//   }).catch(err => {
-//     console.log(err)
-//     res.status(500).send("Failed to update.")
-//   })
+// update
+router.put('/:id', rejectNonAdmin, async (req, res) => {
+  console.log('update order hit', req.params.id, req.body)
+
+  Order.findById(req.params.id).then(order => {
+    console.log('finding', order)
+    if (!order.tracking.number && req.body.tracking.number) {
+      //  {!} SEND EMAIL NOTIFYING CUSTOMER THEIR ORDER HAS
+      //  SHIPPED, INCLUDE NUMBER
+    }
+  })
+
+  Order.updateOne({ _id: req.params.id }, req.body)
+    .then(order => {
+      order = JSON.parse(
+        JSON.stringify(order)
+          .split('"_id":')
+          .join('"id":')
+      )
+      res.json(order)
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).send('Failed to update.')
+    })
+})
+
+// router.put('/:id', rejectNonAdmin, uploadProductPhotos, async (req, res) => {
+//   console.log('update hit', req.params.id)
+//   req.body.imageData = req.imageMetaData
+//   await Product.updateOne({ _id: req.params.id }, req.body)
+//     .then(product => {
+//       product = JSON.parse(
+//         JSON.stringify(product)
+//           .split('"_id":')
+//           .join('"id":')
+//       )
+//       res.json(product)
+//     })
+//     .catch(err => {
+//       console.log(err)
+//       res.status(500).send('Failed to update.')
+//     })
 // })
 
 // //updateMany

@@ -8,9 +8,6 @@ import { initializeAllRequests } from './index-init'
 
 initializeAllRequests()
 
-console.log = (param) => {
-}
-
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>

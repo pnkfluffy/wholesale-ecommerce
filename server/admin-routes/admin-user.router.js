@@ -10,9 +10,13 @@ const bcrypt = require('bcrypt')
 const { restart } = require('nodemon')
 
 //Login
-router.post('/login', passport.authenticate('local', { failureRedirect: '/login' }), (req, res) => {
-  res.sendStatus(201)
-})
+router.post(
+  '/login',
+  passport.authenticate('local', { failureRedirect: '/login' }),
+  (req, res) => {
+    res.sendStatus(201)
+  }
+)
 
 router.get('/logout', (req, res) => {
   req.logout()
@@ -37,10 +41,14 @@ router.get('/perms', (req, res) => {
 })
 
 router.post('/', rejectNonAdmin, async (req, res) => {
-  let pass = shajs('sha256').update(`${req.body.email}${req.body.name}${Date.now()}${Math.random() * 100}`).digest('hex')
+  let pass = shajs('sha256')
+    .update(
+      `${req.body.email}${req.body.name}${Date.now()}${Math.random() * 100}`
+    )
+    .digest('hex')
   pass = pass.substring(0, 10)
-  const salt = await bcrypt.genSalt(10);
-  const saltedPass = await bcrypt.hash(pass, salt);
+  const salt = await bcrypt.genSalt(10)
+  const saltedPass = await bcrypt.hash(pass, salt)
   if (req.body.isAdmin && !req.user.isOwner) {
     res.status(403).send('Insufficient Permissions')
     return
@@ -49,11 +57,11 @@ router.post('/', rejectNonAdmin, async (req, res) => {
     email: req.body.email,
     name: req.body.name,
     isAdmin: req.body.isAdmin,
-    password: saltedPass,
+    password: saltedPass
   })
     .then(newUser => {
       console.log(newUser)
-      newUser.password = null;
+      newUser.password = null
       newUser = JSON.parse(
         JSON.stringify(newUser)
           .split('"_id":')
@@ -62,9 +70,9 @@ router.post('/', rejectNonAdmin, async (req, res) => {
       newUserEmail(
         {
           email: req.body.email,
-          password: pass,
+          password: pass
         },
-        ""
+        ''
       )
       res.status(200).json(newUser)
     })
@@ -91,7 +99,7 @@ router.get('/', rejectNonAdmin, (req, res) => {
       filterQuery._id = filterQuery.id
       delete filterQuery.id
     }
-    console.log('Users filterQuery: ', filterQuery)
+    // console.log('Users filterQuery: ', filterQuery)
     User.find(filterQuery).then(filteredUsers => {
       res.set('content-range', JSON.stringify(filteredUsers.length + 1))
       //  each object needs to have an 'id' field in order for
@@ -101,14 +109,12 @@ router.get('/', rejectNonAdmin, (req, res) => {
           .split('"_id":')
           .join('"id":')
       )
-      console.log('filtered Users: ', filteredUsers)
       res.json(filteredUsers)
     })
   } else {
     User.find()
       .sort(sort)
       .then(users => {
-        console.log('raw users: ', users)
         res.set('content-range', JSON.stringify(users.length))
         //  each object needs to have an 'id' field in order for
         //  reactAdmin to parse

@@ -1,4 +1,6 @@
 import * as React from 'react'
+import { Link } from 'react-router-dom'
+import { stringify } from 'query-string'
 import {
   CreateButton,
   ArrayField,
@@ -28,11 +30,44 @@ import {
   DisabledInput,
   BooleanInput,
   LongTextInput,
-  ReferenceManyField
+  ReferenceManyField,
+  FunctionField,
+  Typography,
+  Filter,
+  SearchInput
 } from 'react-admin'
 
+const CommissionFilter = props => {
+  return (
+    <Filter {...props}>
+      <BooleanInput source='representative' label='My Sales' alwaysOn />
+    </Filter>
+  )
+}
+
+const Aside = ({ data, ids }) => {
+  // console.log('aside', data, ids)
+  return (
+    <div style={{ width: 200, margin: '1vw' }}>
+      <h1>Customer Spending</h1>
+      <p>pulled from current list</p>
+      <div>
+        ${' '}
+        {ids
+          .map(id => data[id].total)
+          .reduce((orderCost, total) => orderCost + total, 0)}
+      </div>
+    </div>
+  )
+}
+
 export const CommissionList = props => (
-  <List {...props}>
+  <List
+    aside={<Aside />}
+    filters={<CommissionFilter />}
+    filterDefaultValues={{ representative: true }}
+    {...props}
+  >
     <Datagrid rowClick='show'>
       <ReferenceField
         label='User'
@@ -42,19 +77,14 @@ export const CommissionList = props => (
       >
         <TextField label='Name' source='name' />
       </ReferenceField>
+
       <ReferenceField
         label='Representative'
-        source='user'
+        source='representative'
         reference='admin-users'
+        link='show'
       >
-        <ReferenceField
-          label='Representative'
-          source='representative'
-          reference='admin-users'
-          link='none'
-        >
-          <TextField label='Name' source='name' />
-        </ReferenceField>
+        <TextField label='Name' source='name' />
       </ReferenceField>
       <NumberField
         label='Total'
@@ -122,8 +152,6 @@ export const CommissionShow = props => (
 //custom comps
 const CommissionShowActions = ({ basePath, data, resource }) => (
   <TopToolbar>
-    <EditButton basePath={basePath} record={data} />
-    <DeleteButton basePath={basePath} record={data} />
     <ListButton basePath={basePath} record={data} />
     {/* Add your custom actions */}
   </TopToolbar>

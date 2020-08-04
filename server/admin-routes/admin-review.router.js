@@ -40,7 +40,6 @@ router.get('/', rejectNonAdmin, (req, res) => {
             .split('"_id":')
             .join('"id":')
         )
-       console.log("parsed reviews: ", reviews)
         res.json(reviews)
       })
       .catch(error => {

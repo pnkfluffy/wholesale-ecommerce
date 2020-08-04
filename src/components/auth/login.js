@@ -8,6 +8,9 @@ import googleIcon from '../../resources/images/google_button_icon.png'
 import MailOutlineIcon from '@material-ui/icons/MailOutline'
 import VpnKeyIcon from '@material-ui/icons/VpnKey'
 import { LightGreenButton } from '../reuseable/materialButtons'
+import Snackbar from "@material-ui/core/Snackbar";
+import Alert from "@material-ui/lab/Alert";
+import {classes} from "../reuseable/materialButtons"
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -20,9 +23,19 @@ class Login extends React.Component {
     this.state = {
       username: '',
       password: '',
-      error: false
+      error: false,
+      snackbarOpen: false,
+      snackbarSeverity: "success",
+      snackbarMessage: "" 
     }
   }
+
+  handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    this.setState({snackbarOpen: false})
+  };
 
   login = event => {
     event.preventDefault()
@@ -37,8 +50,17 @@ class Login extends React.Component {
         window.location.href = '/'
       })
       .catch(err => {
+        this.setSnackbar("error", "Invalid Credentials");
         console.log(err)
       })
+  }
+
+  setSnackbar = (severity, message) => {
+    this.setState({
+      snackbarOpen: true,
+      snackbarSeverity: severity,
+      snackbarMessage: message
+    });
   }
 
   inputUsername = event => {
@@ -61,6 +83,23 @@ class Login extends React.Component {
   render () {
     return (
       <div className='login'>
+         <div className={classes.root}>
+          <Snackbar
+            open={this.state.snackbarOpen}
+            severity={this.state.snackbarSeverity}
+            autoHideDuration={4500}
+            onClose={this.handleClose}
+          >
+            <Alert
+              elevation={6}
+              variant="filled"
+              onClose={this.handleClose}
+              color={this.state.snackbarSeverity}
+            >
+              {this.state.snackbarMessage}
+            </Alert>
+          </Snackbar>
+        </div>
         <div className='login_decoration decoration_left'>
           <div className='decor_green decor_one' />
           <div className='decor_black decor_two' />

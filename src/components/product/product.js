@@ -55,8 +55,18 @@ class Product extends React.Component {
       },
       quantity: 1,
       buttonActive: true,
+      snackbarOpen: false,
+      snackbarSeverity: "success",
+      snackbarMessage: "" 
     }
   }
+
+handleClose = (event, reason) => {
+  if (reason === "clickaway") {
+    return;
+  }
+  this.setState({snackbarOpen: false})
+};
 
   componentDidMount() {
     axios
@@ -89,7 +99,16 @@ class Product extends React.Component {
       product.quantity = quantity
       product.product = this.state.product._id
       addQuantityToCart(product)
+      this.setSnackbar("success", "Your product has been added to your cart");
     })
+  }
+  
+  setSnackbar = (severity, message) => {
+    this.setState({
+      snackbarOpen: true,
+      snackbarSeverity: severity,
+      snackbarMessage: message
+    });
   }
 
   render() {
@@ -101,6 +120,23 @@ class Product extends React.Component {
     )
     return (
       <div className='product_page'>
+        <div className={classes.root}>
+          <Snackbar
+            open={this.state.snackbarOpen}
+            severity={this.state.snackbarSeverity}
+            autoHideDuration={4500}
+            onClose={this.handleClose}
+          >
+            <Alert
+              elevation={6}
+              variant="filled"
+              onClose={this.handleClose}
+              color={this.state.snackbarSeverity}
+            >
+              {this.state.snackbarMessage}
+            </Alert>
+          </Snackbar>
+        </div>
         <div className='product_page_main'>
           <div className='product_page_top'>
             <ProductImages images={product.imageData} productID={product._id} />

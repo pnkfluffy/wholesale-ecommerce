@@ -12,6 +12,11 @@ import { getPriceByQuantity } from '../reuseable/getPriceByQuantity'
 import { GreenButton } from '../reuseable/materialButtons'
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 
+import Snackbar from "@material-ui/core/Snackbar";
+import Alert from "@material-ui/lab/Alert";
+import {classes} from "../reuseable/materialButtons"
+
+
 const mapStateToProps = state => ({
   state: state.reducer
 })

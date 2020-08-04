@@ -18,7 +18,7 @@ class favoriteProductCard extends React.Component {
     return (
       <div className='outside_favorite_product_card_container'>
         <div className='favorite_product_card'>
-          <div className='favorite_product_card_image'>
+          <div className='favorite_product_card_image_container'>
             <img
             className='favorite_product_image'
             alt='product_image'

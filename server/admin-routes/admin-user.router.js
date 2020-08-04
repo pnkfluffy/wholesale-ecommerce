@@ -7,7 +7,6 @@ const User = require('../schemas/userSchema')
 const shajs = require('sha.js')
 const { newUserEmail } = require('../modules/nodemailer')
 const bcrypt = require('bcrypt')
-const { restart } = require('nodemon')
 
 //Login
 router.post(

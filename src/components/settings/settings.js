@@ -14,6 +14,10 @@ import Swal from 'sweetalert2'
 import store from "../../redux/store";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 
+import Snackbar from "@material-ui/core/Snackbar";
+import Alert from "@material-ui/lab/Alert";
+import {classes} from "../reuseable/materialButtons"
+
 const mapStateToProps = state => ({
   state: state.reducer
 })
@@ -40,8 +44,26 @@ class Settings extends React.Component {
         oldPass: false,
         newPass: false,
         newPassConfirm: false
-      }
+      },
+      snackbarOpen: false,
+      snackbarSeverity: "success",
+      snackbarMessage: "" 
     }
+  }
+
+  handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    this.setState({snackbarOpen: false})
+  };
+  
+  setSnackbar = (severity, message) => {
+    this.setState({
+      snackbarOpen: true,
+      snackbarSeverity: severity,
+      snackbarMessage: message
+    });
   }
 
   showUser = () => {
@@ -85,7 +107,9 @@ class Settings extends React.Component {
              originalEmail: this.state.newEmail,
              newEmail: '',
              emailButtonActive: false,
+             openTab: ''
            })
+           this.setSnackbar("success", "Your email has been updated");
          })
          .catch(error => {
            console.log(error.response.data)
@@ -117,8 +141,9 @@ class Settings extends React.Component {
               newPass: false,
               newPassConfirm: false
             },
-            pswdButtonActive: false,
+            openTab: '',
           })
+          this.setSnackbar("success", "Your password has been changed");
         })
         .catch(error => {
           console.log(error.response.data)
@@ -146,6 +171,23 @@ class Settings extends React.Component {
   render () {
     return (
       <div className='settings'>
+        <div className={classes.root}>
+          <Snackbar
+            open={this.state.snackbarOpen}
+            severity={this.state.snackbarSeverity}
+            autoHideDuration={4500}
+            onClose={this.handleClose}
+          >
+            <Alert
+              elevation={6}
+              variant="filled"
+              onClose={this.handleClose}
+              color={this.state.snackbarSeverity}
+            >
+              {this.state.snackbarMessage}
+            </Alert>
+          </Snackbar>
+        </div>
         {/* <div className='page_header'>Settings</div> */}
         <div className='settings_container'>
           <div className='section_container'>
@@ -174,25 +216,13 @@ class Settings extends React.Component {
                     placeholder={this.state.originalEmail}
                     error={this.state.err.email}
                   />
-                  {this.state.emailButtonActive ? (
-                      <GreenButton
-                          variant='contained'
-                          className='full'
-                          onClick={this.editEmail}
-                      >
-                        SAVE
-                      </GreenButton>
-                  ) : (
-                      <GreenButton
-                          variant='contained'
-                          className='full'
-                          disabled={true}
-                          style={{color: 'white'}}
-                      >
-                        <CheckCircleOutlineIcon />
-                        EMAIL CHANGED
-                      </GreenButton>
-                  )}
+                  <GreenButton
+                      variant='contained'
+                      className='full'
+                      onClick={this.editEmail}
+                  >
+                    SAVE
+                  </GreenButton>
                 </div>
               )}
             </div>
@@ -240,25 +270,13 @@ class Settings extends React.Component {
                       placeholder='********'
                       error={this.state.err.newPassConfirm}
                   />
-                  {this.state.pswdButtonActive ? (
-                      <GreenButton
-                          variant='contained'
-                          className='full'
-                          onClick={this.editPass}
-                      >
-                        SAVE
-                      </GreenButton>
-                  ) : (
-                      <GreenButton
-                          variant='contained'
-                          className='full'
-                          disabled={true}
-                          style={{color: 'white'}}
-                      >
-                        <CheckCircleOutlineIcon />
-                        PASSWORD CHANGED
-                      </GreenButton>
-                  )}
+                  <GreenButton
+                      variant='contained'
+                      className='full'
+                      onClick={this.editPass}
+                  >
+                    SAVE
+                  </GreenButton>
                 </div>
               )}
               </div>

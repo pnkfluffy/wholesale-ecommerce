@@ -141,7 +141,8 @@ handleClose = (event, reason) => {
         <div className='product_page_main'>
           <div className='product_page_top'>
             <ProductImages 
-            images={product.imageData} productID={product._id} />
+            images={product.imageData} productID={product._id} 
+            setSnackbar={(severity, message) => this.setSnackbar(severity, message)}/>
             <div className='product_page_info'>
               <div className='product_info'>
                 <div className='product_page_info_top'>

@@ -77,7 +77,7 @@ export const CommissionShow = props => (
         source='representative'
         reference='admin-users'
       >
-        <TextField label='Name' source='email' />
+        <TextField label='Email' source='email' />
       </ReferenceField>
       <NumberField
         label='Order Total'

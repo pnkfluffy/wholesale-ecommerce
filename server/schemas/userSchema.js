@@ -58,6 +58,10 @@ const UserSchema = new Schema({
   representative: {
     type: Schema.Types.ObjectId,
     ref: 'user'
+  },
+  date: {
+    type: Date,
+    default: Date.now
   }
 })
 

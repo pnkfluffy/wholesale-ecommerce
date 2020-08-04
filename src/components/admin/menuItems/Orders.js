@@ -40,7 +40,7 @@ export const OrderList = props => (
         source='user'
         reference='admin-users'
       >
-        <TextField label='Name' source='email' />
+        <TextField label='Name' source='name' />
       </ReferenceField>
       <NumberField
         label='Total'
@@ -59,11 +59,11 @@ export const OrderShow = props => (
   <Show actions={<OrderShowActions />} {...props}>
     <SimpleShowLayout>
       {/* <TextField label="User" source="user" reference="admin-users"/> */}
-      <ReferenceField label='User Email' source='user' reference='admin-users'>
-        <TextField label='email' source='email' />
-      </ReferenceField>
-      <ReferenceField label='User Name' source='user' reference='admin-users'>
+      <ReferenceField label='User' source='user' reference='admin-users'>
         <TextField label='Name' source='name' />
+      </ReferenceField>
+      <ReferenceField label='Email' source='user' reference='admin-users'>
+        <TextField label='Email' source='email' />
       </ReferenceField>
 
       <NumberField

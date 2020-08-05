@@ -8,6 +8,7 @@ import store from '../../redux/store'
 import products from '../home/products'
 import OrderInformation from './orderInformation'
 import { GreenButton } from '../reuseable/materialButtons'
+import Swal from 'sweetalert2'
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -44,39 +45,41 @@ class Order extends React.Component {
   }
 
   redoOrder = async order => {
-    let orderToCartDB = [];
-    const productsWithInfo = await order.products.map(product => {
+    let hasAvailableProducts = false;
+   await order.products.forEach(product => {
       const allInfo = this.props.state.products.products.find(
         p => p._id === product.productId
       )
-      if (allInfo)
-      {
-          orderToCartDB.push({
-            id: product.productId,
-            quantity: product.productQuantity,
-            name: product.productName
-          });
-          allInfo.quantity = product.productQuantity
+      if (allInfo) {
+        if ( this.props.state.cart.find(c => c.product === product.productId)) {
+          store.dispatch({
+            type: 'UPDATE_CART_ITEM',
+            payload: {
+              id: product.productId,
+              quantity: product.productQuantity,
+              name: product.productName
+            }
+          })
+        } else {
+          allInfo.product = product.productId;
+          allInfo.quantity = product.productQuantity;
+          store.dispatch({
+            type: 'ADD_TO_CART',
+            payload: allInfo
+          })
+        }
+        hasAvailableProducts = true;
       }
-      return allInfo
     })
-    console.log(productsWithInfo);
-    //add products to cart
-    store.dispatch({ type: 'SET_CART', payload: productsWithInfo })
-    //save cart in db
-    console.log(orderToCartDB)
-    axios
-        .post('/api/cart', {cart: orderToCartDB})
-        .then(res => {
-          console.log('CART UPDATED', res.data)
-        })
-        .catch(err => {
-          console.log(err)
-        })
+    if(hasAvailableProducts)
+    {
+      //redirect to cart
+      const url = '/cart'
+      this.props.history.push(url)
+    } else {
+      Swal.fire('ERROR:', "We are sorry! None of the products in this order is available anymore", 'error')
+    }
 
-    //redirect to cart
-    const url = '/cart'
-    this.props.history.push(url)
   }
 
   organizeTotal = total => {

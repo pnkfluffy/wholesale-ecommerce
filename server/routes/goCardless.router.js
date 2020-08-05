@@ -338,6 +338,7 @@ const getTotal = async products => {
 // @access  Private
 router.post('/collectPayment', async (req, res) => {
   try {
+    console.log(req.body);
     //validate delivery input sizes (check if any is empty or if zip is too short or too large)
     const { errors, isValid } = validateDeliverySizes(req.body.delivery)
     if (!isValid) {
@@ -370,6 +371,7 @@ router.post('/collectPayment', async (req, res) => {
             )
             //get the cart
             const order = activeUser.cart
+            console.log(order);
             //initialize goCardless
             /*(!) TO GO LIVE
                     const allClients =  await gocardless(
@@ -405,16 +407,19 @@ router.post('/collectPayment', async (req, res) => {
                 return total
               })
               .catch(err => {
+                console.log(err);
                 console.log("Couldn't get total")
                 res.status(500).send('We were unable to calculate your total')
                 return
               })
             const total = totalInfo.total
             const productsInOrder = totalInfo.productsInOrder
-            console.log(productsInOrder)
+
+            //get representative of sale
             const representative = req.user.representative
               ? req.user.representative
-              : ''
+              : null
+
             //create new order in db
             const newOrder = new Order({
               user: req.user._id,
@@ -423,8 +428,17 @@ router.post('/collectPayment', async (req, res) => {
               total: total,
               representative
             })
-            await newOrder.save().catch(err => console.log(err))
-            console.log(newOrder)
+            await newOrder.save()
+                          .catch(err => {
+                            console.log(err)
+                            res
+                                .status(500)
+                                .send(
+                                    "Couldn't get your representative"
+                                )
+                            return ;
+                          })
+
             const payment = await allClients.payments
               .create(
                 {
@@ -457,8 +471,7 @@ router.post('/collectPayment', async (req, res) => {
                           )
                       }
                     )
-                    console.log(payment)
-                    confirmOrderEmail(req.user, newOrder, payment)
+                    confirmOrderEmail(req.user, newOrder, payment, theClient)
                     //send order and payment information so can redirect to order's page
                     res.json({
                       order: newOrder,

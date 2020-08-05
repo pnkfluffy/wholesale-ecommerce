@@ -51,11 +51,10 @@ class ProductUserReviews extends React.Component {
     const orders = this.props.state.orders
     if (orders)
     {
-      console.log(orders);
       let i = 0;
       while (i < orders.length)
       {
-        let find = orders[i].products.find(product => product.product == this.props.productID)
+        let find = orders[i].products.find(product => product.productId === this.props.productID)
         if (find)
           return true;
         i++;

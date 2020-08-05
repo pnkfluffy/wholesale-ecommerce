@@ -36,7 +36,7 @@ const confirmOrderEmail = (user, order, payment, client) => {
 					<h1 style="color: #59ba47">CBDDY</h1> 
 					<h1>PURCHASE CONFIRMED</h1>
 					<p>#${order._id}</p>
-					<p>YOUR CARD YOU BE CHARGED FOR THIS PURCHASE ON ${charge_date}</p>
+					<p>YOUR CARD WILL BE CHARGED FOR THIS PURCHASE ON ${charge_date}</p>
 					<table style="margin-left:auto;margin-right:auto;margin-bottom: 10px">
 						<thead>
 							<tr>

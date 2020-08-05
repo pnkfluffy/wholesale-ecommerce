@@ -54,31 +54,13 @@ class ProductImages extends React.Component {
         activeIndex={this.state.active}
       />
     ))
-
-    if (!this.props.images.length) {
-      return (
-        <div className='product_page_images'>
-          <div className='product_page_image'>
-            <img
-              className='product_image'
-              alt='product_image'
-              src={blank_image}
-            />
-            {this.props.productID && (
-            <FavoritesHeart productID={this.props.productID} chooseStyle={false}/>
-          )}
-          </div>
-      </div>
-      );
-    }
-  //  const image =  (product.imageData.length && product.imageData[0].url) ? product.imageData[0].url : blank_image
-    const image = this.props.images[this.state.active].url ? this.props.images[this.state.active].url : blank_image;
+    const image = (this.props.images.length && this.props.images[this.state.active].url) ? this.props.images[this.state.active].url : blank_image;
     return (
       <div className='product_page_images'>
         <div className='product_page_image'>
           <img
             className='product_image'
-            alt='product_image'
+            alt={blank_image}
             src={image}
           />
           {this.props.productID && (

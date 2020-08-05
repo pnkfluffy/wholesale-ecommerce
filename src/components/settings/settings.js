@@ -115,7 +115,8 @@ class Settings extends React.Component {
            console.log(error.response.data)
            if (error.response && error.response.data)
            {
-             Swal.fire('ERROR:', error.response.data, 'error')
+             Swal.fire(
+               'ERROR:',error.response.data, 'error')
              this.setState({
                err: {
                  email: true

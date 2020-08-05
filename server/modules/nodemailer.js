@@ -22,6 +22,7 @@ const newUserEmail = (user, url) => {
 }
 
 const confirmOrderEmail = (user, order, payment, client) => {
+	const total = (order.total / 100) + ",00"
 	const created_at = payment.created_at;
 	const charge_date = payment.charge_date;
 	const addr_2 = client.address_line2 ? client.address_line2 : "";
@@ -62,7 +63,7 @@ const confirmOrderEmail = (user, order, payment, client) => {
 						</tr>
 					</table>
 					${productsTable}<br/>
-					<div style="text-align: right; margin-right: 10px; color: #59ba47; font-size: 25px; font-weight: bold;">TOTAL: ${order.total}</div>
+					<div style="text-align: right; margin-right: 10px; color: #59ba47; font-size: 25px; font-weight: bold;">TOTAL: ${total}</div>
 					</div>
 			   </html>`
 	})

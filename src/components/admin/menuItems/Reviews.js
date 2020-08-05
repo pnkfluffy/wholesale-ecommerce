@@ -63,7 +63,14 @@ export const ReviewList = props => (
       >
         <TextField source='name' />
       </ReferenceField>
-      <TextField label='Customer' source='userName' />
+      <ReferenceField
+        label='User'
+        link='show'
+        source='user'
+        reference='admin-users'
+      >
+        <TextField label='Name' source='name' />
+      </ReferenceField>
       <TextField label='Stars' source='stars' />
       <DateField label='Created' source='date' />
 

@@ -43,12 +43,15 @@ class ProductInOrderCard extends React.Component {
               <div className='order_card_id'>#{this.props.product.productId}</div>
             </div>
 
-            <div className='product_in_order_card_values'>
-              <div>${this.props.product.productPrice}</div>
-              <div className='product_in_order_card_quantity'>
-                {this.props.product.productQuantity}
+            <div className='product_in_order_card_right_side'>
+              <div className='product_in_order_card_values'>
+                <div>${this.props.product.productPrice}</div>
+                <div className='product_in_order_card_quantity'>
+                  {this.props.product.productQuantity}
+                </div>
+                <div className='product_in_order_card_total'>${this.props.product.productTotal}</div>
               </div>
-                  <div className='product_in_order_card_total'>${this.props.product.productTotal}</div>
+              {this.props.available ? null : <div className="product_in_order_card_not_available">No longer available</div>}
             </div>
           </div>
         </div>

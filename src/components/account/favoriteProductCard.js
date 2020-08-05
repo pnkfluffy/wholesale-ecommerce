@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import FavoritesHeart from '../reuseable/favoritesHeart'
 import { GreenButton } from '../reuseable/materialButtons'
+import blank_image from '../../resources/images/blank_image.jpg'
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -16,6 +17,7 @@ class favoriteProductCard extends React.Component {
   }
 
   render () {
+    const image = (this.props.images.length && this.props.images[0].url) ? this.props.images[0].url : blank_image;
     return (
       <div className='outside_favorite_product_card_container'>
         <div className='favorite_product_card'>
@@ -23,7 +25,7 @@ class favoriteProductCard extends React.Component {
             <img
             className='favorite_product_image'
             alt='product_image'
-            src={this.props.images[0].url}
+            src={image}
             onClick={this.goToProduct}
           />
           </div>

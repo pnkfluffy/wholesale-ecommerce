@@ -56,7 +56,7 @@ class OrderCard extends React.Component {
 
   render () {
     const product = this.props.product
-    const image = product.imageData ? product.imageData[0].url : blank_image
+    const image = (product.imageData.length && product.imageData[0].url) ? product.imageData[0].url : blank_image
     return (
       <div className='order_card'>
         <div className='order_card_image_container'>

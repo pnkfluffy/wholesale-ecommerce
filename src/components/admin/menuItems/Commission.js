@@ -40,7 +40,12 @@ import {
 const CommissionFilter = props => {
   return (
     <Filter {...props}>
-      <BooleanInput source='representative' label='My Sales' alwaysOn />
+      <BooleanInput
+        source='representative'
+        label='My Sales'
+        alwaysOn
+        style={{ display: 'none' }}
+      />
     </Filter>
   )
 }
@@ -65,7 +70,7 @@ export const CommissionList = props => (
   <List
     aside={<Aside />}
     filters={<CommissionFilter />}
-    filterDefaultValues={{ representative: true }}
+    filterDefaultValues={{ commission: true }}
     {...props}
   >
     <Datagrid rowClick='show'>

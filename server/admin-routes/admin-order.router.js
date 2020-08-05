@@ -9,12 +9,13 @@ router.get('/', rejectNonAdmin, (req, res) => {
   console.log('req.query: ', req.query)
   const sortQuery = JSON.parse(req.query.sort)
   let filterQuery = JSON.parse(req.query.filter)
+
   console.log('filterquery', filterQuery)
-  if (filterQuery.representative) {
+  if (filterQuery.commission) {
     filterQuery.representative = req.user._id
-  } else {
-    filterQuery = {};
   }
+  delete filterQuery.commission
+
   console.log('new', filterQuery)
   let sort = {}
   sort[sortQuery[0]] = sortQuery[1] === 'ASC' ? 1 : -1

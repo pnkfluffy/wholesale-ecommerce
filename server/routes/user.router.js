@@ -70,9 +70,9 @@ router.post('/update-favorites', rejectUnauthenticated, async (req, res) => {
 router.post('/edit-email', rejectUnauthenticated, async (req, res) => {
   try {
     const newEmail = req.body.email;
-    const { error, isValid } = validateEmail(newEmail);
-    if (!isValid) {
-      res.status(500).json(error)
+    const { error, isValid } = await validateEmail(newEmail);
+    if (!isValid) {      
+      res.status(400).json(error)
     }
     else {
       await User.findOneAndUpdate({ _id: req.user._id }, { email: newEmail })

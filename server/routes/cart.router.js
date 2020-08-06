@@ -49,6 +49,13 @@ router.post('/', rejectUnauthenticated, async (req, res) => {
   try {
     // console.log(req.body.cart)
     // console.log(req.user._id)
+    cart.forEach(cartItem => {  
+      if (cartItem.quantity > 5000) {
+        res.send('order over maximum quantity')
+        return
+      }
+    })
+
     const user = await User.findOneAndUpdate(
       { _id: req.user._id },
       {

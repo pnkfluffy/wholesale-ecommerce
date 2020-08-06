@@ -91,7 +91,7 @@ router.get('/', rejectNonAdmin, (req, res) => {
         filterQuery._id = filterQuery.id
         delete filterQuery.id
       }
-      console.log('Users filterQuery: ', filterQuery)
+      // console.log('Users filterQuery: ', filterQuery)
       User.find(filterQuery).then(filteredUsers => {
         res.set('content-range', JSON.stringify(filteredUsers.length + 1))
         //  each object needs to have an 'id' field in order for
@@ -101,7 +101,7 @@ router.get('/', rejectNonAdmin, (req, res) => {
             .split('"_id":')
             .join('"id":')
         )
-        console.log('filtered Users: ', filteredUsers)
+        // console.log('filtered Users: ', filteredUsers)
         res.json(filteredUsers)
       })
     } else {

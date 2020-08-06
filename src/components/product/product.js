@@ -170,7 +170,7 @@ class Product extends React.Component {
                     <div className='no_priceTiers_message'>
                       No bulk discounts have been listed for this product. Want
                       to negotiate something?{' '}
-                      <a className='light_green' href='tel:5551234567'>
+                      <a className='light_green' href='tel:7205916284'>
                         Reach out!
                       </a>
                     </div>

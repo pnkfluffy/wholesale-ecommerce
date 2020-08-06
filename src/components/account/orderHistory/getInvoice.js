@@ -2,16 +2,15 @@ import React from 'react'
 import axios from 'axios'
 import { PDFDownloadLink } from '@react-pdf/renderer'
 import { GreenButton } from '../../reuseable/materialButtons'
+import GetAppIcon from '@material-ui/icons/GetApp'
 import { Invoice } from './invoice'
-import loading from '../../../resources/images/loading.svg'
+import loadingSVG from '../../../resources/images/loading.svg';
 
 class GetInvoice extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      invoice: {},
-      receiptReady: false,
-      loading: false
+      invoice: null
     }
   }
 
@@ -23,11 +22,10 @@ class GetInvoice extends React.Component {
         return res.data
       })
       .catch(err => console.log(err))
-    console.log(clientInfo);
+    console.log(clientInfo)
     const fullName = clientInfo.given_name + ' ' + clientInfo.family_name
     let addr_2 = ''
-    if (clientInfo.address_line2)
-      addr_2 = ', ' + clientInfo.address_line2
+    if (clientInfo.address_line2) addr_2 = ', ' + clientInfo.address_line2
     const client = {
       name: fullName,
       company_name: clientInfo.company_name,
@@ -41,9 +39,7 @@ class GetInvoice extends React.Component {
     console.log(client)
     return client
   }
-
   getItems = () => {
-    let allProducts = this.props.products.products
     let productsInOrder = this.props.order.products
     const productsWithTotal = productsInOrder.map(product => {
       return {
@@ -73,74 +69,75 @@ class GetInvoice extends React.Component {
   }
 
   organizeTotal = () => {
-    const str = this.props.order.total.toString();
-    const index = str.length - 2;
-    const beforeComma = str.substring(0, index);
-    const afterComma = str.substring(index);
-    const total = beforeComma + "," + afterComma;
-    return total;
+    const str = this.props.order.total.toString()
+    const index = str.length - 2
+    const beforeComma = str.substring(0, index)
+    const afterComma = str.substring(index)
+    const total = beforeComma + ',' + afterComma
+    return total
   }
 
-  generateInvoice = async e => {
-    e.stopPropagation()
-    this.setState({
-      loading: true
-    })
+  generateInvoice = async () => {
+    console.log('generating')
+
     const client = await this.getClientInfo()
+    const items = await this.getItems()
+    const date = await this.getDate()
+    const subtotal = this.organizeTotal()
+
     const shipping = {
       ...this.props.order.deliveryInfo,
       ClientAddr2: ', ' + this.props.order.deliveryInfo.ClientAddr2
     }
-    const items = await this.getItems()
-    const subtotal = this.organizeTotal();
-
-    const invoice_nr = this.props.order._id
     const chargingDate = this.props.payment.charge_date
-    const date = await this.getDate()
     const invoice = {
       client: client,
       shipping: shipping,
       items: items,
       subtotal: subtotal,
-      invoice_nr: invoice_nr,
+      invoice_nr: this.props.order._id,
       date: date,
       chargingDate: chargingDate,
       status: this.props.payment.status
     }
+    console.log('done generating', invoice)
+
     this.setState({
-      invoice: invoice,
-      receiptReady: true,
-      loading: false
+      invoice: invoice
     })
-    console.log(invoice)
+  }
+
+  componentDidMount = () => {
+    this.generateInvoice()
   }
 
   render () {
-    if (this.state.loading) return <img src={loading} alt='loading' />
-    else if (this.state.receiptReady) {
-      return (
-        <PDFDownloadLink
-          onClick={e => e.stopPropagation()}
-          className='single_order_button'
-          document={<Invoice data={this.state.invoice} />}
-          fileName='invoice_cbddy.pdf'
-        >
-          <GreenButton variant='contained' className='single_order_button'>
-            Download Receipt
-          </GreenButton>
-        </PDFDownloadLink>
-      )
-    } else {
-      return (
-        <GreenButton
-          variant='contained'
-          className='single_order_button'
-          onClick={this.generateInvoice}
-        >
-          Fetch Receipt
-        </GreenButton>
-      )
-    }
+    const fileName = 'cbddy_invoice_' + this.props.order._id + '.pdf'
+    return (
+      <div className='invoice_container'>
+        {this.state.invoice && (
+          <PDFDownloadLink
+            className='pdf_download'
+            document={<Invoice data={this.state.invoice} />}
+            fileName={fileName}
+          >
+            {({ loading }) =>
+              loading ? (
+                <img src={loadingSVG} alt='loading' />
+              ) : (
+                <GreenButton
+                  variant='contained'
+                  className='single_order_button'
+                  startIcon={<GetAppIcon />}
+                >
+                  Receipt
+                </GreenButton>
+              )
+            }
+          </PDFDownloadLink>
+        )}
+      </div>
+    )
   }
 }
 

@@ -27,24 +27,26 @@ router.get('/user', rejectUnauthenticated, (req, res) => {
 
 router.get('/favorites', rejectUnauthenticated, async (req, res) => {
   let user = await User.findById(req.user._id)
-                       .catch(res.status(500).send("couldn't find user"));
+  .catch( err => {
+    res.status(500).send("couldn't find user")
+    return
+  });
   let availableProducts = [];
-  if (user.favorites)
-  {
+  if (user.favorites) {
     const favorites = user.favorites
     for (let i = 0; i < favorites.length; i++) {
       await Product.findById(favorites[i])
-          .then(info => {
-            //  means nothing found
-            if (!info.deleted) {
-              availableProducts.push(favorites[i])
-            }
-          })
-          .catch(err => {
-            console.log(err)
-            res.status(500).send("couldn't get favorites")
-            return ;
-          })
+        .then(info => {
+          //  means nothing found
+          if (!info.deleted) {
+            availableProducts.push(favorites[i])
+          }
+        })
+        .catch(err => {
+          console.log(err)
+          res.status(500).send("couldn't get favorites")
+          return;
+        })
     }
   }
   res.send(availableProducts)
@@ -53,49 +55,48 @@ router.get('/favorites', rejectUnauthenticated, async (req, res) => {
 router.post('/updateFavorites', rejectUnauthenticated, async (req, res) => {
   const favorites = req.body
   const user = await User.findOneAndUpdate({ _id: req.user._id }, { favorites })
-                         .catch(res.status(500).send("couldn't update favorites in database"))
+    .catch(res.status(500).send("couldn't update favorites in database"))
   res.json(user.favorites)
 })
 
 router.post('/editEmail', rejectUnauthenticated, async (req, res) => {
   try {
     const newEmail = req.body.email;
-    const {error, isValid} = validateEmail(newEmail);
+    const { error, isValid } = validateEmail(newEmail);
     if (!isValid) {
       res.status(500).json(error)
     }
     else {
-      await User.findOneAndUpdate({ _id: req.user._id }, {email: newEmail})
-          .then(res.json({success: true}))
-          .catch(err => console.log(err))
+      await User.findOneAndUpdate({ _id: req.user._id }, { email: newEmail })
+        .then(res.json({ success: true }))
+        .catch(err => console.log(err))
     }
-  } catch(err) {
+  } catch (err) {
     console.log(err)
   }
 })
 
 router.post('/editPassword', rejectUnauthenticated, async (req, res) => {
   try {
-    const {errors, isValid} = validatePass(req.body);
+    const { errors, isValid } = validatePass(req.body);
     if (!isValid) {
       res.status(500).json(errors)
     }
     else {
-        const salt = await bcrypt.genSalt(10);
-        const newPass = req.body.newPass;
-        const oldPass = req.body.oldPass;
-        const newSaltedPass = await bcrypt.hash(newPass, salt);
-        console.log(oldPass);
-        if (await bcrypt.compare(oldPass, req.user.password))
-        {
-          await User.findOneAndUpdate({ _id: req.user._id }, {password: newSaltedPass})
-              .then(res.json({success: true}))
-              .catch(err => console.log(err))
-        } else {
-          res.status(500).json(["oldPass", "Incorrect Password"])
-        }
+      const salt = await bcrypt.genSalt(10);
+      const newPass = req.body.newPass;
+      const oldPass = req.body.oldPass;
+      const newSaltedPass = await bcrypt.hash(newPass, salt);
+      console.log(oldPass);
+      if (await bcrypt.compare(oldPass, req.user.password)) {
+        await User.findOneAndUpdate({ _id: req.user._id }, { password: newSaltedPass })
+          .then(res.json({ success: true }))
+          .catch(err => console.log(err))
+      } else {
+        res.status(500).json(["oldPass", "Incorrect Password"])
+      }
     }
-  } catch(err) {
+  } catch (err) {
     console.log(err)
   }
 })

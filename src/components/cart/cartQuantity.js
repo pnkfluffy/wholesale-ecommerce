@@ -7,7 +7,7 @@ const mapStateToProps = state => ({
 })
 
 class CartQuantity extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       quantity: 0,
@@ -15,7 +15,7 @@ class CartQuantity extends React.Component {
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.setState({
       quantity: this.props.productInfo.quantity
     })
@@ -37,37 +37,34 @@ class CartQuantity extends React.Component {
       const res = await this.props.deleteProduct()
       if (!res)
         this.setState(
-            {
-          quantity: 1
-        },
-        () => {
-          this.dispatchQuantity()
-        })
-    }
-    else {
-      this.setState(
           {
-            quantity: this.state.quantity - 1
+            quantity: 1
           },
           () => {
             this.dispatchQuantity()
-          }
+          })
+    }
+    else {
+      this.setState(
+        {
+          quantity: this.state.quantity - 1
+        },
+        () => {
+          this.dispatchQuantity()
+        }
       )
     }
   }
 
   inputQuantity = async event => {
     if (parseInt(event.target.value, 10) <= 0) {
-      const res =  await this.props.deleteProduct()
-      if(!res)
-      {
-        this.setState(
-            {
-              quantity: 1
-            },
-            () => {
-              this.dispatchQuantity()
-            })
+      const res = await this.props.deleteProduct()
+      if (!res) {
+        this.setState({
+          quantity: 1
+        }, () => {
+          this.dispatchQuantity()
+        })
       }
     }
     else {
@@ -92,7 +89,7 @@ class CartQuantity extends React.Component {
     })
   }
 
-  render () {
+  render() {
     const quantity = this.state.quantity ? this.state.quantity : ''
     return (
       <div className='cart_quantity'>

@@ -20,7 +20,7 @@ class Cart extends React.Component {
     let total = 0
     const cartProducts = this.props.state.cart.map((cartProduct, index) => {
       //only give price to product available
-      if (cartProduct.available) {
+      if (!cartProduct.deleted && !cartProduct.draft) {
         const productTotal = getPriceByQuantity(
             cartProduct.priceTiers,
             cartProduct.quantity,

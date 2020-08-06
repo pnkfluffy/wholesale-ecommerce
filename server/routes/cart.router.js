@@ -10,10 +10,13 @@ const {
 router.get('/', rejectUnauthenticated, async (req, res) => {
   try {
     const user = await User.findById(req.user._id)
-    
+    if (!user) {
+      res.status(404).send('no user')
+      return
+    }
     const cart = user.cart;
     if (!cart.cart) {
-      res.status(200).send('no cart')
+      res.status(404).send('no cart')
       return
     }
     let cartProductInfo = []

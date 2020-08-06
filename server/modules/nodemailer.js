@@ -8,7 +8,7 @@ const transporter = nodemailer.createTransport({
 	}
 })
 
-const newUserEmail = (user, url) => {
+const newUserEmail = (user) => {
 	transporter.sendMail({
 		from: process.env.NODE_MAILER_USERNAME,
 		to: user.email,
@@ -69,13 +69,13 @@ const confirmOrderEmail = (user, order, payment, client) => {
 	})
 }
 
-const trackingAddedEmail = (user, order, payment, tracking) => {
+const trackingAddedEmail = (user, order, tracking) => {
 	transporter.sendMail({
 		from: process.env.NODE_MAILER_USERNAME,
 		to: user.email,
 		subject: `Your order has shipped!`,
 		text: `
-		${JSON.stringify(order, payment)}
+		${JSON.stringify(order)}
 		${tracking}
 		`
 	})

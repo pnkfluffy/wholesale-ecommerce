@@ -1,58 +1,61 @@
 const express = require('express')
 const router = express.Router()
 const Order = require('../schemas/orderSchema')
+const User = require('../schemas/userSchema')
 const { rejectNonAdmin } = require('../modules/authentication-middleware')
+const { trackingAddedEmail } = require('../modules/nodemailer')
 
 //getList
 router.get('/', rejectNonAdmin, (req, res) => {
-  console.log('Order list backend hit')
-  console.log('req.query: ', req.query)
-  const sortQuery = JSON.parse(req.query.sort)
-  let filterQuery = JSON.parse(req.query.filter)
+  try {
+    console.log('Order list backend hit')
+    console.log('req.query: ', req.query)
+    const sortQuery = JSON.parse(req.query.sort)
+    let filterQuery = JSON.parse(req.query.filter)
 
-  console.log('filterquery', filterQuery)
-  if (filterQuery.commission) {
-    filterQuery.representative = req.user._id
-  }
-  delete filterQuery.commission
+    console.log('filterquery', filterQuery)
+    if (filterQuery.commission) {
+      filterQuery.representative = req.user._id
+    }
+    delete filterQuery.commission
 
-  console.log('new', filterQuery)
-  let sort = {}
-  sort[sortQuery[0]] = sortQuery[1] === 'ASC' ? 1 : -1
-  if (JSON.stringify(filterQuery) !== '{}') {
-    console.log('orders filterQuery: ', filterQuery)
-    Order.find(filterQuery)
-      .sort(sort)
-      .then(filteredOrders => {
-        res.set('content-range', JSON.stringify(filteredOrders.length + 1))
-        //  each object needs to have an 'id' field in order for
-        //  reactAdmin to parse
-        filteredOrders = JSON.parse(
-          JSON.stringify(filteredOrders)
-            .split('"_id":')
-            .join('"id":')
-        )
-        console.log('filtered Orders: ', filteredOrders)
-        res.json(filteredOrders)
-      })
-  } else {
-    Order.find()
-      .sort(sort)
-      .then(orders => {
-        res.set('content-range', JSON.stringify(orders.length + 1))
-        //  each object needs to have an 'id' field in order for
-        //  reactAdmin to parse
-        orders = JSON.parse(
-          JSON.stringify(orders)
-            .split('"_id":')
-            .join('"id":')
-        )
-        res.json(orders)
-      })
-      .catch(error => {
-        console.log(error)
-        res.status(500).send('no users found')
-      })
+    console.log('new', filterQuery)
+    let sort = {}
+    sort[sortQuery[0]] = sortQuery[1] === 'ASC' ? 1 : -1
+    if (JSON.stringify(filterQuery) !== '{}') {
+      console.log('orders filterQuery: ', filterQuery)
+      Order.find(filterQuery)
+        .sort(sort)
+        .then(filteredOrders => {
+          res.set('content-range', JSON.stringify(filteredOrders.length + 1))
+          //  each object needs to have an 'id' field in order for
+          //  reactAdmin to parse
+          filteredOrders = JSON.parse(
+            JSON.stringify(filteredOrders)
+              .split('"_id":')
+              .join('"id":')
+          )
+          console.log('filtered Orders: ', filteredOrders)
+          res.json(filteredOrders)
+        })
+    } else {
+      Order.find()
+        .sort(sort)
+        .then(orders => {
+          res.set('content-range', JSON.stringify(orders.length + 1))
+          //  each object needs to have an 'id' field in order for
+          //  reactAdmin to parse
+          orders = JSON.parse(
+            JSON.stringify(orders)
+              .split('"_id":')
+              .join('"id":')
+          )
+          res.json(orders)
+        })
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('no orders found')
   }
 })
 
@@ -79,28 +82,28 @@ router.get('/:id', rejectNonAdmin, (req, res) => {
 // update
 router.put('/:id', rejectNonAdmin, async (req, res) => {
   console.log('update order hit', req.params.id, req.body)
-
-  Order.findById(req.params.id).then(order => {
-    console.log('finding', order)
-    if (!order.tracking.number && req.body.tracking.number) {
-      //  {!} SEND EMAIL NOTIFYING CUSTOMER THEIR ORDER HAS
-      //  SHIPPED, INCLUDE NUMBER
-    }
-  })
-
-  Order.updateOne({ _id: req.params.id }, req.body)
-    .then(order => {
-      order = JSON.parse(
-        JSON.stringify(order)
-          .split('"_id":')
-          .join('"id":')
-      )
-      res.json(order)
+  try {
+    Order.findById(req.params.id).then(async order => {
+      console.log('finding', order)
+      if (!order.tracking.number && req.body.tracking.number) {
+        let user = await User.find({ _id: order.user })
+        trackingAddedEmail(user, order, req.body.tracking.number)
+      }
     })
-    .catch(err => {
-      console.log(err)
-      res.status(500).send('Failed to update.')
-    })
+
+    Order.updateOne({ _id: req.params.id }, req.body)
+      .then(order => {
+        order = JSON.parse(
+          JSON.stringify(order)
+            .split('"_id":')
+            .join('"id":')
+        )
+        res.json(order)
+      })
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Failed to update.')
+  }
 })
 
 // router.put('/:id', rejectNonAdmin, uploadProductPhotos, async (req, res) => {

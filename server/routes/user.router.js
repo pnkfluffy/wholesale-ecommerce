@@ -12,7 +12,6 @@ const shajs = require('sha.js')
 const bcrypt = require('bcrypt')
 
 router.post("/login", passport.authenticate("local", { failureRedirect: "/login" }), (req, res) => {
-  console.log('hi');
   res.sendStatus(201)
 });
 
@@ -20,46 +19,55 @@ router.get('/user', rejectUnauthenticated, (req, res) => {
   let user = {
     email: req.user.email,
     name: req.user.name,
-    favorites: req.user.favorites
   }
   res.send(user)
 })
 
 router.get('/favorites', rejectUnauthenticated, async (req, res) => {
-  let user = await User.findById(req.user._id)
-  .catch( err => {
-    res.status(500).send("couldn't find user")
-    return
-  });
-  let availableProducts = [];
-  if (user.favorites) {
-    const favorites = user.favorites
-    for (let i = 0; i < favorites.length; i++) {
-      await Product.findById(favorites[i])
-        .then(info => {
-          //  means nothing found
-          if (!info.deleted) {
-            availableProducts.push(favorites[i])
-          }
-        })
-        .catch(err => {
-          console.log(err)
-          res.status(500).send("couldn't get favorites")
-          return;
-        })
+  try {
+    let user = await User.findById(req.user._id)
+      .catch(err => {
+        res.status(500).send("couldn't find user")
+        return
+      });
+    let availableProducts = [];
+    if (user.favorites) {
+      const favorites = user.favorites
+      for (let i = 0; i < favorites.length; i++) {
+        await Product.findById(favorites[i])
+          .then(info => {
+            //  means nothing found
+            if (!info.deleted) {
+              availableProducts.push(favorites[i])
+            }
+          })
+          .catch(err => {
+            console.log(err)
+            res.status(500).send("couldn't get favorites")
+            return;
+          })
+      }
     }
+    res.send(availableProducts)
+    return
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('error in retrieving favorites')
   }
-  res.send(availableProducts)
 })
 
-router.post('/updateFavorites', rejectUnauthenticated, async (req, res) => {
+router.post('/update-favorites', rejectUnauthenticated, async (req, res) => {
   const favorites = req.body
-  const user = await User.findOneAndUpdate({ _id: req.user._id }, { favorites })
-    .catch(res.status(500).send("couldn't update favorites in database"))
-  res.json(user.favorites)
+  try {
+    const user = await User.findOneAndUpdate({ _id: req.user._id }, { favorites })
+    res.json(user.favorites)
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("couldn't update favorites in database")
+  }
 })
 
-router.post('/editEmail', rejectUnauthenticated, async (req, res) => {
+router.post('/edit-email', rejectUnauthenticated, async (req, res) => {
   try {
     const newEmail = req.body.email;
     const { error, isValid } = validateEmail(newEmail);
@@ -73,10 +81,11 @@ router.post('/editEmail', rejectUnauthenticated, async (req, res) => {
     }
   } catch (err) {
     console.log(err)
+    res.status(500).send('error editing email')
   }
 })
 
-router.post('/editPassword', rejectUnauthenticated, async (req, res) => {
+router.post('/edit-password', rejectUnauthenticated, async (req, res) => {
   try {
     const { errors, isValid } = validatePass(req.body);
     if (!isValid) {
@@ -98,12 +107,13 @@ router.post('/editPassword', rejectUnauthenticated, async (req, res) => {
     }
   } catch (err) {
     console.log(err)
+    res.status(500).send('error editing password')
   }
 })
 
-router.get('/login-uri', (req, res) => {
-  res.send(process.env.DEV_URI)
-})
+// router.get('/login-uri', (req, res) => {
+//   res.send(process.env.DEV_URI)
+// })
 
 router.get('/logout', rejectUnauthenticated, (req, res) => {
   req.logout()

@@ -5,6 +5,7 @@ const User = require('../schemas/userSchema')
 const Order = require('../schemas/orderSchema')
 const Product = require('../schemas/productSchema')
 
+const { rejectUnauthenticated } = require('../modules/authentication-middleware')
 /*validation*/
 const validateDeliverySizes = require('../validation/deliveryValidation')
 const USPS = require('usps-webtools')
@@ -28,7 +29,7 @@ const initializeGoCardless = async () => {
 // @route   GET /gc/checkClient
 // @desc    Returns all clients
 // @access  Private
-router.get('/checkClientID', async (req, res) => {
+router.get('/checkClientID', rejectUnauthenticated, async (req, res) => {
   User.findById(req.user._id)
     .then(user => {
       if (user.goCardlessID) res.send(true)
@@ -43,7 +44,7 @@ router.get('/checkClientID', async (req, res) => {
 // @route   GET /gc/checkClient
 // @desc    Returns all clients
 // @access  Private
-router.get('/checkClientMandate', async (req, res) => {
+router.get('/checkClientMandate', rejectUnauthenticated, async (req, res) => {
   User.findById(req.user._id)
     .then(user => {
       if (user.goCardlessMandate) res.send(true)
@@ -58,7 +59,7 @@ router.get('/checkClientMandate', async (req, res) => {
 // @route   GET /gc/clients
 // @desc    Returns all clients
 // @access  Private
-router.get('/clients', async (req, res) => {
+router.get('/clients', rejectUnauthenticated, async (req, res) => {
   try {
     // Initialize the GoCardLess client.
     const allClients = await initializeGoCardless()
@@ -77,7 +78,7 @@ router.get('/clients', async (req, res) => {
 // @route   GET /gc/oneClient
 // @desc    Returns client by id
 // @access  Private
-router.get('/oneClient', async (req, res) => {
+router.get('/oneClient', rejectUnauthenticated, async (req, res) => {
   try {
     const activeUser = await User.findById(req.user._id).catch(err => {
       console.log(err)
@@ -109,7 +110,7 @@ router.get('/oneClient', async (req, res) => {
 // @route   GET /gc/payments
 // @desc    Returns all payments
 // @access  Private
-router.get('/payments', async (req, res) => {
+router.get('/payments', rejectUnauthenticated, async (req, res) => {
   try {
     // Initialize the GoCardLess client.
     const allClients = await initializeGoCardless()
@@ -124,7 +125,7 @@ router.get('/payments', async (req, res) => {
 // @route   GET /gc/payments
 // @desc    Returns all payments from user
 // @access  Private
-router.get('/payments/from', async (req, res) => {
+router.get('/payments/from', rejectUnauthenticated, async (req, res) => {
   try {
     const allClients = await initializeGoCardless()
     const paymentsList = await allClients.payments.list()
@@ -158,7 +159,7 @@ router.get('/payments/from', async (req, res) => {
 // @route   GET /gc/payments
 // @desc    Returns all payments from user
 // @access  Private
-router.get('/payments/onePayment/:orderID', async (req, res) => {
+router.get('/payments/onePayment/:orderID', rejectUnauthenticated, async (req, res) => {
   try {
     const order = await Order.findById(req.params.orderID).catch(err => {
       console.log(err)
@@ -190,7 +191,7 @@ router.get('/payments/onePayment/:orderID', async (req, res) => {
 // @:id		Active User ID
 // @desc    Returns URL to confirm client creation
 // @access  Private
-router.post('/addClient', async (req, res) => {
+router.post('/addClient', rejectUnauthenticated, async (req, res) => {
   const name = req.body.newClientName
   const lastName = req.body.newClientLastName
   const email = req.body.newClientEmail
@@ -255,7 +256,7 @@ router.post('/addClient', async (req, res) => {
 // @:id		Active User ID
 // @desc    Completes the redirect flow from the addUser and adds payment confirmed to database
 // @access  Private
-router.post('/completeRedirect/', async (req, res) => {
+router.post('/completeRedirect/', rejectUnauthenticated, async (req, res) => {
   try {
     console.log('redirect')
     const allClients = await initializeGoCardless()
@@ -339,7 +340,7 @@ const getTotal = async products => {
 // @desc    Collect Payment of active user
 // @reqBody Delivery Information
 // @access  Private
-router.post('/collectPayment', async (req, res) => {
+router.post('/collectPayment', rejectUnauthenticated, async (req, res) => {
   try {
     console.log(req.body);
     //validate delivery input sizes (check if any is empty or if zip is too short or too large)
@@ -510,7 +511,7 @@ router.post('/collectPayment', async (req, res) => {
 // @desc    Cancel or Retry payment
 // @req		{type: "cancel"} or {type: "retry"}
 // @access  Private
-router.post('/changePayment/:orderID', async (req, res) => {
+router.post('/changePayment/:orderID', rejectUnauthenticated, async (req, res) => {
   try {
     //check validation
     const allClients = await initializeGoCardless()

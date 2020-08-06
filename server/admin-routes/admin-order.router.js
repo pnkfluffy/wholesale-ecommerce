@@ -9,11 +9,10 @@ const { trackingAddedEmail } = require('../modules/nodemailer')
 router.get('/', rejectNonAdmin, (req, res) => {
   try {
     console.log('Order list backend hit')
-    console.log('req.query: ', req.query)
     const sortQuery = JSON.parse(req.query.sort)
     let filterQuery = JSON.parse(req.query.filter)
 
-    console.log('filterquery', filterQuery)
+    // console.log('filterquery', filterQuery)
     if (filterQuery.commission) {
       filterQuery.representative = req.user._id
     }
@@ -23,7 +22,7 @@ router.get('/', rejectNonAdmin, (req, res) => {
     let sort = {}
     sort[sortQuery[0]] = sortQuery[1] === 'ASC' ? 1 : -1
     if (JSON.stringify(filterQuery) !== '{}') {
-      console.log('orders filterQuery: ', filterQuery)
+      // console.log('orders filterQuery: ', filterQuery)
       Order.find(filterQuery)
         .sort(sort)
         .then(filteredOrders => {

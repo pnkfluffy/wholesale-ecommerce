@@ -54,7 +54,7 @@ router.get('/', rejectNonAdmin, (req, res) => {
         })
     }
   } catch (error) {
-    console.log(error);
+    console.log(error)
     res.status(500).send('no orders found')
   }
 })
@@ -81,27 +81,24 @@ router.get('/:id', rejectNonAdmin, (req, res) => {
 
 // update
 router.put('/:id', rejectNonAdmin, async (req, res) => {
-  console.log('update order hit', req.params.id, req.body)
   try {
     Order.findById(req.params.id).then(async order => {
-      console.log('finding', order)
-      if (!order.tracking.number && req.body.tracking.number) {
-        let user = await User.find({ _id: order.user })
-        trackingAddedEmail(user, order, req.body.tracking.number)
+      if (order.tracking.number !== req.body.tracking.number) {
+        let user = await User.findOne({ _id: order.user })
+        trackingAddedEmail(user, order, req.body.tracking)
       }
     })
 
-    Order.updateOne({ _id: req.params.id }, req.body)
-      .then(order => {
-        order = JSON.parse(
-          JSON.stringify(order)
-            .split('"_id":')
-            .join('"id":')
-        )
-        res.json(order)
-      })
+    Order.updateOne({ _id: req.params.id }, req.body).then(order => {
+      order = JSON.parse(
+        JSON.stringify(order)
+          .split('"_id":')
+          .join('"id":')
+      )
+      res.json(order)
+    })
   } catch (error) {
-    console.log(error);
+    console.log(error)
     res.status(500).send('Failed to update.')
   }
 })

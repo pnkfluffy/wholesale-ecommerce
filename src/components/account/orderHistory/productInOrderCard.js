@@ -16,9 +16,11 @@ class ProductInOrderCard extends React.Component {
   }
 
   render () {
-    const image = this.props.imageData
-      ? this.props.imageData[0].url
-      : blank_image
+    let image;
+    if (this.props.imageData && this.props.imageData[0])
+      image = this.props.imageData[0].url;
+    else
+      image = blank_image
 
     const productLink = this.props.available
       ? '/product/' + this.props.product.productId.toString()

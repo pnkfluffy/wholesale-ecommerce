@@ -61,14 +61,14 @@ class CreateReview extends React.Component {
     while (i < this.state.stars) {
       const index = i + 1
       stars.push(
-        <StarIcon onClick={e => this.editStars(index)} key={i}></StarIcon>
+        <StarIcon onClick={() => this.editStars(index)} key={i}></StarIcon>
       )
       i++
     }
     while (i < 5) {
       const index = i + 1
       stars.push(
-        <StarBorderIcon onClick={e => this.editStars(index)}></StarBorderIcon>
+        <StarBorderIcon onClick={() => this.editStars(index)}></StarBorderIcon>
       )
       i++
     }

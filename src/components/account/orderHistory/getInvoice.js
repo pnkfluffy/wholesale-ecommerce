@@ -23,11 +23,10 @@ class GetInvoice extends React.Component {
         return res.data
       })
       .catch(err => console.log(err))
-    console.log(clientInfo);
+    console.log(clientInfo)
     const fullName = clientInfo.given_name + ' ' + clientInfo.family_name
     let addr_2 = ''
-    if (clientInfo.address_line2)
-      addr_2 = ', ' + clientInfo.address_line2
+    if (clientInfo.address_line2) addr_2 = ', ' + clientInfo.address_line2
     const client = {
       name: fullName,
       company_name: clientInfo.company_name,
@@ -43,7 +42,6 @@ class GetInvoice extends React.Component {
   }
 
   getItems = () => {
-    let allProducts = this.props.products.products
     let productsInOrder = this.props.order.products
     const productsWithTotal = productsInOrder.map(product => {
       return {
@@ -73,12 +71,12 @@ class GetInvoice extends React.Component {
   }
 
   organizeTotal = () => {
-    const str = this.props.order.total.toString();
-    const index = str.length - 2;
-    const beforeComma = str.substring(0, index);
-    const afterComma = str.substring(index);
-    const total = beforeComma + "," + afterComma;
-    return total;
+    const str = this.props.order.total.toString()
+    const index = str.length - 2
+    const beforeComma = str.substring(0, index)
+    const afterComma = str.substring(index)
+    const total = beforeComma + ',' + afterComma
+    return total
   }
 
   generateInvoice = async e => {
@@ -92,7 +90,7 @@ class GetInvoice extends React.Component {
       ClientAddr2: ', ' + this.props.order.deliveryInfo.ClientAddr2
     }
     const items = await this.getItems()
-    const subtotal = this.organizeTotal();
+    const subtotal = this.organizeTotal()
 
     const invoice_nr = this.props.order._id
     const chargingDate = this.props.payment.charge_date

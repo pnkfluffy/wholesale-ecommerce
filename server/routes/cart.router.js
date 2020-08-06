@@ -19,13 +19,16 @@ router.get('/', rejectUnauthenticated, async (req, res) => {
     for (let i = 0; i < cart.length; i++) {
       const productInfo = await Product.findById(cart[i].product)
         .then(info => {
+          console.log(info);
           //  means nothing found
-          if (!info) return
-          const relavent = info._doc
-          return {
-            ...relavent,
-            product: relavent._id,
-            quantity: cart[i].quantity
+          if (info) {
+              const relavent = info._doc
+              return {
+                ...relavent,
+                product: relavent._id,
+                quantity: cart[i].quantity,
+                available: true
+            }
           }
         })
         .catch(err => console.log(err))

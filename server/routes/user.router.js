@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const User = require('../schemas/userSchema')
+const Product = require('../schemas/productSchema')
 const passport = require('../modules/passport')
 const {
   rejectUnauthenticated
@@ -26,7 +27,26 @@ router.get('/user', rejectUnauthenticated, (req, res) => {
 
 router.get('/favorites', rejectUnauthenticated, async (req, res) => {
   let user = await User.findById(req.user._id)
-  res.json(user.favorites)
+                       .catch(res.status(500).send("couldn't find user"));
+  let availableProducts = [];
+  if (user.favorites)
+  {
+    const favorites = user.favorites
+    for (let i = 0; i < favorites.length; i++) {
+      await Product.findById(favorites[i])
+          .then(info => {
+            //  means nothing found
+            if (!info.deleted) {
+              availableProducts.push(favorites[i])
+            }
+          })
+          .catch(err => {
+              console.log(err)
+            res.status(500).send("couldn't get favorites")
+          })
+    }
+  }
+  res.send(availableProducts)
 })
 
 router.post('/updateFavorites', rejectUnauthenticated, async (req, res) => {

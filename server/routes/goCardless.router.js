@@ -302,26 +302,29 @@ const getTotal = async products => {
   for (i = 0; i < size; i++) {
     const productInfo = await Product.findById(products[i].product)
       .then(info => {
+        if (!info || info.deleted) return ;
         return info
       })
       .catch(err => console.log(err))
-    let price = productInfo.price
-    for (let x = 0; x < productInfo.priceTiers.length; x++) {
-      if (
-        products[i].quantity >= productInfo.priceTiers[x].quantity &&
-        price > productInfo.priceTiers[x].price
-      ) {
-        price = productInfo.priceTiers[x].price
+    if (productInfo) {
+      let price = productInfo.price
+      for (let x = 0; x < productInfo.priceTiers.length; x++) {
+        if (
+            products[i].quantity >= productInfo.priceTiers[x].quantity &&
+            price > productInfo.priceTiers[x].price
+        ) {
+          price = productInfo.priceTiers[x].price
+        }
       }
+      productsInOrder.push({
+        productId: productInfo._id,
+        productName: productInfo.name,
+        productPrice: price,
+        productQuantity: products[i].quantity,
+        productTotal: price * products[i].quantity
+      })
+      total = total + price * products[i].quantity
     }
-    productsInOrder.push({
-      productId: productInfo._id,
-      productName: productInfo.name,
-      productPrice: price,
-      productQuantity: products[i].quantity,
-      productTotal: price * products[i].quantity
-    })
-    total = total + price * products[i].quantity
   }
   total = total * 100
   console.log(total)
@@ -369,9 +372,7 @@ router.post('/collectPayment', async (req, res) => {
             const activeUser = await User.findById(req.user._id).catch(err =>
               console.log(err)
             )
-            //get the cart
-            const order = activeUser.cart
-            console.log(order);
+
             //initialize goCardless
             /*(!) TO GO LIVE
                     const allClients =  await gocardless(
@@ -400,9 +401,9 @@ router.post('/collectPayment', async (req, res) => {
             else if (clientCountry === 'GB') currency = 'GBP'
 
             //do all the math to get total
-            //to go live needs all values to come with ,00 after the value
-            //or add a double zero to the total because of goCardless
-            const totalInfo = await getTotal(order)
+            //+ check if products are available
+            //+ save their information for the future in case they get deleted
+            const totalInfo = await getTotal(activeUser.cart)
               .then(total => {
                 return total
               })
@@ -410,11 +411,15 @@ router.post('/collectPayment', async (req, res) => {
                 console.log(err);
                 console.log("Couldn't get total")
                 res.status(500).send('We were unable to calculate your total')
-                return
+                return;
               })
             const total = totalInfo.total
             const productsInOrder = totalInfo.productsInOrder
-
+            if (!productsInOrder[0])
+            {
+              res.status(500).send('You have no available items in your order')
+              return ;
+            }
             //get representative of sale
             const representative = req.user.representative
               ? req.user.representative
@@ -434,7 +439,7 @@ router.post('/collectPayment', async (req, res) => {
                             res
                                 .status(500)
                                 .send(
-                                    "Couldn't get your representative"
+                                    "Couldn't create new order"
                                 )
                             return ;
                           })

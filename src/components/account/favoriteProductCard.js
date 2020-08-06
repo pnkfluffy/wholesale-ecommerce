@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import FavoritesHeart from '../reuseable/favoritesHeart'
 import { GreenButton } from '../reuseable/materialButtons'
 import blank_image from '../../resources/images/blank_image.jpg'
 
@@ -15,6 +14,13 @@ class favoriteProductCard extends React.Component {
     e.stopPropagation()
     this.props.history.push(redirect_url)
   }
+
+  removeFromWishlist = (productID) => {
+      this.props.dispatch({
+        type: 'DELETE_WISHLIST',
+        payload: productID
+      })
+    }
 
   render () {
     const image = (this.props.images.length && this.props.images[0].url) ? this.props.images[0].url : blank_image;
@@ -42,11 +48,12 @@ class favoriteProductCard extends React.Component {
           onClick={this.goToProduct}
         > Go to Product
         </GreenButton>
-        </div>
-        <div className='outside_heart_container'>
-          <div className='heart_container'>
-            <FavoritesHeart productID={this.props.product._id} chooseStyle={true}/>
-            </div>
+        <GreenButton
+          variant='contained'
+          className='favorite_product_button'
+          onClick={this.removeFromWishlist(this.props.product._id)}
+        > Remove from Wishlist
+        </GreenButton>
         </div>
       </div>
     )

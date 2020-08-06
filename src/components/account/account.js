@@ -13,15 +13,20 @@ class Account extends React.Component {
   }
 
   render() {    
-    let favorites = this.props.state.favorites.map(favorite => {
-      let productInfo = this.props.state.products.products.find(product => product._id === favorite)
-      return (
-        <FavoriteProductCard
-          product={productInfo}
-          key={productInfo._id}
-          images={productInfo.imageData}
-        />
-      )
+    let wishlistProductList = this.props.state.wishlist.map(wishlistItem => {
+      let productInfo = this.props.state.products.products.find(product => {
+        if (product._id === wishlistItem && wishlistItem !== null){
+          console.log("product", product);
+          return (product);
+        }})
+      console.log("productInfo", productInfo);
+      // return (
+      //   // <FavoriteProductCard
+      //   //   product={productInfo}
+      //   //   key={productInfo._id}
+      //   //   images={productInfo.imageData}
+      //   // />
+      // )
     })
 
     return (
@@ -32,13 +37,13 @@ class Account extends React.Component {
             <OrderHistory />
           </div>
           <div className='section_container'>
-            <div className='page_subheader'>Favorites</div>
-            {this.props.state.favorites.length ? (
-              favorites
+            <div className='page_subheader'>Wishlist</div>
+            {this.props.state.wishlist.length ? (
+              wishlistProductList
             ) : (
                 <div className='no_items_message'>
-                  Seems like you haven't favorited any items yet. Add favorites by
-                  clicking the heart on product page!
+                  Your wishlist is empty. Add products to your wishlist by
+                  clicking on "Add to wishlist" on product page!
                 </div>
               )}
           </div>

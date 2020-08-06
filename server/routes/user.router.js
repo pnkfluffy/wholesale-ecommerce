@@ -24,12 +24,12 @@ router.get('/user', rejectUnauthenticated, (req, res) => {
   res.send(user)
 })
 
-router.get('/favorites', rejectUnauthenticated, async (req, res) => {
+router.get('/wishlist', rejectUnauthenticated, async (req, res) => {
   let user = await User.findById(req.user._id)
   res.json(user.favorites)
 })
 
-router.post('/updateFavorites', rejectUnauthenticated, async (req, res) => {
+router.post('/updateWishlist', rejectUnauthenticated, async (req, res) => {
   const favorites = req.body
   const user = await User.findOneAndUpdate({ _id: req.user._id }, { favorites })
                          .catch(res.status(500).send("couldn't update favorites in database"))

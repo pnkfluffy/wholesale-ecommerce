@@ -11,6 +11,7 @@ import { addQuantityToCart } from '../reuseable/addQuantityToCart'
 import { getPriceByQuantity } from '../reuseable/getPriceByQuantity'
 import { GreenButton } from '../reuseable/materialButtons'
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+import Wishlist from '../reuseable/wishlist';
 
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
@@ -103,7 +104,7 @@ handleClose = (event, reason) => {
       this.setSnackbar("success", product.quantity + product.metaData.units.unit + " " + product.name + " added to your cart");
     })
   }
-  
+
   setSnackbar = (severity, message) => {
     this.setState({
       snackbarOpen: true,
@@ -191,6 +192,9 @@ handleClose = (event, reason) => {
                       Added!
                     </GreenButton>
                   )}
+                  {/* {this.state.button && ( */}
+                  <Wishlist productID={this.props.match.params.productID}/>
+                {/* )}  */}
               </div>
             </div>
           </div>
@@ -201,4 +205,5 @@ handleClose = (event, reason) => {
     )
   }
 }
+ 
 export default connect(mapStateToProps)(Product)

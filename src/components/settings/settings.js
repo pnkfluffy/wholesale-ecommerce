@@ -116,12 +116,14 @@ class Settings extends React.Component {
            if (error.response && error.response.data)
            {
              Swal.fire({
-               title: '<span class="swal_title"> ERROR',
+               title: 'ERROR',
                text: error.response.data,
                icon: 'error',
                background: '#1E1F26',
                customClass: {
-                confirmButton: 'swal_confirm_button'
+                confirmButton: 'swal_confirm_button',
+                content: 'swal_text',
+                title: 'swal_text'
               }
                })
              this.setState({
@@ -168,12 +170,14 @@ class Settings extends React.Component {
               }
             })
             Swal.fire({
-              title: '<span class="swal_title"> ERROR',
+              title: 'ERROR',
               text: errorMessage,
               icon: 'error',
               background: '#1E1F26',
               customClass: {
-                confirmButton: 'swal_confirm_button'
+                confirmButton: 'swal_confirm_button',
+                content: 'swal_text',
+                title: 'swal_text'
               }
               })
           }

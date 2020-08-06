@@ -11,11 +11,15 @@ class Logout extends React.Component {
 
   componentDidMount(){
     Swal.fire({
-      title: '<span class="swal_title">Are you sure you want to logout?',
+      title: 'Are you sure you want to logout?',
       showCancelButton: true,
-      confirmButtonColor: '#59BA47',
       confirmButtonText: 'Yes',
-      background: '#1E1F26'
+      background: '#1E1F26',
+      customClass: {
+        confirmButton: 'swal_confirm_button',
+        content: 'swal_text',
+        title: 'swal_text'
+      }
     }).then(res => {
       if (res.value) {
         axios.get("/auth/logout").then((res) => {

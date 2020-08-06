@@ -1,7 +1,7 @@
 .order_history {
   margin-top: 2vh;
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
 }
 
 .getReceiptButton:link {
@@ -18,28 +18,29 @@
   padding: 5%;
   background-color: var(--searchbar-black);
   margin-bottom: 5%;
-  cursor: pointer;
+  cursor: default;
   display: flex;
   justify-content: space-between;
 }
 
 .order_history_left {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 10vh;
+  width: 70%;
 }
 
 .order_history_number {
-    font-size: 1.3vw;
-    margin-left: 5px;
+  font-size: 1.3vw;
+  margin-left: 5px;
 }
 
 .order_history_right {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .order_history_content {
@@ -52,14 +53,18 @@
   margin-bottom: 1vh;
 }
 
+.order_history_status {
+  margin-top: 1vh;
+}
+
 .order_history_content_small {
   font-size: 0.6vw;
   margin-bottom: 1vh;
 }
 
 .order_history_split {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 .order_history_split:first-child {
@@ -213,7 +218,12 @@
   margin-top: 2vh;
   font-size: 1vw;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  text-align: left;
+}
+
+.order_info_carrier {
+  margin-top: 2vh;
 }
 
 .order_info_address {
@@ -237,3 +247,10 @@
   align-items: center;
 }
 
+.tracking_link {
+  color: var(--dark-hyperlink-green);
+}
+
+.tracking_link:hover {
+  color: var(--logo-green);
+}

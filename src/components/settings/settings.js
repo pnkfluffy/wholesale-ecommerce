@@ -115,7 +115,15 @@ class Settings extends React.Component {
            console.log(error.response.data)
            if (error.response && error.response.data)
            {
-             Swal.fire('ERROR:', error.response.data, 'error')
+             Swal.fire({
+               title: '<span class="swal_title"> ERROR',
+               text: error.response.data,
+               icon: 'error',
+               background: '#1E1F26',
+               customClass: {
+                confirmButton: 'swal_confirm_button'
+              }
+               })
              this.setState({
                err: {
                  email: true
@@ -159,7 +167,15 @@ class Settings extends React.Component {
                 [errorKey]: true,
               }
             })
-            Swal.fire('ERROR:',errorMessage, 'error')
+            Swal.fire({
+              title: '<span class="swal_title"> ERROR',
+              text: errorMessage,
+              icon: 'error',
+              background: '#1E1F26',
+              customClass: {
+                confirmButton: 'swal_confirm_button'
+              }
+              })
           }
         })
   }

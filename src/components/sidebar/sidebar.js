@@ -12,6 +12,7 @@ import SettingsIcon from '@material-ui/icons/Settings'
 
 /*images*/
 import logo from '../../resources/images/cbddy_logo_small.png'
+import blank_image from '../../resources/images/blank_image.jpg'
 import Categories from './categories'
 
 const mapStateToProps = state => ({
@@ -22,11 +23,11 @@ class Sidebar extends React.Component {
   render () {
     const location = window.location.pathname
     console.log('location', location)
-
+    const image = logo ? logo : blank_image
     return (
       <div className='sidebar'>
         <Link to='/'>
-          <img src={logo} alt='cbddy_logo' className='logo_sidebar' />
+          <img src={image} alt='cbddy_logo' className='logo_sidebar' />
         </Link>
         <div className='menu_sidebar'>
           <div className='sidebar_section_header'>Menu</div>
@@ -63,7 +64,7 @@ class Sidebar extends React.Component {
             all products contain <a className='dark_green'>&#60;0.3%</a> thc in
             accordance with the farm bill
           </p> */}
-          <a className='light_green' href='tel:5551234567'>
+          <a className='light_green' href='tel:7205916284'>
             customer support
           </a>
           <a className='light_green' href='https://cbddy.com/privacy-policy/'>

@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import FavoritesHeart from '../reuseable/favoritesHeart'
 import { GreenButton } from '../reuseable/materialButtons'
+import blank_image from '../../resources/images/blank_image.jpg'
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -16,24 +17,25 @@ class favoriteProductCard extends React.Component {
   }
 
   render () {
+    const image = (this.props.images.length && this.props.images[0].url) ? this.props.images[0].url : blank_image;
     return (
-      <div className='outside_favorite_product_card_container'>
+      <div className='favorite_product_card_container'>
         <div className='favorite_product_card'>
           <div className='favorite_product_card_image_container'>
             <img
             className='favorite_product_image'
             alt='product_image'
-            src={this.props.images[0].url}
+            src={image}
             onClick={this.goToProduct}
           />
           </div>
           <div className='favorite_product_name'>
             {this.props.product.name}
-            <div className='favorite_product_order_number'>
+            {/* <div className='favorite_product_order_number'>
               returnOrderNumber
-            </div>
+            </div> */}
           </div>
-          <span className='empty_space'></span>
+          <span className='favorites_empty_space'></span>
           <GreenButton
           variant='contained'
           className='favorite_product_button'
@@ -41,11 +43,9 @@ class favoriteProductCard extends React.Component {
         > Go to Product
         </GreenButton>
         </div>
-        <div className='outside_heart_container'>
           <div className='heart_container'>
-            <FavoritesHeart productID={this.props.product._id} chooseStyle={true}/>
+            <FavoritesHeart productID={this.props.product._id} accountPage={true}/>
             </div>
-        </div>
       </div>
     )
   }

@@ -155,7 +155,7 @@ class Login extends React.Component {
           </form>
         </div>
         <div className='login_footer sidebar_footer_text'>
-          <a className='light_green' href='tel:5551234567'>
+          <a className='light_green' href='tel:7205916284'>
             customer support
           </a>
           ,{' '}

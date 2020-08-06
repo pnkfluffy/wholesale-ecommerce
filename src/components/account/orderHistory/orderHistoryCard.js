@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import GetInvoice from './getInvoice'
-import { GreenButton } from '../reuseable/materialButtons'
+import { GreenButton } from '../../reuseable/materialButtons'
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -24,31 +24,35 @@ class OrderHistoryCard extends React.Component {
 
   render () {
     const chargeDate = moment(this.props.payment.charge_date).format('L')
-    const beenCharged =
-      moment(this.props.payment.charge_date).valueOf() <
-      moment(new Date()).valueOf()
-    console.log(
-      'vals',
-      moment(this.props.payment.charge_date).valueOf(),
-      moment(new Date()).valueOf()
-    )
+    const placementDate = moment(this.props.order.date).format('L')
+
+    const shippingNumber = this.props.order.shippingNumber
     return (
-      <div className='order_history_card' onClick={this.goToOrder}>
+      <div className='order_history_card'>
         <div className='order_history_left'>
           <div className='order_history_content'>
-            Order#:{' '}
+            Order #:{' '}
             <div className='order_history_number'>{this.props.order._id}</div>
+          </div>
+          <div className='order_history_content_small'>
+            Ordered On: {placementDate}
           </div>
           <div className='order_history_content'>
             Status: {this.props.payment.status}
           </div>
           <div className='order_history_content'>
-            {beenCharged ? 'Charged On: ' : 'Expect Charge On: '} {chargeDate}
+            {shippingNumber
+              ? `Shipping #: ${shippingNumber}`
+              : `Processing On: ${chargeDate}`}
           </div>
         </div>
         <div className='order_history_right'>
           <div className='order_history_content'>
-            <GreenButton variant='contained' className='single_order_button'>
+            <GreenButton
+              variant='contained'
+              className='single_order_button'
+              onClick={this.goToOrder}
+            >
               Order Details
             </GreenButton>
           </div>

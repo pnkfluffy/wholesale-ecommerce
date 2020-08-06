@@ -47,7 +47,7 @@
 .carousel_image_container_active {
   width: 18%;
   border-radius: 16px;
-  border: 2px solid; 
+  border: 2px solid;
   margin-left: 2.1vw;
 }
 
@@ -188,14 +188,32 @@
 }
 
 /*Reviews*/
-.add_to_reviews_input {
+.create_review {
+  margin-top: 3vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.create_review_header {
+  font-size: 0.8vw;
+  display: flex;
+  margin-bottom: 0.5vh;
+  text-align: left;
+  padding-left: 2%;
   width: 98%;
+}
+
+.add_to_reviews_input {
+  width: 90%;
   color: var(--paragraph-font-grey);
   resize: none;
-  background-color: transparent;
-  border-width: 1px;
-  border-color: var(--logo-green);
-  border-style: solid;
+  background-color: var(--sidebar-black);
+  padding: 4%;
+  border-radius: 4px;
+  border: 1px solid var(--logo-green);
+  margin-bottom: 1.5vh;
 }
 
 .add_to_reviews_input:focus {
@@ -209,6 +227,30 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.create_review_bottom {
+  height: 3vh;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.create_review_rating {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+.create_review_rating > svg {
+  font-size: 1.4vw;
+}
+
+.create_review_button {
+  width: 40%;
+  height: inherit !important;
 }
 
 .product_title {
@@ -296,22 +338,28 @@
   cursor: pointer;
 }
 
-.create_review_last_line {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.create_review_button {
-  width: 55%;
+.no_priceTiers_message {
+  font-size: 1vw;
 }
 
 .product_card_heart {
-  width: 12% !important;
-  height: 12% !important;
+  position: absolute;
+  display: flex;
+  justify-content: flex-end;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  margin: 5%;
+  cursor: pointer;
+  width: 8% !important;
+  height: 8% !important;
+  color: var(--logo-green);
 }
 
-.no_priceTiers_message {
- font-size: 1vw; 
+.price_table_container {
+  min-height: 35%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }

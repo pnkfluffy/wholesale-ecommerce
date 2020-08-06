@@ -49,31 +49,22 @@ class FavoritesHeart extends React.Component {
   }
 
   render () {
-    let product_card_heart = {
-      position: 'absolute',
-      display: 'flex',
-      top: '0',
-      right: '0',
-      bottom: '0',
-      margin: '5%',
-      cursor: 'pointer',
-      width: '8%',
-      color: 'var(--logo-green)',
-    };
-
-    let favorite_product_heart = {
-    width: '1.1vw',
-    height: '1.1vw',
-    color: 'var(--logo-green)',
-    };
-    const variableCSS= this.props.chooseStyle ? favorite_product_heart : product_card_heart
+    const variableCSS = this.props.accountPage
+      ? 'account_page_heart'
+      : 'product_card_heart'
 
     return (
-      <div className="clean_css">
+      <div className='heart_svg_container'>
         {this.state.isFavorite ? (
-          <FavoriteIcon onClick={this.toggleFavorites} style={variableCSS}/>
+          <FavoriteIcon
+            onClick={this.toggleFavorites}
+            className={variableCSS}
+          />
         ) : (
-          <FavoriteBorderIcon onClick={this.toggleFavorites} style={variableCSS}/>
+          <FavoriteBorderIcon
+            onClick={this.toggleFavorites}
+            className={variableCSS}
+          />
         )}
       </div>
     )

@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import FavoritesHeart from '../reuseable/favoritesHeart'
+import blank_image from "../../resources/images/blank_image.jpg"
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -22,7 +23,6 @@ const selectCSS = (index, activeIndex) =>{
 const CarouselImage = ({ image, select, index, activeIndex}) => {
 
   const imageCSS = selectCSS(index, activeIndex);
-
   return (
     <div className={imageCSS} onClick={() => select(index)}>
       <img className='carousel_image' src={image} alt='single_product_image' />
@@ -45,6 +45,7 @@ class ProductImages extends React.Component {
   render () {
 
     const carouselImages = this.props.images.map((image, index) => (
+      
       <CarouselImage
         image={image.url}
         select={this.selectImage}
@@ -53,18 +54,14 @@ class ProductImages extends React.Component {
         activeIndex={this.state.active}
       />
     ))
-
-    if (!this.props.images.length) {
-      return null;
-    }
-
+    const image = (this.props.images.length && this.props.images[this.state.active].url) ? this.props.images[this.state.active].url : blank_image;
     return (
       <div className='product_page_images'>
         <div className='product_page_image'>
           <img
             className='product_image'
-            alt='product_image'
-            src={this.props.images[this.state.active].url}
+            alt={blank_image}
+            src={image}
           />
           {this.props.productID && (
             <FavoritesHeart productID={this.props.productID} chooseStyle={false}/>

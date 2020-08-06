@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { compose } from 'redux'
 import GetInvoice from './getInvoice'
 import { GreenButton } from '../../reuseable/materialButtons'
+import TrackingLink from './trackingLink'
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -25,44 +26,46 @@ class OrderHistoryCard extends React.Component {
   render () {
     const chargeDate = moment(this.props.payment.charge_date).format('L')
     const placementDate = moment(this.props.order.date).format('L')
+    const shippingNumber = this.props.order.tracking.number
 
-    const shippingNumber = this.props.order.shippingNumber
     return (
       <div className='order_history_card'>
         <div className='order_history_left'>
-          <div className='order_history_content'>
-            Order #:{' '}
+          <div className='order_history_content space_between'>
+            <div>Order #: </div>
             <div className='order_history_number'>{this.props.order._id}</div>
           </div>
-          <div className='order_history_content_small'>
-            Ordered On: {placementDate}
+          <div className='order_history_content_small space_between'>
+            <div>Ordered: {placementDate}</div>
+            <div>Processing date: {chargeDate}</div>
           </div>
-          <div className='order_history_content'>
+          <div className='order_history_content order_history_status'>
             Status: {this.props.payment.status}
           </div>
           <div className='order_history_content'>
-            {shippingNumber
-              ? `Shipping #: ${shippingNumber}`
-              : `Processing On: ${chargeDate}`}
+            {shippingNumber ? (
+              <div>
+                Tracking #
+                <TrackingLink tracking={this.props.order.tracking} />
+              </div>
+            ) : (
+              `not yet shipped out`
+            )}
           </div>
         </div>
         <div className='order_history_right'>
-          <div className='order_history_content'>
-            <GreenButton
-              variant='contained'
-              className='single_order_button'
-              onClick={this.goToOrder}
-            >
-              Order Details
-            </GreenButton>
-          </div>
-          <div className='order_history_content'>
-            <GetInvoice
-              products={this.props.state.products}
-              payment={this.props.payment}
-              order={this.props.order}
-            />
-          </div>
+          <GreenButton
+            variant='contained'
+            className='single_order_button'
+            onClick={this.goToOrder}
+          >
+            Order Details
+          </GreenButton>
+          <GetInvoice
+            products={this.props.state.products}
+            payment={this.props.payment}
+            order={this.props.order}
+          />
         </div>
       </div>
     )

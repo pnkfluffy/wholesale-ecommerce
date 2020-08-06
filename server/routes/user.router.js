@@ -41,8 +41,9 @@ router.get('/favorites', rejectUnauthenticated, async (req, res) => {
             }
           })
           .catch(err => {
-              console.log(err)
+            console.log(err)
             res.status(500).send("couldn't get favorites")
+            return ;
           })
     }
   }

@@ -102,8 +102,8 @@ router.post('/editReview/:reviewID', (req, res) => {
 // @desc    Delete a Review
 // @access  Private
 router.delete('/:reviewID', (req, res) => {
-    Review.findById(req.params.reviewID)
-          .then(review => review.remove().then(() => res.json({ success: true })))
+    Review.findOneAndUpdate({ _id: req.params.reviewID }, { deleted: true })
+          .then(() => res.json({ success: true }))
           .catch(err => {
              console.log(err)
              res.status(500).json("Can't delete review")

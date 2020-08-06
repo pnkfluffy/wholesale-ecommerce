@@ -195,7 +195,7 @@ router.put('/', rejectNonAdmin, async (req, res) => {
 
 //delete
 router.delete('/:id', rejectNonAdmin, async (req, res) => {
-  User.deleteOne({ _id: req.params.id })
+  User.updateOne({ _id: req.params.id }, { deleted: true })
     .then(result => {
       console.log(result)
       res.status(200).send('item deleted')
@@ -211,7 +211,7 @@ router.delete('/', rejectNonAdmin, async (req, res) => {
   console.log('deleteMany hit.')
   console.log(req.query.ids)
   for (let i = 0; i < req.query.ids.length; i++) {
-    await User.deleteOne({ _id: req.params.id })
+    await User.updateOne({ _id: req.params.id }, { deleted: true })
       .then(result => {
         console.log(result)
       })

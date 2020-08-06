@@ -132,7 +132,7 @@ router.put('/:id', rejectNonAdmin, uploadProductPhotos, async (req, res) => {
 router.delete('/:id', rejectNonAdmin, async (req, res) => {
   console.log('Delete backend hit')
   console.log('params: ', req.params)
-  Product.deleteOne({ _id: req.params.id })
+  Product.updateOne({ _id: req.params.id }, { deleted: true})
     .then(result => {
       console.log(result)
       res.json('item deleted')

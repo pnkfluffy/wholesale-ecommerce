@@ -10,19 +10,18 @@ import PriceTiers from './priceTiers'
 import { addQuantityToCart } from '../reuseable/addQuantityToCart'
 import { getPriceByQuantity } from '../reuseable/getPriceByQuantity'
 import { GreenButton } from '../reuseable/materialButtons'
-import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
 
-import Snackbar from "@material-ui/core/Snackbar";
-import Alert from "@material-ui/lab/Alert";
-import {classes} from "../reuseable/materialButtons"
-
+import Snackbar from '@material-ui/core/Snackbar'
+import Alert from '@material-ui/lab/Alert'
+import { classes } from '../reuseable/materialButtons'
 
 const mapStateToProps = state => ({
   state: state.reducer
 })
 
 class Product extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       product: {
@@ -56,19 +55,19 @@ class Product extends React.Component {
       quantity: 1,
       buttonActive: true,
       snackbarOpen: false,
-      snackbarSeverity: "success",
-      snackbarMessage: "" 
+      snackbarSeverity: 'success',
+      snackbarMessage: ''
     }
   }
 
-handleClose = (event, reason) => {
-  if (reason === "clickaway") {
-    return;
+  handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return
+    }
+    this.setState({ snackbarOpen: false })
   }
-  this.setState({snackbarOpen: false})
-};
 
-  componentDidMount() {
+  componentDidMount () {
     axios
       .get('/api/products/' + this.props.match.params.productID)
       .then(res => {
@@ -83,36 +82,43 @@ handleClose = (event, reason) => {
   }
 
   changeQuantity = quantity => {
-    if (quantity === "")
-      this.setState({ quantity })
-    else if (quantity <= 0)
-      this.setState({ quantity: 1 })
-    else
-      this.setState({ quantity })
+    if (quantity === '') this.setState({ quantity })
+    else if (quantity <= 0) this.setState({ quantity: 1 })
+    else this.setState({ quantity })
   }
 
-  addToCart = (quantity) => {
-    this.setState({
-      buttonActive: false
-    }, () => {
-      let product = this.state.product
-      console.log("PRODUCT", product)
-      product.quantity = quantity
-      product.product = this.state.product._id
-      addQuantityToCart(product)
-      this.setSnackbar("success", product.quantity + product.metaData.units.unit + " " + product.name + " added to your cart");
-    })
+  addToCart = quantity => {
+    this.setState(
+      {
+        buttonActive: false
+      },
+      () => {
+        let product = this.state.product
+        console.log('PRODUCT', product)
+        product.quantity = quantity
+        product.product = this.state.product._id
+        addQuantityToCart(product)
+        this.setSnackbar(
+          'success',
+          product.quantity +
+            product.metaData.units.unit +
+            ' ' +
+            product.name +
+            ' added to your cart'
+        )
+      }
+    )
   }
-  
+
   setSnackbar = (severity, message) => {
     this.setState({
       snackbarOpen: true,
       snackbarSeverity: severity,
       snackbarMessage: message
-    });
+    })
   }
 
-  render() {
+  render () {
     const product = this.state.product
     const totalPrice = getPriceByQuantity(
       product.priceTiers,
@@ -130,7 +136,7 @@ handleClose = (event, reason) => {
           >
             <Alert
               elevation={6}
-              variant="filled"
+              variant='filled'
               onClose={this.handleClose}
               color={this.state.snackbarSeverity}
             >
@@ -140,26 +146,36 @@ handleClose = (event, reason) => {
         </div>
         <div className='product_page_main'>
           <div className='product_page_top'>
-            <ProductImages 
-            images={product.imageData} productID={product._id} 
-            setSnackbar={(severity, message) => this.setSnackbar(severity, message)}/>
+            <ProductImages
+              images={product.imageData}
+              productID={product._id}
+              setSnackbar={(severity, message) =>
+                this.setSnackbar(severity, message)
+              }
+            />
             <div className='product_page_info'>
               <div className='product_info'>
                 <div className='product_page_info_top'>
                   <div className='product_title'>{product.name}</div>
                 </div>
                 <ProductMetaData metaData={product.metaData} />
-                {product.priceTiers.length ? (
-                  <PriceTiers tiers={product.priceTiers} product={this.state} addToCart={this.addToCart} />
-                ) : (
+                <div className='price_table_container'>
+                  {product.priceTiers.length ? (
+                    <PriceTiers
+                      tiers={product.priceTiers}
+                      product={this.state}
+                      addToCart={this.addToCart}
+                    />
+                  ) : (
                     <div className='no_priceTiers_message'>
-                      No bulk discounts have been listed for this product. Want to
-                    negotiate something?{' '}
+                      No bulk discounts have been listed for this product. Want
+                      to negotiate something?{' '}
                       <a className='light_green' href='tel:5551234567'>
                         Reach out!
-                    </a>
+                      </a>
                     </div>
                   )}
+                </div>
                 <div className='product_quantity_container'>
                   <div className='product_price'>
                     $<div className='price_price'>{totalPrice}</div>
@@ -181,16 +197,16 @@ handleClose = (event, reason) => {
                     Add To Cart
                   </GreenButton>
                 ) : (
-                    <GreenButton
-                      variant='contained'
-                      className='product_button'
-                      disabled={true}
-                      style={{color: 'white'}}
-                    >
-                      <CheckCircleOutlineIcon />
-                      Added!
-                    </GreenButton>
-                  )}
+                  <GreenButton
+                    variant='contained'
+                    className='product_button'
+                    disabled={true}
+                    style={{ color: 'white' }}
+                  >
+                    <CheckCircleOutlineIcon />
+                    Added!
+                  </GreenButton>
+                )}
               </div>
             </div>
           </div>

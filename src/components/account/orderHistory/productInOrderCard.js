@@ -1,9 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter, Link } from 'react-router-dom'
-import blank_image from '../../resources/images/blank_image.jpg'
+import blank_image from '../../../resources/images/blank_image.jpg'
 import { compose } from 'redux'
-import {getPriceByQuantity} from "../reuseable/getPriceByQuantity";
 
 const mapStateToProps = state => ({
   state: state.reducer

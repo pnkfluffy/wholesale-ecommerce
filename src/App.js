@@ -10,8 +10,7 @@ import Account from "./components/account/account";
 import Cart from "./components/cart/cart";
 import Settings from "./components/settings/settings";
 import Product from "./components/product/product";
-import Order from "./components/orderHistory/order"
-import OrderHistory from "./components/orderHistory/orderHistory";
+import Order from "./components/account/orderHistory/order"
 import Cookies from 'universal-cookie'
 import AdminError404 from './components/error/adminError404'
 import GoCardless from './components/cart/goCardless'
@@ -45,7 +44,6 @@ class App extends React.Component {
               <Route path='/logout' component={Logout} />
               <Route path='/product/:productID' component={Product} />
               <Route path='/order/:orderID' component={Order} />
-              <Route path='/orderHistory' component={OrderHistory} />
               <Route path='/*' component={ErrorPage404} />
             </Switch>
           </div>

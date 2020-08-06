@@ -1,10 +1,9 @@
 import React from 'react'
 import axios from 'axios'
 import { PDFDownloadLink } from '@react-pdf/renderer'
-import { GreenButton } from '../reuseable/materialButtons'
+import { GreenButton } from '../../reuseable/materialButtons'
 import { Invoice } from './invoice'
-import loading from '../../resources/images/loading.svg'
-import {getPriceByQuantity} from "../reuseable/getPriceByQuantity";
+import loading from '../../../resources/images/loading.svg'
 
 class GetInvoice extends React.Component {
   constructor (props) {

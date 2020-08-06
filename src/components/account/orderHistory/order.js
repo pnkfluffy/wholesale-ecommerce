@@ -1,13 +1,11 @@
 import React from 'react'
 import axios from 'axios'
-import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import ProductInOrderCard from './productInOrderCard'
 import GetInvoice from './getInvoice'
-import store from '../../redux/store'
-import products from '../home/products'
+import store from '../../../redux/store'
 import OrderInformation from './orderInformation'
-import { GreenButton } from '../reuseable/materialButtons'
+import { GreenButton } from '../../reuseable/materialButtons'
 import Swal from 'sweetalert2'
 
 const mapStateToProps = state => ({

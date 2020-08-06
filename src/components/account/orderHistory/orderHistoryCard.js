@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import GetInvoice from './getInvoice'
-import { GreenButton } from '../reuseable/materialButtons'
+import { GreenButton } from '../../reuseable/materialButtons'
 
 const mapStateToProps = state => ({
   state: state.reducer

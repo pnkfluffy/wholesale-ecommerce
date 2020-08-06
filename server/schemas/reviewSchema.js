@@ -22,7 +22,11 @@ const ReviewSchema = new Schema({
   },
   stars: {
     type: Number
-  }
+  },
+  deleted: {
+    type: Boolean,
+    default: false
+  },
 });
 
 module.exports = Review = mongoose.model("review", ReviewSchema);

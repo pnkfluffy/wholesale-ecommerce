@@ -2,7 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import { connect } from 'react-redux'
 import OrderHistoryCard from './orderHistoryCard'
-import loading from '../../resources/images/loadingBig.svg'
+import loading from '../../../resources/images/loadingBig.svg'
 
 const mapStateToProps = state => ({
   state: state.reducer

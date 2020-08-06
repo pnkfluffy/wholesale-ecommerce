@@ -8,14 +8,20 @@ const OrderSchema = new Schema({
   },
   products: [
     {
-      product: {
+      productId: {
         type: String,
         ref: 'product'
       },
-      quantity: {
+      productName: {
+        type: String
+      },
+      productPrice: {
         type: Number
       },
-      unitPrice: {
+      productQuantity: {
+        type: Number
+      },
+      productTotal: {
         type: Number
       },
     }
@@ -35,6 +41,10 @@ const OrderSchema = new Schema({
   },
   deliveryInfo: {
     type: Object
+  },
+  representative: {
+    type: Schema.Types.ObjectId,
+    ref: 'user'
   },
   date: {
     type: Date,

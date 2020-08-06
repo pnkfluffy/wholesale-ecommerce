@@ -1,4 +1,6 @@
 import * as React from 'react'
+import { Link } from 'react-router-dom'
+import { stringify } from 'query-string'
 import {
   CreateButton,
   ArrayField,
@@ -28,11 +30,49 @@ import {
   DisabledInput,
   BooleanInput,
   LongTextInput,
-  ReferenceManyField
+  ReferenceManyField,
+  FunctionField,
+  Typography,
+  Filter,
+  SearchInput
 } from 'react-admin'
 
+const CommissionFilter = props => {
+  return (
+    <Filter {...props}>
+      <BooleanInput
+        source='representative'
+        label='My Sales'
+        alwaysOn
+        style={{ display: 'none' }}
+      />
+    </Filter>
+  )
+}
+
+const Aside = ({ data, ids }) => {
+  // console.log('aside', data, ids)
+  return (
+    <div style={{ width: 200, margin: '1vw' }}>
+      <h1>Customer Spending</h1>
+      <p>pulled from current list</p>
+      <div>
+        ${' '}
+        {ids
+          .map(id => data[id].total)
+          .reduce((orderCost, total) => orderCost + total, 0)}
+      </div>
+    </div>
+  )
+}
+
 export const CommissionList = props => (
-  <List {...props}>
+  <List
+    aside={<Aside />}
+    filters={<CommissionFilter />}
+    filterDefaultValues={{ commission: true }}
+    {...props}
+  >
     <Datagrid rowClick='show'>
       <ReferenceField
         label='User'
@@ -40,15 +80,16 @@ export const CommissionList = props => (
         source='user'
         reference='admin-users'
       >
-        <TextField label='Name' source='email' />
+        <TextField label='Name' source='name' />
       </ReferenceField>
+
       <ReferenceField
         label='Representative'
-        link='show'
         source='representative'
         reference='admin-users'
+        link='show'
       >
-        <TextField label='Name' source='email' />
+        <TextField label='Name' source='name' />
       </ReferenceField>
       <NumberField
         label='Total'
@@ -64,7 +105,6 @@ export const CommissionList = props => (
 export const CommissionShow = props => (
   <Show actions={<CommissionShowActions />} {...props}>
     <SimpleShowLayout>
-      {/* <TextField label="User" source="user" reference="admin-users"/> */}
       <ReferenceField label='User Email' source='user' reference='admin-users'>
         <TextField label='email' source='email' />
       </ReferenceField>
@@ -77,37 +117,36 @@ export const CommissionShow = props => (
         source='representative'
         reference='admin-users'
       >
-        <TextField label='Name' source='email' />
+        <TextField label='Name' source='name' />
       </ReferenceField>
+      <TextField label='Order ID' source='id' />
+      <ArrayField label='Products Ordered' source='products'>
+        <Datagrid rowClick='show'>
+          <ReferenceField
+            label='Product'
+            source='productId'
+            reference='admin-products'
+          >
+            <TextField label='Product' source='name' />
+          </ReferenceField>
+          <NumberField label='Quantity' source='productQuantity' />
+          <NumberField
+            label='Price Per Unit'
+            options={{ style: 'currency', currency: 'USD' }}
+            source='productPrice'
+          />
+          <NumberField
+            label='Final Price'
+            options={{ style: 'currency', currency: 'USD' }}
+            source='productTotal'
+          />
+        </Datagrid>
+      </ArrayField>
       <NumberField
         label='Order Total'
         source='total'
         options={{ style: 'currency', currency: 'USD' }}
       />
-      <TextField label='Order ID' source='id' />
-      <ArrayField label='Products Prdereded' source='products'>
-        <Datagrid rowClick='show'>
-          <NumberField label='Quantity' source='quantity' />
-          <ReferenceField
-            label='Price Per Unit'
-            source='product'
-            reference='admin-products'
-          >
-            <NumberField
-              label='Price Per Unit'
-              options={{ style: 'currency', currency: 'USD' }}
-              source='price'
-            />
-          </ReferenceField>
-          <ReferenceField
-            label='Product'
-            source='product'
-            reference='admin-products'
-          >
-            <TextField label='Product' source='name' />
-          </ReferenceField>
-        </Datagrid>
-      </ArrayField>
       <h2>Tracking Information</h2>
       <TextField label='Shipping Company' source='tracking.company' />
       <TextField label='Tracking Number' source='tracking.number' />
@@ -118,8 +157,6 @@ export const CommissionShow = props => (
 //custom comps
 const CommissionShowActions = ({ basePath, data, resource }) => (
   <TopToolbar>
-    <EditButton basePath={basePath} record={data} />
-    <DeleteButton basePath={basePath} record={data} />
     <ListButton basePath={basePath} record={data} />
     {/* Add your custom actions */}
   </TopToolbar>

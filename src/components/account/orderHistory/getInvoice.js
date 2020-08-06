@@ -1,10 +1,9 @@
 import React from 'react'
 import axios from 'axios'
 import { PDFDownloadLink } from '@react-pdf/renderer'
-import { GreenButton } from '../reuseable/materialButtons'
+import { GreenButton } from '../../reuseable/materialButtons'
 import { Invoice } from './invoice'
-import loading from '../../resources/images/loading.svg'
-import {getPriceByQuantity} from "../reuseable/getPriceByQuantity";
+import loading from '../../../resources/images/loading.svg'
 
 class GetInvoice extends React.Component {
   constructor (props) {
@@ -47,14 +46,12 @@ class GetInvoice extends React.Component {
     let allProducts = this.props.products.products
     let productsInOrder = this.props.order.products
     const productsWithTotal = productsInOrder.map(product => {
-      const wholeProductInfo = allProducts.find(
-        productAllInfo => productAllInfo._id === product.product
-      )
       return {
-        item: wholeProductInfo.name,
-        quantity: product.quantity,
-        price: wholeProductInfo.price,
-        amount: getPriceByQuantity(wholeProductInfo.priceTiers, product.quantity, wholeProductInfo.price)
+        item: product.productName,
+        id: product.productId.toString(),
+        quantity: product.productQuantity,
+        price: product.productPrice,
+        amount: product.productTotal
       }
     })
     return productsWithTotal

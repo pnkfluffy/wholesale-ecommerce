@@ -52,13 +52,24 @@ const UserSchema = new Schema({
       },
       quantity: {
         type: Number
-      }
+      },
+      name: {
+        type: String
+      },
     }
   ],
   representative: {
     type: Schema.Types.ObjectId,
     ref: 'user'
-  }
+  },
+  date: {
+    type: Date,
+    default: Date.now
+  },
+  deleted: {
+    type: Boolean,
+    default: false
+  },
 })
 
 module.exports = User = mongoose.model('user', UserSchema)

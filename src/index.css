@@ -181,6 +181,6 @@ select:-webkit-autofill:focus {
 @import './components/auth/auth.css';
 @import './components/cart/cart.css';
 @import './components/settings/settings.css';
-@import './components/orderHistory/orderHistory.css';
+@import './components/account/orderHistory/orderHistory.css';
 @import './components/error/error.css';
 @import './components/admin/reactAdmin.css';

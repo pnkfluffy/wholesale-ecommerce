@@ -1,13 +1,12 @@
 import React from 'react'
 import axios from 'axios'
-import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import ProductInOrderCard from './productInOrderCard'
 import GetInvoice from './getInvoice'
-import store from '../../redux/store'
-import products from '../home/products'
+import store from '../../../redux/store'
 import OrderInformation from './orderInformation'
-import { GreenButton } from '../reuseable/materialButtons'
+import { GreenButton } from '../../reuseable/materialButtons'
+import Swal from 'sweetalert2'
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -28,38 +27,57 @@ class Order extends React.Component {
   printItems = products => {
     const productsWithInfo = products.map(product => {
       const productInfo = this.props.state.products.products.find(
-        oneProduct => oneProduct._id === product.product
+        oneProduct => oneProduct._id === product.productId
       )
+
       return (
         <ProductInOrderCard
-          productInfo={productInfo}
-          quantity={product.quantity}
-          key={productInfo._id}
+          product={product}
+          imageData={productInfo ? productInfo.imageData : false}
+          key={product.productId}
+          available={!!productInfo}
         />
       )
     })
     return productsWithInfo
   }
 
-  redoOrder = order => {
-    const productsWithInfo = order.products.map(product => {
+  redoOrder = async order => {
+    let hasAvailableProducts = false;
+   await order.products.forEach(product => {
       const allInfo = this.props.state.products.products.find(
-        p => p._id === product.product
+        p => p._id === product.productId
       )
-      allInfo.quantity = product.quantity
-      return allInfo
+      if (allInfo) {
+        if ( this.props.state.cart.find(c => c.product === product.productId)) {
+          store.dispatch({
+            type: 'UPDATE_CART_ITEM',
+            payload: {
+              id: product.productId,
+              quantity: product.productQuantity,
+              name: product.productName
+            }
+          })
+        } else {
+          allInfo.product = product.productId;
+          allInfo.quantity = product.productQuantity;
+          store.dispatch({
+            type: 'ADD_TO_CART',
+            payload: allInfo
+          })
+        }
+        hasAvailableProducts = true;
+      }
     })
-    //add products to cart
-    store.dispatch({ type: 'SET_CART', payload: productsWithInfo })
+    if(hasAvailableProducts)
+    {
+      //redirect to cart
+      const url = '/cart'
+      this.props.history.push(url)
+    } else {
+      Swal.fire('ERROR:', "We are sorry! None of the products in this order is available anymore", 'error')
+    }
 
-    //redirect to cart
-    const url = '/cart'
-    this.props.history.push(url)
-
-    //save cart in db
-    axios
-      .post('/api/cart/', { cart: order.products })
-      .catch(err => console.log(err))
   }
 
   organizeTotal = total => {

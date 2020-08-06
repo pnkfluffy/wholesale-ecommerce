@@ -49,7 +49,6 @@ router.post('/', rejectUnauthenticated, async (req, res) => {
         cart: req.body.cart
       }
     )
-    console.log(user)
     res.json(user.cart)
   } catch (error) {
     console.log(error)

@@ -1,4 +1,5 @@
 import React from 'react'
+import axios from 'axios'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
@@ -9,6 +10,13 @@ import MailOutlineIcon from '@material-ui/icons/MailOutline'
 import VpnKeyIcon from '@material-ui/icons/VpnKey'
 import AuthField from '../auth/AuthField'
 import InputField from '../reuseable/InputField'
+import Swal from 'sweetalert2'
+import store from "../../redux/store";
+import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
+
+import Snackbar from "@material-ui/core/Snackbar";
+import Alert from "@material-ui/lab/Alert";
+import {classes} from "../reuseable/materialButtons"
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -21,13 +29,41 @@ class Settings extends React.Component {
       openTab: '',
       originalEmail: '',
       newEmail: '',
+      oldPass: '',
       newPass: '',
+      newPassConfirm: '',
       ClientAddr1: '',
       ClientAddr2: '',
       ClientCity: '',
       ClientPostalCode: '',
-      ClientState: ''
+      ClientState: '',
+      emailButtonActive: true,
+      pswdButtonActive: true,
+      err: {
+        email: false,
+        oldPass: false,
+        newPass: false,
+        newPassConfirm: false
+      },
+      snackbarOpen: false,
+      snackbarSeverity: "success",
+      snackbarMessage: "" 
     }
+  }
+
+  handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    this.setState({snackbarOpen: false})
+  };
+  
+  setSnackbar = (severity, message) => {
+    this.setState({
+      snackbarOpen: true,
+      snackbarSeverity: severity,
+      snackbarMessage: message
+    });
   }
 
   showUser = () => {
@@ -64,11 +100,84 @@ class Settings extends React.Component {
   }
 
   editEmail = () => {
-    // {!} EDIT EMAIL FUNCTIONALITY
+    axios.post('/auth/editEmail', {email: this.state.newEmail})
+         .then(res => {
+           store.dispatch({ type: 'UPDATE_EMAIL', payload: this.state.newEmail })
+           this.setState({
+             originalEmail: this.state.newEmail,
+             newEmail: '',
+             emailButtonActive: false,
+             openTab: ''
+           })
+           this.setSnackbar("success", "Your email has been updated");
+         })
+         .catch(error => {
+           console.log(error.response.data)
+           if (error.response && error.response.data)
+           {
+             Swal.fire({
+               title: '<span class="swal_title"> ERROR',
+               text: error.response.data,
+               icon: 'error',
+               background: '#1E1F26',
+               customClass: {
+                confirmButton: 'swal_confirm_button'
+              }
+               })
+             this.setState({
+               err: {
+                 email: true
+               }
+             })
+           }
+         })
   }
 
   editPass = () => {
-    // {!} EDIT PASSWORD FUNCTIONALITY
+    axios.post('/auth/editPassword', { oldPass: this.state.oldPass,
+                                                newPass: this.state.newPass,
+                                                newPassConfirm: this.state.newPassConfirm
+                                              })
+        .then(res => {
+          console.log(res.data);
+          this.setState({
+            oldPass: '',
+            newPass: '',
+            newPassConfirm: '',
+            err: {
+              oldPass: false,
+              newPass: false,
+              newPassConfirm: false
+            },
+            openTab: '',
+          })
+          this.setSnackbar("success", "Your password has been changed");
+        })
+        .catch(error => {
+          console.log(error.response.data)
+          if (error.response && error.response.data[0])
+          {
+            const errorKey = error.response.data[0];
+            const errorMessage = error.response.data[1];
+            this.setState({
+              oldPass: '',
+              newPass: '',
+              newPassConfirm: '',
+              err: {
+                [errorKey]: true,
+              }
+            })
+            Swal.fire({
+              title: '<span class="swal_title"> ERROR',
+              text: errorMessage,
+              icon: 'error',
+              background: '#1E1F26',
+              customClass: {
+                confirmButton: 'swal_confirm_button'
+              }
+              })
+          }
+        })
   }
 
   editAddress = () => {
@@ -78,6 +187,23 @@ class Settings extends React.Component {
   render () {
     return (
       <div className='settings'>
+        <div className={classes.root}>
+          <Snackbar
+            open={this.state.snackbarOpen}
+            severity={this.state.snackbarSeverity}
+            autoHideDuration={4500}
+            onClose={this.handleClose}
+          >
+            <Alert
+              elevation={6}
+              variant="filled"
+              onClose={this.handleClose}
+              color={this.state.snackbarSeverity}
+            >
+              {this.state.snackbarMessage}
+            </Alert>
+          </Snackbar>
+        </div>
         {/* <div className='page_header'>Settings</div> */}
         <div className='settings_container'>
           <div className='section_container'>
@@ -104,11 +230,12 @@ class Settings extends React.Component {
                     changeField={this.onChange}
                     icon={<MailOutlineIcon className='auth_icon' />}
                     placeholder={this.state.originalEmail}
+                    error={this.state.err.email}
                   />
                   <GreenButton
-                    variant='contained'
-                    className='full'
-                    onClick={this.editEmail}
+                      variant='contained'
+                      className='full'
+                      onClick={this.editEmail}
                   >
                     SAVE
                   </GreenButton>
@@ -129,26 +256,47 @@ class Settings extends React.Component {
               </div>
               {this.state.openTab === 'password' && (
                 <div>
-                  <AuthField
+                  <InputField
                     widthCSS='edit_auth_field'
-                    name='newPass'
-                    value={this.state.newPass}
+                    name='oldPass'
+                    title='Current Password'
+                    value={this.state.oldPass}
                     type='password'
                     changeField={this.onChange}
-                    icon={<VpnKeyIcon className='auth_icon' />}
                     placeholder='********'
+                    error={this.state.err.oldPass}
+                  />
+                  <InputField
+                      widthCSS='edit_auth_field'
+                      name='newPass'
+                      value={this.state.newPass}
+                      title='New Password'
+                      type='password'
+                      changeField={this.onChange}
+                      placeholder='********'
+                      error={this.state.err.newPass}
+                  />
+                  <InputField
+                      widthCSS='edit_auth_field'
+                      name='newPassConfirm'
+                      value={this.state.newPassConfirm}
+                      type='password'
+                      title='Confirm New Password'
+                      changeField={this.onChange}
+                      placeholder='********'
+                      error={this.state.err.newPassConfirm}
                   />
                   <GreenButton
-                    variant='contained'
-                    className='full'
-                    onClick={this.editPass}
+                      variant='contained'
+                      className='full'
+                      onClick={this.editPass}
                   >
                     SAVE
                   </GreenButton>
                 </div>
               )}
-            </div>
-            <div className='edit_account_container'>
+              </div>
+            {/* <div className='edit_account_container'>
               <div
                 className='edit_header'
                 onClick={() => this.openTab('address')}
@@ -160,7 +308,7 @@ class Settings extends React.Component {
                   <ExpandLessIcon className='dropdown_active' />
                 )}
               </div>
-              {this.state.openTab === 'address' && (
+             {this.state.openTab === 'address' && (
                 <div className="edit_address_fields">
                   <InputField
                     widthCSS='edit_address_input'
@@ -216,7 +364,7 @@ class Settings extends React.Component {
                   </GreenButton>
                 </div>
               )}
-            </div>
+            </div>*/}
           </div>
           <div className='section_container'>
             <Link to='/logout'>

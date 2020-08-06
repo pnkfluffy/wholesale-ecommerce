@@ -41,3 +41,12 @@ export const greyButton = withStyles((theme) => ({
     },
   },
 }))(Button);
+
+export const classes = withStyles((theme) => ({
+  root: {
+    width: "100%",
+    "& > * + *": {
+      marginTop: theme.spacing(2)
+    },
+  },
+}));

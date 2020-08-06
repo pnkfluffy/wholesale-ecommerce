@@ -152,6 +152,12 @@
   font-size: 0.8vw;
 }
 
+.product_in_order_card_right_side {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 .product_in_order_card_values {
   display: flex;
   flex-direction: row;
@@ -165,6 +171,12 @@
   font-size: 1vw;
 }
 
+.product_in_order_card_not_available {
+  margin-top: 1vw;
+  text-align: right;
+  color: var(--attention-red);
+  font-size: 1vw;
+}
 .product_in_order_card_quantity,
 .order_product_field_units {
   border-left: 1px solid var(--nofocus-font-grey);

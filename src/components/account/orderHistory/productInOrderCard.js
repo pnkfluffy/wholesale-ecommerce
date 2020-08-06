@@ -1,9 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter, Link } from 'react-router-dom'
-import blank_image from '../../resources/images/blank_image.jpg'
+import blank_image from '../../../resources/images/blank_image.jpg'
 import { compose } from 'redux'
-import {getPriceByQuantity} from "../reuseable/getPriceByQuantity";
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -17,11 +16,13 @@ class ProductInOrderCard extends React.Component {
   }
 
   render () {
-    const image = this.props.productInfo.imageData
-      ? this.props.productInfo.imageData[0].url
+    const image = this.props.imageData
+      ? this.props.imageData[0].url
       : blank_image
 
-    const productLink = '/product/' + this.props.productInfo._id.toString()
+    const productLink = this.props.available
+      ? '/product/' + this.props.product.productId.toString()
+      : ''
 
     return (
       <Link to={productLink} title='go to product'>
@@ -36,22 +37,20 @@ class ProductInOrderCard extends React.Component {
           <div className='order_card_contents'>
             <div className='order_content'>
               <div className='order_card_product_name'>
-                {this.props.productInfo.name}
+                {this.props.product.productName}
               </div>
-              <div className='order_card_id'>#{this.props.productInfo._id}</div>
+              <div className='order_card_id'>#{this.props.product.productId}</div>
             </div>
 
-            <div className='product_in_order_card_values'>
-              <div>${this.props.productInfo.price}</div>
-              <div className='product_in_order_card_quantity'>
-                {this.props.quantity}
+            <div className='product_in_order_card_right_side'>
+              <div className='product_in_order_card_values'>
+                <div>${this.props.product.productPrice}</div>
+                <div className='product_in_order_card_quantity'>
+                  {this.props.product.productQuantity}
+                </div>
+                <div className='product_in_order_card_total'>${this.props.product.productTotal}</div>
               </div>
-              {(() => {
-                const total = getPriceByQuantity(this.props.productInfo.priceTiers, this.props.quantity, this.props.productInfo.price)
-                return (
-                  <div className='product_in_order_card_total'>${total}</div>
-                )
-              })()}
+              {this.props.available ? null : <div className="product_in_order_card_not_available">No longer available</div>}
             </div>
           </div>
         </div>

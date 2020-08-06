@@ -199,3 +199,10 @@
   color: var(--header-font-white);
   font-size: 1.1vw;
 }
+
+.swal_title{
+  color: rgb(180, 178, 178);
+}
+.swal_confirm_button{
+  background-color: rgb(46,125,50) !important;
+}

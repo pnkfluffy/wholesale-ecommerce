@@ -82,8 +82,8 @@ class Product extends React.Component {
   }
 
   changeQuantity = quantity => {
-    if (quantity === '') this.setState({ quantity })
-    else if (quantity <= 0) this.setState({ quantity: 1 })
+    quantity = parseInt(quantity, 10)
+    if (quantity <= 0) this.setState({ quantity: 1 })
     else this.setState({ quantity })
   }
 
@@ -178,7 +178,7 @@ class Product extends React.Component {
                 </div>
                 <div className='product_quantity_container'>
                   <div className='product_price'>
-                    $<div className='price_price'>{totalPrice}</div>
+                    $<div className='price_price'>{totalPrice || ""}</div>
                   </div>
                   <ProductQuantity
                     productID={this.props.match.params.productID}

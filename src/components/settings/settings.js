@@ -101,7 +101,7 @@ class Settings extends React.Component {
 
   editEmail = () => {
     axios.post('/auth/edit-email', { email: this.state.newEmail })
-      .then(res => {
+      .then(async res => {
         store.dispatch({ type: 'UPDATE_EMAIL', payload: this.state.newEmail })
         this.setState({
           originalEmail: this.state.newEmail,
@@ -110,13 +110,15 @@ class Settings extends React.Component {
           openTab: ''
         })
         this.setSnackbar("success", "Your email has been updated");
+        await axios.get('/auth/logout')
+        window.location.href = '/'
       })
       .catch(error => {
         console.log(error.response.data)
         if (error.response && error.response.data) {
           Swal.fire({
             title: '<span class="swal_title"> ERROR',
-            text: error.response.data,
+            text: error.response.data || "an error has occurred",
             icon: 'error',
             background: '#1E1F26',
             customClass: {
@@ -133,7 +135,7 @@ class Settings extends React.Component {
   }
 
   editPass = () => {
-    axios.post('/auth/editPassword', {
+    axios.post('/auth/edit-password', {
       oldPass: this.state.oldPass,
       newPass: this.state.newPass,
       newPassConfirm: this.state.newPassConfirm
@@ -170,7 +172,7 @@ class Settings extends React.Component {
           })
           Swal.fire({
             title: '<span class="swal_title"> ERROR',
-            text: errorMessage,
+            text: errorMessage || "an error has occurred",
             icon: 'error',
             background: '#1E1F26',
             customClass: {

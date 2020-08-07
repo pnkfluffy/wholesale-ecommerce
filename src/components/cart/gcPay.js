@@ -18,7 +18,7 @@ const mapStateToProps = state => ({
 })
 
 class GCPay extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       loading: false,
@@ -45,7 +45,7 @@ class GCPay extends React.Component {
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.setState({
       loading: true
     })
@@ -72,8 +72,22 @@ class GCPay extends React.Component {
       })
   }
 
-  collectPayment = async e => {
+  alert = async e => {
     e.preventDefault()
+    Swal.fire({
+      title: '<span class="swal_title">Confirm Order?',
+      showCancelButton: true,
+      confirmButtonColor: '#59BA47',
+      confirmButtonText: 'Yes',
+      background: '#1E1F26'
+    }).then(res => {
+      if (res.value) {
+        this.collectPayment()
+      }
+    })
+  }
+
+  collectPayment = async e => {
     this.setState({
       loading: true
     })
@@ -89,51 +103,48 @@ class GCPay extends React.Component {
       state: this.state.ClientState,
       postal_code: this.state.ClientPostalCode
     }
-    axios
-      .post('/api/gc/collectPayment/', {
-        delivery: delivery
+    axios.post('/api/gc/collect-payment/', {
+      delivery: delivery
+    }).then(res => {
+      this.setState({
+        loading: false,
+        paymentDone: true
       })
-      .then(res => {
-        this.setState({
-          loading: false,
-          paymentDone: true
-        })
 
-        //add order to redux state orders
-        let allOrders = this.props.state.orders;
-        allOrders.push(res.data.order);
-        console.log(allOrders);
-        store.dispatch({type: 'ADD_ORDERS', payload: allOrders})
-        
-        //Clean the cart
-        console.log('collecting payment')
-        store.dispatch({ type: 'EMPTY_CART', payload: [] })
+      //add order to redux state orders
+      let allOrders = this.props.state.orders;
+      allOrders.push(res.data.order);
+      console.log(allOrders);
+      store.dispatch({ type: 'ADD_ORDERS', payload: allOrders })
 
-        //Redirect to order page where all the information + receipt are available
-        const url = '/order/' + res.data.order._id
-        this.props.history.push({
-          pathname: url,
-          state: {
-            payment: res.data.payment,
-            order: res.data.order
-          }
-        })
-      })
-      .catch(err => {
-        console.log("error!!")
-        if (err.response && err.response.data.errors) {
-          this.setState({
-            err: err.response.data.errors,
-          })
-        } else if (err.response && err.response.data === "addr_1") {
-          Swal.fire('ERROR:', "Something is wrong with your address! Check your ZIP code, address line 1, city and state!", 'error')
-        } else if (err.response) {
-          Swal.fire('ERROR:', err.response.data, 'error')
+      //Clean the cart
+      console.log('collecting payment')
+      store.dispatch({ type: 'EMPTY_CART', payload: [] })
+
+      //Redirect to order page where all the information + receipt are available
+      const url = '/order/' + res.data.order._id
+      this.props.history.push({
+        pathname: url,
+        state: {
+          payment: res.data.payment,
+          order: res.data.order
         }
-        this.setState({
-          loading: false
-        })
       })
+    }).catch(err => {
+      console.log("error!!")
+      if (err.response && err.response.data.errors) {
+        this.setState({
+          err: err.response.data.errors,
+        })
+      } else if (err.response && err.response.data === "addr_1") {
+        Swal.fire('ERROR:', "Something is wrong with your address! Check your ZIP code, address line 1, city and state!", 'error')
+      } else if (err.response) {
+        Swal.fire('ERROR:', err.response.data, 'error')
+      }
+      this.setState({
+        loading: false
+      })
+    })
   }
 
   onChange = e => {
@@ -142,7 +153,7 @@ class GCPay extends React.Component {
     })
   }
 
-  render () {
+  render() {
     if (this.state.loading) {
       return <img src={loading} alt='loading' />
     } else if (!this.state.paymentDone) {
@@ -225,9 +236,9 @@ class GCPay extends React.Component {
             <GreenButton
               variant='contained'
               className='gc_checkout_button'
-              onClick={this.collectPayment}
+              onClick={this.alert}
             >
-              PLACE ORDER: ${this.props.total}
+              Confirm Order: ${this.props.total}
             </GreenButton>
           </div>
         </div>

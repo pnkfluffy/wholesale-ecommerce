@@ -39,6 +39,7 @@ class Settings extends React.Component {
       ClientState: '',
       emailButtonActive: true,
       pswdButtonActive: true,
+      paymentInfo: {},
       err: {
         email: false,
         oldPass: false,
@@ -49,6 +50,18 @@ class Settings extends React.Component {
       snackbarSeverity: "success",
       snackbarMessage: ""
     }
+  }
+
+  componentDidMount() {
+    axios
+        .get('/api/gc/oneClient')
+        .then(res => {
+          this.setState({
+            paymentInfo: res.data,
+          })
+          console.log(this.state.paymentInfo);
+        })
+        .catch(err => console.log(err))
   }
 
   handleClose = (event, reason) => {
@@ -99,40 +112,40 @@ class Settings extends React.Component {
     })
   }
 
-  editEmail = () => {
-    axios.post('/auth/edit-email', { email: this.state.newEmail })
-      .then(async res => {
-        store.dispatch({ type: 'UPDATE_EMAIL', payload: this.state.newEmail })
-        this.setState({
-          originalEmail: this.state.newEmail,
-          newEmail: '',
-          emailButtonActive: false,
-          openTab: ''
-        })
-        this.setSnackbar("success", "Your email has been updated");
-        await axios.get('/auth/logout')
-        window.location.href = '/'
-      })
-      .catch(error => {
-        console.log(error.response.data)
-        if (error.response && error.response.data) {
-          Swal.fire({
-            title: '<span class="swal_title"> ERROR',
-            text: error.response.data || "an error has occurred",
-            icon: 'error',
-            background: '#1E1F26',
-            customClass: {
-              confirmButton: 'swal_confirm_button'
-            }
-          })
-          this.setState({
-            err: {
-              email: true
-            }
-          })
-        }
-      })
-  }
+  // editEmail = () => {
+  //   axios.post('/auth/edit-email', { email: this.state.newEmail })
+  //     .then(async res => {
+  //       store.dispatch({ type: 'UPDATE_EMAIL', payload: this.state.newEmail })
+  //       this.setState({
+  //         originalEmail: this.state.newEmail,
+  //         newEmail: '',
+  //         emailButtonActive: false,
+  //         openTab: ''
+  //       })
+  //       this.setSnackbar("success", "Your email has been updated");
+  //       await axios.get('/auth/logout')
+  //       window.location.href = '/'
+  //     })
+  //     .catch(error => {
+  //       console.log(error.response.data)
+  //       if (error.response && error.response.data) {
+  //         Swal.fire({
+  //           title: '<span class="swal_title"> ERROR',
+  //           text: error.response.data || "an error has occurred",
+  //           icon: 'error',
+  //           background: '#1E1F26',
+  //           customClass: {
+  //             confirmButton: 'swal_confirm_button'
+  //           }
+  //         })
+  //         this.setState({
+  //           err: {
+  //             email: true
+  //           }
+  //         })
+  //       }
+  //     })
+  // }
 
   editPass = () => {
     axios.post('/auth/edit-password', {
@@ -212,7 +225,7 @@ class Settings extends React.Component {
           <div className='section_container'>
             <div className='page_subheader'>Edit Account</div>
             <div className='edit_account_container'>
-              <div
+              {/* <div
                 className='edit_header'
                 onClick={() => this.openTab('email')}
               >
@@ -243,7 +256,7 @@ class Settings extends React.Component {
                     SAVE
                   </GreenButton>
                 </div>
-              )}
+              )} */}
             </div>
             <div className='edit_account_container'>
               <div
@@ -297,6 +310,32 @@ class Settings extends React.Component {
                     SAVE
                   </GreenButton>
                 </div>
+              )}
+            </div>
+            <div className='edit_account_container'>
+              <div
+                  className='edit_header'
+                  onClick={() => this.openTab('payment')}
+              >
+                <div className='edit_dropdown'>Payment</div>
+                {this.state.openTab !== 'payment' ? (
+                    <ExpandMoreIcon />
+                ) : (
+                    <ExpandLessIcon className='dropdown_active' />
+                )}
+              </div>
+              {this.state.openTab === 'payment' && (
+                  <div>
+                    <div>{this.state.paymentInfo.given_name} {this.state.paymentInfo.family_name}</div>
+                    <div>{this.state.paymentInfo.address_line1} {this.state.paymentInfo.address_line2}</div>
+                    <div>{this.state.paymentInfo.postal_code}, {this.state.paymentInfo.city}, {this.state.paymentInfo.region}</div>
+                    <GreenButton
+                        variant='contained'
+                        className='full'
+                    >
+                      New Payment Method
+                    </GreenButton>
+                  </div>
               )}
             </div>
             {/* <div className='edit_account_container'>

@@ -401,9 +401,6 @@ const getTotal = async products => {
       total = total + price * products[i].quantity
     }
   }
-  total = total * 100
-  console.log(total)
-  console.log(productsInOrder)
   return {
     total: total,
     productsInOrder: productsInOrder
@@ -414,7 +411,7 @@ const getTotal = async products => {
 // @desc    Collect Payment of active user
 // @reqBody Delivery Information
 // @access  Private
-router.post('/collectPayment', rejectUnauthenticated, async (req, res) => {
+router.post('/collect-payment', rejectUnauthenticated, async (req, res) => {
   try {
     console.log(req.body);
     //validate delivery input sizes (check if any is empty or if zip is too short or too large)
@@ -442,6 +439,7 @@ router.post('/collectPayment', rejectUnauthenticated, async (req, res) => {
         },
         async (err, address) => {
           if (err !== null) {
+            console.log(err);
             res.status(500).send('addr_1')
           } else {
             const activeUser = await User.findById(req.user._id).catch(err =>
@@ -483,8 +481,6 @@ router.post('/collectPayment', rejectUnauthenticated, async (req, res) => {
                 return total
               })
               .catch(err => {
-                console.log(err);
-                console.log("Couldn't get total")
                 res.status(500).send('We were unable to calculate your total')
                 return;
               })
@@ -522,7 +518,7 @@ router.post('/collectPayment', rejectUnauthenticated, async (req, res) => {
             const payment = await allClients.payments
               .create(
                 {
-                  amount: newOrder.total,
+                  amount: newOrder.total * 100,
                   currency: currency,
                   links: {
                     //getting the mandate from database

@@ -31,7 +31,7 @@ router.get('/favorites', rejectUnauthenticated, async (req, res) => {
         return
       });
     let availableProducts = [];
-    if (user.favorites) {
+    if (user) {
       const favorites = user.favorites
       for (let i = 0; i < favorites.length; i++) {
         await Product.findById(favorites[i])
@@ -67,23 +67,23 @@ router.post('/update-favorites', rejectUnauthenticated, async (req, res) => {
   }
 })
 
-router.post('/edit-email', rejectUnauthenticated, async (req, res) => {
-  try {
-    const newEmail = req.body.email;
-    const { error, isValid } = await validateEmail(newEmail);
-    if (!isValid) {      
-      res.status(400).json(error)
-    }
-    else {
-      await User.findOneAndUpdate({ _id: req.user._id }, { email: newEmail })
-        .then(res.json({ success: true }))
-        .catch(err => console.log(err))
-    }
-  } catch (err) {
-    console.log(err)
-    res.status(500).send('error editing email')
-  }
-})
+// router.post('/edit-email', rejectUnauthenticated, async (req, res) => {
+//   try {
+//     const newEmail = req.body.email;
+//     const { error, isValid } = await validateEmail(newEmail);
+//     if (!isValid) {      
+//       res.status(400).json(error)
+//     }
+//     else {
+//       await User.findOneAndUpdate({ _id: req.user._id }, { email: newEmail })
+//         .then(res.json({ success: true }))
+//         .catch(err => console.log(err))
+//     }
+//   } catch (err) {
+//     console.log(err)
+//     res.status(500).send('error editing email')
+//   }
+// })
 
 router.post('/edit-password', rejectUnauthenticated, async (req, res) => {
   try {

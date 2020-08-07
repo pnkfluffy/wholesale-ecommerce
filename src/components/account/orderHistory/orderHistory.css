@@ -249,6 +249,11 @@
   margin-top: 2vh;
 }
 
+.order_info_pay_status {
+  font-size: 1vw;
+  text-align: right;
+}
+
 .order_info_address {
   margin-top: 1vh;
   font-size: 1vw;

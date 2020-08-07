@@ -4,7 +4,6 @@ import { updateCartServer } from './functions'
 
 const initialUser = {
   email: '',
-  favorites: [],
   admin: false
 }
 
@@ -30,19 +29,22 @@ const loaded = (state = false, action) => {
   }
 }
 
-const favorites = (state = [], action) => {
+const wishlist = (state = [], action) => {
   switch (action.type) {
-    case 'SET_FAVORITES':
+    case 'SET_WISHLIST':
+      console.log("SET_WISHLIST", action.payload)
       return action.payload
-    case 'ADD_FAVORITE':
+    case 'ADD_WISHLIST':
       const itemExists = state.find(c => c === action.payload)
       if (itemExists) return state
-      axios.post('/auth/update-favorites', [...state, action.payload])
+      console.log("STATE:", state)
+      axios.post('/auth/update-wishlist', [...state, action.payload])
       return [...state, action.payload]
-    case 'DELETE_FAVORITE':
+    case 'DELETE_WISHLIST':
       const deleteItemIndex = state.findIndex(c => c === action.payload)
       if (deleteItemIndex !== -1) state.splice(deleteItemIndex, 1)
-      axios.post('/auth/update-favorites', state)
+      console.log("STATE:", state)
+      axios.post('/auth/update-wishlist', state)
       return [...state]
     default:
       return state
@@ -137,7 +139,7 @@ const reviews = (state = [], action) => {
 
 export default combineReducers({
   user,
-  favorites,
+  wishlist,
   categories,
   cart,
   products,

@@ -157,30 +157,33 @@ class Settings extends React.Component {
         await axios.get('/auth/logout')
         window.location.href = '/'
       })
-      .catch(error => {
-        console.log(error.response.data)
-        if (error.response && error.response.data[0]) {
-          const errorKey = error.response.data[0];
-          const errorMessage = error.response.data[1];
-          this.setState({
-            oldPass: '',
-            newPass: '',
-            newPassConfirm: '',
-            err: {
-              [errorKey]: true,
-            }
-          })
-          Swal.fire({
-            title: '<span class="swal_title"> ERROR',
-            text: errorMessage || "an error has occurred",
-            icon: 'error',
-            background: '#1E1F26',
-            customClass: {
-              confirmButton: 'swal_confirm_button'
-            }
-          })
-        }
-      })
+        .catch(error => {
+          console.log(error.response.data)
+          if (error.response && error.response.data[0])
+          {
+            const errorKey = error.response.data[0];
+            const errorMessage = error.response.data[1];
+            this.setState({
+              oldPass: '',
+              newPass: '',
+              newPassConfirm: '',
+              err: {
+                [errorKey]: true,
+              }
+            })
+            Swal.fire({
+              title: 'ERROR',
+              text: errorMessage || "an error has occurred",
+              icon: 'error',
+              background: '#1E1F26',
+              customClass: {
+                confirmButton: 'swal_confirm_button',
+                content: 'swal_text',
+                title: 'swal_text'
+              }
+              })
+          }
+        })
   }
 
   editAddress = () => {

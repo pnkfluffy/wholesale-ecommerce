@@ -12,12 +12,12 @@ const mapStateToProps = state => ({
 })
 
 class CreateReview extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       newReview: '',
       stars: 5,
-      loading: false
+      loading: false,
     }
   }
 
@@ -25,15 +25,15 @@ class CreateReview extends React.Component {
     this.setState({
       loading: true
     })
-    axios
-      .post('/api/reviews/newReview/' + this.props.productID, this.state)
+    axios.post('/api/reviews/newReview/' + this.props.productID, this.state)
       .then(res => {
         this.setState({
           loading: false,
           review: '',
           stars: 5
         })
-        const reviews = [res.data, ...this.props.state.reviews]
+        const reviews = res.data
+        
         store.dispatch({ type: 'ADD_REVIEWS', payload: reviews })
       })
       .catch(err => {
@@ -55,7 +55,14 @@ class CreateReview extends React.Component {
     })
   }
 
-  printStars = () => {
+  onChange = e => {
+    this.setState({
+      review: e.target.value
+    })
+  }
+
+  render() {
+
     let i = 0
     let stars = []
     while (i < this.state.stars) {
@@ -68,20 +75,11 @@ class CreateReview extends React.Component {
     while (i < 5) {
       const index = i + 1
       stars.push(
-        <StarBorderIcon onClick={() => this.editStars(index)}></StarBorderIcon>
+        <StarBorderIcon onClick={() => this.editStars(index)} key={i}></StarBorderIcon>
       )
       i++
     }
-    return stars
-  }
 
-  onChange = e => {
-    this.setState({
-      review: e.target.value
-    })
-  }
-
-  render () {
     return (
       <form className='create_review' noValidate onSubmit={this.onSubmit}>
         <div className='create_review_header'>Leave a review:</div>
@@ -92,19 +90,19 @@ class CreateReview extends React.Component {
           rows='3'
         ></textarea>
         <div className='create_review_bottom'>
-          <div className='create_review_rating'>{this.printStars()}</div>
+          <div className='create_review_rating'>{stars}</div>
 
           {this.state.loading ? (
             <img alt='loading' src={loading} />
           ) : (
-            <GreenButton
-              variant='contained'
-              className='create_review_button'
-              onClick={this.onSubmit}
-            >
-              submit
-            </GreenButton>
-          )}
+              <GreenButton
+                variant='contained'
+                className='create_review_button'
+                onClick={this.onSubmit}
+              >
+                submit
+              </GreenButton>
+            )}
         </div>
       </form>
     )

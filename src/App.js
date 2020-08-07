@@ -71,7 +71,7 @@ class App extends React.Component {
             path='/'
             render={props => <Admin history={this.props.history} {...props} />}
           />
-          <Route exact path='/*' component={AdminError404} >
+          <Route exact path='/*' >
             <Redirect to="/" />
           </Route>
         </Switch>

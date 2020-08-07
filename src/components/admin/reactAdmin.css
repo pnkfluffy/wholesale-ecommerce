@@ -1,3 +1,7 @@
 .MuiTableCell-alignRight {
     text-align: left !important;
 }
+
+.RaFileInput-removeButton-48:nth-child(n+5) {
+    display: none;
+}

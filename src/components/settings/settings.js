@@ -16,14 +16,14 @@ import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
-import {classes} from "../reuseable/materialButtons"
+import { classes } from "../reuseable/materialButtons"
 
 const mapStateToProps = state => ({
   state: state.reducer
 })
 
 class Settings extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       openTab: '',
@@ -47,7 +47,7 @@ class Settings extends React.Component {
       },
       snackbarOpen: false,
       snackbarSeverity: "success",
-      snackbarMessage: "" 
+      snackbarMessage: ""
     }
   }
 
@@ -55,9 +55,9 @@ class Settings extends React.Component {
     if (reason === "clickaway") {
       return;
     }
-    this.setState({snackbarOpen: false})
+    this.setState({ snackbarOpen: false })
   };
-  
+
   setSnackbar = (severity, message) => {
     this.setState({
       snackbarOpen: true,
@@ -100,91 +100,94 @@ class Settings extends React.Component {
   }
 
   editEmail = () => {
-    axios.post('/auth/editEmail', {email: this.state.newEmail})
-         .then(res => {
-           store.dispatch({ type: 'UPDATE_EMAIL', payload: this.state.newEmail })
-           this.setState({
-             originalEmail: this.state.newEmail,
-             newEmail: '',
-             emailButtonActive: false,
-             openTab: ''
-           })
-           this.setSnackbar("success", "Your email has been updated");
-         })
-         .catch(error => {
-           console.log(error.response.data)
-           if (error.response && error.response.data)
-           {
-             Swal.fire({
-               title: '<span class="swal_title"> ERROR',
-               text: error.response.data,
-               icon: 'error',
-               background: '#1E1F26',
-               customClass: {
-                confirmButton: 'swal_confirm_button'
-              }
-               })
-             this.setState({
-               err: {
-                 email: true
-               }
-             })
-           }
-         })
+    axios.post('/auth/edit-email', { email: this.state.newEmail })
+      .then(async res => {
+        store.dispatch({ type: 'UPDATE_EMAIL', payload: this.state.newEmail })
+        this.setState({
+          originalEmail: this.state.newEmail,
+          newEmail: '',
+          emailButtonActive: false,
+          openTab: ''
+        })
+        this.setSnackbar("success", "Your email has been updated");
+        await axios.get('/auth/logout')
+        window.location.href = '/'
+      })
+      .catch(error => {
+        console.log(error.response.data)
+        if (error.response && error.response.data) {
+          Swal.fire({
+            title: '<span class="swal_title"> ERROR',
+            text: error.response.data || "an error has occurred",
+            icon: 'error',
+            background: '#1E1F26',
+            customClass: {
+              confirmButton: 'swal_confirm_button'
+            }
+          })
+          this.setState({
+            err: {
+              email: true
+            }
+          })
+        }
+      })
   }
 
   editPass = () => {
-    axios.post('/auth/editPassword', { oldPass: this.state.oldPass,
-                                                newPass: this.state.newPass,
-                                                newPassConfirm: this.state.newPassConfirm
-                                              })
-        .then(res => {
-          console.log(res.data);
+    axios.post('/auth/edit-password', {
+      oldPass: this.state.oldPass,
+      newPass: this.state.newPass,
+      newPassConfirm: this.state.newPassConfirm
+    })
+      .then(async res => {
+        console.log(res.data);
+        this.setState({
+          oldPass: '',
+          newPass: '',
+          newPassConfirm: '',
+          err: {
+            oldPass: false,
+            newPass: false,
+            newPassConfirm: false
+          },
+          openTab: '',
+        })
+        this.setSnackbar("success", "Your password has been changed, please log in.");
+        await axios.get('/auth/logout')
+        window.location.href = '/'
+      })
+      .catch(error => {
+        console.log(error.response.data)
+        if (error.response && error.response.data[0]) {
+          const errorKey = error.response.data[0];
+          const errorMessage = error.response.data[1];
           this.setState({
             oldPass: '',
             newPass: '',
             newPassConfirm: '',
             err: {
-              oldPass: false,
-              newPass: false,
-              newPassConfirm: false
-            },
-            openTab: '',
+              [errorKey]: true,
+            }
           })
-          this.setSnackbar("success", "Your password has been changed");
-        })
-        .catch(error => {
-          console.log(error.response.data)
-          if (error.response && error.response.data[0])
-          {
-            const errorKey = error.response.data[0];
-            const errorMessage = error.response.data[1];
-            this.setState({
-              oldPass: '',
-              newPass: '',
-              newPassConfirm: '',
-              err: {
-                [errorKey]: true,
-              }
-            })
-            Swal.fire({
-              title: '<span class="swal_title"> ERROR',
-              text: errorMessage,
-              icon: 'error',
-              background: '#1E1F26',
-              customClass: {
-                confirmButton: 'swal_confirm_button'
-              }
-              })
-          }
-        })
+          Swal.fire({
+            title: '<span class="swal_title"> ERROR',
+            text: errorMessage || "an error has occurred",
+            icon: 'error',
+            background: '#1E1F26',
+            customClass: {
+              confirmButton: 'swal_confirm_button'
+            }
+          })
+        }
+      })
   }
 
   editAddress = () => {
     // {!} EDIT ADDRESS FUNCTIONALITY
   }
 
-  render () {
+  render() {
     return (
       <div className='settings'>
         <div className={classes.root}>
@@ -217,8 +220,8 @@ class Settings extends React.Component {
                 {this.state.openTab !== 'email' ? (
                   <ExpandMoreIcon />
                 ) : (
-                  <ExpandLessIcon className='dropdown_active' />
-                )}
+                    <ExpandLessIcon className='dropdown_active' />
+                  )}
               </div>
               {this.state.openTab === 'email' && (
                 <div>
@@ -233,9 +236,9 @@ class Settings extends React.Component {
                     error={this.state.err.email}
                   />
                   <GreenButton
-                      variant='contained'
-                      className='full'
-                      onClick={this.editEmail}
+                    variant='contained'
+                    className='full'
+                    onClick={this.editEmail}
                   >
                     SAVE
                   </GreenButton>
@@ -251,8 +254,8 @@ class Settings extends React.Component {
                 {this.state.openTab !== 'password' ? (
                   <ExpandMoreIcon />
                 ) : (
-                  <ExpandLessIcon className='dropdown_active' />
-                )}
+                    <ExpandLessIcon className='dropdown_active' />
+                  )}
               </div>
               {this.state.openTab === 'password' && (
                 <div>
@@ -267,35 +270,35 @@ class Settings extends React.Component {
                     error={this.state.err.oldPass}
                   />
                   <InputField
-                      widthCSS='edit_auth_field'
-                      name='newPass'
-                      value={this.state.newPass}
-                      title='New Password'
-                      type='password'
-                      changeField={this.onChange}
-                      placeholder='********'
-                      error={this.state.err.newPass}
+                    widthCSS='edit_auth_field'
+                    name='newPass'
+                    value={this.state.newPass}
+                    title='New Password'
+                    type='password'
+                    changeField={this.onChange}
+                    placeholder='********'
+                    error={this.state.err.newPass}
                   />
                   <InputField
-                      widthCSS='edit_auth_field'
-                      name='newPassConfirm'
-                      value={this.state.newPassConfirm}
-                      type='password'
-                      title='Confirm New Password'
-                      changeField={this.onChange}
-                      placeholder='********'
-                      error={this.state.err.newPassConfirm}
+                    widthCSS='edit_auth_field'
+                    name='newPassConfirm'
+                    value={this.state.newPassConfirm}
+                    type='password'
+                    title='Confirm New Password'
+                    changeField={this.onChange}
+                    placeholder='********'
+                    error={this.state.err.newPassConfirm}
                   />
                   <GreenButton
-                      variant='contained'
-                      className='full'
-                      onClick={this.editPass}
+                    variant='contained'
+                    className='full'
+                    onClick={this.editPass}
                   >
                     SAVE
                   </GreenButton>
                 </div>
               )}
-              </div>
+            </div>
             {/* <div className='edit_account_container'>
               <div
                 className='edit_header'

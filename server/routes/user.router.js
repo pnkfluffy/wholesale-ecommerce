@@ -12,7 +12,6 @@ const shajs = require('sha.js')
 const bcrypt = require('bcrypt')
 
 router.post("/login", passport.authenticate("local", { failureRedirect: "/login" }), (req, res) => {
-  console.log('hi');
   res.sendStatus(201)
 });
 
@@ -20,20 +19,22 @@ router.get('/user', rejectUnauthenticated, (req, res) => {
   let user = {
     email: req.user.email,
     name: req.user.name,
-    favorites: req.user.favorites
   }
   res.send(user)
 })
 
 router.get('/favorites', rejectUnauthenticated, async (req, res) => {
-  let user = await User.findById(req.user._id)
-                       .catch(res.status(500).send("couldn't find user"));
-  let availableProducts = [];
-  if (user.favorites)
-  {
-    const favorites = user.favorites
-    for (let i = 0; i < favorites.length; i++) {
-      await Product.findById(favorites[i])
+  try {
+    let user = await User.findById(req.user._id)
+      .catch(err => {
+        res.status(500).send("couldn't find user")
+        return
+      });
+    let availableProducts = [];
+    if (user.favorites) {
+      const favorites = user.favorites
+      for (let i = 0; i < favorites.length; i++) {
+        await Product.findById(favorites[i])
           .then(info => {
             //  means nothing found
             if (!info.deleted) {
@@ -43,66 +44,76 @@ router.get('/favorites', rejectUnauthenticated, async (req, res) => {
           .catch(err => {
             console.log(err)
             res.status(500).send("couldn't get favorites")
-            return ;
+            return;
           })
+      }
     }
+    res.send(availableProducts)
+    return
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('error in retrieving favorites')
   }
-  res.send(availableProducts)
 })
 
-router.post('/updateFavorites', rejectUnauthenticated, async (req, res) => {
+router.post('/update-favorites', rejectUnauthenticated, async (req, res) => {
   const favorites = req.body
-  const user = await User.findOneAndUpdate({ _id: req.user._id }, { favorites })
-                         .catch(res.status(500).send("couldn't update favorites in database"))
-  res.json(user.favorites)
+  try {
+    const user = await User.findOneAndUpdate({ _id: req.user._id }, { favorites })
+    res.json(user.favorites)
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("couldn't update favorites in database")
+  }
 })
 
-router.post('/editEmail', rejectUnauthenticated, async (req, res) => {
+router.post('/edit-email', rejectUnauthenticated, async (req, res) => {
   try {
     const newEmail = req.body.email;
-    const {error, isValid} = validateEmail(newEmail);
-    if (!isValid) {
-      res.status(500).json(error)
+    const { error, isValid } = await validateEmail(newEmail);
+    if (!isValid) {      
+      res.status(400).json(error)
     }
     else {
-      await User.findOneAndUpdate({ _id: req.user._id }, {email: newEmail})
-          .then(res.json({success: true}))
-          .catch(err => console.log(err))
+      await User.findOneAndUpdate({ _id: req.user._id }, { email: newEmail })
+        .then(res.json({ success: true }))
+        .catch(err => console.log(err))
     }
-  } catch(err) {
+  } catch (err) {
     console.log(err)
+    res.status(500).send('error editing email')
   }
 })
 
-router.post('/editPassword', rejectUnauthenticated, async (req, res) => {
+router.post('/edit-password', rejectUnauthenticated, async (req, res) => {
   try {
-    const {errors, isValid} = validatePass(req.body);
+    const { errors, isValid } = validatePass(req.body);
     if (!isValid) {
       res.status(500).json(errors)
     }
     else {
-        const salt = await bcrypt.genSalt(10);
-        const newPass = req.body.newPass;
-        const oldPass = req.body.oldPass;
-        const newSaltedPass = await bcrypt.hash(newPass, salt);
-        console.log(oldPass);
-        if (await bcrypt.compare(oldPass, req.user.password))
-        {
-          await User.findOneAndUpdate({ _id: req.user._id }, {password: newSaltedPass})
-              .then(res.json({success: true}))
-              .catch(err => console.log(err))
-        } else {
-          res.status(500).json(["oldPass", "Incorrect Password"])
-        }
+      const salt = await bcrypt.genSalt(10);
+      const newPass = req.body.newPass;
+      const oldPass = req.body.oldPass;
+      const newSaltedPass = await bcrypt.hash(newPass, salt);
+      console.log(oldPass);
+      if (await bcrypt.compare(oldPass, req.user.password)) {
+        await User.findOneAndUpdate({ _id: req.user._id }, { password: newSaltedPass })
+          .then(res.json({ success: true }))
+          .catch(err => console.log(err))
+      } else {
+        res.status(500).json(["oldPass", "Incorrect Password"])
+      }
     }
-  } catch(err) {
+  } catch (err) {
     console.log(err)
+    res.status(500).send('error editing password')
   }
 })
 
-router.get('/login-uri', (req, res) => {
-  res.send(process.env.DEV_URI)
-})
+// router.get('/login-uri', (req, res) => {
+//   res.send(process.env.DEV_URI)
+// })
 
 router.get('/logout', rejectUnauthenticated, (req, res) => {
   req.logout()

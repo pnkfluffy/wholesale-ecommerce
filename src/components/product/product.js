@@ -21,7 +21,7 @@ const mapStateToProps = state => ({
 })
 
 class Product extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       product: {
@@ -67,7 +67,7 @@ class Product extends React.Component {
     this.setState({ snackbarOpen: false })
   }
 
-  componentDidMount () {
+  componentDidMount() {
     axios
       .get('/api/products/' + this.props.match.params.productID)
       .then(res => {
@@ -82,31 +82,32 @@ class Product extends React.Component {
   }
 
   changeQuantity = quantity => {
-    if (quantity === '') this.setState({ quantity })
-    else if (quantity <= 0) this.setState({ quantity: 1 })
+    quantity = parseInt(quantity, 10)
+    if (quantity > 10000) {
+      return
+    }
+    if (quantity <= 0) this.setState({ quantity: 1 })
     else this.setState({ quantity })
   }
 
   addToCart = quantity => {
-    this.setState(
-      {
-        buttonActive: false
-      },
-      () => {
-        let product = this.state.product
-        console.log('PRODUCT', product)
-        product.quantity = quantity
-        product.product = this.state.product._id
-        addQuantityToCart(product)
-        this.setSnackbar(
-          'success',
-          product.quantity +
-            product.metaData.units.unit +
-            ' ' +
-            product.name +
-            ' added to your cart'
-        )
-      }
+    this.setState({
+      buttonActive: false
+    }, () => {
+      let product = this.state.product
+      console.log('PRODUCT', product)
+      product.quantity = quantity
+      product.product = this.state.product._id
+      addQuantityToCart(product)
+      this.setSnackbar(
+        'success',
+        product.quantity +
+        product.metaData.units.unit +
+        ' ' +
+        product.name +
+        ' added to your cart'
+      )
+    }
     )
   }
 
@@ -118,13 +119,16 @@ class Product extends React.Component {
     })
   }
 
-  render () {
+  render() {
     const product = this.state.product
     const totalPrice = getPriceByQuantity(
       product.priceTiers,
       this.state.quantity,
       product.price
     )
+    if (totalPrice > 10000000) {
+      totalPrice = "limit reached"
+    }
     return (
       <div className='product_page'>
         <div className={classes.root}>
@@ -167,18 +171,18 @@ class Product extends React.Component {
                       addToCart={this.addToCart}
                     />
                   ) : (
-                    <div className='no_priceTiers_message'>
-                      No bulk discounts have been listed for this product. Want
+                      <div className='no_priceTiers_message'>
+                        No bulk discounts have been listed for this product. Want
                       to negotiate something?{' '}
-                      <a className='light_green' href='tel:7205916284'>
-                        Reach out!
+                        <a className='light_green' href='tel:7205916284'>
+                          Reach out!
                       </a>
-                    </div>
-                  )}
+                      </div>
+                    )}
                 </div>
                 <div className='product_quantity_container'>
                   <div className='product_price'>
-                    $<div className='price_price'>{totalPrice}</div>
+                    $<div className='price_price'>{totalPrice || ""}</div>
                   </div>
                   <ProductQuantity
                     productID={this.props.match.params.productID}
@@ -197,16 +201,16 @@ class Product extends React.Component {
                     Add To Cart
                   </GreenButton>
                 ) : (
-                  <GreenButton
-                    variant='contained'
-                    className='product_button'
-                    disabled={true}
-                    style={{ color: 'white' }}
-                  >
-                    <CheckCircleOutlineIcon />
+                    <GreenButton
+                      variant='contained'
+                      className='product_button'
+                      disabled={true}
+                      style={{ color: 'white' }}
+                    >
+                      <CheckCircleOutlineIcon />
                     Added!
-                  </GreenButton>
-                )}
+                    </GreenButton>
+                  )}
               </div>
             </div>
           </div>

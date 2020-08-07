@@ -45,7 +45,7 @@
   background-color: var(--searchbar-black);
   margin-bottom: 2vh;
   border-radius: 20px;
-  height: 14vh;
+  height: 12vh;
 }
 
 .order_card_image_container {
@@ -115,6 +115,68 @@
   border-radius: 10px;
   height: 35%;
   background-color: var(--background-grey);
+}
+
+/*** Unavailable Order Card ***/
+
+.unavailable_order_card {
+  display: flex;
+  position: relative;
+  padding: 1.5vw;
+  flex-direction: row;
+  align-items: center;
+  background-color: rgba(26, 27, 32, 0.5);
+  margin-bottom: 2vh;
+  border-radius: 20px;
+  height: 14vh;
+}
+
+.unavailable_order_card_image {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  opacity: 0.5;
+}
+
+.unavailable_order_card_product_name {
+  font-size: 1.4vw;
+  width: 100%;
+  margin-bottom: 2%;
+  opacity: 0.5;
+}
+
+.unavailable_order_card_id {
+  color: var(--nofocus-font-grey);
+  font-size: 0.8vw;
+  opacity: 0.5;
+}
+
+.unavailable_order_card_remove_area {
+  color: rgb(255, 86, 86);
+  font-size: 0.8vw;
+  font-weight: 100;
+  font-family: Arial, Helvetica, sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.unavailable_order_card_remove_area_text {
+  opacity: 0.8;
+}
+
+.unavailable_order_card_remove {
+  color: rgb(255, 86, 86);
+  font-size: 1vw;
+  font-weight: 100;
+  font-family: Arial, Helvetica, sans-serif;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  margin-top: 4vh;
+  text-align: right;
+}
+
+.unavailable_order_card_remove:hover {
+  color: var(--attention-red);
 }
 
 /*** Buy ***/

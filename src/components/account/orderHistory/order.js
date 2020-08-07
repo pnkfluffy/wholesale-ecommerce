@@ -1,13 +1,11 @@
 import React from 'react'
 import axios from 'axios'
-import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import ProductInOrderCard from './productInOrderCard'
 import GetInvoice from './getInvoice'
-import store from '../../redux/store'
-import products from '../home/products'
+import store from '../../../redux/store'
 import OrderInformation from './orderInformation'
-import { GreenButton } from '../reuseable/materialButtons'
+import { GreenButton } from '../../reuseable/materialButtons'
 import Swal from 'sweetalert2'
 
 const mapStateToProps = state => ({
@@ -29,7 +27,7 @@ class Order extends React.Component {
   printItems = products => {
     const productsWithInfo = products.map(product => {
       const productInfo = this.props.state.products.products.find(
-        oneProduct => oneProduct._id === product.productId
+        oneProduct => oneProduct._id === product.productId && !oneProduct.deleted
       )
 
       return (
@@ -48,7 +46,7 @@ class Order extends React.Component {
     let hasAvailableProducts = false;
    await order.products.forEach(product => {
       const allInfo = this.props.state.products.products.find(
-        p => p._id === product.productId
+        p => p._id === product.productId && !p.deleted
       )
       if (allInfo) {
         if ( this.props.state.cart.find(c => c.product === product.productId)) {

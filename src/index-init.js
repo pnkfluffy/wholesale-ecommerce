@@ -86,6 +86,7 @@ export const getAllProducts = () => {
 }
 
 export const getAllReviews = () => {
+
   return axios
     .get('/api/reviews/all')
     .then(res => {

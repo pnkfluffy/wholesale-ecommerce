@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import FavoriteProductCard from './favoriteProductCard'
-import OrderHistory from '../orderHistory/orderHistory'
+import OrderHistory from './orderHistory/orderHistory'
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -46,10 +46,10 @@ class Account extends React.Component {
                   clicking on "Add to wishlist" on product page!
                 </div>
               )}
+            </div>
           </div>
         </div>
-      </div>
-    )
+        )
   }
 }
 

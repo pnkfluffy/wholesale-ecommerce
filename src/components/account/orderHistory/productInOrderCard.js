@@ -1,9 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter, Link } from 'react-router-dom'
-import blank_image from '../../resources/images/blank_image.jpg'
+import blank_image from '../../../resources/images/blank_image.jpg'
 import { compose } from 'redux'
-import {getPriceByQuantity} from "../reuseable/getPriceByQuantity";
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -17,9 +16,11 @@ class ProductInOrderCard extends React.Component {
   }
 
   render () {
-    const image = this.props.imageData
-      ? this.props.imageData[0].url
-      : blank_image
+    let image;
+    if (this.props.imageData && this.props.imageData[0])
+      image = this.props.imageData[0].url;
+    else
+      image = blank_image
 
     const productLink = this.props.available
       ? '/product/' + this.props.product.productId.toString()

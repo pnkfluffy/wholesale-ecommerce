@@ -38,7 +38,7 @@ const UserSchema = new Schema({
   goCardlessMandate: {
     type: String
   },
-  favorites: [
+  wishlist: [
     {
       type: Schema.Types.ObjectId,
       ref: 'product'
@@ -65,7 +65,11 @@ const UserSchema = new Schema({
   date: {
     type: Date,
     default: Date.now
-  }
+  },
+  deleted: {
+    type: Boolean,
+    default: false
+  },
 })
 
 module.exports = User = mongoose.model('user', UserSchema)

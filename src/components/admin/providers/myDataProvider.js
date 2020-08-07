@@ -54,7 +54,7 @@ const myDataProvider = {
           ...params,
           data: {
             ...params.data,
-            imageData: [...transformedNewImages, ...formerImages]
+            imageData: [...formerImages, ...transformedNewImages]
           }
         })
       )
@@ -71,7 +71,8 @@ const myDataProvider = {
     if (resource === 'admin-commissions') {
       return dataProvider.getOne('admin-orders', params)
     } else {
-      return dataProvider.getOne(resource, params)
+      return dataProvider.getOne
+      (resource, params)
     }
   }
 }

@@ -31,7 +31,7 @@
 }
 
 .order_history_number {
-    font-size: 1.2vw;
+    font-size: 1.3vw;
     margin-left: 5px;
 }
 
@@ -45,7 +45,16 @@
 .order_history_content {
   font-size: 1vw;
   display: flex;
-  align-items: center;
+  align-items: baseline;
+}
+
+.order_history_content:not(:last-child):not(:first-child) {
+  margin-bottom: 1vh;
+}
+
+.order_history_content_small {
+  font-size: 0.6vw;
+  margin-bottom: 1vh;
 }
 
 .order_history_split {
@@ -98,6 +107,7 @@
 .single_order_buttons {
   display: flex;
   flex-direction: row;
+  justify-content: center;
 }
 
 .order_again_button {
@@ -219,3 +229,11 @@
   display: flex;
   justify-content: space-between;
 }
+
+.invoice_container {
+  width: 8vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+

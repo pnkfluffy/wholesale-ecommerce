@@ -23,7 +23,7 @@ const OrderSchema = new Schema({
       },
       productTotal: {
         type: Number
-      },
+      }
     }
   ],
   total: {

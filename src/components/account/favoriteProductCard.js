@@ -25,7 +25,7 @@ class favoriteProductCard extends React.Component {
   render () {
     const image = (this.props.images.length && this.props.images[0].url) ? this.props.images[0].url : blank_image;
     return (
-      <div className='outside_favorite_product_card_container'>
+      <div className='favorite_product_card_container'>
         <div className='favorite_product_card'>
           <div className='favorite_product_card_image_container'>
             <img
@@ -37,11 +37,11 @@ class favoriteProductCard extends React.Component {
           </div>
           <div className='favorite_product_name'>
             {this.props.product.name}
-            <div className='favorite_product_order_number'>
+            {/* <div className='favorite_product_order_number'>
               returnOrderNumber
-            </div>
+            </div> */}
           </div>
-          <span className='empty_space'></span>
+          <span className='favorites_empty_space'></span>
           <GreenButton
           variant='contained'
           className='favorite_product_button'

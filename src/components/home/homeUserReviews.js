@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { GreenButton } from '../reuseable/materialButtons'
 import ReviewsCard from '../reuseable/reviewsCard'
 import UserReviews from '../reuseable/userReviews'
 

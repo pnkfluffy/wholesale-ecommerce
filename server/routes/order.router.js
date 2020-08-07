@@ -11,7 +11,7 @@ const Product = require('../schemas/productSchema')
 // @route   GET /orders/:orderId
 // @desc    Returns the order
 // @access  Private
-router.get('/oneOrder/:orderId', (req, res) => {
+router.get('/oneOrder/:orderId', rejectUnauthenticated, (req, res) => {
   Order.findById({_id: req.params.orderId, user: req.user._id}, { user: 0, paymentID: 0 })
     .then(order => res.json(order))
     .catch(error => {
@@ -23,7 +23,7 @@ router.get('/oneOrder/:orderId', (req, res) => {
 // @route   GET /orders/from/
 // @desc    Returns all orders from user
 // @access  Private
-router.get('/from', (req, res) => {
+router.get('/from', rejectUnauthenticated, (req, res) => {
   Order.find({ user: req.user._id }, { user: 0, paymentID: 0 })
     .then(orders => {
         res.json(orders)
@@ -35,8 +35,8 @@ router.get('/from', (req, res) => {
 })
 
 //@route POST /orders/generateInvoice
-router.get('/generateInvoice', (req, res) => {
+// router.get('/generateInvoice', (req, res) => {
 
-})
+// })
 
 module.exports = router

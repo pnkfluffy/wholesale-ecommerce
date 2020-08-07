@@ -64,7 +64,7 @@ class Sidebar extends React.Component {
             all products contain <a className='dark_green'>&#60;0.3%</a> thc in
             accordance with the farm bill
           </p> */}
-          <a className='light_green' href='tel:5551234567'>
+          <a className='light_green' href='tel:7205916284'>
             customer support
           </a>
           <a className='light_green' href='https://cbddy.com/privacy-policy/'>

@@ -67,18 +67,6 @@
   object-fit: cover;
 }
 
-.product_card_heart {
-  position: absolute;
-  display: flex;
-  justify-content: flex-end;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  margin: 5%;
-  cursor: pointer;
-  width: 8%;
-  color: var(--logo-green);
-}
 
 .product_name {
   font-size: 1vw;

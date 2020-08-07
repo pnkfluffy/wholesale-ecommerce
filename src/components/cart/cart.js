@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 /*components*/
 import OrderCard from './orderCard'
+import UnavailableOrderCard from './unavailableOrderCard'
 import { getPriceByQuantity } from '../reuseable/getPriceByQuantity'
 import { v4 } from 'uuid'
-import { GreenButton } from '../reuseable/materialButtons'
 import GoCardless from "./goCardless";
 
 const mapStateToProps = state => {
@@ -16,18 +16,24 @@ const mapStateToProps = state => {
 
 class Cart extends React.Component {
   render () {
-    console.log(this.props.state.cart)
     let total = 0
     const cartProducts = this.props.state.cart.map((cartProduct, index) => {
-      const productTotal = getPriceByQuantity(
-        cartProduct.priceTiers,
-        cartProduct.quantity,
-        cartProduct.price
-      )
-      total += productTotal
-      return (
-        <OrderCard product={cartProduct} total={productTotal} key={v4()} />
-      )
+      //only give price to product available
+      if (!cartProduct.deleted) {
+        const productTotal = getPriceByQuantity(
+            cartProduct.priceTiers,
+            cartProduct.quantity,
+            cartProduct.price
+        )
+        total += productTotal
+        return (
+            <OrderCard product={cartProduct} total={productTotal} key={v4()} />
+        )
+      } else {
+        return (
+            <UnavailableOrderCard product={cartProduct} key={v4()} />
+        )
+      }
     })
 
     return (

@@ -4,7 +4,6 @@ import { updateCartServer } from './functions'
 
 const initialUser = {
   email: '',
-  wishlist: [],
   admin: false
 }
 
@@ -33,6 +32,7 @@ const loaded = (state = false, action) => {
 const wishlist = (state = [], action) => {
   switch (action.type) {
     case 'SET_WISHLIST':
+      console.log("SET_WISHLIST", action.payload)
       return action.payload
     case 'ADD_WISHLIST':
       const itemExists = state.find(c => c === action.payload)

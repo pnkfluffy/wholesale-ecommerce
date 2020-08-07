@@ -39,7 +39,7 @@ import {
 } from 'react-admin'
 
 export const UserList = props => (
-  <List {...props} sort={{ field: 'date', order: 'DESC' }} perPage={25}>
+  <List {...props} sort={{ field: 'date', order: 'DESC' }} >
     <Datagrid rowClick='show'>
       <TextField label='User' source='name' />
       <TextField label='Email' source='email' />

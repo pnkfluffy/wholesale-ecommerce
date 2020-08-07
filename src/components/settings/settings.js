@@ -39,6 +39,7 @@ class Settings extends React.Component {
       ClientState: '',
       emailButtonActive: true,
       pswdButtonActive: true,
+      paymentInfo: {},
       err: {
         email: false,
         oldPass: false,
@@ -49,6 +50,18 @@ class Settings extends React.Component {
       snackbarSeverity: "success",
       snackbarMessage: ""
     }
+  }
+
+  componentDidMount() {
+    axios
+        .get('/api/gc/oneClient')
+        .then(res => {
+          this.setState({
+            paymentInfo: res.data,
+          })
+          console.log(this.state.paymentInfo);
+        })
+        .catch(err => console.log(err))
   }
 
   handleClose = (event, reason) => {
@@ -300,6 +313,32 @@ class Settings extends React.Component {
                     SAVE
                   </GreenButton>
                 </div>
+              )}
+            </div>
+            <div className='edit_account_container'>
+              <div
+                  className='edit_header'
+                  onClick={() => this.openTab('payment')}
+              >
+                <div className='edit_dropdown'>Payment</div>
+                {this.state.openTab !== 'payment' ? (
+                    <ExpandMoreIcon />
+                ) : (
+                    <ExpandLessIcon className='dropdown_active' />
+                )}
+              </div>
+              {this.state.openTab === 'payment' && (
+                  <div>
+                    <div>{this.state.paymentInfo.given_name} {this.state.paymentInfo.family_name}</div>
+                    <div>{this.state.paymentInfo.address_line1} {this.state.paymentInfo.address_line2}</div>
+                    <div>{this.state.paymentInfo.postal_code}, {this.state.paymentInfo.city}, {this.state.paymentInfo.region}</div>
+                    <GreenButton
+                        variant='contained'
+                        className='full'
+                    >
+                      New Payment Method
+                    </GreenButton>
+                  </div>
               )}
             </div>
             {/* <div className='edit_account_container'>

@@ -27,7 +27,7 @@ import {
 } from 'react-admin'
 
 export const ReviewList = props => (
-  <List {...props} sort={{ field: 'date', order: 'DESC' }} perPage={25}>
+  <List {...props} sort={{ field: 'date', order: 'DESC' }}>
     <Datagrid rowClick='show'>
       <ReferenceField
         link='false'

@@ -241,12 +241,19 @@
   margin-top: 2vh;
   font-size: 1vw;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
   text-align: left;
 }
 
+.order
 .order_info_carrier {
   margin-top: 2vh;
+}
+
+.order_info_pay_status {
+  font-size: 1vw;
+  text-align: right;
 }
 
 .order_info_address {

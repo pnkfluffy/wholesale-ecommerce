@@ -32,7 +32,7 @@ import {
 } from 'react-admin'
 
 export const OrderList = props => (
-  <List {...props}>
+  <List {...props} sort={{ field: 'date', order: 'DESC' }} perPage={25}>
     <Datagrid rowClick='show'>
       <ReferenceField
         label='User'
@@ -47,7 +47,11 @@ export const OrderList = props => (
         source='total'
         options={{ style: 'currency', currency: 'USD' }}
       />
-      <NumberField label='# of Products' source='products.length' />
+      <NumberField
+        label='# of Products'
+        source='products.length'
+        sortable={false}
+      />
       <TextField label='Tracking Number' source='tracking.number' />
       <DateField label='Date' source='date' />
       <ShowButton />

@@ -9,48 +9,25 @@ const Product = require('../schemas/productSchema')
 router.get('/', rejectNonAdmin, (req, res) => {
   try {
     console.log('Product List backend hit')
-    // console.log("products req.query: ", req.query)
+    const sortQuery = JSON.parse(req.query.sort)
+    // let filterQuery = JSON.parse(req.query.filter)
     let sort = {}
-    if (!req.query.sort === undefined) {
-      const sortQuery = JSON.parse(req.query.sort)
-      sort[sortQuery[0]] = sortQuery[1] === 'ASC' ? 1 : -1
-    }
+    sort[sortQuery[0]] = sortQuery[1] === 'ASC' ? 1 : -1
+    console.log('sort', sort)
 
-    const filterQuery = JSON.parse(req.query.filter)
-
-    if (JSON.stringify(filterQuery) !== '{}') {
-      if (filterQuery.id) {
-        filterQuery._id = filterQuery.id
-        delete filterQuery.id
-      }
-      Product.find(filterQuery).then(filteredProducts => {
-        res.set('content-range', JSON.stringify(filteredProducts.length + 1))
-        //  each object needs to have an 'id' field in order for
-        //  reactAdmin to parse
-        filteredProducts = JSON.parse(
-          JSON.stringify(filteredProducts)
+    Product.find()
+      .sort(sort)
+      .then(products => {
+        res.set('content-range', JSON.stringify(products.length))
+        products = JSON.parse(
+          JSON.stringify(products)
             .split('"_id":')
             .join('"id":')
         )
-        res.json(filteredProducts)
+        res.json(products)
       })
-    } else {
-      Product.find()
-        .sort(sort)
-        .then(products => {
-          res.set('content-range', JSON.stringify(products.length))
-          //  each object needs to have an 'id' field in order for
-          //  reactAdmin to parse
-          products = JSON.parse(
-            JSON.stringify(products)
-              .split('"_id":')
-              .join('"id":')
-          )
-          res.json(products)
-        })
-    }
   } catch (error) {
-    console.log(error);
+    console.log(error)
     res.status(500).send('no users found')
   }
 })
@@ -90,18 +67,16 @@ router.post('/', rejectNonAdmin, uploadProductPhotos, async (req, res) => {
       imageData: req.imageMetaData,
       draft: req.body.draft
     })
-    newProduct
-      .save()
-      .then(product => {
-        product = JSON.parse(
-          JSON.stringify(product)
-            .split('"_id":')
-            .join('"id":')
-        )
-        res.json(product)
-      })
+    newProduct.save().then(product => {
+      product = JSON.parse(
+        JSON.stringify(product)
+          .split('"_id":')
+          .join('"id":')
+      )
+      res.json(product)
+    })
   } catch (error) {
-    console.log(error);
+    console.log(error)
     res.status(500).send('error on creating product, fields were missing')
   }
 })

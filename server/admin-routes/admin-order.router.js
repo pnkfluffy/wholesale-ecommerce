@@ -12,31 +12,29 @@ router.get('/', rejectNonAdmin, (req, res) => {
     const sortQuery = JSON.parse(req.query.sort)
     let filterQuery = JSON.parse(req.query.filter)
 
-    // console.log('filterquery', filterQuery)
+    let sort = {}
+    sort[sortQuery[0]] = sortQuery[1] === 'ASC' ? 1 : -1
+    console.log("sort", sort);
+
+    //  used in commission route. Filters orders by customer
+    //  representatives to help calculate commission
     if (filterQuery.commission) {
       filterQuery.representative = req.user._id
     }
     delete filterQuery.commission
-
-    console.log('new', filterQuery)
-    let sort = {}
-    sort[sortQuery[0]] = sortQuery[1] === 'ASC' ? 1 : -1
     if (JSON.stringify(filterQuery) !== '{}') {
-      // console.log('orders filterQuery: ', filterQuery)
       Order.find(filterQuery)
         .sort(sort)
         .then(filteredOrders => {
           res.set('content-range', JSON.stringify(filteredOrders.length + 1))
-          //  each object needs to have an 'id' field in order for
-          //  reactAdmin to parse
           filteredOrders = JSON.parse(
             JSON.stringify(filteredOrders)
               .split('"_id":')
               .join('"id":')
           )
-          console.log('filtered Orders: ', filteredOrders)
           res.json(filteredOrders)
         })
+
     } else {
       Order.find()
         .sort(sort)

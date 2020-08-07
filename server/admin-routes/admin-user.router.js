@@ -10,9 +10,13 @@ const bcrypt = require('bcrypt')
 const { restart } = require('nodemon')
 
 //Login
-router.post('/login', passport.authenticate('local', { failureRedirect: '/login' }), (req, res) => {
-  res.sendStatus(201)
-})
+router.post(
+  '/login',
+  passport.authenticate('local', { failureRedirect: '/login' }),
+  (req, res) => {
+    res.sendStatus(201)
+  }
+)
 
 router.get('/logout', (req, res) => {
   req.logout()
@@ -27,7 +31,7 @@ router.get('/user', rejectNonAdmin, (req, res) => {
   res.send(user)
 })
 
-router.get('/perms', rejectNonAdmin, (req, res) => {
+router.post('/perms', rejectNonAdmin, async (req, res) => {
   console.log('get perms', req.user)
   if (req.user.isOwner) {
     res.status(200).json({ perms: 'owner' })
@@ -36,12 +40,17 @@ router.get('/perms', rejectNonAdmin, (req, res) => {
   }
 })
 
+//create
 router.post('/', rejectNonAdmin, async (req, res) => {
   try {
-    let pass = shajs('sha256').update(`${req.body.email}${req.body.name}${Date.now()}${Math.random() * 100}`).digest('hex')
+    let pass = shajs('sha256')
+      .update(
+        `${req.body.email}${req.body.name}${Date.now()}${Math.random() * 100}`
+      )
+      .digest('hex')
     pass = pass.substring(0, 10)
-    const salt = await bcrypt.genSalt(10);
-    const saltedPass = await bcrypt.hash(pass, salt);
+    const salt = await bcrypt.genSalt(10)
+    const saltedPass = await bcrypt.hash(pass, salt)
     if (req.body.isAdmin && !req.user.isOwner) {
       res.status(403).send('Insufficient Permissions')
       return
@@ -50,78 +59,53 @@ router.post('/', rejectNonAdmin, async (req, res) => {
       email: req.body.email,
       name: req.body.name,
       isAdmin: req.body.isAdmin,
-      password: saltedPass,
-    })
-      .then(newUser => {
-        console.log(newUser)
-        newUser.password = null;
-        newUser = JSON.parse(
-          JSON.stringify(newUser)
-            .split('"_id":')
-            .join('"id":')
-        )
-        newUserEmail(
-          {
-            email: req.body.email,
-            password: pass,
-          }
-        )
-        res.status(200).json(newUser)
+      password: saltedPass
+    }).then(newUser => {
+      console.log(newUser)
+      newUser.password = null
+      newUser = JSON.parse(
+        JSON.stringify(newUser)
+          .split('"_id":')
+          .join('"id":')
+      )
+      newUserEmail({
+        email: req.body.email,
+        password: pass
       })
+      res.status(200).json(newUser)
+    })
   } catch (error) {
-    console.log(error);
+    console.log(error)
     res.status(500).send('Creation failed.')
   }
 })
-
 
 //getList
 router.get('/', rejectNonAdmin, (req, res) => {
   console.log('User list backend hit')
   try {
+    console.log('sortquery', req.query.sort)
+    let sortQuery
     let sort = {}
-    if (!req.query.sort === undefined) {
-      const sortQuery = JSON.parse(req.query.sort)
+    if (req.query.sort) {
+      sortQuery = JSON.parse(req.query.sort)
       sort[sortQuery[0]] = sortQuery[1] === 'ASC' ? 1 : -1
     }
-    const filterQuery = JSON.parse(req.query.filter) || {}
+    console.log('sort', sort)
 
-    if (JSON.stringify(filterQuery) !== '{}') {
-      if (typeof filterQuery.id) {
-        filterQuery._id = filterQuery.id
-        delete filterQuery.id
-      }
-      // console.log('Users filterQuery: ', filterQuery)
-      User.find(filterQuery).then(filteredUsers => {
-        res.set('content-range', JSON.stringify(filteredUsers.length + 1))
-        //  each object needs to have an 'id' field in order for
-        //  reactAdmin to parse
-        filteredUsers = JSON.parse(
-          JSON.stringify(filteredUsers)
+    User.find()
+      .sort(sort)
+      .then(users => {
+        res.set('content-range', JSON.stringify(users.length))
+        users = JSON.parse(
+          JSON.stringify(users)
             .split('"_id":')
             .join('"id":')
         )
-        // console.log('filtered Users: ', filteredUsers)
-        res.json(filteredUsers)
+        res.json(users)
       })
-    } else {
-      User.find()
-        .sort(sort)
-        .then(users => {
-          res.set('content-range', JSON.stringify(users.length))
-          //  each object needs to have an 'id' field in order for
-          //  reactAdmin to parse
-          users = JSON.parse(
-            JSON.stringify(users)
-              .split('"_id":')
-              .join('"id":')
-          )
-          //console.log("parsed users: ", users)
-          res.json(users)
-        })
-    }
   } catch (error) {
-    console.log(error);
+    console.log(error)
     res.status(500).send('error retrieving users')
   }
 })
@@ -191,12 +175,10 @@ router.put('/', rejectNonAdmin, async (req, res) => {
     )
     res.status(200).json(updatedUsers)
   } catch (error) {
-    console.log(error);
+    console.log(error)
     res.status(500).send('error updating users')
   }
 })
-
-//create
 
 //delete
 router.delete('/:id', rejectNonAdmin, async (req, res) => {
@@ -229,7 +211,7 @@ router.delete('/', rejectNonAdmin, async (req, res) => {
     }
     res.status(200).send('items deleted.')
   } catch (error) {
-    console.log(error);
+    console.log(error)
     res.status(500).send('error deleting items')
   }
 })

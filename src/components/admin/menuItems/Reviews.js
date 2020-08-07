@@ -26,34 +26,8 @@ import {
   ReferenceManyField
 } from 'react-admin'
 
-export const ReviewShow = props => (
-  <Show actions={<ReviewActions />} {...props}>
-    <SimpleShowLayout>
-      <ReferenceField
-        link='show'
-        label='Product'
-        reference='admin-products'
-        source='product'
-      >
-        <TextField source='name' />
-      </ReferenceField>
-      <ReferenceField
-        link='show'
-        label='User'
-        reference='admin-users'
-        source='user'
-      >
-        <TextField source='name' />
-      </ReferenceField>
-      <TextField label='Review ID' source='id' />
-      <TextField label='Stars' source='stars' />
-      <TextField label='Comment' source='review' />
-    </SimpleShowLayout>
-  </Show>
-)
-
 export const ReviewList = props => (
-  <List {...props}>
+  <List {...props} sort={{ field: 'date', order: 'DESC' }} perPage={25}>
     <Datagrid rowClick='show'>
       <ReferenceField
         link='false'
@@ -78,6 +52,32 @@ export const ReviewList = props => (
       <DeleteButton />
     </Datagrid>
   </List>
+)
+
+export const ReviewShow = props => (
+  <Show actions={<ReviewActions />} {...props}>
+    <SimpleShowLayout>
+      <ReferenceField
+        link='show'
+        label='Product'
+        reference='admin-products'
+        source='product'
+      >
+        <TextField source='name' />
+      </ReferenceField>
+      <ReferenceField
+        link='show'
+        label='User'
+        reference='admin-users'
+        source='user'
+      >
+        <TextField source='name' />
+      </ReferenceField>
+      <TextField label='Review ID' source='id' />
+      <TextField label='Stars' source='stars' />
+      <TextField label='Comment' source='review' />
+    </SimpleShowLayout>
+  </Show>
 )
 
 //custom comps

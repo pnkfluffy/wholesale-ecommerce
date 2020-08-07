@@ -16,11 +16,11 @@ const displayErrorMessage = (props) => {
 
 export default {
   getList: (resource, params) => {
-
     const { page, perPage } = params.pagination;
     const { field, order } = params.sort;
     console.log("getlist stats", page,  perPage, field, order, params.filter);
 
+    
     const query = {
       sort: JSON.stringify([field, order]),
       range: JSON.stringify([(page - 1) * perPage, page * perPage - 1]),

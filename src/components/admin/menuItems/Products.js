@@ -46,7 +46,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles'
 
 export const ProductList = props => (
-  <List {...props}>
+  <List {...props} sort={{ field: 'date', order: 'DESC' }} perPage={25}>
     <Datagrid actions={<ListActions />} rowClick='show'>
       <TextField label='Product' source='name' />
       <ChipField label='Category' source='category' />

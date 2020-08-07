@@ -43,6 +43,11 @@
   height: 15%;
 }
 
+/* max 4 images */
+.product_images_carousel > div:nth-child(n + 5) {
+  display: none;
+}
+
 .carousel_image_container,
 .carousel_image_container_active {
   width: 18%;
@@ -367,3 +372,4 @@
   flex-direction: column;
   justify-content: space-around;
 }
+

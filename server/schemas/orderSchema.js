@@ -13,21 +13,26 @@ const OrderSchema = new Schema({
         ref: 'product'
       },
       productName: {
-        type: String
+        type: String,
+        default: "",
       },
       productPrice: {
-        type: Number
+        type: Number,
+        default: "",
       },
       productQuantity: {
-        type: Number
+        type: Number,
+        default: 0,
       },
       productTotal: {
-        type: Number
+        type: Number,
+        default: 0,
       }
     }
   ],
   total: {
-    type: Number
+    type: Number,
+    default: 0,
   },
   tracking: {
     number: {
@@ -51,7 +56,8 @@ const OrderSchema = new Schema({
     default: Date.now
   },
   paymentID: {
-    type: 'string'
+    type: 'string',
+    default: "",
   }
 })
 

@@ -108,7 +108,6 @@ router.get('/', rejectNonAdmin, (req, res) => {
       User.find()
         .sort(sort)
         .then(users => {
-          console.log('raw users: ', users)
           res.set('content-range', JSON.stringify(users.length))
           //  each object needs to have an 'id' field in order for
           //  reactAdmin to parse

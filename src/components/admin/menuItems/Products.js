@@ -50,8 +50,12 @@ export const ProductList = props => (
     <Datagrid actions={<ListActions />} rowClick='show'>
       <TextField label='Product' source='name' />
       <ChipField label='Category' source='category' />
-      <NumberField label='Price' source='price' options={{ style: 'currency', currency: 'USD' }}/>
-      <BooleanField label="Is Draft" source="draft"/>
+      <NumberField
+        label='Price'
+        source='price'
+        options={{ style: 'currency', currency: 'USD' }}
+      />
+      <BooleanField label='Is Draft' source='draft' />
       <DateField label='Created' source='date' />
       <ShowButton basePath={props.basePath} record={props.data} />
       <DeleteButton />
@@ -72,7 +76,11 @@ export const ProductShow = props => {
           <Datagrid>
             <TextField label='ID' source='id' />
             <TextField label='Quantity' source='quantity' />
-            <NumberField label='Price per unit' options={{ style: 'currency', currency: 'USD' }} source='price' />
+            <NumberField
+              label='Price per unit'
+              options={{ style: 'currency', currency: 'USD' }}
+              source='price'
+            />
           </Datagrid>
         </ArrayField>
         <FunctionField
@@ -112,12 +120,12 @@ export const ProductShow = props => {
           source='id'
           reference='admin-reviews'
           target='user'
-          link="show"
+          link='show'
         >
-          <Datagrid rowClick="show">
-            <TextField label="Stars" source='stars'/>
-            <TextField label="Date" source="date"/>
-            <TextField label="User" source="user"/>
+          <Datagrid rowClick='show'>
+            <TextField label='Stars' source='stars' />
+            <TextField label='Date' source='date' />
+            <TextField label='User' source='user' />
           </Datagrid>
         </ReferenceManyField>
       </SimpleShowLayout>
@@ -133,6 +141,20 @@ const productCategories = [
   { id: 'pet_products', name: 'Pet Products' },
   { id: 'accessories', name: 'Accessories' }
 ]
+
+const dropZoneOptions = {
+  maxFiles: 1
+  // accept: function(file, done) {
+  //   alert("uploaded");
+  //   done();
+  // },
+  // init: function() {
+  //   this.on("maxfilesexceeded", function(file){
+  //     alert("max reached");
+
+  //   })
+  // }
+}
 
 export const ProductCreate = props => {
   return (
@@ -209,14 +231,19 @@ export const ProductCreate = props => {
           label='Product Images'
           accept='image/*'
           multiple='true'
+          options={dropZoneOptions}
         >
           <ImageField source='url' title='title' />
         </ImageInput>
         <p>
-          Please upload 1-5 product images. The first one uploaded will be the
-          primary image
+          Please upload 1-4 product images. The first one uploaded will be the
+          primary image.
         </p>
-        <BooleanInput label='Save as Draft' source='draft' />
+        <BooleanInput
+          label='Draft (drafts are not displayed to users)'
+          source='draft'
+          initialValue={true}
+        />
       </SimpleForm>
     </Create>
   )
@@ -232,7 +259,10 @@ export const ProductEdit = props => {
     >
       <SimpleForm>
         <TextInput disabled label='ID' source='id' />
-        <BooleanInput label="Draft (drafts are not displayed to users)" source="draft"/>
+        <BooleanInput
+          label='Draft (drafts are not displayed to users)'
+          source='draft'
+        />
         <AutocompleteInput
           lablel='Category'
           source='category'

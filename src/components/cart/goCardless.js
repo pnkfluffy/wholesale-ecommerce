@@ -6,7 +6,7 @@ import axios from 'axios'
 import loading from '../../resources/images/loadingBig.svg'
 import GCFillInfo from './gcFillInfo'
 import GCPay from './gcPay'
-
+import GCProductCard from "./gcProductCard";
 const mapStateToProps = state => ({
   state: state.reducer
 })
@@ -104,10 +104,19 @@ class GoCardless extends React.Component {
   }
 
   render () {
+    const total = this.props.history.location.state.total;
+    const products = this.props.history.location.state.products;
+
+    const productsList = products.map((product, index) => {
+            return <GCProductCard product={product} key={index}/>
+        })
+
     if (!this.state.hasCheckedClient)
       this.checkForIdOrMandate()
+
     if (this.state.hasClientID && !this.state.hasCheckedUrl)
       this.confirmAccount()
+
     return (
       <div className='buy'>
         {(() => {
@@ -115,11 +124,14 @@ class GoCardless extends React.Component {
               return <img src={loading} />
           }
           else if (!this.state.hasMandate) {
-            return <GCFillInfo total={this.props.total} />
+            return <GCFillInfo total={total}/>
           } else {
-            return <GCPay total={this.props.total} />
+            return <GCPay total={total}/>
          }
         })()}
+        <div className="cart_products_payment">
+          {productsList}
+        </div>
       </div>
     )
   }

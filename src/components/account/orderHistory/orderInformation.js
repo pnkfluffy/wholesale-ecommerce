@@ -1,6 +1,7 @@
 import React from 'react'
 import moment from 'moment'
 import { connect } from 'react-redux'
+import TrackingLink from './trackingLink'
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -11,21 +12,34 @@ class OrderInformation extends React.Component {
     const payment = this.props.payment
     const order = this.props.order
     const address = order.deliveryInfo
+    const tracking = order.tracking
     console.log('order', order)
     const orderDate = moment(order.date).format('L')
     const chargeDate = moment(payment.charge_date).format('L')
 
     return (
-      <div className='buy'>
+      <div className='order_info'>
         <div className='order_info_card'>
           <div className='order_info_delivery'>
             <div className='order_info_title'>Tracking Number</div>
-            <div className='order_info_content'>
-              Please check back soon. <br />
-              <br />
-              Tracking information will be added within 24 hours of payment
-              being processed.
-            </div>
+            {tracking.number ? (
+              <div className='order_info_content'>
+                <div>
+
+                
+                Tracking #<TrackingLink tracking={tracking} />
+                
+                </div>
+                <div className="order_info_carrier">shipped via {tracking.company}</div>
+              </div>
+            ) : (
+              <div className='order_info_content'>
+                Please check back soon. <br />
+                <br />
+                Tracking information will be added within 24 hours of payment
+                being processed.
+              </div>
+            )}
           </div>
         </div>
 

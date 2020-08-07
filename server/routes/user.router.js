@@ -31,12 +31,12 @@ router.get('/wishlist', rejectUnauthenticated, async (req, res) => {
         return
       });
     let availableProducts = [];
-    console.log("user.wishlist",user.wishlist)
-    if (user.wishlist) {
+    if (user) {
       const wishlist = user.wishlist
-      for (let i = 0; i < wishlist.length; i++) {
+      for (let i = 0; i <= wishlist.length; i++) {
         await Product.findById(wishlist[i])
           .then(info => {
+            console.log("info", info)
             //  means nothing found
             if (!info.deleted) {
               availableProducts.push(wishlist[i])
@@ -68,23 +68,23 @@ router.post('/update-wishlist', rejectUnauthenticated, async (req, res) => {
   }
 })
 
-router.post('/edit-email', rejectUnauthenticated, async (req, res) => {
-  try {
-    const newEmail = req.body.email;
-    const { error, isValid } = validateEmail(newEmail);
-    if (!isValid) {
-      res.status(500).json(error)
-    }
-    else {
-      await User.findOneAndUpdate({ _id: req.user._id }, { email: newEmail })
-        .then(res.json({ success: true }))
-        .catch(err => console.log(err))
-    }
-  } catch (err) {
-    console.log(err)
-    res.status(500).send('error editing email')
-  }
-})
+// router.post('/edit-email', rejectUnauthenticated, async (req, res) => {
+//   try {
+//     const newEmail = req.body.email;
+//     const { error, isValid } = await validateEmail(newEmail);
+//     if (!isValid) {      
+//       res.status(400).json(error)
+//     }
+//     else {
+//       await User.findOneAndUpdate({ _id: req.user._id }, { email: newEmail })
+//         .then(res.json({ success: true }))
+//         .catch(err => console.log(err))
+//     }
+//   } catch (err) {
+//     console.log(err)
+//     res.status(500).send('error editing email')
+//   }
+// })
 
 router.post('/edit-password', rejectUnauthenticated, async (req, res) => {
   try {

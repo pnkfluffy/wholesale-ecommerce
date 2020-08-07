@@ -340,7 +340,7 @@ const getTotal = async products => {
 // @desc    Collect Payment of active user
 // @reqBody Delivery Information
 // @access  Private
-router.post('/collectPayment', rejectUnauthenticated, async (req, res) => {
+router.post('/collect-payment', rejectUnauthenticated, async (req, res) => {
   try {
     console.log(req.body);
     //validate delivery input sizes (check if any is empty or if zip is too short or too large)

@@ -35,6 +35,7 @@ html {
   width: 100%;
   margin: 0px;
   font-family: 'GT Walsheim Pro Medium';
+  scroll-behavior: smooth;
 }
 
 html {
@@ -126,6 +127,11 @@ input::-webkit-inner-spin-button {
 .page_subheader {
   margin-top: 1vh;
   font-size: 1.4vw;
+}
+
+.space_between {
+  display: flex;
+  justify-content: space-between;
 }
 
 .no_display {

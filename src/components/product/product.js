@@ -10,11 +10,12 @@ import PriceTiers from './priceTiers'
 import { addQuantityToCart } from '../reuseable/addQuantityToCart'
 import { getPriceByQuantity } from '../reuseable/getPriceByQuantity'
 import { GreenButton } from '../reuseable/materialButtons'
-import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+import Wishlist from '../reuseable/wishlist';
 
-import Snackbar from '@material-ui/core/Snackbar'
-import Alert from '@material-ui/lab/Alert'
-import { classes } from '../reuseable/materialButtons'
+import Snackbar from "@material-ui/core/Snackbar";
+import Alert from "@material-ui/lab/Alert";
+import {classes} from "../reuseable/materialButtons"
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -192,6 +193,7 @@ class Product extends React.Component {
                 </div>
               </div>
               <div className='product_purchase'>
+              <Wishlist productID={this.props.match.params.productID}/>
                 {this.state.buttonActive ? (
                   <GreenButton
                     variant='contained'
@@ -221,4 +223,5 @@ class Product extends React.Component {
     )
   }
 }
+ 
 export default connect(mapStateToProps)(Product)

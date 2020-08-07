@@ -3,22 +3,16 @@ const router = express.Router()
 const User = require('../schemas/userSchema')
 const Product = require('../schemas/productSchema')
 
-const {
-  rejectUnauthenticated
-} = require('../modules/authentication-middleware')
+const { rejectUnauthenticated } = require('../modules/authentication-middleware')
 
 router.get('/', rejectUnauthenticated, async (req, res) => {
   try {
     const user = await User.findById(req.user._id)
-    if (!user) {
+    if (!user) {      
       res.status(404).send('no user')
       return
     }
-    const cart = user.cart;
-    if (!cart.cart) {
-      res.status(404).send('no cart')
-      return
-    }
+    const cart = user.cart
     let cartProductInfo = []
     for (let i = 0; i < cart.length; i++) {
       const productInfo = await Product.findById(cart[i].product)
@@ -26,12 +20,12 @@ router.get('/', rejectUnauthenticated, async (req, res) => {
           console.log(info);
           //  means nothing found
           if (info) {
-              const relavent = info._doc
-              return {
-                ...relavent,
-                product: relavent._id,
-                quantity: cart[i].quantity,
-                available: true
+            const relavent = info._doc
+            return {
+              ...relavent,
+              product: relavent._id,
+              quantity: cart[i].quantity,
+              available: true
             }
           }
         })
@@ -49,7 +43,7 @@ router.post('/', rejectUnauthenticated, async (req, res) => {
   try {
     // console.log(req.body.cart)
     // console.log(req.user._id)
-    cart.forEach(cartItem => {  
+    req.body.cart.forEach(cartItem => {
       if (cartItem.quantity > 5000) {
         res.send('order over maximum quantity')
         return

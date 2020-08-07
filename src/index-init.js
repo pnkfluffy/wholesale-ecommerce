@@ -12,7 +12,7 @@ export const initializeAllRequests = async () => {
       store.dispatch({ type: 'GET_USER', payload: res.data })
       await getAllReviews()
       await getUserCart()
-      await getUserFavorites()
+      await getUserWishlist()
       await getAllOrders()
       store.dispatch({ type: 'APP_LOADED' })
     })
@@ -38,13 +38,12 @@ export const getUserCart = () => {
     })
 }
 
-export const getUserFavorites = () => {
+export const getUserWishlist = () => {
   return axios
-    .get('/auth/favorites')
+    .get('/auth/wishlist')
     .then(res => {
       if (res.data) {
-        console.log('getfaves', res.data)
-        store.dispatch({ type: 'SET_FAVORITES', payload: res.data })
+        store.dispatch({ type: 'SET_WISHLIST', payload: res.data })
       }
     })
     .catch(err => {
@@ -87,6 +86,7 @@ export const getAllProducts = () => {
 }
 
 export const getAllReviews = () => {
+
   return axios
     .get('/api/reviews/all')
     .then(res => {

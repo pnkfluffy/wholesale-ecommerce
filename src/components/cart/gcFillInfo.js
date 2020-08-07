@@ -105,7 +105,7 @@ class GCFillInfo extends React.Component {
         </form>
           <GreenButton
             variant='contained'
-            className='checkout_button'
+            className='gc_checkout_button'
             onClick={this.addClients}
           >
             connect bank

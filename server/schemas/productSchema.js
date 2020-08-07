@@ -4,19 +4,20 @@ const Schema = mongoose.Schema
 const ProductSchema = new Schema({
   name: {
     type: String,
-    required: true
+    required: true,
+    default: ""
   },
   description: {
     type: String,
-    default: "",
+    default: ""
   },
   category: {
     type: String,
-    default: "",
+    default: ""
   },
   price: {
     type: Number,
-    default: 0,
+    default: 0
   },
   priceTiers: [
     {
@@ -33,41 +34,41 @@ const ProductSchema = new Schema({
     cbd: {
       unit: {
         type: String,
-        default: "",
+        default: ""
       },
       quantity: {
         type: Number,
-        default: 0,
+        default: 0
       }
     },
     thc: {
       unit: {
         type: String,
-        default: "",
+        default: ""
       },
       quantity: {
         type: Number,
-        default: 0,
+        default: 0
       }
     },
     units: {
       unit: {
         type: String,
-        default: "",
+        default: ""
       },
       quantity: {
         type: Number,
-        default: 0,
+        default: 0
       }
     },
     weight: {
       unit: {
         type: String,
-        default: "",
+        default: ""
       },
       quantity: {
         type: Number,
-        default: 0,
+        default : 0
       }
     }
   },

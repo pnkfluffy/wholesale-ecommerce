@@ -23,7 +23,7 @@ router.get('/user', rejectUnauthenticated, (req, res) => {
   res.send(user)
 })
 
-router.get('/favorites', rejectUnauthenticated, async (req, res) => {
+router.get('/wishlist', rejectUnauthenticated, async (req, res) => {
   try {
     let user = await User.findById(req.user._id)
       .catch(err => {
@@ -31,19 +31,20 @@ router.get('/favorites', rejectUnauthenticated, async (req, res) => {
         return
       });
     let availableProducts = [];
-    if (user.favorites) {
-      const favorites = user.favorites
-      for (let i = 0; i < favorites.length; i++) {
-        await Product.findById(favorites[i])
+    console.log("user.wishlist",user.wishlist)
+    if (user.wishlist) {
+      const wishlist = user.wishlist
+      for (let i = 0; i < wishlist.length; i++) {
+        await Product.findById(wishlist[i])
           .then(info => {
             //  means nothing found
             if (!info.deleted) {
-              availableProducts.push(favorites[i])
+              availableProducts.push(wishlist[i])
             }
           })
           .catch(err => {
             console.log(err)
-            res.status(500).send("couldn't get favorites")
+            res.status(500).send("couldn't get wishlist")
             return;
           })
       }
@@ -52,38 +53,38 @@ router.get('/favorites', rejectUnauthenticated, async (req, res) => {
     return
   } catch (error) {
     console.log(error);
-    res.status(500).send('error in retrieving favorites')
+    res.status(500).send('error in retrieving wishlist')
   }
 })
 
-router.post('/update-favorites', rejectUnauthenticated, async (req, res) => {
-  const favorites = req.body
+router.post('/update-wishlist', rejectUnauthenticated, async (req, res) => {
+  const wishlist = req.body
   try {
-    const user = await User.findOneAndUpdate({ _id: req.user._id }, { favorites })
-    res.json(user.favorites)
+    const user = await User.findOneAndUpdate({ _id: req.user._id }, { wishlist })
+    res.json(user.wishlist)
   } catch (error) {
     console.log(error);
-    res.status(500).send("couldn't update favorites in database")
+    res.status(500).send("couldn't update wishlist in database")
   }
 })
 
-router.post('/edit-email', rejectUnauthenticated, async (req, res) => {
-  try {
-    const newEmail = req.body.email;
-    const { error, isValid } = validateEmail(newEmail);
-    if (!isValid) {
-      res.status(500).json(error)
-    }
-    else {
-      await User.findOneAndUpdate({ _id: req.user._id }, { email: newEmail })
-        .then(res.json({ success: true }))
-        .catch(err => console.log(err))
-    }
-  } catch (err) {
-    console.log(err)
-    res.status(500).send('error editing email')
-  }
-})
+// router.post('/edit-email', rejectUnauthenticated, async (req, res) => {
+//   try {
+//     const newEmail = req.body.email;
+//     const { error, isValid } = await validateEmail(newEmail);
+//     if (!isValid) {      
+//       res.status(400).json(error)
+//     }
+//     else {
+//       await User.findOneAndUpdate({ _id: req.user._id }, { email: newEmail })
+//         .then(res.json({ success: true }))
+//         .catch(err => console.log(err))
+//     }
+//   } catch (err) {
+//     console.log(err)
+//     res.status(500).send('error editing email')
+//   }
+// })
 
 router.post('/edit-password', rejectUnauthenticated, async (req, res) => {
   try {

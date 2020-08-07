@@ -29,6 +29,22 @@ dotenv.config()
 
 connectDB()
 
+const app = express()
+const server = http.createServer(app)
+
+app.use(helmet())
+app.use(cors({ exposedHeaders: 'Content-Range' }))
+app.options('*', cors())
+
+app.use(bodyParser.json({ limit: '50mb' }))
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
+app.use(cookieParser())
+app.use(express.static("build"));
+// app.use(express.static('src'))
+app.use(sessionMiddleware)
+app.use(passport.initialize())
+app.use(passport.session())
+
 if (cluster.isMaster) {
   const cpuCount = os.cpus().length
   for (let i = 0; i < cpuCount; i++) {
@@ -36,22 +52,6 @@ if (cluster.isMaster) {
   }
 }
 else {
-  const app = express()
-  const server = http.createServer(app)
-
-  app.use(helmet())
-  app.use(cors({ exposedHeaders: 'Content-Range' }))
-  app.options('*', cors())
-
-  app.use(bodyParser.json({ limit: '50mb' }))
-  app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
-  app.use(cookieParser())
-  app.use(express.static("build"));
-  // app.use(express.static('src'))
-  app.use(sessionMiddleware)
-  app.use(passport.initialize())
-  app.use(passport.session())
-
   app.use('/api/gc', gcRouter)
   app.use('/auth', userRouter)
   app.use('/api/cart', cartRouter)

@@ -7,6 +7,7 @@ import UnavailableOrderCard from './unavailableOrderCard'
 import { getPriceByQuantity } from '../reuseable/getPriceByQuantity'
 import { v4 } from 'uuid'
 import GoCardless from "./goCardless";
+import {GreenButton} from "../reuseable/materialButtons";
 
 const mapStateToProps = state => {
   return {
@@ -15,8 +16,19 @@ const mapStateToProps = state => {
 }
 
 class Cart extends React.Component {
+  checkOut = (total, availableProducts) => {
+    this.props.history.push({
+      pathname: '/buy',
+      state: {
+        total: total,
+        products: availableProducts
+      }
+    })
+  }
+
   render () {
-    let total = 0
+    let total = 0;
+    let availableProducts = [];
     const cartProducts = this.props.state.cart.map((cartProduct, index) => {
       //only give price to product available
       if (!cartProduct.deleted) {
@@ -26,6 +38,12 @@ class Cart extends React.Component {
             cartProduct.price
         )
         total += productTotal
+        availableProducts = [...availableProducts,
+                            {
+                              product: cartProduct,
+                              price: productTotal,
+                              quantity: cartProduct.quantity
+                            }]
         return (
             <OrderCard product={cartProduct} total={productTotal} key={v4()} />
         )
@@ -50,10 +68,13 @@ class Cart extends React.Component {
               <b> Your cart is empty! </b>
             )}
           </div>
-          {(() => {
-            if (this.props.state.cart.length)
-              return <GoCardless total={total}/>
-          })()}
+          <GreenButton
+              variant='contained'
+              className='checkout_button'
+              onClick={e => this.checkOut(total, availableProducts)}
+          >
+            CHECK OUT: ${total}
+          </GreenButton>
       </div>
     )
   }

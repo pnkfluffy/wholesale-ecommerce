@@ -16,13 +16,14 @@ const styles = StyleSheet.create({
     top: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        color: '#52ff4d',
+        color: '#062a05',
         fontSize: 45,
         margin: 10,
         padding: 10,
     },
     information: {
         flexDirection: 'row',
+        justifyContent: 'space-between',
         color: '#0a3b09',
         fontSize: 12,
         margin: 10,
@@ -36,7 +37,6 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         color: '#0a3b09',
         fontSize: 12,
-        marginRight: 20,
     },
     section: {
         margin: 10,
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         width: 60,
         height: 15,
-        borderColor: '#52ff4d',
+        borderColor: '#062a05',
         borderWidth: 1,
         borderStyle: 'solid',
     },
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
         width: 370,
         height: 15,
         flexDirection: 'row',
-        borderColor: '#52ff4d',
+        borderColor: '#062a05',
         borderWidth: 1,
         borderStyle: 'solid',
     },
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
         width: 100,
         height: 15,
         flexDirection: 'row',
-        borderColor: '#52ff4d',
+        borderColor: '#062a05',
         borderWidth: 1,
         borderStyle: 'solid',
         fontSize: '7',
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
         width: 370,
         height: 15,
         flexDirection: 'row',
-        borderColor: '#52ff4d',
+        borderColor: '#062a05',
         borderWidth: 1,
         borderStyle: 'solid',
     },
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
         height: 15,
         textAlign: 'center',
         flexDirection: 'row',
-        borderColor: '#52ff4d',
+        borderColor: '#062a05',
         borderWidth: 1,
         borderStyle: 'solid',
     },
@@ -117,12 +117,12 @@ const styles = StyleSheet.create({
         width: 180,
         height: 15,
         flexDirection: 'row',
-        borderColor: '#52ff4d',
+        borderColor: '#062a05',
         borderWidth: 1,
         borderStyle: 'solid',
     },
     thanks: {
-        color: '#52ff4d',
+        color: '#062a05',
         fontSize: 15,
         textAlign: 'center',
         marginTop: 20,
@@ -145,10 +145,11 @@ export function Invoice(props) {
                     </View>
                     <View style={styles.top}>
                         <View style={styles.text}>
-                            <Text>[ Store Address ]</Text>
-                            <Text>[ City, State, ZIP ]</Text>
-                            <Text>Phone: 99998888</Text>
-                            <Text>Website: www.cbddy-wholesale.com</Text>
+                            <Text>Chris Eoff</Text>
+                            <Text>2124 35th Ave</Text>
+                            <Text>Greeley, CO 80634</Text>
+                            <Text>Phone: (720)5916284</Text>
+                            <Text>Website: http://cbddy-wholesale.com</Text>
                         </View>
                         <View style={styles.text}>
                             <Text style={styles.paymentStatus}>Payment Status: {props.data.status}</Text>

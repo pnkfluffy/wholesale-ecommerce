@@ -94,8 +94,8 @@ class Order extends React.Component {
     const order = this.props.history.location.state.order
     const total = this.organizeTotal(order.total)
     return (
-      <div className='cart_page'>
-        <div className='cart'>
+      <div className='order_page'>
+        <div className='order'>
           <div className='single_order'>
             <div className='single_order_header_top'>
               <div className='page_header'>Order Details</div>

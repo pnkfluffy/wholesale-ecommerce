@@ -9,22 +9,33 @@ const Product = require('../schemas/productSchema')
 router.get('/', rejectNonAdmin, (req, res) => {
   try {
     console.log('Product List backend hit')
-    const sortQuery = JSON.parse(req.query.sort)
-    // let filterQuery = JSON.parse(req.query.filter)
+    let sortQuery
     let sort = {}
-    sort[sortQuery[0]] = sortQuery[1] === 'ASC' ? 1 : -1
-    console.log('sort', sort)
+    let rangeQuery = [0]
+    let rangeLimit = 10
+    if (req.query.sort) {
+      sortQuery = JSON.parse(req.query.sort)
+      sort[sortQuery[0]] = sortQuery[1] === 'ASC' ? 1 : -1
+    }
+    if (req.query.range) {
+      rangeQuery = JSON.parse(req.query.range)
+      rangeLimit = rangeQuery[1] - rangeQuery[0] + 1
+    }
 
     Product.find()
       .sort(sort)
+      .skip(rangeQuery[0])
+      .limit(rangeLimit)
       .then(products => {
-        res.set('content-range', JSON.stringify(products.length))
-        products = JSON.parse(
-          JSON.stringify(products)
-            .split('"_id":')
-            .join('"id":')
-        )
-        res.json(products)
+        Product.countDocuments().then(contentRange => {
+          res.set('content-range', JSON.stringify(contentRange))
+          products = JSON.parse(
+            JSON.stringify(products)
+              .split('"_id":')
+              .join('"id":')
+          )
+          res.json(products)
+        })
       })
   } catch (error) {
     console.log(error)

@@ -43,7 +43,7 @@ export const CommissionList = props => (
     filters={<CommissionFilter />}
     filterDefaultValues={{ commission: true }}
     sort={{ field: 'date', order: 'DESC' }}
-    perPage={25}
+    
     {...props}
   >
     <Datagrid rowClick='show'>

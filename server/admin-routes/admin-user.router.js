@@ -84,25 +84,33 @@ router.post('/', rejectNonAdmin, async (req, res) => {
 router.get('/', rejectNonAdmin, (req, res) => {
   console.log('User list backend hit')
   try {
-    console.log('sortquery', req.query.sort)
     let sortQuery
     let sort = {}
+    let rangeQuery = [0];
+    let rangeLimit = 10
     if (req.query.sort) {
       sortQuery = JSON.parse(req.query.sort)
       sort[sortQuery[0]] = sortQuery[1] === 'ASC' ? 1 : -1
     }
-    console.log('sort', sort)
+    if (req.query.range) {
+      rangeQuery = JSON.parse(req.query.range)
+      rangeLimit = rangeQuery[1] - rangeQuery[0] + 1
+    }
 
     User.find()
       .sort(sort)
+      .skip(rangeQuery[0])
+      .limit(rangeLimit)
       .then(users => {
-        res.set('content-range', JSON.stringify(users.length))
-        users = JSON.parse(
-          JSON.stringify(users)
-            .split('"_id":')
-            .join('"id":')
-        )
-        res.json(users)
+        User.countDocuments().then(contentRange => {
+          res.set('content-range', JSON.stringify(contentRange))
+          users = JSON.parse(
+            JSON.stringify(users)
+              .split('"_id":')
+              .join('"id":')
+          )
+          res.json(users)
+        })
       })
   } catch (error) {
     console.log(error)

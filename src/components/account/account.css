@@ -16,7 +16,7 @@
 
 .wishlist_product_card_container {
   width: 100%;
-  margin-bottom: 2vh;
+  margin: 1.3vh 0;
   position: relative;
 }
 
@@ -66,29 +66,11 @@
   font-size: min(0.85vw, 16px) !important;
 }
 
-.account_page_heart {
-  width: 1.2vw !important;
-  height: 1.2vw !important;
-  color: var(--logo-green);
-}
-
-.heart_container {
-  border-radius: 50%;
-  padding: 0.65vw;
-  background-color: var(--sidebar-black);
+.remove_button_container {
   cursor: pointer;
-  margin-top: -1.5vh;
-  margin-right: -1.5vh;
+  margin-top: -1vh;
+  margin-right: -1vh;
   position: absolute;
   top: 0;
   right: 0;
 }
-
-.heart_container:hover {
-  background-color: var(--nofocus-font-grey);
-}
-
-.heart_svg_container {
-  display: flex;
-}
-

@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { GreenButton } from '../reuseable/materialButtons'
 import blank_image from '../../resources/images/blank_image.jpg'
+import CancelIcon from '@material-ui/icons/Cancel';
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -24,6 +25,11 @@ class wishlistProductCard extends React.Component {
 
   render () {
     const image = (this.props.images.length && this.props.images[0].url) ? this.props.images[0].url : blank_image;
+    let wishlist_CancelIcon = {
+      width: '1.7vw',
+      height: '1.7vw',
+      };
+
     return (
       <div className='wishlist_product_card_container'>
         <div className='wishlist_product_card'>
@@ -48,12 +54,9 @@ class wishlistProductCard extends React.Component {
           onClick={this.goToProduct}
         > Go to Product
         </GreenButton>
-        <GreenButton
-          variant='contained'
-          className='favorite_product_button'
-          onClick={this.removeFromWishlist}
-        > Remove from Wishlist
-        </GreenButton>
+          <div className='remove_button_container'>
+            <CancelIcon onClick={this.removeFromWishlist} style={wishlist_CancelIcon}/>
+            </div>
         </div>
       </div>
     )

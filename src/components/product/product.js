@@ -189,6 +189,7 @@ class Product extends React.Component {
                 </div>
               </div>
               <div className='product_purchase'>
+              <Wishlist productID={this.props.match.params.productID}/>
                 {this.state.buttonActive ? (
                   <GreenButton
                     variant='contained'
@@ -209,7 +210,6 @@ class Product extends React.Component {
                     </GreenButton>
                   )}
                   {/* {this.state.button && ( */}
-                  <Wishlist productID={this.props.match.params.productID}/>
                 {/* )}  */}
               </div>
             </div>

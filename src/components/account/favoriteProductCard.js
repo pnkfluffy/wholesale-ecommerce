@@ -15,10 +15,10 @@ class favoriteProductCard extends React.Component {
     this.props.history.push(redirect_url)
   }
 
-  removeFromWishlist = (productID) => {
+  removeFromWishlist = () => {
       this.props.dispatch({
         type: 'DELETE_WISHLIST',
-        payload: productID
+        payload: this.props.product._id
       })
     }
 
@@ -51,7 +51,7 @@ class favoriteProductCard extends React.Component {
         <GreenButton
           variant='contained'
           className='favorite_product_button'
-          onClick={this.removeFromWishlist(this.props.product._id)}
+          onClick={this.removeFromWishlist}
         > Remove from Wishlist
         </GreenButton>
         </div>

@@ -20,14 +20,17 @@ class Account extends React.Component {
           return (product);
         }})
       console.log("productInfo", productInfo);
-      // return (
-      //   // <FavoriteProductCard
-      //   //   product={productInfo}
-      //   //   key={productInfo._id}
-      //   //   images={productInfo.imageData}
-      //   // />
-      // )
+      return (
+        <FavoriteProductCard
+          product={productInfo}
+          key={productInfo._id}
+          images={productInfo.imageData}
+        />
+      )
     })
+
+    console.log(this.props.state);
+    
 
     return (
       <div>

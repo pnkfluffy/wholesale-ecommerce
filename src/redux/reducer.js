@@ -38,13 +38,13 @@ const wishlist = (state = [], action) => {
       const itemExists = state.find(c => c === action.payload)
       if (itemExists) return state
       console.log("STATE:", state)
-      axios.post('/auth/updateWishlist', [...state, action.payload])
+      axios.post('/auth/update-wishlist', [...state, action.payload])
       return [...state, action.payload]
     case 'DELETE_WISHLIST':
       const deleteItemIndex = state.findIndex(c => c === action.payload)
       if (deleteItemIndex !== -1) state.splice(deleteItemIndex, 1)
       console.log("STATE:", state)
-      axios.post('/auth/updateWishlist', state)
+      axios.post('/auth/update-wishlist', state)
       return [...state]
     default:
       return state

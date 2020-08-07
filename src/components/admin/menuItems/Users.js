@@ -77,11 +77,11 @@ export const UserShow = props => {
           <TextField label='Name' source='email' />
         </ReferenceField>
         <TextField label='Payment confirmed' source='paymentVerified' />
-        {/* <ArrayField label='Favorites' source='favorites'>
+        <ArrayField label='Wishlist' source='wishlist'>
             <ReferenceField label='Product' reference='admin-products'>
               <TextField label='Product' source='name' />
             </ReferenceField>
-        </ArrayField> */}
+        </ArrayField>
         <ReferenceManyField
           label='Order History'
           source='id'

@@ -8,70 +8,46 @@ const mapStateToProps = state => ({
 })
 
 class Wishlist extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
-    this.state = {
-      isWishlist: true
-    }
   }
 
   addToWishlist = () => {
-    this.setState({ isWishlist: false })
-      this.props.dispatch({
-        type: 'ADD_WISHLIST',
-        payload: this.props.productID
-      })
-    } 
-    // else {
-    //   this.props.dispatch({
-    //     type: 'DELETE_WISHLIST',
-    //     payload: this.props.productID
-    //   })
-    // }
-  
-
-  isWishlist = () => {
-    const Wishlist = this.props.state.wishlist
-    const productID = this.props.productID
-    function checkIfIsWishlist (result) {
-      return result === productID
-    }
-    if (Wishlist.find(checkIfIsWishlist)) {
-      return true
-    } else {
-      return false
-    }
+    this.props.dispatch({
+      type: 'ADD_WISHLIST',
+      payload: this.props.productID
+    })
   }
 
-  // componentDidMount = () => {
-  //   console.log("before setstate");
-  //   this.setState({ isWishlist: this.isWishlist() })
-  // }
+  render() {
+    let flag = true
+    if (this.props.state.wishlist.findIndex(item => item === this.props.productID) !== -1) {
+      flag = false
+    }
 
- render () {
-   return (
-   <div>
-    {this.state.isWishlist ? (
-      <GreenButton
-        variant='contained'
-        className='product_button'
-        onClick={() => this.addToWishlist(this.props.productID)}
-      >
-        Add To Wishlist
-      </GreenButton>
-    ) : (
-        <GreenButton
-          variant='contained'
-          className='product_button'
-          disabled={true}
-          style={{color: 'white'}}
-        >
-          <CheckCircleOutlineIcon />
-           in Wishlist!
-        </GreenButton>
-      )}
-    </div>
-   )
- }
+    return (
+      <>
+        {flag ? (
+          <GreenButton
+            variant='contained'
+            className='wishlist_button'
+            onClick={() => this.addToWishlist(this.props.productID)}
+          >
+            Add to Wishlist
+          </GreenButton>
+        ) : (
+            <GreenButton
+              variant='contained'
+              className='wishlist_button'
+              disabled={true}
+              style={{ color: 'white' }}
+            >
+              <CheckCircleOutlineIcon />
+           In Wishlist!
+            </GreenButton>
+          )}
+      </>
+    )
+  }
 }
 export default connect(mapStateToProps)(Wishlist)

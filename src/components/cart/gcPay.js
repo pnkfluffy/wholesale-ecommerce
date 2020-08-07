@@ -224,7 +224,7 @@ class GCPay extends React.Component {
             <span className='err'>{this.state.err.payment}</span>
             <GreenButton
               variant='contained'
-              className='checkout_button'
+              className='gc_checkout_button'
               onClick={this.collectPayment}
             >
               CHECK OUT: ${this.props.total}

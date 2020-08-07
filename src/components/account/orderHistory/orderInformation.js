@@ -18,7 +18,7 @@ class OrderInformation extends React.Component {
     const chargeDate = moment(payment.charge_date).format('L')
 
     return (
-      <div className='buy'>
+      <div className='order_info'>
         <div className='order_info_card'>
           <div className='order_info_delivery'>
             <div className='order_info_title'>Tracking Number</div>

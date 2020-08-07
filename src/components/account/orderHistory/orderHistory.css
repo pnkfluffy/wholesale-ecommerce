@@ -28,11 +28,11 @@
   flex-direction: column;
   justify-content: space-between;
   min-height: 10vh;
-  width: 70%;
+  width: 68%;
 }
 
 .order_history_number {
-  font-size: 1.3vw;
+  font-size: 1.2vw;
   margin-left: 5px;
 }
 
@@ -72,6 +72,17 @@
 }
 
 /* EACH ORDER PAGE */
+.order_page {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.order {
+  width: 55%;
+}
+
 .single_order {
   width: 90%;
   display: flex;
@@ -113,8 +124,12 @@
   display: flex;
   flex-direction: row;
   justify-content: center;
+  margin-left: 1vw;
 }
 
+.single_order_button {
+  width: 10vw;
+}
 .order_again_button {
   margin-left: 20px !important;
 }
@@ -199,6 +214,12 @@
 }
 
 /* ORDER INFORMATION */
+.order_info {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+}
+
 .order_info_card {
   width: calc(100% - 2vw);
   border-radius: 8px;

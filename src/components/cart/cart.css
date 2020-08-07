@@ -25,10 +25,9 @@
 }
 
 .checkout_button {
-  width: 35%;
+  width: 100%;
   letter-spacing: 1px !important;
 }
-
 /** ORDER CARD **/
 .cart_products {
   width: 100%;
@@ -237,4 +236,8 @@
 /** products in payment area **/
 .cart_products_payment {
   width: 45%;
+}
+.gc_checkout_button {
+  width: 35%;
+  letter-spacing: 1px !important;
 }

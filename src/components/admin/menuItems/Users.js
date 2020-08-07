@@ -39,7 +39,7 @@ import {
 } from 'react-admin'
 
 export const UserList = props => (
-  <List {...props}>
+  <List {...props} sort={{ field: 'date', order: 'DESC' }} perPage={25}>
     <Datagrid rowClick='show'>
       <TextField label='User' source='name' />
       <TextField label='Email' source='email' />
@@ -78,9 +78,9 @@ export const UserShow = props => {
         </ReferenceField>
         <TextField label='Payment confirmed' source='paymentVerified' />
         <ArrayField label='Wishlist' source='wishlist'>
-            <ReferenceField label='Product' reference='admin-products'>
-              <TextField label='Product' source='name' />
-            </ReferenceField>
+          <ReferenceField label='Product' reference='admin-products'>
+            <TextField label='Product' source='name' />
+          </ReferenceField>
         </ArrayField>
         <ReferenceManyField
           label='Order History'

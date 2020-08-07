@@ -90,7 +90,7 @@ class GCPay extends React.Component {
       postal_code: this.state.ClientPostalCode
     }
     axios
-      .post('/api/gc/collectPayment/', {
+      .post('/api/gc/collect-payment/', {
         delivery: delivery
       })
       .then(res => {

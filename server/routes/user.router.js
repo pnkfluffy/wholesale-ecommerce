@@ -31,7 +31,7 @@ router.get('/favorites', rejectUnauthenticated, async (req, res) => {
         return
       });
     let availableProducts = [];
-    if (user.favorites) {
+    if (user) {
       const favorites = user.favorites
       for (let i = 0; i < favorites.length; i++) {
         await Product.findById(favorites[i])

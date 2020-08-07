@@ -129,7 +129,9 @@
 
 .single_order_button {
   width: 10vw;
+  font-size: min(0.85vw, 16px) !important;
 }
+
 .order_again_button {
   margin-left: 20px !important;
 }

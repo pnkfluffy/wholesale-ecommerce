@@ -68,13 +68,13 @@ class Cart extends React.Component {
               <b> Your cart is empty! </b>
             )}
           </div>
-          <GreenButton
+          {this.props.state.cart.length ? <GreenButton
               variant='contained'
               className='checkout_button'
               onClick={e => this.checkOut(total, availableProducts)}
           >
             CHECK OUT: ${total}
-          </GreenButton>
+          </GreenButton> : null}
       </div>
     )
   }

@@ -2,6 +2,7 @@ import React from 'react'
 import moment from 'moment'
 import { connect } from 'react-redux'
 import TrackingLink from './trackingLink'
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -63,7 +64,7 @@ class OrderInformation extends React.Component {
           <div className='order_info_title'>Payment Information</div>
           <div className='order_info_split'>
             <div className='order_info_content'>Status:</div>
-            <div className='order_info_content'>{payment.status}</div>
+            <div className='order_info_content'>{payment.status} <HelpOutlineIcon /></div>
           </div>
           <div className='order_info_split'>
             <div className='order_info_content'>Ordered on: </div>

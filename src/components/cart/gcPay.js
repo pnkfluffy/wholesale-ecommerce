@@ -227,7 +227,7 @@ class GCPay extends React.Component {
               className='gc_checkout_button'
               onClick={this.collectPayment}
             >
-              CHECK OUT: ${this.props.total}
+              PLACE ORDER: ${this.props.total}
             </GreenButton>
           </div>
         </div>

@@ -107,6 +107,73 @@ router.get('/oneClient', rejectUnauthenticated, async (req, res) => {
   }
 })
 
+function translatePaymentStatus (status) {
+  let translated = {
+                      status: "",
+                      message: ""
+                    }
+
+  switch (status)
+  {
+    case "pending_customer_approval":
+      translated = {
+                      status: "Pending Customer Approval",
+                      message: "You haven't gotten all the signatures to authorise Direct Debits yet."
+                    }
+      break ;
+    case "pending_submission":
+      translated = {
+                      status: "Pending Submission",
+                      message: "Your payment has been created, but not yet submitted to the banks."
+                    }
+      break ;
+    case "submitted":
+      translated = {
+                      status: "Submitted ",
+                      message: "Your payment has been submitted to the bank."
+                    }
+      break ;
+    case "confirmed":
+      translated = {
+                      status: "Confirmed",
+                      message: "Your payment has been confirmed as collected."
+                    }
+      break ;
+    case "paid_out":
+      translated = {
+                      status: "Paid Out",
+                      message: "Your payment was received."
+                    }
+      break ;
+    case "cancelled":
+      translated = {
+                      status: "Cancelled",
+                      message: "Your payment has been cancelled."
+                    }
+      return ;
+    case "customer_approval_denied":
+      translated = {
+                      status: "Customer approval denied",
+                      message: "You have denied approval for the payment."
+                    }
+      break ;
+    case "failed":
+      translated = {
+                      status: "Failed",
+                      message: "Your payment failed to be processed. Note that payments can fail after being confirmed if the failure message is sent late by the banks."
+                    }
+      break ;
+    case "charged_back":
+      translated = {
+                      status: "Charged Back",
+                      message: "You have requested the money back directly to your bank"
+                    }
+      break ;
+  }
+  console.log(translated)
+  return translated;
+}
+
 // @route   GET /gc/payments
 // @desc    Returns all payments
 // @access  Private
@@ -114,7 +181,8 @@ router.get('/payments', rejectUnauthenticated, async (req, res) => {
   try {
     // Initialize the GoCardLess client.
     const allClients = await initializeGoCardless()
-    const payments = await allClients.payments.list()
+    let payments = await allClients.payments.list()
+    console.log(payments)
     res.send(payments.payments)
   } catch (error) {
     console.log(error)
@@ -136,12 +204,15 @@ router.get('/payments/from', rejectUnauthenticated, async (req, res) => {
         const paidOrders = orders.filter(order => order.paymentID)
         const userPayments = paidOrders.map(order => {
           let payment = payments.find(payment => payment.id === order.paymentID)
+          const status = translatePaymentStatus(payment.status);
+          console.log(status);
           return {
             amount: payment.amount,
             charge_date: payment.charge_date,
             created_at: payment.created_at,
             currency: payment.currency,
-            status: payment.status
+            status: status.status,
+            statusMessage: status.message
           }
         })
         res.json(userPayments)
@@ -169,12 +240,15 @@ router.get('/payments/onePayment/:orderID', rejectUnauthenticated, async (req, r
     await allClients.payments
       .find(order.paymentID)
       .then(payment => {
+        const status = payment.status;
+        console.log(status);
         res.json({
           amount: payment.amount,
           charge_date: payment.charge_date,
           created_at: payment.created_at,
           currency: payment.currency,
-          status: payment.status
+          status: status.status,
+          statusMessage: status.message
         })
       })
       .catch(err => {

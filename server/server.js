@@ -45,13 +45,13 @@ app.use(sessionMiddleware)
 app.use(passport.initialize())
 app.use(passport.session())
 
-if (cluster.isMaster) {
-  const cpuCount = os.cpus().length
-  for (let i = 0; i < cpuCount; i++) {
-    cluster.fork()
-  }
-}
-else {
+// if (cluster.isMaster) {
+//   const cpuCount = os.cpus().length
+//   for (let i = 0; i < cpuCount; i++) {
+//     cluster.fork()
+//   }
+// }
+// else {
   app.use('/api/gc', gcRouter)
   app.use('/auth', userRouter)
   app.use('/api/cart', cartRouter)
@@ -76,11 +76,11 @@ else {
   server.listen(process.env.PORT || 5000, () => {
     console.log(`listening on port: ${PORT}`)
   })
-}
+// }
 
-cluster.on('exit', (worker) => {
-  console.log('mayday! mayday! worker', worker.id, ' is no more!')
-  cluster.fork()
-})
+// cluster.on('exit', (worker) => {
+//   console.log('mayday! mayday! worker', worker.id, ' is no more!')
+//   cluster.fork()
+// })
 
 

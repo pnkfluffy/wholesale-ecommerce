@@ -6,13 +6,13 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import { RedButton, GreenButton } from '../reuseable/materialButtons'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
-import MailOutlineIcon from '@material-ui/icons/MailOutline'
-import VpnKeyIcon from '@material-ui/icons/VpnKey'
-import AuthField from '../auth/AuthField'
+// import MailOutlineIcon from '@material-ui/icons/MailOutline'
+// import VpnKeyIcon from '@material-ui/icons/VpnKey'
+// import AuthField from '../auth/AuthField'
 import InputField from '../reuseable/InputField'
 import Swal from 'sweetalert2'
-import store from "../../redux/store";
-import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
+// import store from "../../redux/store";
+// import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";

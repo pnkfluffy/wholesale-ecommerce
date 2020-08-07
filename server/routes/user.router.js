@@ -37,6 +37,7 @@ router.get('/wishlist', rejectUnauthenticated, async (req, res) => {
       for (let i = 0; i < wishlist.length; i++) {
         await Product.findById(wishlist[i])
           .then(info => {
+            console.log("info", info)
             //  means nothing found
             if (!info.deleted) {
               availableProducts.push(wishlist[i])
@@ -59,6 +60,7 @@ router.get('/wishlist', rejectUnauthenticated, async (req, res) => {
 
 router.post('/update-wishlist', rejectUnauthenticated, async (req, res) => {
   const wishlist = req.body
+  console.log("wishlist to update", wishlist)
   try {
     const user = await User.findOneAndUpdate({ _id: req.user._id }, { wishlist })
     res.json(user.wishlist)

@@ -43,6 +43,11 @@
   height: 15%;
 }
 
+/* max 4 images */
+.product_images_carousel > div:nth-child(n + 5) {
+  display: none;
+}
+
 .carousel_image_container,
 .carousel_image_container_active {
   width: 18%;
@@ -167,14 +172,18 @@
 
 .product_purchase {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-evenly;
   align-items: center;
   height: 15%;
   margin-top: 5%;
 }
 
 .product_button {
-  width: 80%;
+  width: 60%;
+}
+
+.wishlist_button {
+  width: 30%
 }
 
 .product_price {
@@ -363,3 +372,4 @@
   flex-direction: column;
   justify-content: space-around;
 }
+

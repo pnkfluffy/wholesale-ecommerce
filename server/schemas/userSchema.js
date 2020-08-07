@@ -38,7 +38,7 @@ const UserSchema = new Schema({
   goCardlessMandate: {
     type: String
   },
-  favorites: [
+  wishlist: [
     {
       type: Schema.Types.ObjectId,
       ref: 'product'

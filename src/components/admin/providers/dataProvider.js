@@ -16,10 +16,10 @@ const displayErrorMessage = (props) => {
 
 export default {
   getList: (resource, params) => {
-
     const { page, perPage } = params.pagination;
     const { field, order } = params.sort;
     console.log("getlist stats", page,  perPage, field, order, params.filter);
+
 
     const query = {
       sort: JSON.stringify([field, order]),
@@ -32,6 +32,7 @@ export default {
       console.log("getList dataprovider method hit")
       // console.log("headers", headers);
       console.log("getList response: ", { data: json})
+      console.log("getList headers: ", { data: headers})
       return {
         data: json,
         total: parseInt(headers.get("content-range").split("/").pop(), 10),

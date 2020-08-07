@@ -37,40 +37,13 @@ import {
   SearchInput
 } from 'react-admin'
 
-const CommissionFilter = props => {
-  return (
-    <Filter {...props}>
-      <BooleanInput
-        source='representative'
-        label='My Sales'
-        alwaysOn
-        style={{ display: 'none' }}
-      />
-    </Filter>
-  )
-}
-
-const Aside = ({ data, ids }) => {
-  // console.log('aside', data, ids)
-  return (
-    <div style={{ width: 200, margin: '1vw' }}>
-      <h1>Customer Spending</h1>
-      <p>pulled from current list</p>
-      <div>
-        ${' '}
-        {ids
-          .map(id => data[id].total)
-          .reduce((orderCost, total) => orderCost + total, 0)}
-      </div>
-    </div>
-  )
-}
-
 export const CommissionList = props => (
   <List
     aside={<Aside />}
     filters={<CommissionFilter />}
     filterDefaultValues={{ commission: true }}
+    sort={{ field: 'date', order: 'DESC' }}
+    
     {...props}
   >
     <Datagrid rowClick='show'>
@@ -101,6 +74,36 @@ export const CommissionList = props => (
     </Datagrid>
   </List>
 )
+
+
+const CommissionFilter = props => {
+  return (
+    <Filter {...props}>
+      <BooleanInput
+        source='representative'
+        label='My Sales'
+        alwaysOn
+        style={{ display: 'none' }}
+      />
+    </Filter>
+  )
+}
+
+const Aside = ({ data, ids }) => {
+  // console.log('aside', data, ids)
+  return (
+    <div style={{ width: 200, margin: '1vw' }}>
+      <h1>Customer Spending</h1>
+      <p>pulled from current list</p>
+      <div>
+        ${' '}
+        {ids
+          .map(id => data[id].total)
+          .reduce((orderCost, total) => orderCost + total, 0)}
+      </div>
+    </div>
+  )
+}
 
 export const CommissionShow = props => (
   <Show actions={<CommissionShowActions />} {...props}>

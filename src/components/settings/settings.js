@@ -6,13 +6,13 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import { RedButton, GreenButton } from '../reuseable/materialButtons'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
-import MailOutlineIcon from '@material-ui/icons/MailOutline'
-import VpnKeyIcon from '@material-ui/icons/VpnKey'
-import AuthField from '../auth/AuthField'
+// import MailOutlineIcon from '@material-ui/icons/MailOutline'
+// import VpnKeyIcon from '@material-ui/icons/VpnKey'
+// import AuthField from '../auth/AuthField'
 import InputField from '../reuseable/InputField'
 import Swal from 'sweetalert2'
-import store from "../../redux/store";
-import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
+// import store from "../../redux/store";
+// import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
@@ -170,30 +170,33 @@ class Settings extends React.Component {
         await axios.get('/auth/logout')
         window.location.href = '/'
       })
-      .catch(error => {
-        console.log(error.response.data)
-        if (error.response && error.response.data[0]) {
-          const errorKey = error.response.data[0];
-          const errorMessage = error.response.data[1];
-          this.setState({
-            oldPass: '',
-            newPass: '',
-            newPassConfirm: '',
-            err: {
-              [errorKey]: true,
-            }
-          })
-          Swal.fire({
-            title: '<span class="swal_title"> ERROR',
-            text: errorMessage || "an error has occurred",
-            icon: 'error',
-            background: '#1E1F26',
-            customClass: {
-              confirmButton: 'swal_confirm_button'
-            }
-          })
-        }
-      })
+        .catch(error => {
+          console.log(error.response.data)
+          if (error.response && error.response.data[0])
+          {
+            const errorKey = error.response.data[0];
+            const errorMessage = error.response.data[1];
+            this.setState({
+              oldPass: '',
+              newPass: '',
+              newPassConfirm: '',
+              err: {
+                [errorKey]: true,
+              }
+            })
+            Swal.fire({
+              title: 'ERROR',
+              text: errorMessage || "an error has occurred",
+              icon: 'error',
+              background: '#1E1F26',
+              customClass: {
+                confirmButton: 'swal_confirm_button',
+                content: 'swal_text',
+                title: 'swal_text'
+              }
+              })
+          }
+        })
   }
 
   editAddress = () => {

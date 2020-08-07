@@ -9,38 +9,26 @@ const Product = require('../schemas/productSchema')
 router.get('/', rejectNonAdmin, (req, res) => {
   try {
     console.log('Product List backend hit')
-    // console.log("products req.query: ", req.query)
+    let sortQuery
     let sort = {}
-    if (!req.query.sort === undefined) {
-      const sortQuery = JSON.parse(req.query.sort)
+    let rangeQuery = [0]
+    let rangeLimit = 10
+    if (req.query.sort) {
+      sortQuery = JSON.parse(req.query.sort)
       sort[sortQuery[0]] = sortQuery[1] === 'ASC' ? 1 : -1
     }
+    if (req.query.range) {
+      rangeQuery = JSON.parse(req.query.range)
+      rangeLimit = rangeQuery[1] - rangeQuery[0] + 1
+    }
 
-    const filterQuery = JSON.parse(req.query.filter)
-
-    if (JSON.stringify(filterQuery) !== '{}') {
-      if (filterQuery.id) {
-        filterQuery._id = filterQuery.id
-        delete filterQuery.id
-      }
-      Product.find(filterQuery).then(filteredProducts => {
-        res.set('content-range', JSON.stringify(filteredProducts.length + 1))
-        //  each object needs to have an 'id' field in order for
-        //  reactAdmin to parse
-        filteredProducts = JSON.parse(
-          JSON.stringify(filteredProducts)
-            .split('"_id":')
-            .join('"id":')
-        )
-        res.json(filteredProducts)
-      })
-    } else {
-      Product.find()
-        .sort(sort)
-        .then(products => {
-          res.set('content-range', JSON.stringify(products.length))
-          //  each object needs to have an 'id' field in order for
-          //  reactAdmin to parse
+    Product.find()
+      .sort(sort)
+      .skip(rangeQuery[0])
+      .limit(rangeLimit)
+      .then(products => {
+        Product.countDocuments().then(contentRange => {
+          res.set('content-range', JSON.stringify(contentRange))
           products = JSON.parse(
             JSON.stringify(products)
               .split('"_id":')
@@ -48,9 +36,9 @@ router.get('/', rejectNonAdmin, (req, res) => {
           )
           res.json(products)
         })
-    }
+      })
   } catch (error) {
-    console.log(error);
+    console.log(error)
     res.status(500).send('no users found')
   }
 })
@@ -90,18 +78,16 @@ router.post('/', rejectNonAdmin, uploadProductPhotos, async (req, res) => {
       imageData: req.imageMetaData,
       draft: req.body.draft
     })
-    newProduct
-      .save()
-      .then(product => {
-        product = JSON.parse(
-          JSON.stringify(product)
-            .split('"_id":')
-            .join('"id":')
-        )
-        res.json(product)
-      })
+    newProduct.save().then(product => {
+      product = JSON.parse(
+        JSON.stringify(product)
+          .split('"_id":')
+          .join('"id":')
+      )
+      res.json(product)
+    })
   } catch (error) {
-    console.log(error);
+    console.log(error)
     res.status(500).send('error on creating product, fields were missing')
   }
 })

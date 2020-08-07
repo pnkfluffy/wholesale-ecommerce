@@ -23,6 +23,7 @@ class UserReviews extends React.Component {
     }
     if (reviews[0]) {
       return reviews.map(one => {
+        console.log("ONE", one)
         return <ReviewsCard key={one._id} review={one} />
       })
     }

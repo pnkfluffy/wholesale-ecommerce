@@ -22,6 +22,16 @@
   width: 100%;
 }
 
+.settings_payment_address {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  margin-bottom: 1vw;
+}
+
+.settings_payment_addr_info {
+  font-size: 1vw;
+}
 .dropdown_active {
   color: var(--logo-green);
 }

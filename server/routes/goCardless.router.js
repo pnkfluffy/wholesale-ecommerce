@@ -272,7 +272,7 @@ router.post('/addClient', rejectUnauthenticated, async (req, res) => {
   const addr = req.body.newClientAddr
   const city = req.body.newClientCity
   const postalCode = req.body.newClientPostalCode
-
+  const success_redirect_url = 'http://localhost:3000/' + req.body.redirect
   try {
     // Initialize the GoCardLess allClients.
     const allClients = await initializeGoCardless()
@@ -283,7 +283,7 @@ router.post('/addClient', rejectUnauthenticated, async (req, res) => {
       /*(!) TO GO LIVE
 			success_redirect_url: "https://wholesale-portal-testing.herokuapp.com/cart",
 			 */
-      success_redirect_url: 'http://localhost:3000/cart',
+      success_redirect_url: success_redirect_url,
 
       prefilled_customer: {
         given_name: name,
@@ -332,7 +332,6 @@ router.post('/addClient', rejectUnauthenticated, async (req, res) => {
 // @access  Private
 router.post('/completeRedirect/', rejectUnauthenticated, async (req, res) => {
   try {
-    console.log('redirect')
     const allClients = await initializeGoCardless()
     //get activeUser from database
     const activeUser = await User.findById(req.user._id).then(user => {

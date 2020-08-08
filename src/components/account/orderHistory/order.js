@@ -80,19 +80,11 @@ class Order extends React.Component {
 
   }
 
-  organizeTotal = total => {
-    const str = total.toString();
-    const index = str.length - 2;
-    const beforeComma = str.substring(0, index);
-    const afterComma = str.substring(index);
-    const totalOrganized = beforeComma + "." + afterComma;
-    return totalOrganized;
-  }
 
   render () {
     const payment = this.props.history.location.state.payment
     const order = this.props.history.location.state.order
-    const total = this.organizeTotal(order.total)
+    const total = order.total + ",00"
     return (
       <div className='order_page'>
         <div className='order'>

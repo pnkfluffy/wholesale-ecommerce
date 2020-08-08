@@ -9,35 +9,35 @@ import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import InputField from '../reuseable/InputField'
 import Swal from 'sweetalert2'
 import loading from '../../resources/images/loading.svg'
-import Snackbar from "@material-ui/core/Snackbar";
-import Alert from "@material-ui/lab/Alert";
-import { classes } from "../reuseable/materialButtons"
+import Snackbar from '@material-ui/core/Snackbar'
+import Alert from '@material-ui/lab/Alert'
+import { classes } from '../reuseable/materialButtons'
 
 const mapStateToProps = state => ({
   state: state.reducer
 })
 
 class ChangePayment extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       paymentInfo: {},
       bankInfo: {},
       err: {
-        payment: false,
+        payment: false
       },
       loading: true
     }
   }
 
-  componentDidMount() {
-    axios.get('/api/gc/oneClient')
+  componentDidMount () {
+    axios
+      .get('/api/gc/oneClient')
       .then(res => {
         this.setState({
           paymentInfo: res.data,
           loading: false
         })
-        console.log(this.state.paymentInfo);
       })
       .catch(err => {
         this.setState({
@@ -58,15 +58,16 @@ class ChangePayment extends React.Component {
   }
 
   changePayment = () => {
-    axios.post('/api/gc/addClient', {
-      newClientName: '',
-      newClientLastName: '',
-      newClientEmail: '',
-      newClientAddr: '',
-      newClientCity: '',
-      newClientPostalCode: '',
-      redirect: 'settings',
-    })
+    axios
+      .post('/api/gc/addClient', {
+        newClientName: '',
+        newClientLastName: '',
+        newClientEmail: '',
+        newClientAddr: '',
+        newClientCity: '',
+        newClientPostalCode: '',
+        redirect: 'settings'
+      })
       .then(res => {
         /*set token to finish payment*/
         const token = res.data.token
@@ -78,9 +79,8 @@ class ChangePayment extends React.Component {
       })
   }
 
-  render() {
-    if (this.state.loading)
-      return (<img src={loading} />)
+  render () {
+    if (this.state.loading) return <img src={loading} />
     else if (Object.entries(this.state.paymentInfo).length !== 0) {
       return (
         <div>
@@ -104,37 +104,43 @@ class ChangePayment extends React.Component {
             <div className='order_info_split'>
               <div className='order_info_content'>Associated Address: </div>
               <div className='settings_payment_address'>
-                <div className='settings_payment_addr_info'>{this.state.paymentInfo.address_line1} {this.state.paymentInfo.address_line2}</div>
-                <div className='settings_payment_addr_info'>{this.state.paymentInfo.postal_code}, {this.state.paymentInfo.city}, {this.state.paymentInfo.region}</div>
+                <div className='settings_payment_addr_info'>
+                  {this.state.paymentInfo.address_line1}{' '}
+                  {this.state.paymentInfo.address_line2}
+                </div>
+                <div className='settings_payment_addr_info'>
+                  {this.state.paymentInfo.postal_code},{' '}
+                  {this.state.paymentInfo.city}, {this.state.paymentInfo.region}
+                </div>
               </div>
             </div>
           </div>
           <GreenButton
             variant='contained'
-            className='full'
+            className='full settings_button'
             onClick={this.changePayment}
           >
             Change Payment Method
           </GreenButton>
         </div>
       )
-    }
-    else {
+    } else {
       return (
         <div>
-          <div>
-            You don't have any payment method associated to your account yet. Create one here or wait until cart check-out
-                    </div>
+          <div className="settings_text">
+            You don't have any payment method associated to your account yet.
+            Create one here or wait until cart check-out
+          </div>
           <GreenButton
             variant='contained'
-            className='full'
+            className='full settings_button'
             onClick={this.changePayment}
           >
             Add Payment Method
-                    </GreenButton>
+          </GreenButton>
         </div>
       )
     }
   }
 }
-export default connect(mapStateToProps)(ChangePayment);
+export default connect(mapStateToProps)(ChangePayment)

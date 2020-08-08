@@ -2,7 +2,10 @@ const express = require('express')
 const router = express.Router()
 // const bcrypt = require("bcryptjs");
 const passport = require('../modules/passport')
-const { rejectNonAdmin, rejectNonOwner } = require('../modules/authentication-middleware')
+const {
+  rejectNonAdmin,
+  rejectNonOwner
+} = require('../modules/authentication-middleware')
 const User = require('../schemas/userSchema')
 const shajs = require('sha.js')
 const { newUserEmail } = require('../modules/nodemailer')
@@ -10,18 +13,22 @@ const bcrypt = require('bcrypt')
 const { restart } = require('nodemon')
 
 //Login
-router.post('/login', passport.authenticate('local', { failureRedirect: '/login' }), (req, res) => {
-  let perms
-  if (req.user.isOwner) {
-    perms = 'owner'
-  } else if (req.user.isAdmin) {
-    perms = 'admin'
+router.post(
+  '/login',
+  passport.authenticate('local', { failureRedirect: '/login' }),
+  (req, res) => {
+    let perms
+    if (req.user.isOwner) {
+      perms = 'owner'
+    } else if (req.user.isAdmin) {
+      perms = 'admin'
+    }
+    res.json({
+      sig: Date.now(),
+      perms: perms
+    })
   }
-  res.json({
-    sig: Date.now(),
-    perms: perms
-  })
-})
+)
 
 router.get('/logout', (req, res) => {
   req.logout()
@@ -36,6 +43,13 @@ router.get('/user', rejectNonAdmin, (req, res) => {
   res.send(user)
 })
 
+const checkOwner = user => {
+  if (user) {
+    return user.isOwner
+  }
+  return false
+}
+
 //create
 router.post('/', rejectNonAdmin, async (req, res) => {
   try {
@@ -47,7 +61,9 @@ router.post('/', rejectNonAdmin, async (req, res) => {
     pass = pass.substring(0, 10)
     const salt = await bcrypt.genSalt(10)
     const saltedPass = await bcrypt.hash(pass, salt)
-    if (req.body.isAdmin && !req.user.isOwner) {
+    if (!req.user) {
+    }
+    if (req.body.isAdmin && !checkOwner(req.user)) {
       res.status(403).send('Insufficient Permissions')
       return
     }

@@ -49,3 +49,11 @@
 .logout_button {
   margin-top: 34vh !important ;
 }
+
+.settings_button {
+  margin-top: 3vh !important;
+}
+
+.settings_text {
+  margin-top: 2vh;
+}

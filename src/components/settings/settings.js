@@ -10,17 +10,17 @@ import InputField from '../reuseable/InputField'
 import Swal from 'sweetalert2'
 import loading from '../../resources/images/loading.svg'
 
-import Snackbar from "@material-ui/core/Snackbar";
-import Alert from "@material-ui/lab/Alert";
-import { classes } from "../reuseable/materialButtons"
-import ChangePayment from "./changePayment";
+import Snackbar from '@material-ui/core/Snackbar'
+import Alert from '@material-ui/lab/Alert'
+import { classes } from '../reuseable/materialButtons'
+import ChangePayment from './changePayment'
 
 const mapStateToProps = state => ({
   state: state.reducer
 })
 
 class Settings extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       openTab: '',
@@ -40,12 +40,11 @@ class Settings extends React.Component {
       err: {
         email: false,
         oldPass: false,
-        newPass: false,
-        newPassConfirm: false
+        newPass: false
       },
       snackbarOpen: false,
-      snackbarSeverity: "success",
-      snackbarMessage: "",
+      snackbarSeverity: 'success',
+      snackbarMessage: ''
     }
     let params = new URLSearchParams(window.location.href)
     /*/!*(!) TO GO LIVE
@@ -58,10 +57,10 @@ class Settings extends React.Component {
   }
 
   completeSetPayment = redirect => {
+    this.props.history.replace('/settings')
     axios
         .post('/api/gc/completeRedirect', {redirect: redirect})
         .then(res => {
-          this.props.history.replace('/settings')
             Swal.fire({
               title: '<span class="swal_title"> SUCCESS',
               text: "Your payment method has been updated!",
@@ -73,8 +72,6 @@ class Settings extends React.Component {
             })
         })
         .catch(err => {
-          console.log(err)
-          this.props.history.replace('/settings')
           Swal.fire({
             title: '<span class="swal_title"> ERROR',
             text: "Something went wrong trying to change you payment method, please try again!",
@@ -88,18 +85,18 @@ class Settings extends React.Component {
   }
 
   handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
+    if (reason === 'clickaway') {
+      return
     }
     this.setState({ snackbarOpen: false })
-  };
+  }
 
   setSnackbar = (severity, message) => {
     this.setState({
       snackbarOpen: true,
       snackbarSeverity: severity,
       snackbarMessage: message
-    });
+    })
   }
 
   showUser = () => {
@@ -109,7 +106,7 @@ class Settings extends React.Component {
   clearFields = () => {
     //  {!} IMPORT ADDRESS FROM CLIENT ADDRESS
     this.setState({
-      originalEmail: this.props.state.user.email,
+      originalEmail: '',
       newEmail: '',
       newPass: '',
       ClientAddr1: '',
@@ -171,13 +168,14 @@ class Settings extends React.Component {
   // }
 
   editPass = () => {
-    axios.post('/auth/edit-password', {
-      oldPass: this.state.oldPass,
-      newPass: this.state.newPass,
-      newPassConfirm: this.state.newPassConfirm
-    })
-      .then(async res => {
-        console.log(res.data);
+    axios
+      .post('/auth/edit-password', {
+        oldPass: this.state.oldPass,
+        newPass: this.state.newPass,
+        newPassConfirm: this.state.newPassConfirm
+      })
+      .then(res => {
+        console.log(res.data)
         this.setState({
           oldPass: '',
           newPass: '',
@@ -187,46 +185,55 @@ class Settings extends React.Component {
             newPass: false,
             newPassConfirm: false
           },
-          openTab: '',
+          openTab: ''
         })
-        this.setSnackbar("success", "Your password has been changed, please log in.");
-        await axios.get('/auth/logout')
-        window.location.href = '/'
-      })
-        .catch(error => {
-          console.log(error.response.data)
-          if (error.response && error.response.data[0])
-          {
-            const errorKey = error.response.data[0];
-            const errorMessage = error.response.data[1];
-            this.setState({
-              oldPass: '',
-              newPass: '',
-              newPassConfirm: '',
-              err: {
-                [errorKey]: true,
-              }
-            })
-            Swal.fire({
-              title: 'ERROR',
-              text: errorMessage || "an error has occurred",
-              icon: 'error',
-              background: '#1E1F26',
-              customClass: {
-                confirmButton: 'swal_confirm_button',
-                content: 'swal_text',
-                title: 'swal_text'
-              }
-              })
+        Swal.fire({
+          title: '<span class="swal_title"> Password Updated!',
+          text: 'You will be logged out. Please enter your new credentials.',
+          icon: 'success',
+          background: '#1E1F26',
+          customClass: {
+            confirmButton: 'swal_confirm_button'
           }
+        }).then(() => {
+          axios.get('/auth/logout')
+          window.location.href = '/'
         })
+        // this.setSnackbar("success", "Your password has been changed, please log in.");
+      })
+      .catch(error => {
+        console.log(error.response.data)
+        if (error.response && error.response.data[0]) {
+          const errorKey = error.response.data[0]
+          const errorMessage = error.response.data[1]
+          this.setState({
+            oldPass: '',
+            newPass: '',
+            newPassConfirm: '',
+            err: {
+              [errorKey]: true
+            }
+          })
+          Swal.fire({
+            title: 'ERROR',
+            text: errorMessage || 'an error has occurred',
+            icon: 'error',
+            background: '#1E1F26',
+            customClass: {
+              confirmButton: 'swal_confirm_button',
+              content: 'swal_text',
+              title: 'swal_text'
+            }
+          })
+        }
+      })
   }
 
   editAddress = () => {
     // {!} EDIT ADDRESS FUNCTIONALITY
   }
 
-  render() {
+  render () {
     return (
       <div className='settings'>
         <div className={classes.root}>
@@ -238,7 +245,7 @@ class Settings extends React.Component {
           >
             <Alert
               elevation={6}
-              variant="filled"
+              variant='filled'
               onClose={this.handleClose}
               color={this.state.snackbarSeverity}
             >
@@ -293,8 +300,8 @@ class Settings extends React.Component {
                 {this.state.openTab !== 'password' ? (
                   <ExpandMoreIcon />
                 ) : (
-                    <ExpandLessIcon className='dropdown_active' />
-                  )}
+                  <ExpandLessIcon className='dropdown_active' />
+                )}
               </div>
               {this.state.openTab === 'password' && (
                 <div>
@@ -326,11 +333,11 @@ class Settings extends React.Component {
                     title='Confirm New Password'
                     changeField={this.onChange}
                     placeholder='********'
-                    error={this.state.err.newPassConfirm}
+                    error={this.state.err.newPass}
                   />
                   <GreenButton
                     variant='contained'
-                    className='full'
+                    className='full settings_button'
                     onClick={this.editPass}
                   >
                     SAVE
@@ -340,19 +347,17 @@ class Settings extends React.Component {
             </div>
             <div className='edit_account_container'>
               <div
-                  className='edit_header'
-                  onClick={() => this.openTab('payment')}
+                className='edit_header'
+                onClick={() => this.openTab('payment')}
               >
                 <div className='edit_dropdown'>Payment</div>
                 {this.state.openTab !== 'payment' ? (
-                    <ExpandMoreIcon />
+                  <ExpandMoreIcon />
                 ) : (
-                    <ExpandLessIcon className='dropdown_active' />
+                  <ExpandLessIcon className='dropdown_active' />
                 )}
               </div>
-              {this.state.openTab === 'payment' && (
-                  <ChangePayment />
-              )}
+              {this.state.openTab === 'payment' && <ChangePayment />}
             </div>
             {/* <div className='edit_account_container'>
               <div
@@ -440,4 +445,4 @@ class Settings extends React.Component {
     )
   }
 }
-export default connect(mapStateToProps)(Settings);
+export default connect(mapStateToProps)(Settings)

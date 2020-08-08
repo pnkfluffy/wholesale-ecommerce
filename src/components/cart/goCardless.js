@@ -29,10 +29,13 @@ class GoCardless extends React.Component {
     console.log(params.has(url));
     if (params.has(url)) {
       const redirect = params.get(url)
+      this.props.history.replace('/buy')
       axios
         .post('/api/gc/completeRedirect', {redirect: redirect})
         .then(res => {
-          this.props.history.replace('/buy')
+          store.dispatch({
+            type: 'CHANGE_MANDATE_STATUS'
+          })
           Swal.fire({
             title: '<span class="swal_title"> SUCCESS',
             text: "Your payment method has been updated!",
@@ -44,7 +47,6 @@ class GoCardless extends React.Component {
           })
         })
         .catch(err => {
-          this.props.history.replace('/buy')
           Swal.fire({
             title: '<span class="swal_title"> ERROR',
             text: "Something went wrong trying to change you payment method, please try again!",

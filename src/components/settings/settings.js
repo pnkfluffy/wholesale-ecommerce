@@ -14,6 +14,7 @@ import Snackbar from '@material-ui/core/Snackbar'
 import Alert from '@material-ui/lab/Alert'
 import { classes } from '../reuseable/materialButtons'
 import ChangePayment from './changePayment'
+import store from "../../redux/store";
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -61,6 +62,10 @@ class Settings extends React.Component {
     axios
         .post('/api/gc/completeRedirect', {redirect: redirect})
         .then(res => {
+            if (!this.state.props.hasMandate)
+              store.dispatch({
+                type: 'CHANGE_MANDATE_STATUS'
+              })
             Swal.fire({
               title: '<span class="swal_title"> SUCCESS',
               text: "Your payment method has been updated!",

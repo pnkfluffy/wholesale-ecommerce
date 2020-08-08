@@ -227,6 +227,14 @@
   margin-bottom: 5%;
 }
 
+.gc_info_card {
+  width: calc(100% - 2vw);
+  border-radius: 8px;
+  padding: 1vw;
+  margin-bottom: 5%;
+  background-color: var(--searchbar-black);
+}
+
 .cart_button_area {
   display: flex;
   flex-direction: row;

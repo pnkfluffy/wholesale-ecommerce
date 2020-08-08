@@ -60,7 +60,7 @@ router.get('/from/:page_size/:page_num', rejectUnauthenticated, (req, res) => {
 router.post('/newReview/:productID', rejectUnauthenticated, async (req, res) => {
     try {
         const userID = req.user._id
-        const userName = req.user.name
+        const userName = req.user.name.split(' ')
         const product = req.params.productID
         const review = req.body.review
         const stars = req.body.stars
@@ -76,7 +76,7 @@ router.post('/newReview/:productID', rejectUnauthenticated, async (req, res) => 
 
         const newReview = new Review({
             user: userID,
-            userName: userName,
+            userName: userName[0],
             product: product,
             review: review,
             stars: stars

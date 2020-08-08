@@ -47,7 +47,7 @@ import {
 } from 'react-admin'
 import { makeStyles } from '@material-ui/core/styles'
 
-export const ProductList = props => (
+export const ProductList = ({permissions, ...props}) => (
   <List {...props} sort={{ field: 'date', order: 'DESC' }} bulkActionButtons={false} >
     <Datagrid actions={<ListActions />} rowClick='show'>
       <TextField label='Product' source='name' />

@@ -8,10 +8,16 @@ import {
   ArrayField,
   DisabledInput,
   BooleanInput,
+  ReferenceArrayInput,
+  AutocompleteInput,
+  AutocompleteArrayInput,
+  SelectArrayInput,
+  SelectInput,
   BooleanField,
   TextInput,
   DateInput,
   ReferenceField,
+  ReferenceInput,
   ReferenceManyField,
   LongTextInput,
   Datagrid,
@@ -39,7 +45,7 @@ import {
 } from 'react-admin'
 
 export const UserList = props => (
-  <List {...props} sort={{ field: 'date', order: 'DESC' }} >
+  <List {...props} sort={{ field: 'date', order: 'DESC' }}>
     <Datagrid rowClick='show'>
       <TextField label='User' source='name' />
       <TextField label='Email' source='email' />
@@ -91,7 +97,7 @@ export const UserShow = props => {
         >
           <Datagrid rowClick='show'>
             <TextField label='Total' source='total' />
-            <TextField label='Date' source='date' />
+            <DateField label='Date' source='date' />
             <TextField label='Product Purchased' source='products.length' />
           </Datagrid>
         </ReferenceManyField>
@@ -111,6 +117,7 @@ export const UserShow = props => {
               <TextField source='name' />
             </ReferenceField>
             <NumberField label='Rating' source='stars' />
+            <DateField label='Date' source='date' />
           </Datagrid>
         </ReferenceManyField>
         <TextField label='goCardless ID' source='goCardlessID' />
@@ -128,20 +135,22 @@ export const UserEdit = props => (
   >
     <SimpleForm>
       <TextField disabled label='ID' source='id' />
-      <TextField disabled label='email' source='email' />
+      <TextInput label='email' source='email' />
       <TextInput label='name' source='name' />
       <BooleanInput
         disabled
         label='Payment Verified'
         source='paymentVerified'
       />
+      <ReferenceInput
+        label='Representative'
+        source='representative'
+        reference='admin-users'
+        disabled
+      >
+        <SelectInput optionText='name' />
+      </ReferenceInput>
       <TextInput disabled label='goCardless ID' source='goCardlessID' />
-      <ArrayInput label='Cart' source='cart'>
-        <SimpleFormIterator>
-          <TextInput disabled label='Product' source='product' />
-          <NumberInput label='Quantity' source='quantity' />
-        </SimpleFormIterator>
-      </ArrayInput>
     </SimpleForm>
   </Edit>
 )
@@ -170,7 +179,7 @@ export const UserCreate = props => {
 // custom components
 
 const UserTitle = ({ record }) => {
-  return <span>Post {record ? `"${record.name}"` : ''}</span>
+  return <span>Editing {record ? `"${record.name}"` : ''}</span>
 }
 
 const UserShowActions = ({ basePath, data, resource }) => (

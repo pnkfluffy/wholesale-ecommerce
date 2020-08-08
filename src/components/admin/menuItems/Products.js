@@ -264,7 +264,7 @@ export const ProductEdit = props => {
           source='draft'
         />
         <AutocompleteInput
-          lablel='Category'
+          label='Category'
           source='category'
           choices={productCategories}
         />

@@ -14,22 +14,24 @@ const rejectUnauthenticated = (req, res, next) => {
 }
 
 const rejectNonAdmin = async (req, res, next) => {
-
-	// if (process.env.DEV_MODE == 1) {
-	// 	console.log('hi');
-
-	// 	next()
-	// 	return
-	// }
-
 	if (req.isAuthenticated() && req.user.isAdmin) {
 		next()
 		return
 	} else {
 		// failure best handled on the server. do redirect here.
-		res.status(403).send('user not authenticated')
+		res.status(403).send('user is not admin')
 		return
 	}
 }
 
-module.exports = { rejectUnauthenticated, rejectNonAdmin }
+const rejectNonOwner = async (req, res, next) => {
+	if (req.isAuthenticated() && req.user.isOwner) {
+		next()
+		return
+	} else {
+		res.status(403).send('user is not owner')
+		return
+	}
+}
+
+module.exports = { rejectUnauthenticated, rejectNonAdmin, rejectNonOwner }

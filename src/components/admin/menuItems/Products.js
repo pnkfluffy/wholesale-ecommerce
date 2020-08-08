@@ -41,12 +41,14 @@ import {
   useListContext,
   sanitizeListRestProps,
   AutocompleteInput,
-  NumberField
+  NumberField,
+  Toolbar, 
+  SaveButton
 } from 'react-admin'
 import { makeStyles } from '@material-ui/core/styles'
 
-export const ProductList = props => (
-  <List {...props}>
+export const ProductList = ({ permissions, ...props }) => (
+  <List {...props} bulkActionButtons={false}>
     <Datagrid actions={<ListActions />} rowClick='show'>
       <TextField label='Product' source='name' />
       <ChipField label='Category' source='category' />
@@ -58,7 +60,7 @@ export const ProductList = props => (
       <BooleanField label='Is Draft' source='draft' />
       <DateField label='Created' source='date' />
       <ShowButton basePath={props.basePath} record={props.data} />
-      <DeleteButton />
+      {permissions === 'owner' && <DeleteButton />}
     </Datagrid>
   </List>
 )
@@ -257,7 +259,7 @@ export const ProductEdit = props => {
       actions={<ProductEditActions />}
       {...props}
     >
-      <SimpleForm>
+      <SimpleForm toolbar={<ProductEditToolbar />}>
         <TextInput disabled label='ID' source='id' />
         <BooleanInput
           label='Draft (drafts are not displayed to users)'
@@ -344,10 +346,10 @@ const ProductTitle = ({ record }) => {
   return <span>Edit Product: {record ? `"${record.name}"` : ''}</span>
 }
 
-const ProductShowActions = ({ basePath, data, resource }) => (
+const ProductShowActions = ({ permissions, basePath, data, resource }) => (
   <TopToolbar>
     <EditButton label='Edit' basePath={basePath} record={data} />
-    <DeleteButton basePath={basePath} record={data} />
+    {permissions === 'owner' && <DeleteButton basePath={basePath} record={data} />}
     <ListButton basePath={basePath} record={data} />
     {/* Add your custom actions */}
   </TopToolbar>
@@ -361,7 +363,7 @@ const ProductEditActions = ({ basePath, data, resource }) => (
   </TopToolbar>
 )
 
-const ListActions = props => {
+const ListActions = ({ permissions, ...props }) => {
   const { className, exporter, filters, maxResults, ...rest } = props
   const {
     resource,
@@ -380,7 +382,7 @@ const ListActions = props => {
           filterValues,
           context: 'button'
         })}
-      <DeleteButton basePath={basePath} />
+      {permissions === 'owner' && <DeleteButton basePath={basePath} />}
       <CreateButton basePath={basePath} />
       {/* <ExportButton
         disabled={total === 0}
@@ -393,3 +395,9 @@ const ListActions = props => {
     </TopToolbar>
   )
 }
+
+const ProductEditToolbar = props => (
+  <Toolbar {...props} >
+      <SaveButton />
+  </Toolbar>
+);

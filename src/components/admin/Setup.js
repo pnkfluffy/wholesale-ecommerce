@@ -47,46 +47,48 @@ const AdminSetup = () => (
       history={history}
       title='My Admin'
     >
-      <Resource
-        name='admin-users'
-        options={{ label: 'Customers' }}
-        list={UserList}
-        edit={UserEdit}
-        show={UserShow}
-        create={UserCreate}
-        icon={UserIcon}
-      />
-      <Resource
-        name='admin-products'
-        options={{ label: 'Products' }}
-        list={ProductList}
-        edit={ProductEdit}
-        show={ProductShow}
-        create={ProductCreate}
-        icon={ProductIcon}
-      />
-      <Resource
-        name='admin-orders'
-        options={{ label: 'Orders' }}
-        list={OrderList}
-        show={OrderShow}
-        edit={OrderEdit}
-        icon={OrderIcon}
-      />
-      <Resource
-        name='admin-reviews'
-        options={{ label: 'Reviews' }}
-        list={ReviewList}
-        show={ReviewShow}
-        icon={ReviewIcon}
-      />
-      <Resource
-        name='admin-commissions'
-        options={{ label: 'Commission' }}
-        list={CommissionList}
-        show={CommissionShow}
-        icon={MonetizationOnIcon}
-      />
+      {permissions => [
+        <Resource
+          name='admin-users'
+          options={{ label: 'Customers' }}
+          list={UserList}
+          edit={UserEdit}
+          show={UserShow}
+          create={UserCreate}
+          icon={UserIcon}
+        />,
+        <Resource
+          name='admin-products'
+          options={{ label: 'Products' }}
+          list={ProductList}
+          edit={ProductEdit}
+          show={ProductShow}
+          create={ProductCreate}
+          icon={ProductIcon}
+        />,
+        <Resource
+          name='admin-orders'
+          options={{ label: 'Orders' }}
+          list={OrderList}
+          show={OrderShow}
+          edit={OrderEdit}
+          icon={OrderIcon}
+        />,
+        <Resource
+          name='admin-reviews'
+          options={{ label: 'Reviews' }}
+          list={ReviewList}
+          show={ReviewShow}
+          icon={ReviewIcon}
+        />,
+        <Resource
+          name='admin-commissions'
+          options={{ label: 'Commission' }}
+          list={CommissionList}
+          show={CommissionShow}
+          icon={MonetizationOnIcon}
+        />
+      ]}
     </Admin>
   </Provider>
 )

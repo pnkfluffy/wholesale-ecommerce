@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 // const bcrypt = require("bcryptjs");
 const passport = require('../modules/passport')
-const { rejectNonAdmin } = require('../modules/authentication-middleware')
+const { rejectNonAdmin, rejectNonOwner } = require('../modules/authentication-middleware')
 const User = require('../schemas/userSchema')
 const shajs = require('sha.js')
 const { newUserEmail } = require('../modules/nodemailer')
@@ -11,7 +11,16 @@ const { restart } = require('nodemon')
 
 //Login
 router.post('/login', passport.authenticate('local', { failureRedirect: '/login' }), (req, res) => {
-  res.sendStatus(201)
+  let perms
+  if (req.user.isOwner) {
+    perms = 'owner'
+  } else if (req.user.isAdmin) {
+    perms = 'admin'
+  }
+  res.json({
+    sig: Date.now(),
+    perms: perms
+  })
 })
 
 router.get('/logout', (req, res) => {
@@ -29,11 +38,7 @@ router.get('/user', rejectNonAdmin, (req, res) => {
 
 router.get('/perms', rejectNonAdmin, (req, res) => {
   console.log('get perms', req.user)
-  if (req.user.isOwner) {
-    res.status(200).json({ perms: 'owner' })
-  } else if (req.user.isAdmin) {
-    res.status(200).json({ perms: 'admin' })
-  }
+  
 })
 
 router.post('/', rejectNonAdmin, async (req, res) => {
@@ -168,7 +173,7 @@ router.put('/:id', rejectNonAdmin, async (req, res) => {
 })
 
 //updateMany
-router.put('/', rejectNonAdmin, async (req, res) => {
+router.put('/', rejectNonOwner, async (req, res) => {
   try {
     console.log('updateMany hit')
     let users = []
@@ -199,7 +204,7 @@ router.put('/', rejectNonAdmin, async (req, res) => {
 //create
 
 //delete
-router.delete('/:id', rejectNonAdmin, async (req, res) => {
+router.delete('/:id', rejectNonOwner, async (req, res) => {
   User.updateOne({ _id: req.params.id }, { deleted: true })
     .then(result => {
       console.log(result)
@@ -212,7 +217,7 @@ router.delete('/:id', rejectNonAdmin, async (req, res) => {
 })
 
 //deleteMany
-router.delete('/', rejectNonAdmin, async (req, res) => {
+router.delete('/', rejectNonOwner, async (req, res) => {
   try {
     console.log('deleteMany hit.')
     console.log(req.query.ids)

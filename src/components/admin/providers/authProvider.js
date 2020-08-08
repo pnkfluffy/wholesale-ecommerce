@@ -15,14 +15,17 @@ export default {
       body: JSON.stringify({ username, password }),
       headers: new Headers({ 'Content-Type': 'application/json' })
     })
-    return fetch(request).then(response => {
+    return fetch(request).then(async response => {
       if (response.status < 200 || response.status >= 300) {
         console.log('hi' + response.statusText)
 
         throw new Error(response.statusText)
       }
-      window.location.href = '/'
-      cookie.set('sig', response.data)
+      let res = await response.json()
+
+      cookie.set('sig', res.sig)
+      cookie.set('perms', res.perms)
+
       return Promise.resolve()
     })
     // .catch(err => {
@@ -39,6 +42,7 @@ export default {
     })
     return fetch(request).then(response => {
       cookie.remove('sig')
+      cookie.remove('perms')
       // window.location.href = '/admin'
       return Promise.resolve()
     })
@@ -57,24 +61,8 @@ export default {
     return cookie.get('sig') ? Promise.resolve() : Promise.reject()
   },
   // called when the user navigates to a new location, to check for permissions / roles
-  // getPermissions: () => {
-  //   const request = new Request(`/api/admin-users/perms`, {
-  //     method: 'GET'
-  //   })
-  //   return fetch(request)
-  //     .then(response => {
-  //       if (response.status < 200 || response.status >= 300) {
-  //         console.log('hi' + response.statusText)
-
-  //         throw new Error(response.statusText)
-  //       }
-  //       console.log("response", response.data)
-  //       return Promise.resolve(response.data)
-  //     })
-  //     .catch(err => {
-  //       // {!} SWAL ERROR MESSAGES
-  //       return Promise.reject()
-  //     })
-  // }
-  getPermissions: () => Promise.resolve()
+  getPermissions: () => {
+    let role = cookie.get('perms')
+    return role ? Promise.resolve(role) : Promise.reject();
+  }
 }

@@ -71,6 +71,7 @@ export const CommissionList = props => (
     aside={<Aside />}
     filters={<CommissionFilter />}
     filterDefaultValues={{ commission: true }}
+    bulkActionButtons={false}
     {...props}
   >
     <Datagrid rowClick='show'>

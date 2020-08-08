@@ -35,11 +35,13 @@ import {
   ArrayInput,
   SimpleFormIterator,
   NumberInput,
-  NumberField
+  NumberField,
+  Toolbar,
+  SaveButton
 } from 'react-admin'
 
-export const UserList = props => (
-  <List {...props}>
+export const UserList = ({ permissions, ...props }) => (
+  <List {...props} bulkActionButtons={false}>
     <Datagrid rowClick='show'>
       <TextField label='User' source='name' />
       <TextField label='Email' source='email' />
@@ -55,7 +57,7 @@ export const UserList = props => (
       <BooleanField label='Is Admin' source='isAdmin' />
       <DateField label='Created' source='date' />
       <ShowButton basePath={props.basePath} record={props.data} />
-      <DeleteButton />
+      {permissions === 'owner' && <DeleteButton />}
     </Datagrid>
   </List>
 )
@@ -78,9 +80,9 @@ export const UserShow = props => {
         </ReferenceField>
         <TextField label='Payment confirmed' source='paymentVerified' />
         <ArrayField label='Wishlist' source='wishlist'>
-            <ReferenceField label='Product' reference='admin-products'>
-              <TextField label='Product' source='name' />
-            </ReferenceField>
+          <ReferenceField label='Product' reference='admin-products'>
+            <TextField label='Product' source='name' />
+          </ReferenceField>
         </ArrayField>
         <ReferenceManyField
           label='Order History'
@@ -126,7 +128,7 @@ export const UserEdit = props => (
     actions={<UserEditActions />}
     {...props}
   >
-    <SimpleForm>
+    <SimpleForm toolbar={<UserEditToolbar />}> 
       <TextField disabled label='ID' source='id' />
       <TextField disabled label='email' source='email' />
       <TextInput label='name' source='name' />
@@ -173,17 +175,23 @@ const UserTitle = ({ record }) => {
   return <span>Post {record ? `"${record.name}"` : ''}</span>
 }
 
-const UserShowActions = ({ basePath, data, resource }) => (
+const UserShowActions = ({ permissions, basePath, data, resource }) => (
   <TopToolbar>
     <EditButton basePath={basePath} record={data} />
-    <DeleteButton basePath={basePath} record={data} />
+    {permissions === 'owner' && <DeleteButton basePath={basePath} record={data} />}
     <ListButton basePath={basePath} record={data} />
   </TopToolbar>
 )
-const UserEditActions = ({ basePath, data, resource }) => (
+const UserEditActions = ({ permissions, basePath, data, resource }) => (
   <TopToolbar>
     <ShowButton basePath={basePath} record={data} />
-    <DeleteButton basePath={basePath} record={data} />
+    {permissions === 'owner' && <DeleteButton basePath={basePath} record={data} />}
     <ListButton basePath={basePath} record={data} />
   </TopToolbar>
 )
+
+const UserEditToolbar = props => (
+  <Toolbar {...props} >
+      <SaveButton />
+  </Toolbar>
+);

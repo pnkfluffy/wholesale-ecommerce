@@ -53,7 +53,7 @@ export const ReviewShow = props => (
 )
 
 export const ReviewList = props => (
-  <List {...props}>
+  <List {...props} bulkActionButtons={false}>
     <Datagrid rowClick='show'>
       <ReferenceField
         link='false'
@@ -75,17 +75,15 @@ export const ReviewList = props => (
       <DateField label='Created' source='date' />
 
       <ShowButton />
-      <DeleteButton />
     </Datagrid>
   </List>
 )
 
 //custom comps
-const ReviewActions = ({ basePath, data, resource }) => (
+const ReviewActions = ({ permissions, basePath, data, resource }) => (
   <TopToolbar>
-    <EditButton basePath={basePath} record={data} />
-    <DeleteButton basePath={basePath} record={data} />
     <ListButton basePath={basePath} record={data} />
     {/* Add your custom actions */}
   </TopToolbar>
 )
+

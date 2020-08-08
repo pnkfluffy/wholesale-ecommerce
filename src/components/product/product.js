@@ -59,7 +59,8 @@ class Product extends React.Component {
       snackbarOpen: false,
       snackbarSeverity: 'success',
       snackbarMessage: '',
-      wasError: false
+      wasError: false,
+      loaded: false,
     }
   }
 
@@ -76,7 +77,8 @@ class Product extends React.Component {
       .then(res => {
         console.log('res', res.data)
         this.setState({
-          product: res.data
+          product: res.data,
+          loaded: true
         })
       })
       .catch(err => {
@@ -139,6 +141,12 @@ class Product extends React.Component {
   }
 
   render() {
+    if (this.state.wasError) {
+      return <div>Product Not Found</div>
+    }
+    if (!this.state.loaded) {
+      return <div></div>
+    }
     const product = this.state.product
     let totalPrice = getPriceByQuantity(
       product.priceTiers,

@@ -224,6 +224,8 @@
 }
 
 .cart_button_area {
+  display: flex;
+  flex-direction: row;
   width: 100%;
 }
 
@@ -245,4 +247,8 @@
 .gc_checkout_button {
   width: 100%;
   letter-spacing: 1px !important;
+}
+
+.gc_checkout_button:last-child {
+  margin-left: 1vw;
 }

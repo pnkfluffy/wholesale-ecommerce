@@ -137,6 +137,15 @@ const reviews = (state = [], action) => {
   }
 }
 
+const hasMandate = (state = false, action) => {
+  switch (action.type) {
+    case 'CHANGE_MANDATE_STATUS':
+      return !state
+    default:
+      return state
+  }
+}
+
 export default combineReducers({
   user,
   wishlist,
@@ -145,5 +154,6 @@ export default combineReducers({
   products,
   orders,
   reviews,
+  hasMandate,
   loaded
 })

@@ -78,11 +78,11 @@ class ChangePayment extends React.Component {
                   <div>
                     <div>
                       <div className='order_info_split'>
-                        <div className='order_info_content'>Account in the name of: </div>
+                        <div className='order_info_content'>Payment Account Owner: </div>
                         <div className='order_info_content'>{this.state.paymentInfo.given_name} {this.state.paymentInfo.family_name}</div>
                       </div>
                       <div className='order_info_split'>
-                        <div className='order_info_content'>Address Associated to payment: </div>
+                        <div className='order_info_content'>Associated Address: </div>
                         <div className='settings_payment_address'>
                           <div className='settings_payment_addr_info'>{this.state.paymentInfo.address_line1} {this.state.paymentInfo.address_line2}</div>
                           <div className='settings_payment_addr_info'>{this.state.paymentInfo.postal_code}, {this.state.paymentInfo.city}, {this.state.paymentInfo.region}</div>

@@ -14,6 +14,7 @@ export const initializeAllRequests = async () => {
       await getUserCart()
       await getUserWishlist()
       await getAllOrders()
+      await checkMandate()
       store.dispatch({ type: 'APP_LOADED' })
     })
     .catch(err => {
@@ -105,4 +106,19 @@ export const getAllOrders = () => {
     .catch(err => {
       console.log(err)
     })
+}
+
+export const checkMandate = () => {
+    axios
+        .get('/api/gc/checkClientMandate')
+        .then(res => {
+            if (res.data) {
+                store.dispatch({
+                    type: 'CHANGE_MANDATE_STATUS'
+                })
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        })
 }

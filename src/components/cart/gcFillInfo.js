@@ -27,10 +27,6 @@ class GCFillInfo extends React.Component {
     axios
       .post('/api/gc/addClient', this.state)
       .then(res => {
-        console.log(res.data)
-        /*set token to finish payment*/
-        const token = res.data.token
-        localStorage.setItem('gc', token)
         window.open(res.data.url, '_self')
       })
       .catch(err => {

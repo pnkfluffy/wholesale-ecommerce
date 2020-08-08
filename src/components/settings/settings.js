@@ -55,7 +55,6 @@ class Settings extends React.Component {
     if (params.has(url)) {
       this.completeSetPayment(params.get(url));
     } else if (params.has('http://localhost:3000/settings?new')) {
-      console.log(params.get('http://localhost:3000/settings?new'));
       if(params.get('http://localhost:3000/settings?new') === "true")
         Swal.fire({
           title: '<span class="swal_title"> SUCCESS',

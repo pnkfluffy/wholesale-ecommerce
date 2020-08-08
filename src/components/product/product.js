@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
+import Swal from 'sweetalert2'
 
 import ProductQuantity from './productQuantity'
 import UserReviews from './productUserReviews'
@@ -15,7 +16,7 @@ import Wishlist from '../reuseable/wishlist';
 
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
-import {classes} from "../reuseable/materialButtons"
+import { classes } from "../reuseable/materialButtons"
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -57,7 +58,8 @@ class Product extends React.Component {
       buttonActive: true,
       snackbarOpen: false,
       snackbarSeverity: 'success',
-      snackbarMessage: ''
+      snackbarMessage: '',
+      wasError: false
     }
   }
 
@@ -79,12 +81,15 @@ class Product extends React.Component {
       })
       .catch(err => {
         console.log('error' + err)
+        this.setState({
+          wasError: true
+        })
       })
   }
 
   changeQuantity = quantity => {
     quantity = parseInt(quantity, 10)
-    if (quantity > 1000) {
+    if (quantity > 1000 || !this.state.buttonActive) {
       return
     }
     if (quantity <= 0) this.setState({ quantity: 1 })
@@ -92,10 +97,23 @@ class Product extends React.Component {
   }
 
   addToCart = quantity => {
+    let product = this.state.product
+    let totalPrice = getPriceByQuantity(
+      product.priceTiers,
+      this.state.quantity,
+      product.price
+    )
+    if (totalPrice > 5000) {
+      Swal.fire({
+        text: `Total price exceeds amount supported by payment method.
+        Please place an order under $5000.`,
+        confirmButtonColor: 'rgb(255, 102, 102)'
+      })
+      return
+    }
     this.setState({
       buttonActive: false
     }, () => {
-      let product = this.state.product
       console.log('PRODUCT', product)
       product.quantity = quantity
       product.product = this.state.product._id
@@ -122,13 +140,16 @@ class Product extends React.Component {
 
   render() {
     const product = this.state.product
-    const totalPrice = getPriceByQuantity(
+    let totalPrice = getPriceByQuantity(
       product.priceTiers,
       this.state.quantity,
       product.price
     )
     if (totalPrice > 10000000) {
       totalPrice = "limit reached"
+    }
+    if (!totalPrice) {
+      totalPrice = ""
     }
     return (
       <div className='product_page'>
@@ -183,7 +204,7 @@ class Product extends React.Component {
                 </div>
                 <div className='product_quantity_container'>
                   <div className='product_price'>
-                    $<div className='price_price'>{totalPrice || ""}</div>
+                    $<div className='price_price'>{totalPrice}</div>
                   </div>
                   <ProductQuantity
                     productID={this.props.match.params.productID}
@@ -193,7 +214,7 @@ class Product extends React.Component {
                 </div>
               </div>
               <div className='product_purchase'>
-              <Wishlist productID={this.props.match.params.productID}/>
+                <Wishlist productID={this.props.match.params.productID} />
                 {this.state.buttonActive ? (
                   <GreenButton
                     variant='contained'
@@ -223,5 +244,5 @@ class Product extends React.Component {
     )
   }
 }
- 
+
 export default connect(mapStateToProps)(Product)

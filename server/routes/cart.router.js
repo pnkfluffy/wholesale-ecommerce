@@ -8,7 +8,7 @@ const { rejectUnauthenticated } = require('../modules/authentication-middleware'
 router.get('/', rejectUnauthenticated, async (req, res) => {
   try {
     const user = await User.findById(req.user._id)
-    if (!user) {      
+    if (!user) {
       res.status(404).send('no user')
       return
     }
@@ -17,19 +17,23 @@ router.get('/', rejectUnauthenticated, async (req, res) => {
     for (let i = 0; i < cart.length; i++) {
       const productInfo = await Product.findById(cart[i].product)
         .then(info => {
-          console.log(info);
-          //  means nothing found
-          if (info) {
-            const relavent = info._doc
-            return {
-              ...relavent,
-              product: relavent._id,
-              quantity: cart[i].quantity,
-              available: true
-            }
+          console.log("hi", info);
+          if (!info) {
+            res.status(404).send('Cannot find product.')
+            return
+          }
+          const relavent = info._doc
+          return {
+            ...relavent,
+            product: relavent._id,
+            quantity: cart[i].quantity,
+            available: true
           }
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+          console.log(err)
+          res.status(500).send(err)
+        })
       cartProductInfo.push(productInfo)
     }
     res.send(cartProductInfo)

@@ -82,6 +82,9 @@ class Order extends React.Component {
 
 
   render () {
+    if (!this.props.history.location.state) {
+      return <div>Order not found</div>
+    }
     const payment = this.props.history.location.state.payment
     const order = this.props.history.location.state.order
     const total = order.total + ",00"

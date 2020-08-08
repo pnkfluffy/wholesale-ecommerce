@@ -98,14 +98,14 @@ class GCPay extends React.Component {
       background: '#1E1F26'
     }).then(res => {
       if (res.value) {
-          axios
-              .post('/api/gc/addClient', this.state)
-              .then(res => {
-                window.open(res.data.url, '_self')
-              })
-              .catch(err => {
-                console.log(err)
-              })
+        axios
+          .post('/api/gc/addClient', this.state)
+          .then(res => {
+            window.open(res.data.url, '_self')
+          })
+          .catch(err => {
+            console.log(err)
+          })
       }
     })
   }
@@ -258,16 +258,16 @@ class GCPay extends React.Component {
             <GreenButton
               variant='contained'
               className='gc_checkout_button'
+              onClick={e => this.alert_change_payment(e)}
+            >
+              Change Payment Method
+            </GreenButton>
+            <GreenButton
+              variant='contained'
+              className='gc_checkout_button'
               onClick={e => this.alert_make_payment(e)}
             >
               Confirm Order: ${this.props.total}
-            </GreenButton>
-            <GreenButton
-                variant='contained'
-                className='gc_checkout_button'
-                onClick={e => this.alert_change_payment(e)}
-            >
-              Change Payment Method
             </GreenButton>
           </div>
         </div>

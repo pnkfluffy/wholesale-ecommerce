@@ -31,13 +31,11 @@ router.get('/wishlist', rejectUnauthenticated, async (req, res) => {
         return
       });
     let availableProducts = [];
-    console.log("user.wishlist",user.wishlist)
     if (user.wishlist) {
       const wishlist = user.wishlist
       for (let i = 0; i < wishlist.length; i++) {
         await Product.findById(wishlist[i])
           .then(info => {
-            console.log("info", info)
             //  means nothing found
             if (!info.deleted) {
               availableProducts.push(wishlist[i])

@@ -109,7 +109,10 @@ class Product extends React.Component {
       Swal.fire({
         text: `Total price exceeds amount supported by payment method.
         Please place an order under $5000.`,
-        confirmButtonColor: 'rgb(255, 102, 102)'
+        background: '#1E1F26',
+        customClass: {
+          confirmButton: 'swal_confirm_button'
+        }
       })
       return
     }

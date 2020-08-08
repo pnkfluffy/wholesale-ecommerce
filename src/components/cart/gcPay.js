@@ -160,9 +160,25 @@ class GCPay extends React.Component {
           err: err.response.data.errors,
         })
       } else if (err.response && err.response.data === "addr_1") {
-        Swal.fire('ERROR:', "Something is wrong with your address! Check your ZIP code, address line 1, city and state!", 'error')
+        Swal.fire({
+          text: 'ERROR:' + "Something is wrong with your address! Check your ZIP code, address line 1, city and state!" + 'error',
+          background: '#1E1F26',
+          customClass: {
+            confirmButton: 'swal_confirm_button',
+            content: 'swal_text',
+            title: 'swal_text'
+          }
+        })
       } else if (err.response) {
-        Swal.fire('ERROR:', err.response.data, 'error')
+        Swal.fire({
+          text: 'ERROR:'+ err.response.data+ 'error',
+          background: '#1E1F26',
+          customClass: {
+            confirmButton: 'swal_confirm_button',
+            content: 'swal_text',
+            title: 'swal_text'
+          }
+        })
       }
       this.setState({
         loading: false

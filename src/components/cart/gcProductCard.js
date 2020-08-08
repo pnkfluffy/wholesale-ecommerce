@@ -12,14 +12,19 @@ const mapStateToProps = state => ({
 class GCProductCard extends React.Component {
   deleteProduct = async () => {
     let product = this.props.product
-    const res = await Swal.fire({
+    let res = Swal.fire({
       title: `Removing ${product.name} from your cart`,
       text: 'Are you sure?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'remove',
       cancelButtonText: 'nevermind',
-      confirmButtonColor: 'rgb(255, 102, 102)'
+      background: '#1E1F26',
+      customClass: {
+        confirmButton: 'swal_confirm_button',
+        content: 'swal_text',
+        title: 'swal_text'
+      },
     }).then(res => {
       console.log(res);
       if (res.value) {
@@ -39,11 +44,11 @@ class GCProductCard extends React.Component {
     this.props.history.push(redirect_url)
   }
 
-  render () {
+  render() {
     const product = this.props.product.product;
     const price = this.props.product.price;
     const quantity = this.props.product.quantity;
-    const pricePerUnity =  () => {
+    const pricePerUnity = () => {
       let unitPrice = product.price;
       for (let i = 0; i < product.priceTiers.length; i++) {
         if (quantity >= product.priceTiers[i].quantity && unitPrice > product.priceTiers[i].price) {
@@ -63,35 +68,35 @@ class GCProductCard extends React.Component {
       : ''
 
     return (
-        <div className='order_details_card'>
-          <div className='order_card_contents'>
-            <div className='order_content'>
-              <div className='order_card_product_name'>
-                {product.name}
-              </div>
-              <div className='order_card_id'>#{product._id}</div>
+      <div className='order_details_card'>
+        <div className='order_card_contents'>
+          <div className='order_content'>
+            <div className='order_card_product_name'>
+              {product.name}
             </div>
+            <div className='order_card_id'>#{product._id}</div>
+          </div>
 
-            <div className='gc_product_card_right_side'>
-              <div className='product_in_order_card_values'>
-                <div className="gc_product_card_units">
-                  <div>Unit</div>
-                  <div>${pricePerUnity()}</div>
+          <div className='gc_product_card_right_side'>
+            <div className='product_in_order_card_values'>
+              <div className="gc_product_card_units">
+                <div>Unit</div>
+                <div>${pricePerUnity()}</div>
+              </div>
+              <div className="gc_product_card_units">
+                <div>Quantity</div>
+                <div className='product_in_order_card_quantity'>
+                  {product.quantity}
                 </div>
-                <div className="gc_product_card_units">
-                  <div>Quantity</div>
-                  <div className='product_in_order_card_quantity'>
-                    {product.quantity}
-                  </div>
-                </div>
-                <div className="gc_product_card_units">
-                  <div>Total</div>
-                  <div className='product_in_order_card_total'>${price}</div>
-                </div>
+              </div>
+              <div className="gc_product_card_units">
+                <div>Total</div>
+                <div className='product_in_order_card_total'>${price}</div>
               </div>
             </div>
           </div>
         </div>
+      </div>
     )
   }
 }

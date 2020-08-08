@@ -24,7 +24,10 @@ class PriceTiers extends React.Component {
       text: `total: $${total}`,
       icon: 'question',
       showCancelButton: true,
-      confirmButtonColor: '#59BA47',
+      background: '#1E1F26',
+      customClass: {
+        confirmButton: 'swal_confirm_button'
+      }
     }).then(res => {
       if (res.value) {
         this.props.addToCart(quantity)
@@ -32,7 +35,7 @@ class PriceTiers extends React.Component {
     })
   }
 
-  render () {
+  render() {
     const tableRow = this.props.tiers.map((tier, index) => {
       return <PriceTierRow tier={tier} key={index} addToCart={this.addToCart} />
     })

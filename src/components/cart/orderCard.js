@@ -19,7 +19,10 @@ class OrderCard extends React.Component {
       showCancelButton: true,
       confirmButtonText: 'remove',
       cancelButtonText: 'nevermind',
-      confirmButtonColor: 'rgb(255, 102, 102)'
+      background: '#1E1F26',
+      customClass: {
+        confirmButton: 'swal_confirm_button'
+      }
     }).then(res => {
       console.log(res);
       if (res.isDismissed) {
@@ -54,7 +57,7 @@ class OrderCard extends React.Component {
     this.props.history.push(redirect_url)
   }
 
-  render () {
+  render() {
     const product = this.props.product
     const image = (product.imageData.length && product.imageData[0].url) ? product.imageData[0].url : blank_image
     return (

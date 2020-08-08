@@ -34,11 +34,17 @@ class CreateReview extends React.Component {
           stars: 5
         })
         const reviews = res.data
-        
+
         store.dispatch({ type: 'ADD_REVIEWS', payload: reviews })
       })
       .catch(err => {
-        Swal.fire(err.response.data)
+        Swal.fire({
+          text: err.response.data,
+          background: '#1E1F26',
+          customClass: {
+            confirmButton: 'swal_confirm_button'
+          }
+        })
         this.setState({
           loading: false
         })
@@ -86,9 +92,9 @@ class CreateReview extends React.Component {
     return (
       <form className='create_review' noValidate onSubmit={this.onSubmit}>
         <div className="counter_container">
-        <div className='create_review_header'>Leave a review:</div>
-        <div className="character_counter"
-        >{this.state.review &&(this.state.review.length <= char_limit) ? (char_limit - this.state.review.length) : char_limit}</div>
+          <div className='create_review_header'>Leave a review:</div>
+          <div className="character_counter"
+          >{this.state.review && (this.state.review.length <= char_limit) ? (char_limit - this.state.review.length) : char_limit}</div>
         </div>
         <textarea
           className='add_to_reviews_input'

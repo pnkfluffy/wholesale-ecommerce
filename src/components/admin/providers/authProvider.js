@@ -1,7 +1,4 @@
-import Cookies from 'universal-cookie'
-import shajs from 'sha.js'
 
-const cookie = new Cookies()
 
 // let url = window.location.href
 // let arr = url.split("/");
@@ -23,8 +20,8 @@ export default {
       }
       let res = await response.json()
 
-      cookie.set('sig', res.sig)
-      cookie.set('perms', res.perms)
+      localStorage.setItem('sig', res.sig)
+      localStorage.setItem('perms', res.perms)
 
       return Promise.resolve()
     })
@@ -41,8 +38,9 @@ export default {
       headers: new Headers({ 'Content-Type': 'application/json' })
     })
     return fetch(request).then(response => {
-      cookie.remove('sig')
-      cookie.remove('perms')
+      localStorage.removeItem('sig')
+      localStorage.removeItem('perms')
+
       // window.location.href = '/admin'
       return Promise.resolve()
     })
@@ -51,18 +49,20 @@ export default {
   // called when the API returns an error
   checkError: ({ status }) => {
     if (status === 401 || status === 403) {
-      cookie.remove('sig')
+      localStorage.removeItem('sig')
+      localStorage.removeItem('perms')
+
       return Promise.reject()
     }
     return Promise.resolve()
   },
   // called when the user navigates to a new location, to check for authentication
   checkAuth: () => {
-    return cookie.get('sig') ? Promise.resolve() : Promise.reject()
+    return localStorage.getItem('sig') ? Promise.resolve() : Promise.reject()
   },
   // called when the user navigates to a new location, to check for permissions / roles
   getPermissions: () => {
-    let role = cookie.get('perms')
+    let role = localStorage.getItem('perms')
     return role ? Promise.resolve(role) : Promise.reject();
   }
 }

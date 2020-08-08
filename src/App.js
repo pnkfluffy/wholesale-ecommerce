@@ -11,14 +11,12 @@ import Cart from "./components/cart/cart";
 import Settings from "./components/settings/settings";
 import Product from "./components/product/product";
 import Order from "./components/account/orderHistory/order"
-import Cookies from 'universal-cookie'
 import AdminError404 from './components/error/adminError404'
 import GoCardless from './components/cart/goCardless'
 import Admin from './components/admin/Setup'
 import { connect } from "react-redux";
 
 
-const cookie = new Cookies()
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -80,7 +78,7 @@ class App extends React.Component {
 
     let routes = loggedOutRoutes
     if (this.props.state.user.email) routes = loggedInRoutes
-    if (cookie.get('sig')) routes = adminRoutes
+    if (localStorage.getItem('sig')) routes = adminRoutes
 
     return (
       <div className='App'>

@@ -172,7 +172,7 @@
 
 .product_purchase {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
   height: 15%;
   margin-top: 5%;
@@ -183,7 +183,7 @@
 }
 
 .wishlist_button {
-  width: 30%
+  width: 35%
 }
 
 .product_price {

@@ -80,15 +80,23 @@ class CreateReview extends React.Component {
       i++
     }
 
+    const char_limit = 180;
+
     return (
       <form className='create_review' noValidate onSubmit={this.onSubmit}>
+        <div className="counter_container">
         <div className='create_review_header'>Leave a review:</div>
+        <div className="character_counter"
+        >{this.state.review &&(this.state.review.length <= char_limit) ? (char_limit - this.state.review.length) : char_limit}</div>
+        </div>
         <textarea
           className='add_to_reviews_input'
           onChange={this.onChange}
           value={this.state.review}
           rows='3'
+          maxlength={char_limit}
         ></textarea>
+
         <div className='create_review_bottom'>
           <div className='create_review_rating'>{stars}</div>
 

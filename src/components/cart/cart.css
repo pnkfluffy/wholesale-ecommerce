@@ -25,6 +25,11 @@
 }
 
 .checkout_button {
+  width: 30%;
+  letter-spacing: 1px !important;
+}
+
+.pay_button {
   width: 100%;
   letter-spacing: 1px !important;
 }
@@ -238,6 +243,6 @@
   width: 45%;
 }
 .gc_checkout_button {
-  width: 35%;
+  width: 100%;
   letter-spacing: 1px !important;
 }

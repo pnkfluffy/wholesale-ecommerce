@@ -40,8 +40,8 @@ import {
   SaveButton
 } from 'react-admin'
 
-export const UserList = ({ permissions, ...props }) => (
-  <List {...props} bulkActionButtons={false}>
+export const UserList = ({permissions, ...props}) => (
+  <List {...props} sort={{ field: 'date', order: 'DESC' }} bulkActionButtons={false}>
     <Datagrid rowClick='show'>
       <TextField label='User' source='name' />
       <TextField label='Email' source='email' />

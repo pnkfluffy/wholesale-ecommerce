@@ -129,7 +129,9 @@
 
 .single_order_button {
   width: 10vw;
+  font-size: min(0.85vw, 16px) !important;
 }
+
 .order_again_button {
   margin-left: 20px !important;
 }
@@ -239,12 +241,19 @@
   margin-top: 2vh;
   font-size: 1vw;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
   text-align: left;
 }
 
+.order
 .order_info_carrier {
   margin-top: 2vh;
+}
+
+.order_info_pay_status {
+  font-size: 1vw;
+  text-align: right;
 }
 
 .order_info_address {

@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import FavoriteProductCard from './favoriteProductCard'
+import WishlistProductCard from './wishlistProductCard'
 import OrderHistory from './orderHistory/orderHistory'
 
 const mapStateToProps = state => ({
@@ -21,7 +21,7 @@ class Account extends React.Component {
         }})
       console.log("productInfo", productInfo);
       return (
-        <FavoriteProductCard
+        <WishlistProductCard
           product={productInfo}
           key={productInfo._id}
           images={productInfo.imageData}

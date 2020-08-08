@@ -9,49 +9,43 @@ const { trackingAddedEmail } = require('../modules/nodemailer')
 router.get('/', rejectNonAdmin, (req, res) => {
   try {
     console.log('Order list backend hit')
-    const sortQuery = JSON.parse(req.query.sort)
-    let filterQuery = JSON.parse(req.query.filter)
+    let filterQuery = JSON.parse(req.query.filter) || {}
+    let sortQuery
+    let sort = {}
+    let rangeQuery = [0]
+    let rangeLimit = 10
 
-    // console.log('filterquery', filterQuery)
+    if (req.query.sort) {
+      sortQuery = JSON.parse(req.query.sort)
+      sort[sortQuery[0]] = sortQuery[1] === 'ASC' ? 1 : -1
+    }
+    if (req.query.range) {
+      rangeQuery = JSON.parse(req.query.range)
+      rangeLimit = rangeQuery[1] - rangeQuery[0] + 1
+    }
+    //  used in commission route. Filters orders by customer
+    //  representatives to help calculate commission
     if (filterQuery.commission) {
       filterQuery.representative = req.user._id
     }
     delete filterQuery.commission
 
-    console.log('new', filterQuery)
-    let sort = {}
-    sort[sortQuery[0]] = sortQuery[1] === 'ASC' ? 1 : -1
-    if (JSON.stringify(filterQuery) !== '{}') {
-      // console.log('orders filterQuery: ', filterQuery)
-      Order.find(filterQuery)
-        .sort(sort)
-        .then(filteredOrders => {
-          res.set('content-range', JSON.stringify(filteredOrders.length + 1))
-          //  each object needs to have an 'id' field in order for
-          //  reactAdmin to parse
+    Order.find(filterQuery)
+      .sort(sort)
+      .skip(rangeQuery[0])
+      .limit(rangeLimit)
+      .then(filteredOrders => {
+        Order.countDocuments().then(contentRange => {
+          res.set('content-range', JSON.stringify(contentRange))
           filteredOrders = JSON.parse(
             JSON.stringify(filteredOrders)
               .split('"_id":')
               .join('"id":')
           )
-          console.log('filtered Orders: ', filteredOrders)
           res.json(filteredOrders)
         })
-    } else {
-      Order.find()
-        .sort(sort)
-        .then(orders => {
-          res.set('content-range', JSON.stringify(orders.length + 1))
-          //  each object needs to have an 'id' field in order for
-          //  reactAdmin to parse
-          orders = JSON.parse(
-            JSON.stringify(orders)
-              .split('"_id":')
-              .join('"id":')
-          )
-          res.json(orders)
-        })
-    }
+      })
+    //
   } catch (error) {
     console.log(error)
     res.status(500).send('no orders found')

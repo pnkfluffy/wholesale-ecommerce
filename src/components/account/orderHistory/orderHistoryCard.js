@@ -24,6 +24,9 @@ class OrderHistoryCard extends React.Component {
   }
 
   render () {
+    if (!this.props.payment) {
+      return <div></div>
+    }
     const chargeDate = moment(this.props.payment.charge_date).format('L')
     const placementDate = moment(this.props.order.date).format('L')
     const shippingNumber = this.props.order.tracking.number

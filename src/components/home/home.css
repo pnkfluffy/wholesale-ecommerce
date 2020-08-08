@@ -33,7 +33,7 @@
 }
 
 .products_area::after {
-  content: '';
+  content: "";
   flex: none;
   width: 31%;
 }
@@ -67,10 +67,11 @@
   object-fit: cover;
 }
 
-
 .product_name {
   font-size: 1vw;
   color: var(--header-font-white);
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .product_metadata {
@@ -145,11 +146,14 @@
   justify-content: space-between;
 }
 
-.reviews_card_info_user, .reviews_card_info_rating   {
+.reviews_card_info_user,
+.reviews_card_info_rating {
   font-size: 1vw;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .reviews_card_info_date {
@@ -169,6 +173,8 @@
 .reviews_card_review {
   font-size: 0.8vw;
   margin-top: 5%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .reviews_card_review::first-letter {

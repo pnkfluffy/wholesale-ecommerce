@@ -27,7 +27,7 @@ import {
 } from 'react-admin'
 
 export const ReviewList = props => (
-  <List {...props} sort={{ field: 'date', order: 'DESC' }}>
+  <List {...props} sort={{ field: 'date', order: 'DESC' }} bulkActionButtons={false}>
     <Datagrid rowClick='show'>
       <ReferenceField
         link='false'
@@ -81,11 +81,10 @@ export const ReviewShow = props => (
 )
 
 //custom comps
-const ReviewActions = ({ basePath, data, resource }) => (
+const ReviewActions = ({ permissions, basePath, data, resource }) => (
   <TopToolbar>
-    <EditButton basePath={basePath} record={data} />
-    <DeleteButton basePath={basePath} record={data} />
     <ListButton basePath={basePath} record={data} />
     {/* Add your custom actions */}
   </TopToolbar>
 )
+

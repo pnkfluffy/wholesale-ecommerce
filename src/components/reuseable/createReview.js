@@ -6,6 +6,7 @@ import StarIcon from '@material-ui/icons/Star'
 import { GreenButton } from './materialButtons'
 import loading from '../../resources/images/loading.svg'
 import store from '../../redux/store'
+import Swal from 'sweetalert2'
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -37,7 +38,7 @@ class CreateReview extends React.Component {
         store.dispatch({ type: 'ADD_REVIEWS', payload: reviews })
       })
       .catch(err => {
-        console.log(err)
+        Swal.fire(err.response.data)
         this.setState({
           loading: false
         })

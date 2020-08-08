@@ -65,6 +65,13 @@ router.post('/newReview/:productID', rejectUnauthenticated, async (req, res) => 
         const review = req.body.review
         const stars = req.body.stars
 
+        const verify = review.split(' ')
+        const invalid = verify.filter(word => word.length > 30)
+        if (invalid.length > 0) {
+            res.status(415).send('your review contains invalid words')
+            return
+        }
+
         await Review.updateMany({ user: userID, product: product }, {deleted: true})
 
         const newReview = new Review({

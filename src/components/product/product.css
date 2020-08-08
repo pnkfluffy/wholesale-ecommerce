@@ -263,6 +263,8 @@
 }
 
 .product_title {
+  overflow: hidden;
+  text-overflow: ellipsis;
   width: 80%;
 }
 

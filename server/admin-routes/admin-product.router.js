@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const uploadProductPhotos = require('../modules/uploadphotosAWS')
-const { rejectNonAdmin } = require('../modules/authentication-middleware')
+const { rejectNonAdmin, rejectNonOwner } = require('../modules/authentication-middleware')
 
 const Product = require('../schemas/productSchema')
 
@@ -117,7 +117,7 @@ router.put('/:id', rejectNonAdmin, uploadProductPhotos, async (req, res) => {
 // @id      id of product
 // @desc    Delete a Product
 // @access  Private
-router.delete('/:id', rejectNonAdmin, async (req, res) => {
+router.delete('/:id', rejectNonOwner, async (req, res) => {
   console.log('Delete backend hit')
   console.log('params: ', req.params)
   Product.updateOne({ _id: req.params.id }, { deleted: true })

@@ -42,8 +42,8 @@ export const CommissionList = props => (
     aside={<Aside />}
     filters={<CommissionFilter />}
     filterDefaultValues={{ commission: true }}
+    bulkActionButtons={false}
     sort={{ field: 'date', order: 'DESC' }}
-    
     {...props}
   >
     <Datagrid rowClick='show'>

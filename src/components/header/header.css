@@ -72,6 +72,8 @@
 
 .header_username {
   font-size: 0.9vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .dropdown {

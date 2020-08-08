@@ -28,11 +28,13 @@ import {
   DisabledInput,
   BooleanInput,
   LongTextInput,
-  ReferenceManyField
+  ReferenceManyField,
+  Toolbar,
+  SaveButton
 } from 'react-admin'
 
 export const OrderList = props => (
-  <List {...props} sort={{ field: 'date', order: 'DESC' }} >
+  <List {...props} sort={{ field: 'date', order: 'DESC' }} bulkActionButtons={false}>
     <Datagrid rowClick='show'>
       <ReferenceField
         label='User'
@@ -112,7 +114,7 @@ const shippingCategories = [
 
 export const OrderEdit = props => (
   <Edit undoable={false} actions={<OrderEditActions />} {...props}>
-    <SimpleForm>
+    <SimpleForm toolbar={<OrderEditToolbar />}>
       <h2>User Information</h2>
       <ReferenceField label='User Email' source='user' reference='admin-users'>
         <TextField source='email' />
@@ -142,10 +144,10 @@ export const OrderEdit = props => (
 )
 
 //custom comps
-const OrderShowActions = ({ basePath, data, resource }) => (
+const OrderShowActions = ({ permissions, basePath, data, resource }) => (
   <TopToolbar>
     <EditButton basePath={basePath} record={data} />
-    <DeleteButton basePath={basePath} record={data} />
+    {permissions === 'owner' && <DeleteButton basePath={basePath} record={data} />}
     <ListButton basePath={basePath} record={data} />
     {/* Add your custom actions */}
   </TopToolbar>
@@ -158,3 +160,9 @@ const OrderEditActions = ({ basePath, data, resource }) => (
     {/* Add your custom actions */}
   </TopToolbar>
 )
+
+const OrderEditToolbar = props => (
+  <Toolbar {...props} >
+      <SaveButton />
+  </Toolbar>
+);

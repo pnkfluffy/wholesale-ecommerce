@@ -75,11 +75,18 @@ class Product extends React.Component {
     axios
       .get('/api/products/' + this.props.match.params.productID)
       .then(res => {
-        console.log('res', res.data)
-        this.setState({
-          product: res.data,
-          loaded: true
-        })
+        if (res.data) {
+          this.setState({
+            product: res.data,
+            loaded: true
+          })
+        }
+        else {
+          this.setState({
+            wasError: true,
+            loaded: true
+          })
+        }
       })
       .catch(err => {
         console.log('error' + err)
@@ -144,11 +151,11 @@ class Product extends React.Component {
   }
 
   render() {
-    if (this.state.wasError) {
-      return <div>Product Not Found</div>
-    }
     if (!this.state.loaded) {
       return <div></div>
+    }
+    if (this.state.wasError || this.state.products) {
+      return <div>Product Not Found</div>
     }
     const product = this.state.product
     let totalPrice = getPriceByQuantity(

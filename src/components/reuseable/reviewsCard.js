@@ -12,7 +12,7 @@ const mapStateToProps = state => ({
 })
 
 class ReviewsCard extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       productName: ''
@@ -62,7 +62,7 @@ class ReviewsCard extends React.Component {
     return name.slice(0, endOfName)
   }
 
-  render () {
+  render() {
     const reviewDate = moment(this.props.review.date).format('ll')
     const onHomePage = Object.keys(this.props.match.params).length === 0
     const review = this.props.review.review

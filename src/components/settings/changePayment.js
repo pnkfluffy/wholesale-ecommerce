@@ -30,91 +30,88 @@ class ChangePayment extends React.Component {
   }
 
   componentDidMount() {
-    axios
-        .get('/api/gc/oneClient')
-        .then(res => {
-          this.setState({
-            paymentInfo: res.data,
-            loading: false
-          })
-          console.log(this.state.paymentInfo);
+    axios.get('/api/gc/oneClient')
+      .then(res => {
+        this.setState({
+          paymentInfo: res.data,
+          loading: false
         })
-        .catch(err => {
-            this.setState({
-                loading: false
-            })
-            console.log(err)
+        console.log(this.state.paymentInfo);
+      })
+      .catch(err => {
+        this.setState({
+          loading: false
         })
+        console.log(err)
+      })
   }
 
   changePayment = () => {
-      axios
-          .post('/api/gc/addClient', {
-                                                newClientName: '',
-                                                newClientLastName: '',
-                                                newClientEmail: '',
-                                                newClientAddr: '',
-                                                newClientCity: '',
-                                                newClientPostalCode: '',
-                                                redirect: 'settings',
-                                              })
-          .then(res => {
-            /*set token to finish payment*/
-            const token = res.data.token
-            localStorage.setItem('gc', token)
-            window.open(res.data.url, '_self')
-          })
-          .catch(err => {
-            console.log(err)
-          })
+    axios.post('/api/gc/addClient', {
+      newClientName: '',
+      newClientLastName: '',
+      newClientEmail: '',
+      newClientAddr: '',
+      newClientCity: '',
+      newClientPostalCode: '',
+      redirect: 'settings',
+    })
+      .then(res => {
+        /*set token to finish payment*/
+        const token = res.data.token
+        localStorage.setItem('gc', token)
+        window.open(res.data.url, '_self')
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   render() {
-            if(this.state.loading)
-              return (<img src = {loading}/>)
-            else if (Object.entries(this.state.paymentInfo).length !== 0)
-            {
-              return (
-                  <div>
-                    <div>
-                      <div className='order_info_split'>
-                        <div className='order_info_content'>Payment Account Owner: </div>
-                        <div className='order_info_content'>{this.state.paymentInfo.given_name} {this.state.paymentInfo.family_name}</div>
-                      </div>
-                      <div className='order_info_split'>
-                        <div className='order_info_content'>Associated Address: </div>
-                        <div className='settings_payment_address'>
-                          <div className='settings_payment_addr_info'>{this.state.paymentInfo.address_line1} {this.state.paymentInfo.address_line2}</div>
-                          <div className='settings_payment_addr_info'>{this.state.paymentInfo.postal_code}, {this.state.paymentInfo.city}, {this.state.paymentInfo.region}</div>
-                        </div>
-                      </div>
+    if (this.state.loading)
+      return (<img src={loading} />)
+    else if (Object.entries(this.state.paymentInfo).length !== 0) {
+      return (
+        <div>
+          <div>
+            <div className='order_info_split'>
+              <div className='order_info_content'>Payment Account Owner: </div>
+              <div className='order_info_content'>{this.state.paymentInfo.given_name} {this.state.paymentInfo.family_name}</div>
+            </div>
+            <div className='order_info_split'>
+              <div className='order_info_content'>Associated Address: </div>
+              <div className='settings_payment_address'>
+                <div className='settings_payment_addr_info'>{this.state.paymentInfo.address_line1} {this.state.paymentInfo.address_line2}</div>
+                <div className='settings_payment_addr_info'>{this.state.paymentInfo.postal_code}, {this.state.paymentInfo.city}, {this.state.paymentInfo.region}</div>
+              </div>
+            </div>
+          </div>
+          <GreenButton
+            variant='contained'
+            className='full'
+            onClick={this.changePayment}
+          >
+            Change Payment Method
+          </GreenButton>
+        </div>
+      )
+    }
+    else {
+      return (
+        <div>
+          <div>
+            You don't have any payment method associated to your account yet. Create one here or wait until cart check-out
                     </div>
-                    <GreenButton
-                        variant='contained'
-                        className='full'
-                        onClick={this.changePayment}
-                    >
-                      Change Payment Method
+          <GreenButton
+            variant='contained'
+            className='full'
+            onClick={this.changePayment}
+          >
+            Add Payment Method
                     </GreenButton>
-                  </div>
-                )
-                }
-            else {
-              return (
-                  <div>
-                    <div>
-                      You don't have any payment method associated to your account yet. Create one here or wait until cart check-out
-                    </div>
-                    <GreenButton
-                        variant='contained'
-                        className='full'
-                        onClick={this.changePayment}
-                    >
-                      Add Payment Method
-                    </GreenButton>
-                  </div>
-              )
-            }
+        </div>
+      )
+    }
   }
 }
 export default connect(mapStateToProps)(ChangePayment);

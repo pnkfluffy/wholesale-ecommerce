@@ -54,28 +54,6 @@ class Settings extends React.Component {
     const url = 'http://localhost:3000/settings?redirect_flow_id'
     if (params.has(url)) {
       this.completeSetPayment(params.get(url));
-    } else if (params.has('http://localhost:3000/settings?new')) {
-      if(params.get('http://localhost:3000/settings?new') === "true")
-        Swal.fire({
-          title: '<span class="swal_title"> SUCCESS',
-          text: "Your payment method has been updated!",
-          icon: 'success',
-          background: '#1E1F26',
-          customClass: {
-            confirmButton: 'swal_confirm_button'
-          }
-        })
-      else {
-        Swal.fire({
-          title: '<span class="swal_title"> ERROR',
-          text: "Something went wrong trying to change you payment method, please try again!",
-          icon: 'error',
-          background: '#1E1F26',
-          customClass: {
-            confirmButton: 'swal_confirm_button'
-          }
-        })
-      }
     }
   }
 
@@ -83,11 +61,29 @@ class Settings extends React.Component {
     axios
         .post('/api/gc/completeRedirect', {redirect: redirect})
         .then(res => {
-          window.open("http://localhost:3000/settings?new=true", "_self");
+          this.props.history.replace('/settings')
+            Swal.fire({
+              title: '<span class="swal_title"> SUCCESS',
+              text: "Your payment method has been updated!",
+              icon: 'success',
+              background: '#1E1F26',
+              customClass: {
+                confirmButton: 'swal_confirm_button'
+              }
+            })
         })
         .catch(err => {
           console.log(err)
-          window.open("http://localhost:3000/settings?new=false", "_self");
+          this.props.history.replace('/settings')
+          Swal.fire({
+            title: '<span class="swal_title"> ERROR',
+            text: "Something went wrong trying to change you payment method, please try again!",
+            icon: 'error',
+            background: '#1E1F26',
+            customClass: {
+              confirmButton: 'swal_confirm_button'
+            }
+          })
         })
   }
 

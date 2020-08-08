@@ -22,6 +22,7 @@ class ChangePayment extends React.Component {
     super(props)
     this.state = {
       paymentInfo: {},
+      bankInfo: {},
       err: {
         payment: false,
       },
@@ -44,6 +45,16 @@ class ChangePayment extends React.Component {
         })
         console.log(err)
       })
+      axios.get('/api/gc/oneBank')
+          .then(res => {
+              this.setState({
+                  bankInfo: res.data,
+              })
+              console.log(res.data);
+          })
+          .catch(err => {
+              console.log(err)
+          })
   }
 
   changePayment = () => {
@@ -75,9 +86,21 @@ class ChangePayment extends React.Component {
         <div>
           <div>
             <div className='order_info_split'>
-              <div className='order_info_content'>Payment Account Owner: </div>
-              <div className='order_info_content'>{this.state.paymentInfo.given_name} {this.state.paymentInfo.family_name}</div>
+              <div className='order_info_content'>Account Holder: </div>
+              <div className='order_info_content'>{this.state.bankInfo.account_holder_name}</div>
             </div>
+              <div className='order_info_split'>
+                  <div className='order_info_content'>Account Number:</div>
+                  <div className='order_info_content'>********{this.state.bankInfo.account_number}</div>
+              </div>
+              <div className='order_info_split'>
+                  <div className='order_info_content'>Account Type:</div>
+                  <div className='order_info_content'>{this.state.bankInfo.account_type}</div>
+              </div>
+              <div className='order_info_split'>
+                  <div className='order_info_content'>Bank Name:</div>
+                  <div className='order_info_content'>{this.state.bankInfo.bank_name}</div>
+              </div>
             <div className='order_info_split'>
               <div className='order_info_content'>Associated Address: </div>
               <div className='settings_payment_address'>

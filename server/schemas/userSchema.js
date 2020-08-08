@@ -26,11 +26,14 @@ const UserSchema = new Schema({
     required: true
   },
   name: {
-    type: String
+    type: String,
+    default: "",
+    required: true,
   },
   paymentVerified: {
     type: Boolean,
-    default: false
+    default: false,
+    required: true,
   },
   goCardlessID: {
     type: String
@@ -60,7 +63,8 @@ const UserSchema = new Schema({
   ],
   representative: {
     type: Schema.Types.ObjectId,
-    ref: 'user'
+    ref: 'user',
+    required: true,
   },
   date: {
     type: Date,

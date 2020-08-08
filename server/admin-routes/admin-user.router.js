@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
-// const bcrypt = require("bcryptjs");
+// const bcrypt = require("bcryptjs")
+const {ObjectId} = require('mongodb')
 const passport = require('../modules/passport')
 const {
   rejectNonAdmin,
@@ -67,11 +68,13 @@ router.post('/', rejectNonAdmin, async (req, res) => {
       res.status(403).send('Insufficient Permissions')
       return
     }
+    const representative = req.body.makeRepresentative ? req.user._id : ObjectId();
     User.create({
       email: req.body.email,
       name: req.body.name,
       isAdmin: req.body.isAdmin,
-      password: saltedPass
+      password: saltedPass,
+      representative
     }).then(newUser => {
       console.log(newUser)
       newUser.password = null

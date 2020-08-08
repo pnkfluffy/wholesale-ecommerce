@@ -82,7 +82,7 @@ export const UserShow = props => {
           source='representative'
           reference='admin-users'
         >
-          <TextField label='Name' source='email' />
+          <TextField label='Name' source='name' />
         </ReferenceField>
         <TextField label='Payment confirmed' source='paymentVerified' />
         <ArrayField label='Wishlist' source='wishlist'>

@@ -304,16 +304,10 @@ router.post('/addClient', rejectUnauthenticated, async (req, res) => {
           console.log('no user with this id')
           res.status(500).send('no user with this id')
         } else {
-          user
-            .updateOne({
-              $set: { goCardlessID: redirectFlow.id }
-            })
-            .then(
-              res.json({
-                success: true,
-                url: redirectFlow.redirect_url
-              })
-            )
+          res.json({
+            success: true,
+            url: redirectFlow.redirect_url
+          })
         }
       })
       .catch(err => {
@@ -343,7 +337,7 @@ router.post('/completeRedirect/', rejectUnauthenticated, async (req, res) => {
       }
     })
     const redirectFlow = await allClients.redirectFlows.complete(
-      activeUser.goCardlessID,
+      req.body.redirect,
       {
         session_token: req.user._id.toString()
       }

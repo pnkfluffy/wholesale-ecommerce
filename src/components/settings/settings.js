@@ -56,7 +56,7 @@ class Settings extends React.Component {
       this.completeSetPayment(params.get(url));
     } else if (params.has('http://localhost:3000/settings?new')) {
       console.log(params.get('http://localhost:3000/settings?new'));
-      if(params.get('http://localhost:3000/settings?new'))
+      if(params.get('http://localhost:3000/settings?new') === "true")
         Swal.fire({
           title: '<span class="swal_title"> SUCCESS',
           text: "Your payment method has been updated!",
@@ -66,22 +66,23 @@ class Settings extends React.Component {
             confirmButton: 'swal_confirm_button'
           }
         })
-      else
+      else {
         Swal.fire({
-                    title: '<span class="swal_title"> ERROR',
-                    text: "Something went wrong trying to change you payment method, please try again!",
-                    icon: 'error',
-                    background: '#1E1F26',
-                    customClass: {
-                      confirmButton: 'swal_confirm_button'
-                    }
-                  })
+          title: '<span class="swal_title"> ERROR',
+          text: "Something went wrong trying to change you payment method, please try again!",
+          icon: 'error',
+          background: '#1E1F26',
+          customClass: {
+            confirmButton: 'swal_confirm_button'
+          }
+        })
+      }
     }
   }
 
   completeSetPayment = redirect => {
     axios
-        .post('/api/gc/completeRedirect', redirect)
+        .post('/api/gc/completeRedirect', {redirect: redirect})
         .then(res => {
           window.open("http://localhost:3000/settings?new=true", "_self");
         })

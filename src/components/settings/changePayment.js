@@ -39,7 +39,12 @@ class ChangePayment extends React.Component {
           })
           console.log(this.state.paymentInfo);
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+            this.setState({
+                loading: false
+            })
+            console.log(err)
+        })
   }
 
   changePayment = () => {

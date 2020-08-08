@@ -77,7 +77,7 @@ class GoCardless extends React.Component {
       })
       const redirect = params.get(url)
       axios
-        .post('/api/gc/completeRedirect', redirect)
+        .post('/api/gc/completeRedirect', {redirect: redirect})
         .then(res => {
           this.setState({
             hasMandate: true,

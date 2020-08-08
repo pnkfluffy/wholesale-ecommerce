@@ -24,7 +24,7 @@ router.get('/oneOrder/:orderId', rejectUnauthenticated, (req, res) => {
 // @desc    Returns all orders from user
 // @access  Private
 router.get('/from', rejectUnauthenticated, (req, res) => {
-  Order.find({ user: req.user._id }, { user: 0, paymentID: 0 })
+  Order.find({ user: req.user._id }, { user: 0, paymentID: 0, representative: 0 })
     .then(orders => {
         res.json(orders)
     })

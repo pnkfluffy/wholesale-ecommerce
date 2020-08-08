@@ -84,7 +84,7 @@ class Product extends React.Component {
 
   changeQuantity = quantity => {
     quantity = parseInt(quantity, 10)
-    if (quantity > 10000) {
+    if (quantity > 1000) {
       return
     }
     if (quantity <= 0) this.setState({ quantity: 1 })

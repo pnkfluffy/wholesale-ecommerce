@@ -59,21 +59,21 @@ router.get('/checkClientMandate', rejectUnauthenticated, async (req, res) => {
 // @route   GET /gc/clients
 // @desc    Returns all clients
 // @access  Private
-router.get('/clients', rejectUnauthenticated, async (req, res) => {
-  try {
-    // Initialize the GoCardLess client.
-    const allClients = await initializeGoCardless()
-    const listResponse = await allClients.customers.list()
-    const customers = listResponse.customers
-    res.json({
-      success: true,
-      customers: customers
-    })
-  } catch (error) {
-    console.log(error)
-    res.status(500).send('error getting clients')
-  }
-})
+// router.get('/clients', rejectUnauthenticated, async (req, res) => {
+//   try {
+//     // Initialize the GoCardLess client.
+//     const allClients = await initializeGoCardless()
+//     const listResponse = await allClients.customers.list()
+//     const customers = listResponse.customers
+//     res.json({
+//       success: true,
+//       customers: customers
+//     })
+//   } catch (error) {
+//     console.log(error)
+//     res.status(500).send('error getting clients')
+//   }
+// })
 
 // @route   GET /gc/oneClient
 // @desc    Returns client by id
@@ -177,18 +177,18 @@ function translatePaymentStatus (status) {
 // @route   GET /gc/payments
 // @desc    Returns all payments
 // @access  Private
-router.get('/payments', rejectUnauthenticated, async (req, res) => {
-  try {
-    // Initialize the GoCardLess client.
-    const allClients = await initializeGoCardless()
-    let payments = await allClients.payments.list()
-    console.log(payments)
-    res.send(payments.payments)
-  } catch (error) {
-    console.log(error)
-    res.status(500).send('payments not found')
-  }
-})
+// router.get('/payments', rejectUnauthenticated, async (req, res) => {
+//   try {
+//     // Initialize the GoCardLess client.
+//     const allClients = await initializeGoCardless()
+//     let payments = await allClients.payments.list()
+//     console.log(payments)
+//     res.send(payments.payments)
+//   } catch (error) {
+//     console.log(error)
+//     res.status(500).send('payments not found')
+//   }
+// })
 
 // @route   GET /gc/payments
 // @desc    Returns all payments from user
@@ -272,7 +272,7 @@ router.post('/addClient', rejectUnauthenticated, async (req, res) => {
   const addr = req.body.newClientAddr
   const city = req.body.newClientCity
   const postalCode = req.body.newClientPostalCode
-  const success_redirect_url = 'http://localhost:3000/' + req.body.redirect
+  const success_redirect_url = process.env.DEV_URI + req.body.redirect
   try {
     // Initialize the GoCardLess allClients.
     const allClients = await initializeGoCardless()

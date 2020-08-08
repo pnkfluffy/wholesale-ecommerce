@@ -11,7 +11,7 @@ const Review = require('../schemas/reviewSchema')
 // @desc    Returns page_size reviews of page_number
 // @access  Private
 router.get('/all', rejectUnauthenticated, (req, res) => {
-    Review.find({ deleted: false }, { user: 0 }).sort({ date: -1 })
+    Review.find({ deleted: false }, { user: 0, deleted: 0 }).sort({ date: -1 })
         .then(reviews => {
             res.json(reviews)
         })
@@ -41,7 +41,7 @@ router.get('/all', rejectUnauthenticated, (req, res) => {
 router.get('/from/:page_size/:page_num', rejectUnauthenticated, (req, res) => {
     const skips = req.params.page_size * (req.params.page_num - 1)
 
-    Review.find({ user: req.user._id, deleted: false }, { user: 0 })
+    Review.find({ user: req.user._id, deleted: false }, { user: 0, deleted: 0 })
         .skip(skips)
         .limit(parseInt(req.params.page_size, 10))
         .then(reviews => {
@@ -103,7 +103,7 @@ router.post('/newReview/:productID', rejectUnauthenticated, async (req, res) => 
 router.post('/editReview/:reviewID', rejectUnauthenticated, (req, res) => {
     const newReview = req.body.review;
     const newStars = req.body.stars;
-    Review.findById(req.params.reviewID)
+    Review.find({ _id: req.params.reviewID, user: req.user._id})
         .then(review => {
             review.updateOne({ review: newReview, stars: newStars })
                 .then(review => res.json(review))
@@ -122,7 +122,7 @@ router.post('/editReview/:reviewID', rejectUnauthenticated, (req, res) => {
 // @desc    Delete a Review
 // @access  Private
 router.delete('/:reviewID', rejectUnauthenticated, (req, res) => {
-    Review.findOneAndUpdate({ _id: req.params.reviewID }, { deleted: true })
+    Review.findOneAndUpdate({ _id: req.params.reviewID, user: req.user._id }, { deleted: true })
         .then(() => res.json({ success: true }))
         .catch(err => {
             console.log(err)

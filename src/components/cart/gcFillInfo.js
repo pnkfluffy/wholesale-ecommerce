@@ -17,7 +17,8 @@ class GCFillInfo extends React.Component {
       newClientEmail: '',
       newClientAddr: '',
       newClientCity: '',
-      newClientPostalCode: ''
+      newClientPostalCode: '',
+      redirect: 'cart',
     }
   }
 

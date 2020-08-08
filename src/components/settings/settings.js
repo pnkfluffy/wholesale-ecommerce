@@ -6,17 +6,14 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import { RedButton, GreenButton } from '../reuseable/materialButtons'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
-// import MailOutlineIcon from '@material-ui/icons/MailOutline'
-// import VpnKeyIcon from '@material-ui/icons/VpnKey'
-// import AuthField from '../auth/AuthField'
 import InputField from '../reuseable/InputField'
 import Swal from 'sweetalert2'
-// import store from "../../redux/store";
-// import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
+import loading from '../../resources/images/loading.svg'
 
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
 import { classes } from "../reuseable/materialButtons"
+import ChangePayment from "./changePayment";
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -48,20 +45,50 @@ class Settings extends React.Component {
       },
       snackbarOpen: false,
       snackbarSeverity: "success",
-      snackbarMessage: ""
+      snackbarMessage: "",
+    }
+    let params = new URLSearchParams(window.location.href)
+    /*/!*(!) TO GO LIVE
+    const url = 'https://wholesale-portal-testing.herokuapp.com/settings?redirect_flow_id';
+    *!/*/
+    const url = 'http://localhost:3000/settings?redirect_flow_id'
+    if (params.has(url)) {
+      this.completeSetPayment(params.get(url));
+    } else if (params.has('http://localhost:3000/settings?new')) {
+      console.log(params.get('http://localhost:3000/settings?new'));
+      if(params.get('http://localhost:3000/settings?new'))
+        Swal.fire({
+          title: '<span class="swal_title"> SUCCESS',
+          text: "Your payment method has been updated!",
+          icon: 'success',
+          background: '#1E1F26',
+          customClass: {
+            confirmButton: 'swal_confirm_button'
+          }
+        })
+      else
+        Swal.fire({
+                    title: '<span class="swal_title"> ERROR',
+                    text: "Something went wrong trying to change you payment method, please try again!",
+                    icon: 'error',
+                    background: '#1E1F26',
+                    customClass: {
+                      confirmButton: 'swal_confirm_button'
+                    }
+                  })
     }
   }
 
-  componentDidMount() {
+  completeSetPayment = redirect => {
     axios
-        .get('/api/gc/oneClient')
+        .post('/api/gc/completeRedirect', redirect)
         .then(res => {
-          this.setState({
-            paymentInfo: res.data,
-          })
-          console.log(this.state.paymentInfo);
+          window.open("http://localhost:3000/settings?new=true", "_self");
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+          console.log(err)
+          window.open("http://localhost:3000/settings?new=false", "_self");
+        })
   }
 
   handleClose = (event, reason) => {
@@ -328,17 +355,7 @@ class Settings extends React.Component {
                 )}
               </div>
               {this.state.openTab === 'payment' && (
-                  <div>
-                    <div>{this.state.paymentInfo.given_name} {this.state.paymentInfo.family_name}</div>
-                    <div>{this.state.paymentInfo.address_line1} {this.state.paymentInfo.address_line2}</div>
-                    <div>{this.state.paymentInfo.postal_code}, {this.state.paymentInfo.city}, {this.state.paymentInfo.region}</div>
-                    <GreenButton
-                        variant='contained'
-                        className='full'
-                    >
-                      New Payment Method
-                    </GreenButton>
-                  </div>
+                  <ChangePayment />
               )}
             </div>
             {/* <div className='edit_account_container'>

@@ -68,22 +68,13 @@ class GetInvoice extends React.Component {
     return fullDate
   }
 
-  organizeTotal = () => {
-    const str = this.props.order.total.toString()
-    const index = str.length - 2
-    const beforeComma = str.substring(0, index)
-    const afterComma = str.substring(index)
-    const total = beforeComma + ',' + afterComma
-    return total
-  }
-
   generateInvoice = async () => {
     console.log('generating')
 
     const client = await this.getClientInfo()
     const items = await this.getItems()
     const date = await this.getDate()
-    const subtotal = this.organizeTotal()
+    const subtotal =  this.props.order.total + ",00"
 
     const shipping = {
       ...this.props.order.deliveryInfo,

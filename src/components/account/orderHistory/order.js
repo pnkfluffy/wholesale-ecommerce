@@ -85,7 +85,7 @@ class Order extends React.Component {
     const index = str.length - 2;
     const beforeComma = str.substring(0, index);
     const afterComma = str.substring(index);
-    const totalOrganized = beforeComma + "," + afterComma;
+    const totalOrganized = beforeComma + "." + afterComma;
     return totalOrganized;
   }
 

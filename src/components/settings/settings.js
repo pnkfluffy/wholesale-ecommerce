@@ -14,6 +14,7 @@ import Snackbar from '@material-ui/core/Snackbar'
 import Alert from '@material-ui/lab/Alert'
 import { classes } from '../reuseable/materialButtons'
 import ChangePayment from './changePayment'
+import store from "../../redux/store";
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -52,43 +53,40 @@ class Settings extends React.Component {
     *!/*/
     const url = 'http://localhost:3000/settings?redirect_flow_id'
     if (params.has(url)) {
-      this.completeSetPayment(params.get(url))
-    } else if (params.has('http://localhost:3000/settings?new')) {
-      if (params.get('http://localhost:3000/settings?new') === 'true')
-        Swal.fire({
-          title: '<span class="swal_title"> SUCCESS',
-          text: 'Your payment method has been updated!',
-          icon: 'success',
-          background: '#1E1F26',
-          customClass: {
-            confirmButton: 'swal_confirm_button'
-          }
-        })
-      else {
-        Swal.fire({
-          title: '<span class="swal_title"> ERROR',
-          text:
-            'Something went wrong trying to change you payment method, please try again!',
-          icon: 'error',
-          background: '#1E1F26',
-          customClass: {
-            confirmButton: 'swal_confirm_button'
-          }
-        })
-      }
+      this.completeSetPayment(params.get(url));
     }
   }
 
   completeSetPayment = redirect => {
+    this.props.history.replace('/settings')
     axios
-      .post('/api/gc/completeRedirect', { redirect: redirect })
-      .then(res => {
-        window.open('http://localhost:3000/settings?new=true', '_self')
-      })
-      .catch(err => {
-        console.log(err)
-        window.open('http://localhost:3000/settings?new=false', '_self')
-      })
+        .post('/api/gc/completeRedirect', {redirect: redirect})
+        .then(res => {
+            if (!this.state.props.hasMandate)
+              store.dispatch({
+                type: 'CHANGE_MANDATE_STATUS'
+              })
+            Swal.fire({
+              title: '<span class="swal_title"> SUCCESS',
+              text: "Your payment method has been updated!",
+              icon: 'success',
+              background: '#1E1F26',
+              customClass: {
+                confirmButton: 'swal_confirm_button'
+              }
+            })
+        })
+        .catch(err => {
+          Swal.fire({
+            title: '<span class="swal_title"> ERROR',
+            text: "Something went wrong trying to change you payment method, please try again!",
+            icon: 'error',
+            background: '#1E1F26',
+            customClass: {
+              confirmButton: 'swal_confirm_button'
+            }
+          })
+        })
   }
 
   handleClose = (event, reason) => {
@@ -190,6 +188,7 @@ class Settings extends React.Component {
           err: {
             oldPass: false,
             newPass: false,
+            newPassConfirm: false
           },
           openTab: ''
         })

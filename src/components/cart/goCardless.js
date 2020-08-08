@@ -17,7 +17,23 @@ const mapStateToProps = state => ({
 class GoCardless extends React.Component {
   constructor (props) {
     super(props)
+    this.state = {
+      bankInfo: {}
+    }
     this.confirmAccount()
+  }
+
+  componentDidMount() {
+    axios.get('/api/gc/oneBank')
+        .then(res => {
+          this.setState({
+            bankInfo: res.data,
+          })
+          console.log(res.data);
+        })
+        .catch(err => {
+          console.log(err)
+        })
   }
 
   confirmAccount = () => {
@@ -29,38 +45,35 @@ class GoCardless extends React.Component {
     console.log(params.has(url));
     if (params.has(url)) {
       const redirect = params.get(url)
+      this.props.history.replace('/buy')
       axios
         .post('/api/gc/completeRedirect', {redirect: redirect})
         .then(res => {
-          window.open("http://localhost:3000/buy?new=true", "_self");
+          store.dispatch({
+            type: 'CHANGE_MANDATE_STATUS'
+          })
+          Swal.fire({
+            title: '<span class="swal_title"> SUCCESS',
+            text: "Your payment method has been updated!",
+            icon: 'success',
+            background: '#1E1F26',
+            customClass: {
+              confirmButton: 'swal_confirm_button'
+            }
+          })
         })
         .catch(err => {
-          console.log(err)
-          window.open("http://localhost:3000/buy?new=false", "_self");
+          Swal.fire({
+            title: '<span class="swal_title"> ERROR',
+            text: "Something went wrong trying to change you payment method, please try again!",
+            icon: 'error',
+            background: '#1E1F26',
+            customClass: {
+              confirmButton: 'swal_confirm_button'
+            }
+          })
         })
-    } else if (params.has('http://localhost:3000/buy?new')) {
-      if(params.get('http://localhost:3000/buy?new') === "true")
-        Swal.fire({
-          title: '<span class="swal_title"> SUCCESS',
-          text: "Your payment method has been updated!",
-          icon: 'success',
-          background: '#1E1F26',
-          customClass: {
-            confirmButton: 'swal_confirm_button'
-          }
-        })
-      else {
-        Swal.fire({
-          title: '<span class="swal_title"> ERROR',
-          text: "Something went wrong trying to change you payment method, please try again!",
-          icon: 'error',
-          background: '#1E1F26',
-          customClass: {
-            confirmButton: 'swal_confirm_button'
-          }
-        })
-      }
-    }
+     }
   }
 
   render () {
@@ -94,6 +107,25 @@ class GoCardless extends React.Component {
          }
         })()}
         <div className="cart_products_payment">
+          <div className='gc_info_card'>
+            <div className='order_info_title'>Payment Method</div>
+            <div className='order_info_split'>
+              <div className='order_info_content'>Account Holder: </div>
+              <div className='order_info_content'>{this.state.bankInfo.account_holder_name}</div>
+            </div>
+            <div className='order_info_split'>
+              <div className='order_info_content'>Account Number:</div>
+              <div className='order_info_content'>********{this.state.bankInfo.account_number}</div>
+            </div>
+            <div className='order_info_split'>
+              <div className='order_info_content'>Account Type:</div>
+              <div className='order_info_content'>{this.state.bankInfo.account_type}</div>
+            </div>
+            <div className='order_info_split'>
+              <div className='order_info_content'>Bank Name:</div>
+              <div className='order_info_content'>{this.state.bankInfo.bank_name}</div>
+            </div>
+          </div>
           {productsList}
         </div>
       </div>

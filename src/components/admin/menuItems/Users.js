@@ -46,7 +46,7 @@ import {
   SaveButton
 } from 'react-admin'
 
-export const UserList = ({permissions, ...props}) => (
+export const UserList = ({ permissions, ...props }) => (
   <List {...props} sort={{ field: 'date', order: 'DESC' }} bulkActionButtons={false}>
     <Datagrid rowClick='show'>
       <TextField label='User' source='name' />
@@ -135,7 +135,7 @@ export const UserEdit = props => (
     actions={<UserEditActions />}
     {...props}
   >
-    <SimpleForm toolbar={<UserEditToolbar />}> 
+    <SimpleForm toolbar={<UserEditToolbar />}>
       <TextField disabled label='ID' source='id' />
       <TextInput label='email' source='email' />
       <TextInput label='name' source='name' />
@@ -157,13 +157,13 @@ export const UserEdit = props => (
   </Edit>
 )
 
-export const UserCreate = props => {
+export const UserCreate = ({ permissions, ...props }) => {
   return (
     <Create {...props}>
       <SimpleForm>
         <TextInput label='User Email' source='email' />
         <TextInput label='Full Name' source='name' />
-        <BooleanInput label='Make Admin User' source='isAdmin' />
+        {permissions === 'owner' && <BooleanInput label='Make Admin User' source='isAdmin' />}
         <BooleanInput
           label='Make Me User Representative'
           source='makeRepresentative'
@@ -201,6 +201,6 @@ const UserEditActions = ({ permissions, basePath, data, resource }) => (
 
 const UserEditToolbar = props => (
   <Toolbar {...props} >
-      <SaveButton />
+    <SaveButton />
   </Toolbar>
 );

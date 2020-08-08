@@ -107,6 +107,35 @@ router.get('/oneClient', rejectUnauthenticated, async (req, res) => {
   }
 })
 
+// @route   GET /gc/oneClient
+// @desc    Returns client by id
+// @access  Private
+router.get('/oneBank', rejectUnauthenticated, async (req, res) => {
+    try {
+        const activeUser = await User.findById(req.user._id).catch(err => {
+            console.log(err)
+            res.status(500).send("Couldn't find user in db")
+        })
+
+        const allClients = await gocardless(
+            process.env.GC_ACCESS_TOKEN,
+            // Change this to constants.Environments.Live when you're ready to go live
+            constants.Environments.Sandbox
+        )
+        const listBankAccounts = await allClients.customerBankAccounts.list({customer: activeUser.goCardlessID});
+        const userBank = listBankAccounts.customer_bank_accounts[0];
+        res.json({
+            account_holder_name: userBank.account_holder_name,
+            account_number: userBank.account_number_ending,
+            account_type: userBank.account_type,
+            bank_name: userBank.bank_name,
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('client not found')
+    }
+})
+
 function translatePaymentStatus (status) {
   let translated = {
                       status: "",

@@ -208,7 +208,6 @@
 .create_review_header {
   font-size: 0.8vw;
   display: flex;
-  margin-bottom: 0.5vh;
   text-align: left;
   padding-left: 2%;
   width: 98%;
@@ -255,6 +254,7 @@
 
 .create_review_rating > svg {
   font-size: 1.4vw;
+  color: var(--logo-green);
 }
 
 .create_review_button {
@@ -373,3 +373,14 @@
   justify-content: space-around;
 }
 
+.counter_container{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 0.5vh;
+}
+
+.character_counter{
+  font-size: 0.75vw;
+  margin: 0;
+}

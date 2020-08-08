@@ -282,7 +282,7 @@ router.post('/addClient', rejectUnauthenticated, async (req, res) => {
       description: 'Cider Barrels',
       session_token: req.user._id.toString(),
       /*(!) TO GO LIVE
-			success_redirect_url: "https://wholesale-portal-testing.herokuapp.com/cart",
+			success_redirect_url: "https://wholesale-portal-testing.herokuapp.com/cart", // use DEV_URI to get dynamic url
 			 */
       success_redirect_url: success_redirect_url,
 

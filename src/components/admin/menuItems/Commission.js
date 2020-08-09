@@ -40,41 +40,42 @@ import {
 
 export const CommissionList = props => (
   // <ReferenceManyField label={false} reference='admin-users' target='id'>
-    <List
-      aside={<Aside />}
-      filters={<CommissionFilter />}
-      filterDefaultValues={{ commission: true }}
-      bulkActionButtons={false}
-      sort={{ field: 'date', order: 'DESC' }}
-      {...props}
-    >
-      <Datagrid rowClick='show'>
-        <ReferenceField
-          label='User'
-          link='show'
-          source='user'
-          reference='admin-users'
-        >
-          <TextField label='Name' source='name' />
-        </ReferenceField>
+  <List
+    aside={<Aside />}
+    filters={<CommissionFilter />}
+    actions={<div />}
+    filterDefaultValues={{ commission: true }}
+    bulkActionButtons={false}
+    sort={{ field: 'date', order: 'DESC' }}
+    {...props}
+  >
+    <Datagrid rowClick='show'>
+      <ReferenceField
+        label='User'
+        link='show'
+        source='user'
+        reference='admin-users'
+      >
+        <TextField label='Name' source='name' />
+      </ReferenceField>
 
-        <ReferenceField
-          label='Representative'
-          source='representative'
-          reference='admin-users'
-          link='show'
-        >
-          <TextField label='Name' source='name' />
-        </ReferenceField>
-        <NumberField
-          label='Total'
-          source='total'
-          options={{ style: 'currency', currency: 'USD' }}
-        />
-        <DateField label='Date' source='date' />
-        <ShowButton />
-      </Datagrid>
-    </List>
+      <ReferenceField
+        label='Representative'
+        source='representative'
+        reference='admin-users'
+        link='show'
+      >
+        <TextField label='Name' source='name' />
+      </ReferenceField>
+      <NumberField
+        label='Total'
+        source='total'
+        options={{ style: 'currency', currency: 'USD' }}
+      />
+      <DateField label='Date' source='date' />
+      <ShowButton />
+    </Datagrid>
+  </List>
   // </ReferenceManyField>
 )
 

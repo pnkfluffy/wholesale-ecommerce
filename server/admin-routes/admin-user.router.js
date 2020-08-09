@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 // const bcrypt = require("bcryptjs")
-const {ObjectId} = require('mongodb')
+const { ObjectId } = require('mongodb')
 const passport = require('../modules/passport')
 const {
   rejectNonAdmin,
@@ -68,7 +68,9 @@ router.post('/', rejectNonAdmin, async (req, res) => {
       res.status(403).send('Insufficient Permissions')
       return
     }
-    const representative = req.body.makeRepresentative ? req.user._id : ObjectId();
+    const representative = req.body.makeRepresentative
+      ? req.user._id
+      : ObjectId()
     User.create({
       email: req.body.email,
       name: req.body.name,
@@ -100,6 +102,7 @@ router.get('/', rejectNonAdmin, (req, res) => {
   console.log('User list backend hit', req.query)
   try {
     let filterQuery = JSON.parse(req.query.filter) || {}
+    console.log("filter", filterQuery);
     let sortQuery
     let sort = {}
     let rangeQuery = [0]
@@ -206,10 +209,16 @@ router.put('/', rejectNonOwner, async (req, res) => {
 
 //delete
 router.delete('/:id', rejectNonOwner, async (req, res) => {
+  console.log('del attempt', req.params.id)
+
   User.updateOne({ _id: req.params.id }, { deleted: true })
-    .then(result => {
-      console.log(result)
-      res.status(200).send('item deleted')
+    .then(user => {
+      user = JSON.parse(
+        JSON.stringify(user)
+          .split('"_id":')
+          .join('"id":')
+      )
+      res.json(user)
     })
     .catch(err => {
       console.log(err)

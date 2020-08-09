@@ -42,13 +42,20 @@ import {
   sanitizeListRestProps,
   AutocompleteInput,
   NumberField,
-  Toolbar, 
+  Toolbar,
+  Filter,
   SaveButton
 } from 'react-admin'
 import { makeStyles } from '@material-ui/core/styles'
 
-export const ProductList = ({permissions, ...props}) => (
-  <List {...props} sort={{ field: 'date', order: 'DESC' }} bulkActionButtons={false} >
+export const ProductList = ({ permissions, ...props }) => (
+  <List
+    filters={<ProductFilter />}
+    {...props}
+    sort={{ field: 'date', order: 'DESC' }}
+    bulkActionButtons={false}
+    actions={<ListActions/>}
+  >
     <Datagrid actions={<ListActions />} rowClick='show'>
       <TextField label='Product' source='name' />
       <ChipField label='Category' source='category' />
@@ -64,6 +71,24 @@ export const ProductList = ({permissions, ...props}) => (
     </Datagrid>
   </List>
 )
+
+const ListActions = props => {
+  const { className, exporter, filters, maxResults, ...rest } = props
+  const { basePath } = useListContext()
+  return (
+    <TopToolbar className={className} {...sanitizeListRestProps(rest)}>
+      <CreateButton basePath={basePath} />
+    </TopToolbar>
+  )
+}
+
+const ProductFilter = props => {
+  return (
+    <Filter {...props}>
+      <BooleanInput source='deleted' label='Show Deleted' alwaysOn />
+    </Filter>
+  )
+}
 
 export const ProductShow = props => {
   return (
@@ -349,7 +374,9 @@ const ProductTitle = ({ record }) => {
 const ProductShowActions = ({ permissions, basePath, data, resource }) => (
   <TopToolbar>
     <EditButton label='Edit' basePath={basePath} record={data} />
-    {permissions === 'owner' && <DeleteButton basePath={basePath} record={data} />}
+    {permissions === 'owner' && (
+      <DeleteButton basePath={basePath} record={data} />
+    )}
     <ListButton basePath={basePath} record={data} />
     {/* Add your custom actions */}
   </TopToolbar>
@@ -363,41 +390,8 @@ const ProductEditActions = ({ basePath, data, resource }) => (
   </TopToolbar>
 )
 
-const ListActions = ({ permissions, ...props }) => {
-  const { className, exporter, filters, maxResults, ...rest } = props
-  const {
-    resource,
-    displayedFilters,
-    filterValues,
-    basePath,
-    showFilter
-  } = useListContext()
-  return (
-    <TopToolbar className={className} {...sanitizeListRestProps(rest)}>
-      {filters &&
-        cloneElement(filters, {
-          resource,
-          showFilter,
-          displayedFilters,
-          filterValues,
-          context: 'button'
-        })}
-      {permissions === 'owner' && <DeleteButton basePath={basePath} />}
-      <CreateButton basePath={basePath} />
-      {/* <ExportButton
-        disabled={total === 0}
-        resource={resource}
-        sort={currentSort}
-        filterValues={filterValues}
-        maxResults={maxResults}
-      /> */}
-      {/* Add your custom actions */}
-    </TopToolbar>
-  )
-}
-
 const ProductEditToolbar = props => (
-  <Toolbar {...props} >
-      <SaveButton />
+  <Toolbar {...props}>
+    <SaveButton />
   </Toolbar>
-);
+)

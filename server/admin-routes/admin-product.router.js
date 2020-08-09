@@ -8,8 +8,12 @@ const Product = require('../schemas/productSchema')
 //getList
 router.get('/', rejectNonAdmin, (req, res) => {
   try {
-    let filterQuery = JSON.parse(req.query.filter) || {}
-    // console.log('Product List backend hit')
+    const filterQuery = JSON.parse(req.query.filter)
+    let filter =
+    Object.entries(filterQuery).length !== 0
+      ? JSON.parse(req.query.filter)
+      : { deleted: 'false' }
+    console.log('Product List backend hit')
     let sortQuery
     let sort = {}
     let rangeQuery = [0]
@@ -23,7 +27,7 @@ router.get('/', rejectNonAdmin, (req, res) => {
       rangeLimit = rangeQuery[1] - rangeQuery[0] + 1
     }
 
-    Product.find(filterQuery)
+    Product.find(filter)
       .sort(sort)
       .skip(rangeQuery[0])
       .limit(rangeLimit)

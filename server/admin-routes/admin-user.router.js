@@ -75,7 +75,7 @@ router.post('/', rejectNonAdmin, async (req, res) => {
       password: saltedPass,
       representative
     }).then(newUser => {
-      console.log(newUser)
+      // console.log(newUser)
       newUser.password = null
       newUser = JSON.parse(
         JSON.stringify(newUser)
@@ -89,17 +89,17 @@ router.post('/', rejectNonAdmin, async (req, res) => {
       res.status(200).json(newUser)
     })
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     res.status(500).send('Creation failed.')
   }
 })
 
 //getList
 router.get('/', rejectNonAdmin, (req, res) => {
-  console.log('User list backend hit', req.query)
+  // console.log('User list backend hit', req.query)
   try {
     let filterQuery = JSON.parse(req.query.filter) || {}
-    console.log("filter", filterQuery);
+    // console.log("filter", filterQuery);
     let sortQuery
     let sort = {}
     let rangeQuery = [0]
@@ -129,14 +129,14 @@ router.get('/', rejectNonAdmin, (req, res) => {
         })
       })
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     res.status(500).send('error retrieving users')
   }
 })
 
 //getOne
 router.get('/:id', rejectNonAdmin, (req, res) => {
-  console.log('getOne user hit. Id: ', req.params.id)
+  // console.log('getOne user hit. Id: ', req.params.id)
   User.findOne({ _id: req.params.id })
     .then(user => {
       user = JSON.parse(
@@ -147,7 +147,7 @@ router.get('/:id', rejectNonAdmin, (req, res) => {
       res.json(user)
     })
     .catch(err => {
-      console.log('error: ', err)
+      // console.log('error: ', err)
       res.status(500).send('user not found.')
     })
 })
@@ -159,7 +159,7 @@ router.get('/:id', rejectNonAdmin, (req, res) => {
 
 //update
 router.put('/:id', rejectNonAdmin, async (req, res) => {
-  console.log('update user hit')
+  // console.log('update user hit')
   User.updateOne({ _id: req.params.id }, req.body)
     .then(user => {
       user = JSON.parse(
@@ -170,7 +170,7 @@ router.put('/:id', rejectNonAdmin, async (req, res) => {
       res.json(user)
     })
     .catch(err => {
-      console.log(err)
+      // console.log(err)
       res.status(500).send('Failed to update.')
     })
 })
@@ -178,7 +178,7 @@ router.put('/:id', rejectNonAdmin, async (req, res) => {
 //updateMany
 router.put('/', rejectNonOwner, async (req, res) => {
   try {
-    console.log('updateMany hit')
+    // console.log('updateMany hit')
     let users = []
     for (let i = 0; i < req.query.ids.length; i++) {
       await User.updateOne({ _id: req.query.ids[i] }, req.body)
@@ -186,7 +186,7 @@ router.put('/', rejectNonOwner, async (req, res) => {
           users.push(user)
         })
         .catch(err => {
-          console.log(err)
+          // console.log(err)
           res.status(500).send('Failed to update all items.')
           return
         })
@@ -199,14 +199,14 @@ router.put('/', rejectNonOwner, async (req, res) => {
     )
     res.status(200).json(updatedUsers)
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     res.status(500).send('error updating users')
   }
 })
 
 //delete
 router.delete('/:id', rejectNonOwner, async (req, res) => {
-  console.log('del attempt', req.params.id)
+  // console.log('del attempt', req.params.id)
 
   User.updateOne({ _id: req.params.id }, { deleted: true })
     .then(user => {
@@ -218,7 +218,7 @@ router.delete('/:id', rejectNonOwner, async (req, res) => {
       res.json(user)
     })
     .catch(err => {
-      console.log(err)
+      // console.log(err)
       res.status(500).send('Deletion failed!')
     })
 })
@@ -226,22 +226,22 @@ router.delete('/:id', rejectNonOwner, async (req, res) => {
 //deleteMany
 router.delete('/', rejectNonOwner, async (req, res) => {
   try {
-    console.log('deleteMany hit.')
-    console.log(req.query.ids)
+    // console.log('deleteMany hit.')
+    // console.log(req.query.ids)
     for (let i = 0; i < req.query.ids.length; i++) {
       await User.updateOne({ _id: req.params.id }, { deleted: true })
         .then(result => {
-          console.log(result)
+          // console.log(result)
         })
         .catch(err => {
-          console.log(err)
+          // console.log(err)
           res.status(500).send('Not all items were deleted')
           return
         })
     }
     res.status(200).send('items deleted.')
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     res.status(500).send('error deleting items')
   }
 })

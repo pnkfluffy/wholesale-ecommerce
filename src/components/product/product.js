@@ -88,7 +88,7 @@ class Product extends React.Component {
         }
       })
       .catch(err => {
-        console.log('error' + err)
+        // console.log('error' + err)
         this.setState({
           wasError: true
         })
@@ -127,7 +127,7 @@ class Product extends React.Component {
         buttonActive: false
       },
       () => {
-        console.log('PRODUCT', product)
+        // console.log('PRODUCT', product)
         product.quantity = quantity
         product.product = this.state.product._id
         addQuantityToCart(product)

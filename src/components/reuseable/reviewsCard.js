@@ -26,7 +26,7 @@ class ReviewsCard extends React.Component {
       const product = products.find(
         product => product._id === this.props.review.product
       )
-      console.log('getproduct', product)
+      // console.log('getproduct', product)
       if (product) {
         return (
           <Link to={`/product/${product._id}`} title='go to product'>

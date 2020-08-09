@@ -26,7 +26,7 @@ class GCProductCard extends React.Component {
         title: 'swal_text'
       },
     }).then(res => {
-      console.log(res);
+      // console.log(res);
       if (res.value) {
         this.props.dispatch({
           type: 'DELETE_CART_ITEM',

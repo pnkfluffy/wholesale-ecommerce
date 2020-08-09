@@ -8,7 +8,7 @@ const { trackingAddedEmail } = require('../modules/nodemailer')
 //getList
 router.get('/', rejectNonAdmin, (req, res) => {
   try {
-    console.log('Order list backend hit', req.query)
+    // console.log('Order list backend hit', req.query)
     let filterQuery = JSON.parse(req.query.filter) || {}
     let sortQuery
     let sort = {}
@@ -31,15 +31,15 @@ router.get('/', rejectNonAdmin, (req, res) => {
     }
     delete filterQuery.commission
 
-    console.log("filterquery", filterQuery);
-    console.log("user", req.user);
+    // console.log("filterquery", filterQuery);
+    // console.log("user", req.user);
     Order.find(filterQuery)
       .sort(sort)
       .skip(rangeQuery[0])
       .limit(rangeLimit)
       .then(filteredOrders => {
         Order.countDocuments().then(contentRange => {
-          // console.log(filteredOrders);
+          // // console.log(filteredOrders);
           res.set('content-range', JSON.stringify(contentRange))
           filteredOrders = JSON.parse(
             JSON.stringify(filteredOrders)
@@ -51,14 +51,14 @@ router.get('/', rejectNonAdmin, (req, res) => {
       })
     //
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     res.status(500).send('no orders found')
   }
 })
 
 //getOne
 router.get('/:id', rejectNonAdmin, (req, res) => {
-  console.log('Order getOne hit. Id: ', req.params.id)
+  // console.log('Order getOne hit. Id: ', req.params.id)
   Order.findOne({ _id: req.params.id })
     .then(order => {
       order = JSON.parse(
@@ -69,7 +69,7 @@ router.get('/:id', rejectNonAdmin, (req, res) => {
       res.json(order)
     })
     .catch(err => {
-      console.log('error: ', err)
+      // console.log('error: ', err)
       res.status(500).send('user not found.')
     })
 })
@@ -95,13 +95,13 @@ router.put('/:id', rejectNonAdmin, async (req, res) => {
       res.json(order)
     })
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     res.status(500).send('Failed to update.')
   }
 })
 
 // router.put('/:id', rejectNonAdmin, uploadProductPhotos, async (req, res) => {
-//   console.log('update hit', req.params.id)
+//   // console.log('update hit', req.params.id)
 //   req.body.imageData = req.imageMetaData
 //   await Product.updateOne({ _id: req.params.id }, req.body)
 //     .then(product => {
@@ -113,23 +113,23 @@ router.put('/:id', rejectNonAdmin, async (req, res) => {
 //       res.json(product)
 //     })
 //     .catch(err => {
-//       console.log(err)
+//       // console.log(err)
 //       res.status(500).send('Failed to update.')
 //     })
 // })
 
 // //updateMany
 // router.put("/", async (req, res) => {
-//   console.log("updateMany hit")
-//   console.log(req.query.ids)
+//   // console.log("updateMany hit")
+//   // console.log(req.query.ids)
 //   let users = []
 //   for(let i = 0; i < req.query.ids.length; i++){
 //     User.updateOne({_id: req.query.ids[i]}, req.body)
 //     .then((user) => {
 //       users.push(user)
-//       console.log("pushed: ", user)
+//       // console.log("pushed: ", user)
 //     }).catch(err => {
-//       console.log(err)
+//       // console.log(err)
 //       res.status(500).send("Failed to update all items.")
 //     })
 //   }
@@ -142,11 +142,11 @@ router.put('/:id', rejectNonAdmin, async (req, res) => {
 // router.post("/", async (req, res) => {
 //   User.create(req.body.body)
 //   .then(newUser => {
-//     console.log(newUser)
+//     // console.log(newUser)
 //     newUser = JSON.parse(JSON.stringify(newUser).split('"_id":').join('"id":'));
 //     res.status(200).json(newUser)
 //   }).catch(err => {
-//     console.log(err)
+//     // console.log(err)
 //     res.status(500).send("Creation failed.")
 //   })
 // })
@@ -155,24 +155,24 @@ router.put('/:id', rejectNonAdmin, async (req, res) => {
 // router.delete("/:id", async (req, res) => {
 //   User.deleteOne({_id: req.params.id})
 //   .then(res => {
-//     console.log(res)
+//     // console.log(res)
 //     res.status(200).send("item deleted")
 //   }).catch(err => {
-//     console.log(err)
+//     // console.log(err)
 //     res.status(500).send("Deletion failed!")
 //   })
 // })
 
 // //deleteMany
 // router.delete("/", async (req, res) => {
-//   console.log("deleteMany hit.")
-//   console.log(req.query.ids)
+//   // console.log("deleteMany hit.")
+//   // console.log(req.query.ids)
 //   for(let i = 0; i < req.query.ids.length; i++){
 //     await User.deleteOne({_id: req.params.id})
 //     .then(res => {
-//       console.log(res)
+//       // console.log(res)
 //     }).catch(err => {
-//       console.log(err)
+//       // console.log(err)
 //       res.status(500).send("Not all items were deleted")
 //     })
 //   }

@@ -7,9 +7,9 @@
 //   { multi: true },
 //   function (err, data) {
 //     if (!err) {
-//       console.log('success!')
+//       // console.log('success!')
 //     } else {
-//       console.log('ERROR')
+//       // console.log('ERROR')
 //     }
 //   }
 // )

@@ -105,7 +105,7 @@ class Settings extends React.Component {
   }
 
   showUser = () => {
-    console.log(this.props.state.user)
+    // console.log(this.props.state.user)
   }
 
   clearFields = () => {
@@ -152,7 +152,7 @@ class Settings extends React.Component {
   //       window.location.href = '/'
   //     })
   //     .catch(error => {
-  //       console.log(error.response.data)
+  //       // console.log(error.response.data)
   //       if (error.response && error.response.data) {
   //         Swal.fire({
   //           title: '<span class="swal_title"> ERROR',
@@ -180,7 +180,7 @@ class Settings extends React.Component {
         newPassConfirm: this.state.newPassConfirm
       })
       .then(res => {
-        console.log(res.data)
+        // console.log(res.data)
         this.setState({
           oldPass: '',
           newPass: '',
@@ -207,7 +207,7 @@ class Settings extends React.Component {
         // this.setSnackbar("success", "Your password has been changed, please log in.");
       })
       .catch(error => {
-        console.log(error.response.data)
+        // console.log(error.response.data)
         if (error.response && error.response.data[0]) {
           const errorKey = error.response.data[0]
           const errorMessage = error.response.data[1]

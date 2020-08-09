@@ -15,7 +15,7 @@ router.get('/all', rejectUnauthenticated, (req, res) => {
   Product.find({draft: false, deleted: false})
     .then(products => res.json(products))
     .catch(error => {
-      console.log(error)
+      // console.log(error)
       res.status(500).send('no products found')
     })
 })
@@ -26,11 +26,11 @@ router.get('/all', rejectUnauthenticated, (req, res) => {
 router.get("/categories", rejectUnauthenticated, (req, res) => {
     Product.distinct("category")
         .then(categories => {
-            console.log(categories);
+            // console.log(categories);
             res.json(categories)
         })
         .catch((error) => {
-            console.log(error);
+            // console.log(error);
             res.status(500).send("can't find categories");
         });
 })
@@ -43,7 +43,7 @@ router.get('/:id', rejectUnauthenticated, (req, res) => {
   Product.findById(req.params.id)
     .then(product => res.json(product))
     .catch(error => {
-      console.log(error)
+      // console.log(error)
       res.status(500).send('product not found')
     })
 })

@@ -29,10 +29,10 @@ class GoCardless extends React.Component {
           this.setState({
             bankInfo: res.data,
           })
-          console.log(res.data);
+          // console.log(res.data);
         })
         .catch(err => {
-          console.log(err)
+          // console.log(err)
         })
   }
 
@@ -42,7 +42,7 @@ class GoCardless extends React.Component {
     const url = 'https://wholesale-portal-testing.herokuapp.com/buy?redirect_flow_id';
     */
     const url = `${this.props.state.devURI}/buy?redirect_flow_id`
-    console.log(params.has(url));
+    // console.log(params.has(url));
     if (params.has(url)) {
       const redirect = params.get(url)
       this.props.history.replace('/buy')

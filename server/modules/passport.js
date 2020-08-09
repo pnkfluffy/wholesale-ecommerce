@@ -13,7 +13,7 @@ passport.use(
     function (req, username, password, cb) {		
       User.findOne({ email: username, deleted: false }, async (err, user) => {
         if (err) {
-          console.log(err)
+          // console.log(err)
           return cb(err)
         }
         if (!user) {

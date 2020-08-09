@@ -18,7 +18,7 @@ export default {
   getList: (resource, params) => {
     const { page, perPage } = params.pagination
     const { field, order } = params.sort
-    console.log('getlist stats', page, perPage, field, order, params.filter)
+    // console.log('getlist stats', page, perPage, field, order, params.filter)
 
     const query = {
       sort: JSON.stringify([field, order]),
@@ -26,13 +26,13 @@ export default {
       filter: JSON.stringify(params.filter)
     }
     const url = `/api/${resource}?${stringify(query)}`
-    console.log('getList url', url)
+    // console.log('getList url', url)
     return httpClient(url)
       .then(({ headers, json }) => {
-        console.log('getList dataprovider method hit')
-        // console.log("headers", headers);
-        console.log('getList response: ', { data: json })
-        console.log('getList headers: ', { data: headers })
+        // console.log('getList dataprovider method hit')
+        // // console.log("headers", headers);
+        // console.log('getList response: ', { data: json })
+        // console.log('getList headers: ', { data: headers })
         return {
           data: json,
           total: parseInt(
@@ -45,43 +45,43 @@ export default {
         }
       })
       .catch(err => {
-        console.log('getList error: ', err)
+        // console.log('getList error: ', err)
       })
   },
 
   getOne: (resource, params) => {
-    console.log(`getOne url: /api/${resource}/${params.id}`)
+    // console.log(`getOne url: /api/${resource}/${params.id}`)
     return httpClient(`/api/${resource}/${params.id}`)
       .then(({ json }) => {
-        console.log('json: ', { data: json })
+        // console.log('json: ', { data: json })
         return { data: json }
       })
       .catch(err => {
-        console.log('getOne error: ', err)
+        // console.log('getOne error: ', err)
         return err
       })
   },
 
   getMany: (resource, params) => {
-    console.log('getMany', resource)
-    console.log('getMany', resource, 'params: ', params)
+    // console.log('getMany', resource)
+    // console.log('getMany', resource, 'params: ', params)
     const query = {
       filter: JSON.stringify({ id: params.ids })
     }
     const url = `/api/${resource}?${stringify(query)}`
-    console.log('url: ', url)
+    // console.log('url: ', url)
     return httpClient(url)
       .then(({ json }) => {
-        console.log('getMany response: ', { data: json })
+        // console.log('getMany response: ', { data: json })
         return { data: json }
       })
       .catch(err => {
-        console.log('getmany error: ', err)
+        // console.log('getmany error: ', err)
       })
   },
 
   getManyReference: (resource, params) => {
-    console.log('getManyReference', resource)
+    // console.log('getManyReference', resource)
 
     const { page, perPage } = params.pagination
     const { field, order } = params.sort
@@ -109,14 +109,14 @@ export default {
         }
       })
       .catch(err => {
-        console.log('error: ', err)
+        // console.log('error: ', err)
         return err
       })
   },
 
   update: (resource, params) => {
     const url = `/api/${resource}/${params.id}}`
-    console.log('UPDATING UPDATING UPDATING', url)
+    // console.log('UPDATING UPDATING UPDATING', url)
     return httpClient(`/api/${resource}/${params.id}`, {
       method: 'PUT',
       body: JSON.stringify(params.data)
@@ -130,7 +130,7 @@ export default {
   },
 
   updateMany: (resource, params) => {
-    console.log('updateMany')
+    // console.log('updateMany')
 
     const query = {
       filter: JSON.stringify({ id: params.ids })
@@ -144,7 +144,7 @@ export default {
   },
 
   create: (resource, params) => {
-    console.log('create')
+    // console.log('create')
 
     return httpClient(`/api/${resource}`, {
       method: 'POST',
@@ -156,18 +156,18 @@ export default {
   },
 
   delete: (resource, params) => {
-    console.log('delete')
+    // console.log('delete')
 
     return httpClient(`/api/${resource}/${params.id}`, {
       method: 'DELETE'
     }).then(({ json }) => {
-      console.log('delete', json)
+      // console.log('delete', json)
       return { data: json }
     })
   },
 
   deleteMany: (resource, params) => {
-    console.log('deleteMany')
+    // console.log('deleteMany')
 
     const query = {
       filter: JSON.stringify({ id: params.ids })

@@ -15,7 +15,7 @@ router.get('/oneOrder/:orderId', rejectUnauthenticated, (req, res) => {
   Order.findById({_id: req.params.orderId, user: req.user._id}, { user: 0, paymentID: 0, representative: 0 })
     .then(order => res.json(order))
     .catch(error => {
-      console.log(error)
+      // console.log(error)
       res.status(500).send('order not found')
     })
 })
@@ -29,7 +29,7 @@ router.get('/from', rejectUnauthenticated, (req, res) => {
         res.json(orders)
     })
     .catch(error => {
-      console.log(error)
+      // console.log(error)
       res.status(500).send('Error finding orders')
     })
 })

@@ -30,7 +30,7 @@ class GCFillInfo extends React.Component {
         window.open(res.data.url, '_self')
       })
       .catch(err => {
-        console.log(err)
+        // console.log(err)
       })
   }
 

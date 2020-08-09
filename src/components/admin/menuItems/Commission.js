@@ -93,7 +93,7 @@ const CommissionFilter = props => {
 }
 
 const Aside = ({ data, ids }) => {
-  // console.log('aside', data, ids)
+  // // console.log('aside', data, ids)
   return (
     <div style={{ width: 200, margin: '1vw' }}>
       <h1>Customer Spending</h1>

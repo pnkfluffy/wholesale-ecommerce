@@ -38,19 +38,19 @@ class Login extends React.Component {
 
   login = event => {
     event.preventDefault()
-    console.log(this.state)
+    // console.log(this.state)
     axios
       .post('/auth/login', {
         username: this.state.username,
         password: this.state.password
       })
       .then(res => {
-        console.log(res.status)
+        // console.log(res.status)
         window.location.href = '/'
       })
       .catch(err => {
         this.setSnackbar("error", "Invalid Credentials");
-        console.log(err)
+        // console.log(err)
       })
   }
 

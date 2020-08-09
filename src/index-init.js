@@ -2,7 +2,7 @@ import axios from 'axios'
 import store from './redux/store'
 
 export const initializeAllRequests = async () => {
-  console.log('redux initializing')
+  // console.log('redux initializing')
   await getAllCategories()
   await getAllProducts()
   axios
@@ -20,7 +20,7 @@ export const initializeAllRequests = async () => {
     })
     .catch(err => {
       store.dispatch({ type: 'APP_LOADED' })
-      console.log('not logged in or admin', err)
+      // console.log('not logged in or admin', err)
     })
 }
 
@@ -28,9 +28,9 @@ const getURI = () => {
   return axios.get('/auth/login-uri').then(res => {
     store.dispatch({ type: 'SET_URI', payload: res.data })
   }).catch(err => {
-    console.log(err);
+    // console.log(err);
   })
-} 
+}
 
 export const getUserCart = () => {
   return axios
@@ -44,7 +44,7 @@ export const getUserCart = () => {
       }
     })
     .catch(err => {
-      console.log(err)
+      // console.log(err)
     })
 }
 
@@ -57,7 +57,7 @@ export const getUserWishlist = () => {
       }
     })
     .catch(err => {
-      console.log(err)
+      // console.log(err)
     })
 }
 
@@ -75,11 +75,11 @@ const getAllCategories = () => {
   // return axios
   //   .get('/api/products/categories')
   //   .then(res => {
-  //     console.log('categories here', res.data)
+  //     // console.log('categories here', res.data)
   //   store.dispatch({ type: 'SET_CATEGORIES', payload: res.data })
   // })
   // .catch(err => {
-  //   console.log(err)
+  //   // console.log(err)
   // })
 }
 
@@ -87,11 +87,11 @@ export const getAllProducts = () => {
   return axios
     .get('/api/products/all')
     .then(res => {
-      console.log(res)
+      // console.log(res)
       store.dispatch({ type: 'ADD_ALL_PRODUCTS', payload: res.data })
     })
     .catch(err => {
-      console.log(err)
+      // console.log(err)
     })
 }
 
@@ -102,7 +102,9 @@ export const getAllReviews = () => {
     .then(res => {
       store.dispatch({ type: 'ADD_REVIEWS', payload: res.data })
     })
-    .catch(err => console.log(err))
+    .catch(err => {
+      // console.log(err)
+    })
 }
 
 export const getAllOrders = () => {
@@ -113,21 +115,21 @@ export const getAllOrders = () => {
       store.dispatch({ type: 'ADD_ORDERS', payload: res.data })
     })
     .catch(err => {
-      console.log(err)
+      // console.log(err)
     })
 }
 
 export const checkMandate = () => {
-    axios
-        .get('/api/gc/checkClientMandate')
-        .then(res => {
-            if (res.data) {
-                store.dispatch({
-                    type: 'YES_MANDATE'
-                })
-            }
+  axios
+    .get('/api/gc/checkClientMandate')
+    .then(res => {
+      if (res.data) {
+        store.dispatch({
+          type: 'YES_MANDATE'
         })
-        .catch(err => {
-            console.log(err);
-        })
+      }
+    })
+    .catch(err => {
+      // console.log(err);
+    })
 }

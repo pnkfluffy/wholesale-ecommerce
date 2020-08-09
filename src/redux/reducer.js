@@ -41,18 +41,18 @@ const loaded = (state = false, action) => {
 const wishlist = (state = [], action) => {
   switch (action.type) {
     case 'SET_WISHLIST':
-      console.log("SET_WISHLIST", action.payload)
+      // console.log("SET_WISHLIST", action.payload)
       return action.payload
     case 'ADD_WISHLIST':
       const itemExists = state.find(c => c === action.payload)
       if (itemExists) return state
-      console.log("STATE:", state)
+      // console.log("STATE:", state)
       axios.post('/auth/update-wishlist', [...state, action.payload])
       return [...state, action.payload]
     case 'DELETE_WISHLIST':
       const deleteItemIndex = state.findIndex(c => c === action.payload)
       if (deleteItemIndex !== -1) state.splice(deleteItemIndex, 1)
-      console.log("STATE:", state)
+      // console.log("STATE:", state)
       axios.post('/auth/update-wishlist', state)
       return [...state]
     default:
@@ -139,7 +139,7 @@ const orders = (state = [], action) => {
 const reviews = (state = [], action) => {
   switch (action.type) {
     case 'ADD_REVIEWS':
-      console.log('Adding REVIEWS' + action.payload)
+      // console.log('Adding REVIEWS' + action.payload)
       return action.payload
     default:
       return state

@@ -42,7 +42,7 @@ router.get('/wishlist', rejectUnauthenticated, async (req, res) => {
             }
           })
           .catch(err => {
-            console.log(err)
+            // console.log(err)
             res.status(500).send("couldn't get wishlist")
             return
           })
@@ -51,14 +51,14 @@ router.get('/wishlist', rejectUnauthenticated, async (req, res) => {
     res.send(availableProducts)
     return
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     res.status(500).send('error in retrieving wishlist')
   }
 })
 
 router.post('/update-wishlist', rejectUnauthenticated, async (req, res) => {
   const wishlist = req.body
-  console.log('wishlist to update', wishlist)
+  // console.log('wishlist to update', wishlist)
   try {
     const user = await User.findOneAndUpdate(
       { _id: req.user._id },
@@ -66,7 +66,7 @@ router.post('/update-wishlist', rejectUnauthenticated, async (req, res) => {
     )
     res.json(user.wishlist)
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     res.status(500).send("couldn't update wishlist in database")
   }
 })
@@ -81,10 +81,10 @@ router.post('/update-wishlist', rejectUnauthenticated, async (req, res) => {
 //     else {
 //       await User.findOneAndUpdate({ _id: req.user._id }, { email: newEmail })
 //         .then(res.json({ success: true }))
-//         .catch(err => console.log(err))
+//         .catch(err => // console.log(err))
 //     }
 //   } catch (err) {
-//     console.log(err)
+//     // console.log(err)
 //     res.status(500).send('error editing email')
 //   }
 // })
@@ -99,7 +99,7 @@ router.post('/edit-password', rejectUnauthenticated, async (req, res) => {
       const newPass = req.body.newPass
       const oldPass = req.body.oldPass
       const newSaltedPass = await bcrypt.hash(newPass, salt)
-      console.log(oldPass)
+      // console.log(oldPass)
       if (await bcrypt.compare(oldPass, req.user.password)) {
         await User.findOneAndUpdate(
           { _id: req.user._id },
@@ -109,13 +109,15 @@ router.post('/edit-password', rejectUnauthenticated, async (req, res) => {
             passwordChangedEmail(req.user)
             res.json({ success: true })
           })
-          .catch(err => console.log(err))
+          .catch(err => {
+            // console.log(err)
+          })
       } else {
         res.status(500).json(['oldPass', 'Incorrect Password'])
       }
     }
   } catch (err) {
-    console.log(err)
+    // console.log(err)
     res.status(500).send('error editing password')
   }
 })

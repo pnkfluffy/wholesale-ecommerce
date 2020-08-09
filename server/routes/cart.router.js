@@ -30,22 +30,22 @@ router.get('/', rejectUnauthenticated, async (req, res) => {
           }
         })
         .catch(err => {
-          console.log(err)
+          // console.log(err)
           res.status(500).send(err)
         })
       cartProductInfo.push(productInfo)
     }
     res.send(cartProductInfo)
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     res.status(500).send('error updating cart')
   }
 })
 
 router.post('/', rejectUnauthenticated, async (req, res) => {
   try {
-    // console.log(req.body.cart)
-    // console.log(req.user._id)
+    // // console.log(req.body.cart)
+    // // console.log(req.user._id)
     req.body.cart.forEach(cartItem => {
       if (cartItem.quantity > 5000) {
         res.send('order over maximum quantity')
@@ -61,7 +61,7 @@ router.post('/', rejectUnauthenticated, async (req, res) => {
     )
     res.json(user.cart)
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     res.status(500).send('error updating cart')
   }
 })

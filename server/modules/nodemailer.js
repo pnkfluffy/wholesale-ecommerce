@@ -91,7 +91,7 @@ const trackingAddedEmail = (user, order, tracking) => {
 }
 
 const passwordChangedEmail = (user) => {
-  console.log('sending email?', user)
+  // console.log('sending email?', user)
   transporter.sendMail({
     from: process.env.NODE_MAILER_USERNAME,
     to: user.email,

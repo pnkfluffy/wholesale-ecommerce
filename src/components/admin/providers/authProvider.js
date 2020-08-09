@@ -5,21 +5,21 @@
 export default {
   // called when the user attempts to log in
   login: ({ username, password }) => {
-    console.log('attempt')
+    // console.log('attempt')
     const request = new Request(`/api/admin-users/login`, {
       method: 'POST',
       body: JSON.stringify({ username, password }),
       headers: new Headers({ 'Content-Type': 'application/json' })
     })
     return fetch(request).then(async response => {
-      console.log('res', response)
+      // console.log('res', response)
       if (response.status < 200 || response.status >= 300) {
-        console.log('hi' + response.statusText)
+        // console.log('hi' + response.statusText)
 
         throw new Error(response.statusText)
       }
       let res = await response.json()
-      console.log('nao', res.sig, res.perms)
+      // console.log('nao', res.sig, res.perms)
       localStorage.setItem('sig', res.sig)
       localStorage.setItem('perms', res.perms)
       window.location.href = '/'

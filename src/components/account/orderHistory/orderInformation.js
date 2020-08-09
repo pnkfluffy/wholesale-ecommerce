@@ -3,13 +3,35 @@ import moment from 'moment'
 import { connect } from 'react-redux'
 import TrackingLink from './trackingLink'
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+import axios from 'axios'
 
 const mapStateToProps = state => ({
   state: state.reducer
 })
 
 class OrderInformation extends React.Component {
-  render () {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      bankInfo: {}
+    }
+  }
+
+  componentDidMount() {
+    axios.get('/api/gc/oneBank')
+      .then(res => {
+        this.setState({
+          bankInfo: res.data,
+        })
+        console.log(res.data);
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+
+  render() {
     const payment = this.props.payment
     const order = this.props.order
     const address = order.deliveryInfo
@@ -26,20 +48,20 @@ class OrderInformation extends React.Component {
               <div className='order_info_content'>
                 <div>
 
-                
-                Tracking #<TrackingLink tracking={tracking} />
-                
+
+                  Tracking #<TrackingLink tracking={tracking} />
+
                 </div>
                 <div className="order_info_carrier">shipped via {tracking.company}</div>
               </div>
             ) : (
-              <div className='order_info_content'>
-                Please check back soon. <br />
-                <br />
+                <div className='order_info_content'>
+                  Please check back soon. <br />
+                  <br />
                 Tracking information will be added within 24 hours of payment
                 being processed.
-              </div>
-            )}
+                </div>
+              )}
           </div>
         </div>
 
@@ -59,15 +81,31 @@ class OrderInformation extends React.Component {
             <div className='order_info_address'>{address.postal_code}</div>
           </div>
         </div>
-        <div className='order_info_card'>
-          <div className='order_info_title'>Payment Information</div>
+        <div className='gc_info_card'>
+          <div className='order_info_title'>Payment Method</div>
+          <div className='order_info_split'>
+            <div className='order_info_content'>Account Holder: </div>
+            <div className='order_info_content'>{this.state.bankInfo.account_holder_name}</div>
+          </div>
+          <div className='order_info_split'>
+            <div className='order_info_content'>Account Number:</div>
+            <div className='order_info_content'>********{this.state.bankInfo.account_number}</div>
+          </div>
+          <div className='order_info_split'>
+            <div className='order_info_content'>Account Type:</div>
+            <div className='order_info_content'>{this.state.bankInfo.account_type}</div>
+          </div>
+          <div className='order_info_split'>
+            <div className='order_info_content'>Bank Name:</div>
+            <div className='order_info_content'>{this.state.bankInfo.bank_name}</div>
+          </div>
           <div className='order_info_split'>
             <div className='order_info_content'>Status:</div>
             <div className='order_info_content'>{payment.status}
-            <div className='order_info_message'>
-              <HelpOutlineIcon fontSize='inherit'/>
-              <span className="order_info_pay_status">{payment.statusMessage}</span>
-            </div>
+              <div className='order_info_message'>
+                <HelpOutlineIcon fontSize='inherit' />
+                <span className="order_info_pay_status">{payment.statusMessage}</span>
+              </div>
             </div>
           </div>
           <div className='order_info_split'>

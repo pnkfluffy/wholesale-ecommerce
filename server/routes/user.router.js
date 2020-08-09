@@ -12,13 +12,9 @@ const shajs = require('sha.js')
 const bcrypt = require('bcrypt')
 const { passwordChangedEmail } = require('../modules/nodemailer')
 
-router.post(
-  '/login',
-  passport.authenticate('local', { failureRedirect: '/login' }),
-  (req, res) => {
-    res.sendStatus(201)
-  }
-)
+router.post('/login', passport.authenticate('local', { failureRedirect: '/login' }), (req, res) => {
+  res.sendStatus(201)
+})
 
 router.get('/user', rejectUnauthenticated, (req, res) => {
   let user = {
@@ -124,9 +120,9 @@ router.post('/edit-password', rejectUnauthenticated, async (req, res) => {
   }
 })
 
-// router.get('/login-uri', (req, res) => {
-//   res.send(process.env.DEV_URI)
-// })
+router.get('/login-uri', (req, res) => {
+  res.send(process.env.DEV_URI)
+})
 
 router.get('/logout', rejectUnauthenticated, (req, res) => {
   req.logout()

@@ -226,7 +226,7 @@
   width: calc(100% - 2vw);
   border-radius: 8px;
   padding: 1vw;
-  margin-top: 5%;
+  margin-bottom: 3%;
   background-color: var(--searchbar-black);
 }
 

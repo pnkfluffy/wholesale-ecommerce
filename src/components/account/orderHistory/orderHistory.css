@@ -246,8 +246,8 @@
   text-align: left;
 }
 .order_info_message {
-  margin-left: 0.2vw;
-  font-size: 1.4vw;
+  margin-left: 0.9vw;
+  font-size: 1.2vw;
   position: relative;
   display: inline-block;
 }
@@ -261,7 +261,6 @@
   padding: 50% 50%;
   opacity: 0.9;
   border-radius: 6px;
-  /* Position the tooltip text - see examples below! */
   position: absolute;
   z-index: 1;
   top: -10vh;

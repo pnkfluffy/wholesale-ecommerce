@@ -9,19 +9,6 @@ const mapStateToProps = state => ({
 })
 
 class OrderInformation extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-                  status: false,
-                }
-  }
-  explainStatus = () => {
-    this.setState({
-      status: !this.state.status
-    })
-    console.log(this.state.status);
-  }
-
   render () {
     const payment = this.props.payment
     const order = this.props.order
@@ -76,9 +63,13 @@ class OrderInformation extends React.Component {
           <div className='order_info_title'>Payment Information</div>
           <div className='order_info_split'>
             <div className='order_info_content'>Status:</div>
-            <div className='order_info_content'>{payment.status} <HelpOutlineIcon onMouseEnter={this.explainStatus} onMouseLeave={this.explainStatus}/></div>
+            <div className='order_info_content'>{payment.status}
+            <div className='order_info_message'>
+              <HelpOutlineIcon fontSize='inherit'/>
+              <span className="order_info_pay_status">{payment.statusMessage}</span>
+            </div>
+            </div>
           </div>
-          {this.state.status ? <div className="order_info_pay_status">{payment.statusMessage}</div> : null }
           <div className='order_info_split'>
             <div className='order_info_content'>Ordered on: </div>
             <div className='order_info_content'>{orderDate} </div>

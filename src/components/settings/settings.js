@@ -48,9 +48,7 @@ class Settings extends React.Component {
       snackbarMessage: ''
     }
     let params = new URLSearchParams(window.location.href)
-    /*/!*(!) TO GO LIVE
-    const url = 'https://wholesale-portal-testing.herokuapp.com/settings?redirect_flow_id';
-    *!/*/
+
     const url = `${this.props.state.devURI}/settings?redirect_flow_id`
     if (params.has(url)) {
       this.completeSetPayment(params.get(url));

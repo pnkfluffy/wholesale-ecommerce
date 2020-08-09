@@ -11,7 +11,7 @@ passport.use(
       passReqToCallback: true
     },
     function (req, username, password, cb) {		
-      User.findOne({ email: username }, async (err, user) => {
+      User.findOne({ email: username, deleted: false }, async (err, user) => {
         if (err) {
           console.log(err)
           return cb(err)

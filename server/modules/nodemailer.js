@@ -13,10 +13,14 @@ const newUserEmail = user => {
     from: process.env.NODE_MAILER_USERNAME,
     to: user.email,
     subject: `Welcome to CBDDY Wholesale!`,
-    text: `We've created your account, your temporary password is:
-		${user.password}
-		Login at https://cbddy-wholesale-portal.herokuapp.com/
-		`
+    html: `<html>
+    <div style="text-align: center">
+      <h1 style="color: #59ba47">CBDDY</h1>
+      <h1>ACCOUNT CREATED!</h1>
+      <p>Password: ${user.password}</p><br/>
+      <p>Login at: https://cbddy-wholesale-portal.herokuapp.com/ </p>
+    </div>
+  </html>`
   })
 }
 
@@ -104,7 +108,7 @@ const passwordChangedEmail = (user) => {
 
 // order confirm email
 //pass array of products into an html table
-function productsToTable (products) {
+function productsToTable(products) {
   let i = 0
   let table =
     '<table style="margin-left:auto;margin-right:auto;"><thead><tr><th style="border:1px solid #59ba47;">ID</th><th style="border:1px solid #59ba47; width: 60%;">Product</th><th style="border:1px solid #59ba47;">Price</th><th style="border:1px solid #59ba47;">Total</th></tr></thead><tbody>'

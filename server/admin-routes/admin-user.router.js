@@ -14,10 +14,7 @@ const bcrypt = require('bcrypt')
 const { restart } = require('nodemon')
 
 //Login
-router.post(
-  '/login',
-  passport.authenticate('local', { failureRedirect: '/login' }),
-  (req, res) => {
+router.post('/login', passport.authenticate('local', { failureRedirect: '/login' }), (req, res) => {
     let perms
     if (req.user.isOwner) {
       perms = 'owner'

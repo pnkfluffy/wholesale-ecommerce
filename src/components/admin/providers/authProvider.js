@@ -22,7 +22,7 @@ export default {
 
       localStorage.setItem('sig', res.sig)
       localStorage.setItem('perms', res.perms)
-
+      window.location.href = '/'
       return Promise.resolve()
     })
     // .catch(err => {

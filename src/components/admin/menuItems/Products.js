@@ -99,7 +99,7 @@ const ListActions = props => {
 const ProductFilter = props => {
   return (
     <Filter {...props}>
-      <BooleanInput source='deleted' label='Show Deleted' alwaysOn />
+      <BooleanInput source='deleted' label='Show Deleted' />
     </Filter>
   )
 }

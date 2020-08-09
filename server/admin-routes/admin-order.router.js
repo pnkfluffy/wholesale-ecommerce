@@ -30,7 +30,6 @@ router.get('/', rejectNonAdmin, (req, res) => {
     delete filterQuery.commission
 
     console.log('filterquery', filterQuery)
-    console.log('user', req.user)
     Order.find(filterQuery)
       .sort(sort)
       .skip(rangeQuery[0])

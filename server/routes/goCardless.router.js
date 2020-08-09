@@ -20,8 +20,8 @@ const { confirmOrderEmail } = require('../modules/nodemailer')
 
 const initializeGoCardless = async () => {
   const allClients = await gocardless(
-    process.env.GC_ACCESS_TOKEN,
-    constants.Environments.Sandbox,
+    process.env.GC_LIVE_TOKEN,
+    constants.Environments.Live,
     { raiseOnIdempotencyConflict: true }
   )
 
@@ -83,14 +83,15 @@ router.get('/checkClientMandate', rejectUnauthenticated, async (req, res) => {
 router.get('/oneClient', rejectUnauthenticated, async (req, res) => {
   try {
     const activeUser = await User.findById(req.user._id).catch(err => {
-      // console.log(err)
+      console.log(err)
       res.status(500).send("Couldn't find user in db")
     })
 
     const allClients = await gocardless(
-      process.env.GC_ACCESS_TOKEN,
+      process.env.GC_LIVE_TOKEN,
       // Change this to constants.Environments.Live when you're ready to go live
-      constants.Environments.Sandbox
+      constants.Environments.Live,
+      { raiseOnIdempotencyConflict: true }
     )
     const theClient = await allClients.customers.find(activeUser.goCardlessID)
     res.json({
@@ -104,7 +105,7 @@ router.get('/oneClient', rejectUnauthenticated, async (req, res) => {
       postal_code: theClient.postal_code
     })
   } catch (error) {
-    // console.log(error)
+    console.log(error)
     res.status(500).send('client not found')
   }
 })
@@ -120,9 +121,10 @@ router.get('/oneBank', rejectUnauthenticated, async (req, res) => {
     })
 
     const allClients = await gocardless(
-      process.env.GC_ACCESS_TOKEN,
+      process.env.GC_LIVE_TOKEN,
       // Change this to constants.Environments.Live when you're ready to go live
-      constants.Environments.Sandbox
+      constants.Environments.Live,
+      { raiseOnIdempotencyConflict: true }
     )
     const listBankAccounts = await allClients.customerBankAccounts.list({
       customer: activeUser.goCardlessID
@@ -341,7 +343,7 @@ router.post('/addClient', rejectUnauthenticated, async (req, res) => {
     User.findById(req.user._id)
       .then(user => {
         if (!user) {
-          // console.log('no user with this id')
+          console.log('no user with this id')
           res.status(500).send('no user with this id')
         } else {
           res.json({
@@ -351,11 +353,11 @@ router.post('/addClient', rejectUnauthenticated, async (req, res) => {
         }
       })
       .catch(err => {
-        // console.log(err)
+        console.log(err)
         res.status(500).send('error updating database')
       })
   } catch (error) {
-    // console.log(error)
+    console.log(error)
     res.status(500).send('error creating client')
   }
 })
@@ -482,17 +484,16 @@ router.post('/collect-payment', rejectUnauthenticated, async (req, res) => {
             })
 
             //initialize goCardless
-            /*(!) TO GO LIVE
-                    const allClients =  await gocardless(
-                            process.env.GC_LIVE_TOKEN,
-                            constants.Environments.Live,
-                            { raiseOnIdempotencyConflict: true },
-                        );*/
             const allClients = await gocardless(
-              process.env.GC_ACCESS_TOKEN,
-              constants.Environments.Sandbox,
-              { raiseOnIdempotencyConflict: true }
-            )
+              process.env.GC_LIVE_TOKEN,
+              constants.Environments.Live,
+              { raiseOnIdempotencyConflict: true },
+            );
+            // const allClients = await gocardless(
+            //   process.env.GC_ACCESS_TOKEN,
+            //   constants.Environments.Sandbox,
+            //   { raiseOnIdempotencyConflict: true }
+            // )
 
             //set proper client currency to payment
             //to go live needs to add other currencies

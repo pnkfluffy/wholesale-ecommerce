@@ -8,6 +8,7 @@ const Product = require('../schemas/productSchema')
 //getList
 router.get('/', rejectNonAdmin, (req, res) => {
   try {
+    let filterQuery = JSON.parse(req.query.filter) || {}
     console.log('Product List backend hit')
     let sortQuery
     let sort = {}
@@ -22,7 +23,7 @@ router.get('/', rejectNonAdmin, (req, res) => {
       rangeLimit = rangeQuery[1] - rangeQuery[0] + 1
     }
 
-    Product.find()
+    Product.find(filterQuery)
       .sort(sort)
       .skip(rangeQuery[0])
       .limit(rangeLimit)

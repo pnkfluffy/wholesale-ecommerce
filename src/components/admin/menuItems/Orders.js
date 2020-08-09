@@ -34,7 +34,12 @@ import {
 } from 'react-admin'
 
 export const OrderList = props => (
-  <List {...props} sort={{ field: 'date', order: 'DESC' }} bulkActionButtons={false}>
+  <List
+    {...props}
+    actions={<div />}
+    sort={{ field: 'date', order: 'DESC' }}
+    bulkActionButtons={false}
+  >
     <Datagrid rowClick='show'>
       <ReferenceField
         label='User'
@@ -147,7 +152,9 @@ export const OrderEdit = props => (
 const OrderShowActions = ({ permissions, basePath, data, resource }) => (
   <TopToolbar>
     <EditButton basePath={basePath} record={data} />
-    {permissions === 'owner' && <DeleteButton basePath={basePath} record={data} />}
+    {permissions === 'owner' && (
+      <DeleteButton basePath={basePath} record={data} />
+    )}
     <ListButton basePath={basePath} record={data} />
     {/* Add your custom actions */}
   </TopToolbar>
@@ -162,7 +169,7 @@ const OrderEditActions = ({ basePath, data, resource }) => (
 )
 
 const OrderEditToolbar = props => (
-  <Toolbar {...props} >
-      <SaveButton />
+  <Toolbar {...props}>
+    <SaveButton />
   </Toolbar>
-);
+)

@@ -27,7 +27,12 @@ import {
 } from 'react-admin'
 
 export const ReviewList = props => (
-  <List {...props} sort={{ field: 'date', order: 'DESC' }} bulkActionButtons={false}>
+  <List
+    {...props}
+    actions={<div />}
+    sort={{ field: 'date', order: 'DESC' }}
+    bulkActionButtons={false}
+  >
     <Datagrid rowClick='show'>
       <ReferenceField
         link='false'
@@ -87,4 +92,3 @@ const ReviewActions = ({ permissions, basePath, data, resource }) => (
     {/* Add your custom actions */}
   </TopToolbar>
 )
-

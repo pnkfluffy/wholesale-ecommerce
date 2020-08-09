@@ -18,7 +18,7 @@ const newUserEmail = user => {
       <h1 style="color: #59ba47">CBDDY</h1>
       <h1>ACCOUNT CREATED!</h1>
       <p>Password: ${user.password}</p><br/>
-      <p>Login at: https://cbddy-wholesale-portal.herokuapp.com/ </p>
+      <p>Login at: ${process.env.DEV_URI} </p>
     </div>
   </html>`
   })

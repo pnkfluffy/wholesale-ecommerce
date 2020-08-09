@@ -41,7 +41,7 @@ class GoCardless extends React.Component {
     /*(!) TO GO LIVE
     const url = 'https://wholesale-portal-testing.herokuapp.com/buy?redirect_flow_id';
     */
-    const url = 'http://localhost:3000/buy?redirect_flow_id'
+    const url = `${this.props.state.devURI}/buy?redirect_flow_id`
     console.log(params.has(url));
     if (params.has(url)) {
       const redirect = params.get(url)
@@ -50,7 +50,7 @@ class GoCardless extends React.Component {
         .post('/api/gc/completeRedirect', {redirect: redirect})
         .then(res => {
           store.dispatch({
-            type: 'CHANGE_MANDATE_STATUS'
+            type: 'YES_MANDATE'
           })
           Swal.fire({
             title: '<span class="swal_title"> SUCCESS',

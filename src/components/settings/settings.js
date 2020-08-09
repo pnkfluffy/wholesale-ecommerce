@@ -51,7 +51,7 @@ class Settings extends React.Component {
     /*/!*(!) TO GO LIVE
     const url = 'https://wholesale-portal-testing.herokuapp.com/settings?redirect_flow_id';
     *!/*/
-    const url = 'http://localhost:3000/settings?redirect_flow_id'
+    const url = `${this.props.state.devURI}/settings?redirect_flow_id`
     if (params.has(url)) {
       this.completeSetPayment(params.get(url));
     }
@@ -64,7 +64,7 @@ class Settings extends React.Component {
         .then(res => {
             if (!this.state.props.hasMandate)
               store.dispatch({
-                type: 'CHANGE_MANDATE_STATUS'
+                type: 'YES_MANDATE'
               })
             Swal.fire({
               title: '<span class="swal_title"> SUCCESS',

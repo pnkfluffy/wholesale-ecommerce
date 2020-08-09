@@ -10,6 +10,7 @@ export const initializeAllRequests = async () => {
     .then(async res => {
       //  only fires if user get successfull
       store.dispatch({ type: 'GET_USER', payload: res.data })
+      await getURI()
       await getAllReviews()
       await getUserCart()
       await getUserWishlist()
@@ -22,6 +23,14 @@ export const initializeAllRequests = async () => {
       console.log('not logged in or admin', err)
     })
 }
+
+const getURI = () => {
+  return axios.get('/auth/login-uri').then(res => {
+    store.dispatch({ type: 'SET_URI', payload: res.data })
+  }).catch(err => {
+    console.log(err);
+  })
+} 
 
 export const getUserCart = () => {
   return axios
@@ -114,7 +123,7 @@ export const checkMandate = () => {
         .then(res => {
             if (res.data) {
                 store.dispatch({
-                    type: 'CHANGE_MANDATE_STATUS'
+                    type: 'YES_MANDATE'
                 })
             }
         })

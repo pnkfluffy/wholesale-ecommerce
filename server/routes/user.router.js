@@ -120,9 +120,9 @@ router.post('/edit-password', rejectUnauthenticated, async (req, res) => {
   }
 })
 
-// router.get('/login-uri', (req, res) => {
-//   res.send(process.env.DEV_URI)
-// })
+router.get('/login-uri', (req, res) => {
+  res.send(process.env.DEV_URI)
+})
 
 router.get('/logout', rejectUnauthenticated, (req, res) => {
   req.logout()

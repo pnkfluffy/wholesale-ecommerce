@@ -81,16 +81,30 @@ export const UserList = ({ permissions, ...props }) => (
 const UserFilter = props => {
   return (
     <Filter {...props}>
-      <BooleanInput source='deleted' label='Show Deleted' alwaysOn />
+      <BooleanInput source='deleted' label='Show Deleted' />
     </Filter>
   )
 }
 
 const ListActions = props => {
   const { className, exporter, filters, maxResults, ...rest } = props
-  const { basePath } = useListContext()
+  const {
+    basePath,
+    resource,
+    showFilter,
+    displayedFilters,
+    filterValues
+  } = useListContext()
   return (
     <TopToolbar className={className} {...sanitizeListRestProps(rest)}>
+      {filters &&
+        React.cloneElement(filters, {
+          resource,
+          showFilter,
+          displayedFilters,
+          filterValues,
+          context: 'button'
+        })}
       <CreateButton basePath={basePath} />
     </TopToolbar>
   )

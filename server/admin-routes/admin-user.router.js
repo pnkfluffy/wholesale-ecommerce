@@ -101,8 +101,13 @@ router.post('/', rejectNonAdmin, async (req, res) => {
 router.get('/', rejectNonAdmin, (req, res) => {
   console.log('User list backend hit', req.query)
   try {
-    let filterQuery = JSON.parse(req.query.filter) || {}
-    console.log("filter", filterQuery);
+    const filterQuery = JSON.parse(req.query.filter)
+    console.log('stringify', filterQuery, Object.entries(filterQuery).length)
+    let filter =
+      Object.entries(filterQuery).length !== 0
+        ? JSON.parse(req.query.filter)
+        : { deleted: 'false' }
+    console.log('filter', filterQuery)
     let sortQuery
     let sort = {}
     let rangeQuery = [0]
@@ -116,7 +121,7 @@ router.get('/', rejectNonAdmin, (req, res) => {
       rangeLimit = rangeQuery[1] - rangeQuery[0] + 1
     }
 
-    User.find(filterQuery)
+    User.find(filter)
       .sort(sort)
       .skip(rangeQuery[0])
       .limit(rangeLimit)

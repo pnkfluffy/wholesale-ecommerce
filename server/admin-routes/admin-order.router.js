@@ -23,16 +23,14 @@ router.get('/', rejectNonAdmin, (req, res) => {
       rangeQuery = JSON.parse(req.query.range)
       rangeLimit = rangeQuery[1] - rangeQuery[0] + 1
     }
-    //  used in commission route. Filters orders by customer
-    //  representatives to help calculate commission
+
     if (!req.user.isAdmin) {
-    // if (filterQuery.commission) {
       filterQuery.representative = req.user._id
     }
     delete filterQuery.commission
 
-    console.log("filterquery", filterQuery);
-    console.log("user", req.user);
+    console.log('filterquery', filterQuery)
+    console.log('user', req.user)
     Order.find(filterQuery)
       .sort(sort)
       .skip(rangeQuery[0])

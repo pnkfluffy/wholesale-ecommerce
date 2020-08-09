@@ -17,7 +17,6 @@ router.get('/', rejectUnauthenticated, async (req, res) => {
     for (let i = 0; i < cart.length; i++) {
       const productInfo = await Product.findById(cart[i].product)
         .then(info => {
-          console.log("hi", info);
           if (!info) {
             res.status(404).send('Cannot find product.')
             return

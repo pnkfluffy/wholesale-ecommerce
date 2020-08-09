@@ -8,7 +8,7 @@ const { trackingAddedEmail } = require('../modules/nodemailer')
 //getList
 router.get('/', rejectNonAdmin, (req, res) => {
   try {
-    console.log('Order list backend hit')
+    console.log('Order list backend hit', req.query)
     let filterQuery = JSON.parse(req.query.filter) || {}
     let sortQuery
     let sort = {}
@@ -25,17 +25,21 @@ router.get('/', rejectNonAdmin, (req, res) => {
     }
     //  used in commission route. Filters orders by customer
     //  representatives to help calculate commission
-    if (filterQuery.commission) {
+    if (!req.user.isAdmin) {
+    // if (filterQuery.commission) {
       filterQuery.representative = req.user._id
     }
     delete filterQuery.commission
 
+    console.log("filterquery", filterQuery);
+    console.log("user", req.user);
     Order.find(filterQuery)
       .sort(sort)
       .skip(rangeQuery[0])
       .limit(rangeLimit)
       .then(filteredOrders => {
         Order.countDocuments().then(contentRange => {
+          // console.log(filteredOrders);
           res.set('content-range', JSON.stringify(contentRange))
           filteredOrders = JSON.parse(
             JSON.stringify(filteredOrders)

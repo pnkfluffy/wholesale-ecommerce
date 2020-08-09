@@ -514,6 +514,7 @@ router.post('/collect-payment', rejectUnauthenticated, async (req, res) => {
               res.status(500).send('You have no available items in your order')
               return ;
             }
+
             //get representative of sale
             const representative = req.user.representative
               ? req.user.representative

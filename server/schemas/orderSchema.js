@@ -58,7 +58,11 @@ const OrderSchema = new Schema({
   paymentID: {
     type: 'string',
     default: "",
-  }
+  },
+  bankID: {
+    type: 'string',
+    default: "",
+  },
 })
 
 module.exports = Order = mongoose.model('order', OrderSchema)

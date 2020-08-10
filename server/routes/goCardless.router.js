@@ -82,6 +82,7 @@ router.get('/oneClient', rejectUnauthenticated, async (req, res) => {
   try {
     const activeUser = await User.findById(req.user._id).catch(err => {
       console.log(err)
+        console.log("user");
       res.status(500).send("Couldn't find user in db")
     })
 
@@ -91,6 +92,8 @@ router.get('/oneClient', rejectUnauthenticated, async (req, res) => {
       constants.Environments.Sandbox
     )
     const theClient = await allClients.customers.find(activeUser.goCardlessID)
+    console.log("THE CLIENT")
+    console.log(theClient);
     res.json({
       given_name: theClient.given_name,
       family_name: theClient.family_name,
@@ -103,20 +106,20 @@ router.get('/oneClient', rejectUnauthenticated, async (req, res) => {
     })
   } catch (error) {
     console.log(error)
+      console.log('failed')
     res.status(500).send('client not found')
   }
 })
 
-// @route   GET /gc/oneClient
-// @desc    Returns client by id
+// @route   GET /gc/bankFromUser
+// @desc    Returns bank information from active client by id
 // @access  Private
-router.get('/oneBank', rejectUnauthenticated, async (req, res) => {
+router.get('/bankFromUser', rejectUnauthenticated, async (req, res) => {
     try {
         const activeUser = await User.findById(req.user._id).catch(err => {
             console.log(err)
             res.status(500).send("Couldn't find user in db")
         })
-
         const allClients = await gocardless(
             process.env.GC_ACCESS_TOKEN,
             // Change this to constants.Environments.Live when you're ready to go live
@@ -124,11 +127,40 @@ router.get('/oneBank', rejectUnauthenticated, async (req, res) => {
         )
         const listBankAccounts = await allClients.customerBankAccounts.list({customer: activeUser.goCardlessID});
         const userBank = listBankAccounts.customer_bank_accounts[0];
+        console.log(userBank);
         res.json({
             account_holder_name: userBank.account_holder_name,
             account_number: userBank.account_number_ending,
             account_type: userBank.account_type,
             bank_name: userBank.bank_name,
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('client not found')
+    }
+})
+
+// @route   GET /gc/bankFromOrder
+// @desc    Returns bank information from order
+// @access  Private
+router.get('/bankFromOrder/:orderID', rejectUnauthenticated, async (req, res) => {
+    try {
+        const order = await Order.findById(req.params.orderID).catch(err => {
+            console.log(err)
+            res.status(500).send("Couldn't find order in db")
+        })
+        const allClients = await gocardless(
+            process.env.GC_ACCESS_TOKEN,
+            // Change this to constants.Environments.Live when you're ready to go live
+            constants.Environments.Sandbox
+        )
+        const orderBank = await allClients.customerBankAccounts.find(order.bankID);
+        console.log(orderBank);
+        res.json({
+            account_holder_name: orderBank.account_holder_name,
+            account_number: orderBank.account_number_ending,
+            account_type: orderBank.account_type,
+            bank_name: orderBank.bank_name,
         })
     } catch (error) {
         console.log(error)
@@ -199,7 +231,6 @@ function translatePaymentStatus (status) {
                     }
       break ;
   }
-  console.log(translated)
   return translated;
 }
 
@@ -269,8 +300,7 @@ router.get('/payments/onePayment/:orderID', rejectUnauthenticated, async (req, r
     await allClients.payments
       .find(order.paymentID)
       .then(payment => {
-        const status = payment.status;
-        console.log(status);
+        const status = translatePaymentStatus(payment.status);
         res.json({
           amount: payment.amount,
           charge_date: payment.charge_date,
@@ -520,13 +550,18 @@ router.post('/collect-payment', rejectUnauthenticated, async (req, res) => {
               ? req.user.representative
               : null
 
+            //get bank from this user
+            const listBankAccounts = await allClients.customerBankAccounts.list({customer: activeUser.goCardlessID});
+            const userBank = listBankAccounts.customer_bank_accounts[0];
+            console.log(userBank);
             //create new order in db
             const newOrder = new Order({
               user: req.user._id,
               products: productsInOrder,
               deliveryInfo: req.body.delivery,
               total: total,
-              representative
+              representative,
+              bankID: userBank.id
             })
             await newOrder.save()
                           .catch(err => {
@@ -571,11 +606,20 @@ router.post('/collect-payment', rejectUnauthenticated, async (req, res) => {
                           )
                       }
                     )
-                    confirmOrderEmail(req.user, newOrder, payment, theClient)
+                    const status = translatePaymentStatus(payment.status);
+                    const cleanPayment = {
+                        amount: payment.amount,
+                        charge_date: payment.charge_date,
+                        created_at: payment.created_at,
+                        currency: payment.currency,
+                        status: status.status,
+                        statusMessage: status.message
+                    }
+                    confirmOrderEmail(req.user, newOrder, cleanPayment, theClient)
                     //send order and payment information so can redirect to order's page
                     res.json({
                       order: newOrder,
-                      payment: payment
+                      payment: cleanPayment
                     })
                   })
                   .catch(err => {

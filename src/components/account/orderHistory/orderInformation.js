@@ -10,6 +10,7 @@ const mapStateToProps = state => ({
 
 class OrderInformation extends React.Component {
   render () {
+    const bankInfo = this.props.bankInfo
     const payment = this.props.payment
     const order = this.props.order
     const address = order.deliveryInfo
@@ -78,6 +79,26 @@ class OrderInformation extends React.Component {
             <div className='order_info_content'>Charged on:</div>
             <div className='order_info_content'>{chargeDate}</div>
           </div>
+          {Object.entries(bankInfo).length !== 0 ?
+              <div>
+                <div className='order_info_split'>
+                  <div className='order_info_content'>Account Holder: </div>
+                  <div className='order_info_content'>{bankInfo.account_holder_name}</div>
+                </div>
+                <div className='order_info_split'>
+                  <div className='order_info_content'>Account Number:</div>
+                  <div className='order_info_content'>********{bankInfo.account_number}</div>
+                </div>
+                <div className='order_info_split'>
+                  <div className='order_info_content'>Account Type:</div>
+                  <div className='order_info_content'>{bankInfo.account_type}</div>
+                </div>
+                <div className='order_info_split'>
+                  <div className='order_info_content'>Bank Name:</div>
+                  <div className='order_info_content'>{bankInfo.bank_name}</div>
+                </div>
+              </div>
+          : null}
         </div>
       </div>
     )

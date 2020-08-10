@@ -13,15 +13,22 @@ const mapStateToProps = state => ({
 })
 
 class Order extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      bankInfo: {}
+    }
+  }
+
   componentDidMount () {
     axios
-      .get('/api/gc/payments/from')
-      .then(res =>
-        this.setState({
-          payments: res.data
+        .get('/api/gc/bankFromOrder/' + this.props.history.location.state.order._id)
+        .then(res =>{
+              this.setState({
+                bankInfo: res.data
+              })
         })
-      )
-      .catch(err => console.log(err))
+        .catch(err => console.log(err))
   }
 
   printItems = products => {
@@ -125,8 +132,7 @@ class Order extends React.Component {
             <div className='cart_body'>{this.printItems(order.products)}</div>
           </div>
         </div>
-
-        <OrderInformation payment={payment} order={order} />
+        <OrderInformation payment={payment} order={order} bankInfo={this.state.bankInfo}/>
       </div>
     )
   }

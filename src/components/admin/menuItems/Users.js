@@ -43,11 +43,21 @@ import {
   NumberInput,
   NumberField,
   Toolbar,
+  sanitizeListRestProps,
+  Filter,
+  useListContext,
+  ExportButton,
   SaveButton
 } from 'react-admin'
 
 export const UserList = ({ permissions, ...props }) => (
-  <List {...props} sort={{ field: 'date', order: 'DESC' }} bulkActionButtons={false}>
+  <List
+    filters={<UserFilter />}
+    {...props}
+    sort={{ field: 'date', order: 'DESC' }}
+    bulkActionButtons={false}
+    actions={<ListActions />}
+  >
     <Datagrid rowClick='show'>
       <TextField label='User' source='name' />
       <TextField label='Email' source='email' />
@@ -67,6 +77,38 @@ export const UserList = ({ permissions, ...props }) => (
     </Datagrid>
   </List>
 )
+
+const UserFilter = props => {
+  return (
+    <Filter {...props}>
+      <BooleanInput source='deleted' label='Show Deleted' />
+    </Filter>
+  )
+}
+
+const ListActions = props => {
+  const { className, exporter, filters, maxResults, ...rest } = props
+  const {
+    basePath,
+    resource,
+    showFilter,
+    displayedFilters,
+    filterValues
+  } = useListContext()
+  return (
+    <TopToolbar className={className} {...sanitizeListRestProps(rest)}>
+      {filters &&
+        React.cloneElement(filters, {
+          resource,
+          showFilter,
+          displayedFilters,
+          filterValues,
+          context: 'button'
+        })}
+      <CreateButton basePath={basePath} />
+    </TopToolbar>
+  )
+}
 
 export const UserShow = props => {
   return (
@@ -163,7 +205,9 @@ export const UserCreate = ({ permissions, ...props }) => {
       <SimpleForm>
         <TextInput label='User Email' source='email' />
         <TextInput label='Full Name' source='name' />
-        {permissions === 'owner' && <BooleanInput label='Make Admin User' source='isAdmin' />}
+        {permissions === 'owner' && (
+          <BooleanInput label='Make Admin User' source='isAdmin' />
+        )}
         <BooleanInput
           label='Make Me User Representative'
           source='makeRepresentative'
@@ -187,20 +231,24 @@ const UserTitle = ({ record }) => {
 const UserShowActions = ({ permissions, basePath, data, resource }) => (
   <TopToolbar>
     <EditButton basePath={basePath} record={data} />
-    {permissions === 'owner' && <DeleteButton basePath={basePath} record={data} />}
+    {permissions === 'owner' && (
+      <DeleteButton basePath={basePath} record={data} />
+    )}
     <ListButton basePath={basePath} record={data} />
   </TopToolbar>
 )
 const UserEditActions = ({ permissions, basePath, data, resource }) => (
   <TopToolbar>
     <ShowButton basePath={basePath} record={data} />
-    {permissions === 'owner' && <DeleteButton basePath={basePath} record={data} />}
+    {permissions === 'owner' && (
+      <DeleteButton basePath={basePath} record={data} />
+    )}
     <ListButton basePath={basePath} record={data} />
   </TopToolbar>
 )
 
 const UserEditToolbar = props => (
-  <Toolbar {...props} >
+  <Toolbar {...props}>
     <SaveButton />
   </Toolbar>
-);
+)

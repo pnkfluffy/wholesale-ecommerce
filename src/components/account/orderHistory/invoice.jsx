@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
 });
 
 export function Invoice(props) {
-    console.log(props.data);
+    // console.log(props.data);
     const logo = "https://64.media.tumblr.com/ac45c2ec1c2c6512b1c8752f82b0b0c9/849d4b56695a1b67-f2/s1280x1920/24d50a5d50d2ca742f705ceb769ed30a305d3ba3.png"
     if (props.data.shipping)
     {

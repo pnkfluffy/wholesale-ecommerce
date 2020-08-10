@@ -3,6 +3,7 @@ import moment from 'moment'
 import { connect } from 'react-redux'
 import TrackingLink from './trackingLink'
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+import axios from 'axios'
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -27,20 +28,20 @@ class OrderInformation extends React.Component {
               <div className='order_info_content'>
                 <div>
 
-                
-                Tracking #<TrackingLink tracking={tracking} />
-                
+
+                  Tracking #<TrackingLink tracking={tracking} />
+
                 </div>
                 <div className="order_info_carrier">shipped via {tracking.company}</div>
               </div>
             ) : (
-              <div className='order_info_content'>
-                Please check back soon. <br />
-                <br />
+                <div className='order_info_content'>
+                  Please check back soon. <br />
+                  <br />
                 Tracking information will be added within 24 hours of payment
                 being processed.
-              </div>
-            )}
+                </div>
+              )}
           </div>
         </div>
 
@@ -65,10 +66,10 @@ class OrderInformation extends React.Component {
           <div className='order_info_split'>
             <div className='order_info_content'>Status:</div>
             <div className='order_info_content'>{payment.status}
-            <div className='order_info_message'>
-              <HelpOutlineIcon fontSize='inherit'/>
-              <span className="order_info_pay_status">{payment.statusMessage}</span>
-            </div>
+              <div className='order_info_message'>
+                <HelpOutlineIcon fontSize='inherit' />
+                <span className="order_info_pay_status">{payment.statusMessage}</span>
+              </div>
             </div>
           </div>
           <div className='order_info_split'>

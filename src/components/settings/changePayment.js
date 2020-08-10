@@ -43,17 +43,17 @@ class ChangePayment extends React.Component {
         this.setState({
           loading: false
         })
-        console.log(err)
+        // console.log(err)
       })
       axios.get('/api/gc/bankFromUser')
           .then(res => {
               this.setState({
                   bankInfo: res.data,
               })
-              console.log(res.data);
+              // console.log(res.data);
           })
           .catch(err => {
-              console.log(err)
+              // console.log(err)
           })
   }
 
@@ -75,7 +75,7 @@ class ChangePayment extends React.Component {
         window.open(res.data.url, '_self')
       })
       .catch(err => {
-        console.log(err)
+        // console.log(err)
       })
   }
 

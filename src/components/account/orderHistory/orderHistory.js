@@ -9,7 +9,7 @@ const mapStateToProps = state => ({
 })
 
 class OrderHistory extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       loading: true,
@@ -17,7 +17,7 @@ class OrderHistory extends React.Component {
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     axios
       .get('/api/gc/payments/from')
       .then(res => {
@@ -27,10 +27,12 @@ class OrderHistory extends React.Component {
           loading: false
         })
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        // console.log(err)
+      })
   }
 
-  render () {
+  render() {
     let ordersAndPay
     if (this.props.state.orders.length > 0 && this.state.payments.length > 0) {
       ordersAndPay = this.props.state.orders.map((order, index) => {
@@ -48,8 +50,8 @@ class OrderHistory extends React.Component {
         {this.state.loading ? (
           <img src={loading} alt='loading' />
         ) : (
-          ordersAndPay
-        )}
+            ordersAndPay
+          )}
       </div>
     )
   }

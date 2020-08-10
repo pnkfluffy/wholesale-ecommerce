@@ -4,7 +4,6 @@ import axios from 'axios'
 import logo from '../../resources/images/cbddy_logo_small.png'
 import AuthField from './AuthField'
 import shajs from 'sha.js'
-import googleIcon from '../../resources/images/google_button_icon.png'
 import MailOutlineIcon from '@material-ui/icons/MailOutline'
 import VpnKeyIcon from '@material-ui/icons/VpnKey'
 import { LightGreenButton } from '../reuseable/materialButtons'
@@ -39,19 +38,19 @@ class Login extends React.Component {
 
   login = event => {
     event.preventDefault()
-    console.log(this.state)
+    // console.log(this.state)
     axios
       .post('/auth/login', {
         username: this.state.username,
         password: this.state.password
       })
       .then(res => {
-        console.log(res.status)
+        // console.log(res.status)
         window.location.href = '/'
       })
       .catch(err => {
         this.setSnackbar("error", "Invalid Credentials");
-        console.log(err)
+        // console.log(err)
       })
   }
 

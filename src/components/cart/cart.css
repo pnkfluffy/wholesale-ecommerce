@@ -3,13 +3,13 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: center;
 }
 
 .cart {
   width: 60%;
 }
 .cart_body {
+  margin-top: 2vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -263,4 +263,8 @@
 
 .gc_checkout_button:last-child {
   margin-left: 1vw;
+}
+
+.empty_cart {
+  margin-top: 1vh;
 }

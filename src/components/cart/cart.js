@@ -6,8 +6,8 @@ import OrderCard from './orderCard'
 import UnavailableOrderCard from './unavailableOrderCard'
 import { getPriceByQuantity } from '../reuseable/getPriceByQuantity'
 import { v4 } from 'uuid'
-import GoCardless from "./goCardless";
-import { GreenButton } from "../reuseable/materialButtons";
+import GoCardless from './goCardless'
+import { GreenButton } from '../reuseable/materialButtons'
 
 const mapStateToProps = state => {
   return {
@@ -26,9 +26,9 @@ class Cart extends React.Component {
     })
   }
 
-  render() {
-    let total = 0;
-    let availableProducts = [];
+  render () {
+    let total = 0
+    let availableProducts = []
     const cartProducts = this.props.state.cart.map((cartProduct, index) => {
       //only give price to product available
       if (!cartProduct.deleted) {
@@ -38,46 +38,46 @@ class Cart extends React.Component {
           cartProduct.price
         )
         total += productTotal
-        availableProducts = [...availableProducts,
-        {
-          product: cartProduct,
-          price: productTotal,
-          quantity: cartProduct.quantity
-        }]
+        availableProducts = [
+          ...availableProducts,
+          {
+            product: cartProduct,
+            price: productTotal,
+            quantity: cartProduct.quantity
+          }
+        ]
         return (
           <OrderCard product={cartProduct} total={productTotal} key={v4()} />
         )
       } else {
-        return (
-          <UnavailableOrderCard product={cartProduct} key={v4()} />
-        )
+        return <UnavailableOrderCard product={cartProduct} key={v4()} />
       }
     })
 
+    const checkOutButton = this.props.state.cart.length ? (
+      <div className='checkout_button_container'>
+        <GreenButton
+          variant='contained'
+          className='checkout_button'
+          onClick={e => this.checkOut(total, availableProducts)}
+        >
+          CHECK OUT: ${total}
+        </GreenButton>
+      </div>
+    ) : null
+
     return (
-      <div className="cart_page">
+      <div className='cart_page'>
         <div className='cart'>
-          <div className='page_header'>
-            Cart
-          </div>
+          <div className='page_subheader'>Cart</div>
           {this.props.state.cart.length ? (
             <div className='cart_body'>
               <div className='cart_products'>{cartProducts}</div>
             </div>
           ) : (
-              <b> Your cart is empty! </b>
-            )}
-        {this.props.state.cart.length && (
-          <div className="checkout_button_container">
-          <GreenButton
-            variant='contained'
-            className='checkout_button'
-            onClick={e => this.checkOut(total, availableProducts)}
-            >
-            CHECK OUT: ${total}
-          </GreenButton>
-            </div>
-        )}
+            <div className="empty_cart"> Your cart is empty! </div>
+          )}
+          {checkOutButton}
         </div>
       </div>
     )

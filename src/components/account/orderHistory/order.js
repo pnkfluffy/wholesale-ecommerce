@@ -22,13 +22,15 @@ class Order extends React.Component {
 
   componentDidMount () {
     axios
-        .get('/api/gc/bankFromOrder/' + this.props.history.location.state.order._id)
-        .then(res =>{
-              this.setState({
-                bankInfo: res.data
-              })
-        })
-        .catch(err => console.log(err))
+      .get('/api/gc/bankFromOrder/' + this.props.history.location.state.order._id)
+      .then(res =>{
+            this.setState({
+              bankInfo: res.data
+            })
+      })
+      .catch(err => {
+        // console.log(err)
+      })
   }
 
   printItems = products => {
@@ -51,12 +53,12 @@ class Order extends React.Component {
 
   redoOrder = async order => {
     let hasAvailableProducts = false;
-   await order.products.forEach(product => {
+    await order.products.forEach(product => {
       const allInfo = this.props.state.products.products.find(
         p => p._id === product.productId && !p.deleted
       )
       if (allInfo) {
-        if ( this.props.state.cart.find(c => c.product === product.productId)) {
+        if (this.props.state.cart.find(c => c.product === product.productId)) {
           store.dispatch({
             type: 'UPDATE_CART_ITEM',
             payload: {
@@ -76,19 +78,17 @@ class Order extends React.Component {
         hasAvailableProducts = true;
       }
     })
-    if(hasAvailableProducts)
-    {
+    if (hasAvailableProducts) {
       //redirect to cart
       const url = '/cart'
       this.props.history.push(url)
     } else {
       Swal.fire('ERROR:', "We are sorry! None of the products in this order is available anymore", 'error')
     }
-
   }
 
 
-  render () {
+  render() {
     if (!this.props.history.location.state) {
       return <div>Order not found</div>
     }

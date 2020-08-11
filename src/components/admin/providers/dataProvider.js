@@ -63,13 +63,12 @@ export default {
   },
 
   getMany: (resource, params) => {
-    // console.log('getMany', resource)
-    // console.log('getMany', resource, 'params: ', params)
+    console.log('getMany resource:', resource, 'params: ', params)
     const query = {
-      filter: JSON.stringify({ id: params.ids })
+      filter: JSON.stringify({ _id: params.ids })
     }
     const url = `/api/${resource}?${stringify(query)}`
-    // console.log('url: ', url)
+    console.log('url: ', url)
     return httpClient(url)
       .then(({ json }) => {
         // console.log('getMany response: ', { data: json })

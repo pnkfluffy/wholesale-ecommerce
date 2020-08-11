@@ -96,7 +96,6 @@ router.post('/', rejectNonAdmin, async (req, res) => {
 
 //getList
 router.get('/', rejectNonAdmin, (req, res) => {
-  // console.log('User list backend hit', req.query)
   try {
     const filterQuery = JSON.parse(req.query.filter)
     let filter =
@@ -157,6 +156,8 @@ router.get('/:id', rejectNonAdmin, (req, res) => {
 
 //https://marmelab.com/react-admin/doc/2.8/DataProviders.html
 //getMany
+
+
 
 //getManyReference
 

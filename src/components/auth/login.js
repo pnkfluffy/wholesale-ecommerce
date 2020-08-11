@@ -9,14 +9,14 @@ import VpnKeyIcon from '@material-ui/icons/VpnKey'
 import { LightGreenButton } from '../reuseable/materialButtons'
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
-import {classes} from "../reuseable/materialButtons"
+import { classes } from "../reuseable/materialButtons"
 
 const mapStateToProps = state => ({
   state: state.reducer
 })
 
 class Login extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -25,7 +25,7 @@ class Login extends React.Component {
       error: false,
       snackbarOpen: false,
       snackbarSeverity: "success",
-      snackbarMessage: "" 
+      snackbarMessage: ""
     }
   }
 
@@ -33,7 +33,7 @@ class Login extends React.Component {
     if (reason === "clickaway") {
       return;
     }
-    this.setState({snackbarOpen: false})
+    this.setState({ snackbarOpen: false })
   };
 
   login = event => {
@@ -79,10 +79,10 @@ class Login extends React.Component {
     })
   }
 
-  render () {
+  render() {
     return (
       <div className='login'>
-         <div className={classes.root}>
+        <div className={classes.root}>
           <Snackbar
             open={this.state.snackbarOpen}
             severity={this.state.snackbarSeverity}
@@ -143,7 +143,7 @@ class Login extends React.Component {
               placeholder='Password'
               error={this.state.error}
             />
-            <input type="submit" className="no_display"/>
+            <input type="submit" className="no_display" />
             <LightGreenButton
               variant='contained'
               className='full'
@@ -152,6 +152,7 @@ class Login extends React.Component {
               LOGIN
             </LightGreenButton>
           </form>
+          <span className="register_text"> want to sign up and buy bulk cbd products? contact our store at 720-591-6284</span>
         </div>
         <div className='login_footer sidebar_footer_text'>
           <a className='light_green' href='tel:7205916284'>

@@ -170,7 +170,7 @@
 }
 
 .login_form {
-  margin-bottom: 20vh;
+  margin-bottom: 10vh;
   display: flex;
   flex-direction: column;
   width: 30vw;
@@ -205,4 +205,8 @@
 }
 .swal_confirm_button{
   background-color: rgb(46,125,50) !important;
+}
+
+.register_text {
+  transform: translateY(-20vh);
 }

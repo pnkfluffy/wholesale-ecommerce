@@ -45,7 +45,7 @@ class ChangePayment extends React.Component {
         })
         // console.log(err)
       })
-      axios.get('/api/gc/oneBank')
+      axios.get('/api/gc/bankFromUser')
           .then(res => {
               this.setState({
                   bankInfo: res.data,

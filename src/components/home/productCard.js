@@ -44,7 +44,7 @@ class ProductCard extends React.Component {
           </span>{' '}
           |
           <span>
-            QT
+            CT
             <br />
             <sub>{units}</sub>
           </span>

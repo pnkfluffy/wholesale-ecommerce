@@ -10,28 +10,8 @@ const mapStateToProps = state => ({
 })
 
 class OrderInformation extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      bankInfo: {}
-    }
-  }
-
-  componentDidMount() {
-    axios.get('/api/gc/oneBank')
-      .then(res => {
-        this.setState({
-          bankInfo: res.data,
-        })
-        // console.log(res.data);
-      })
-      .catch(err => {
-        // console.log(err)
-      })
-  }
-
-  render() {
+  render () {
+    const bankInfo = this.props.bankInfo
     const payment = this.props.payment
     const order = this.props.order
     const address = order.deliveryInfo
@@ -81,24 +61,8 @@ class OrderInformation extends React.Component {
             <div className='order_info_address'>{address.postal_code}</div>
           </div>
         </div>
-        <div className='gc_info_card'>
-          <div className='order_info_title'>Payment Method</div>
-          <div className='order_info_split'>
-            <div className='order_info_content'>Account Holder: </div>
-            <div className='order_info_content'>{this.state.bankInfo.account_holder_name}</div>
-          </div>
-          <div className='order_info_split'>
-            <div className='order_info_content'>Account Number:</div>
-            <div className='order_info_content'>********{this.state.bankInfo.account_number}</div>
-          </div>
-          <div className='order_info_split'>
-            <div className='order_info_content'>Account Type:</div>
-            <div className='order_info_content'>{this.state.bankInfo.account_type}</div>
-          </div>
-          <div className='order_info_split'>
-            <div className='order_info_content'>Bank Name:</div>
-            <div className='order_info_content'>{this.state.bankInfo.bank_name}</div>
-          </div>
+        <div className='order_info_card'>
+          <div className='order_info_title'>Payment Information</div>
           <div className='order_info_split'>
             <div className='order_info_content'>Status:</div>
             <div className='order_info_content'>{payment.status}
@@ -116,6 +80,26 @@ class OrderInformation extends React.Component {
             <div className='order_info_content'>Charged on:</div>
             <div className='order_info_content'>{chargeDate}</div>
           </div>
+          {Object.entries(bankInfo).length !== 0 ?
+              <div>
+                <div className='order_info_split'>
+                  <div className='order_info_content'>Account Holder: </div>
+                  <div className='order_info_content'>{bankInfo.account_holder_name}</div>
+                </div>
+                <div className='order_info_split'>
+                  <div className='order_info_content'>Account Number:</div>
+                  <div className='order_info_content'>********{bankInfo.account_number}</div>
+                </div>
+                <div className='order_info_split'>
+                  <div className='order_info_content'>Account Type:</div>
+                  <div className='order_info_content'>{bankInfo.account_type}</div>
+                </div>
+                <div className='order_info_split'>
+                  <div className='order_info_content'>Bank Name:</div>
+                  <div className='order_info_content'>{bankInfo.bank_name}</div>
+                </div>
+              </div>
+          : null}
         </div>
       </div>
     )

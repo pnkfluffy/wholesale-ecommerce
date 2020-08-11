@@ -17,7 +17,7 @@ const ProductSchema = new Schema({
   },
   price: {
     type: Number,
-    default: 0
+    default: 100,
   },
   priceTiers: [
     {

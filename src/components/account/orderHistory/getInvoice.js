@@ -15,15 +15,21 @@ class GetInvoice extends React.Component {
   }
 
   getClientInfo = async () => {
-    /*organize all shipping information*/
+    /*organize all payment information*/
     const clientInfo = await axios
-      .get('/api/gc/one-client')
+      .get('/api/gc/oneClient')
       .then(res => {
         return res.data
       })
       .catch(err => {
         // console.log(err)
       })
+    const bankInfo = await axios
+      .get('/api/gc/bankFromOrder/' + this.props.order._id)
+      .then(res =>{
+        return res.data
+      })
+      .catch(err => console.log(err))
     if (!clientInfo) {
       alert('unexpected error in retrieving client info')
     }
@@ -31,6 +37,9 @@ class GetInvoice extends React.Component {
     let addr_2 = ''
     if (clientInfo.address_line2) addr_2 = ', ' + clientInfo.address_line2
     const client = {
+      account_number: bankInfo.account_number,
+      account_type: bankInfo.account_type,
+      bank_name: bankInfo.bank_name,
       name: fullName,
       company_name: clientInfo.company_name,
       address_line1: clientInfo.address_line1,

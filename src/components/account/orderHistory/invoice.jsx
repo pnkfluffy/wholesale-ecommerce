@@ -149,7 +149,7 @@ export function Invoice(props) {
                             <Text>2124 35th Ave</Text>
                             <Text>Greeley, CO 80634</Text>
                             <Text>Phone: (720)5916284</Text>
-                            <Text>Website: http://cbddy-wholesale.com</Text>
+                            <Text>Website: http://cbddywholesale.com</Text>
                         </View>
                         <View style={styles.text}>
                             <Text style={styles.paymentStatus}>Payment Status: {props.data.status}</Text>
@@ -162,9 +162,9 @@ export function Invoice(props) {
                         <View style={styles.text}>
                             <Text style={styles.title}>Payment Information</Text>
                             <Text>{props.data.client.name}</Text>
-                            <Text>{props.data.client.address_line1}{props.data.client.address_line2}</Text>
-                            <Text>{props.data.client.postal_code}</Text>
-                            <Text>{props.data.client.state}, {props.data.client.city}</Text>
+                            <Text>Account Number {props.data.client.account_number}</Text>
+                            <Text>Account Type {props.data.client.account_type}</Text>
+                            <Text>{props.data.client.bank_name}</Text>
                         </View>
                         <View style={styles.text}>
                             <Text style={styles.title}>Shipping Information</Text>

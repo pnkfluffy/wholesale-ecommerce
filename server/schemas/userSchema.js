@@ -64,7 +64,6 @@ const UserSchema = new Schema({
   representative: {
     type: Schema.Types.ObjectId,
     ref: 'user',
-    required: true,
   },
   date: {
     type: Date,

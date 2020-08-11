@@ -1,7 +1,7 @@
 const isEmpty = require('is-empty')
 
 module.exports = function validatePass (data) {
-  console.log(data)
+  // console.log(data)
   let errors = []
   // Convert empty fields to an empty string for Validator functions
   const oldPass = !isEmpty(data.oldPass) ? data.oldPass : ''

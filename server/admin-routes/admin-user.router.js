@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 // const bcrypt = require("bcryptjs")
-const {ObjectId} = require('mongodb')
+const { ObjectId } = require('mongodb')
 const passport = require('../modules/passport')
 const {
   rejectNonAdmin,
@@ -14,10 +14,7 @@ const bcrypt = require('bcrypt')
 const { restart } = require('nodemon')
 
 //Login
-router.post(
-  '/login',
-  passport.authenticate('local', { failureRedirect: '/login' }),
-  (req, res) => {
+router.post('/login', passport.authenticate('local', { failureRedirect: '/login' }), (req, res) => {
     let perms
     if (req.user.isOwner) {
       perms = 'owner'
@@ -68,7 +65,9 @@ router.post('/', rejectNonAdmin, async (req, res) => {
       res.status(403).send('Insufficient Permissions')
       return
     }
-    const representative = req.body.makeRepresentative ? req.user._id : ObjectId();
+    const representative = req.body.makeRepresentative
+      ? req.user._id
+      : ObjectId()
     User.create({
       email: req.body.email,
       name: req.body.name,
@@ -76,7 +75,7 @@ router.post('/', rejectNonAdmin, async (req, res) => {
       password: saltedPass,
       representative
     }).then(newUser => {
-      console.log(newUser)
+      // console.log(newUser)
       newUser.password = null
       newUser = JSON.parse(
         JSON.stringify(newUser)
@@ -90,16 +89,19 @@ router.post('/', rejectNonAdmin, async (req, res) => {
       res.status(200).json(newUser)
     })
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     res.status(500).send('Creation failed.')
   }
 })
 
 //getList
 router.get('/', rejectNonAdmin, (req, res) => {
-  console.log('User list backend hit', req.query)
   try {
-    let filterQuery = JSON.parse(req.query.filter) || {}
+    const filterQuery = JSON.parse(req.query.filter)
+    let filter =
+      Object.entries(filterQuery).length !== 0
+        ? JSON.parse(req.query.filter)
+        : { deleted: 'false' }
     let sortQuery
     let sort = {}
     let rangeQuery = [0]
@@ -113,7 +115,7 @@ router.get('/', rejectNonAdmin, (req, res) => {
       rangeLimit = rangeQuery[1] - rangeQuery[0] + 1
     }
 
-    User.find(filterQuery)
+    User.find(filter)
       .sort(sort)
       .skip(rangeQuery[0])
       .limit(rangeLimit)
@@ -129,14 +131,14 @@ router.get('/', rejectNonAdmin, (req, res) => {
         })
       })
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     res.status(500).send('error retrieving users')
   }
 })
 
 //getOne
 router.get('/:id', rejectNonAdmin, (req, res) => {
-  console.log('getOne user hit. Id: ', req.params.id)
+  // console.log('getOne user hit. Id: ', req.params.id)
   User.findOne({ _id: req.params.id })
     .then(user => {
       user = JSON.parse(
@@ -147,7 +149,7 @@ router.get('/:id', rejectNonAdmin, (req, res) => {
       res.json(user)
     })
     .catch(err => {
-      console.log('error: ', err)
+      // console.log('error: ', err)
       res.status(500).send('user not found.')
     })
 })
@@ -155,11 +157,13 @@ router.get('/:id', rejectNonAdmin, (req, res) => {
 //https://marmelab.com/react-admin/doc/2.8/DataProviders.html
 //getMany
 
+
+
 //getManyReference
 
 //update
 router.put('/:id', rejectNonAdmin, async (req, res) => {
-  console.log('update user hit')
+  // console.log('update user hit')
   User.updateOne({ _id: req.params.id }, req.body)
     .then(user => {
       user = JSON.parse(
@@ -170,7 +174,7 @@ router.put('/:id', rejectNonAdmin, async (req, res) => {
       res.json(user)
     })
     .catch(err => {
-      console.log(err)
+      // console.log(err)
       res.status(500).send('Failed to update.')
     })
 })
@@ -178,7 +182,7 @@ router.put('/:id', rejectNonAdmin, async (req, res) => {
 //updateMany
 router.put('/', rejectNonOwner, async (req, res) => {
   try {
-    console.log('updateMany hit')
+    // console.log('updateMany hit')
     let users = []
     for (let i = 0; i < req.query.ids.length; i++) {
       await User.updateOne({ _id: req.query.ids[i] }, req.body)
@@ -186,7 +190,7 @@ router.put('/', rejectNonOwner, async (req, res) => {
           users.push(user)
         })
         .catch(err => {
-          console.log(err)
+          // console.log(err)
           res.status(500).send('Failed to update all items.')
           return
         })
@@ -199,20 +203,26 @@ router.put('/', rejectNonOwner, async (req, res) => {
     )
     res.status(200).json(updatedUsers)
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     res.status(500).send('error updating users')
   }
 })
 
 //delete
 router.delete('/:id', rejectNonOwner, async (req, res) => {
+  // console.log('del attempt', req.params.id)
+
   User.updateOne({ _id: req.params.id }, { deleted: true })
-    .then(result => {
-      console.log(result)
-      res.status(200).send('item deleted')
+    .then(user => {
+      user = JSON.parse(
+        JSON.stringify(user)
+          .split('"_id":')
+          .join('"id":')
+      )
+      res.json(user)
     })
     .catch(err => {
-      console.log(err)
+      // console.log(err)
       res.status(500).send('Deletion failed!')
     })
 })
@@ -220,22 +230,22 @@ router.delete('/:id', rejectNonOwner, async (req, res) => {
 //deleteMany
 router.delete('/', rejectNonOwner, async (req, res) => {
   try {
-    console.log('deleteMany hit.')
-    console.log(req.query.ids)
+    // console.log('deleteMany hit.')
+    // console.log(req.query.ids)
     for (let i = 0; i < req.query.ids.length; i++) {
       await User.updateOne({ _id: req.params.id }, { deleted: true })
         .then(result => {
-          console.log(result)
+          // console.log(result)
         })
         .catch(err => {
-          console.log(err)
+          // console.log(err)
           res.status(500).send('Not all items were deleted')
           return
         })
     }
     res.status(200).send('items deleted.')
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     res.status(500).send('error deleting items')
   }
 })

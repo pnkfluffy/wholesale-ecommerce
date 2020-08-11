@@ -12,25 +12,33 @@ class Account extends React.Component {
     super(props)
   }
 
-  render() {    
+  render() {
     let wishlistProductList = this.props.state.wishlist.map(wishlistItem => {
       let productInfo = this.props.state.products.products.find(product => {
-        if (product._id === wishlistItem && wishlistItem !== null){
-          console.log("product", product);
+        if (product._id === wishlistItem && wishlistItem !== null) {
+          // console.log("product", product);
           return (product);
-        }})
-      console.log("productInfo", productInfo);
-      return (
-        <WishlistProductCard
-          product={productInfo}
-          key={productInfo._id}
-          images={productInfo.imageData}
-        />
-      )
+        }
+      })
+      if (productInfo) {
+        return (
+          <WishlistProductCard
+            product={productInfo}
+            id={productInfo._id}
+            key={productInfo._id}
+            images={productInfo.imageData}
+          />
+        )
+      }
+      else {
+        return (
+          <WishlistProductCard
+            product={null}
+            id={wishlistItem}
+          />
+        )
+      }
     })
-
-    console.log(this.props.state);
-    
 
     return (
       <div>
@@ -41,7 +49,7 @@ class Account extends React.Component {
           </div>
           <div className='section_container'>
             <div className='page_subheader'>Wishlist</div>
-            {this.props.state.wishlist.length ? (
+            {wishlistProductList.length ? (
               wishlistProductList
             ) : (
                 <div className='no_items_message'>
@@ -49,10 +57,10 @@ class Account extends React.Component {
                   clicking on "Add to wishlist" on product page!
                 </div>
               )}
-            </div>
           </div>
         </div>
-        )
+      </div>
+    )
   }
 }
 

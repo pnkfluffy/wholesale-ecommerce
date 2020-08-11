@@ -22,7 +22,7 @@ const mapStateToProps = state => ({
 class Sidebar extends React.Component {
   render () {
     const location = window.location.pathname
-    console.log('location', location)
+    // console.log('location', location)
     const image = logo ? logo : blank_image
     return (
       <div className='sidebar'>

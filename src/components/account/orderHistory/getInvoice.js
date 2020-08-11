@@ -7,7 +7,7 @@ import { Invoice } from './invoice'
 import loadingSVG from '../../../resources/images/loading.svg';
 
 class GetInvoice extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       invoice: null
@@ -15,10 +15,18 @@ class GetInvoice extends React.Component {
   }
 
   getClientInfo = async () => {
-    /*organize all shipping information*/
+    /*organize all payment information*/
     const clientInfo = await axios
-      .get('/api/gc/one-client')
+      .get('/api/gc/oneClient')
       .then(res => {
+        return res.data
+      })
+      .catch(err => {
+        // console.log(err)
+      })
+    const bankInfo = await axios
+      .get('/api/gc/bankFromOrder/' + this.props.order._id)
+      .then(res =>{
         return res.data
       })
       .catch(err => console.log(err))
@@ -29,6 +37,9 @@ class GetInvoice extends React.Component {
     let addr_2 = ''
     if (clientInfo.address_line2) addr_2 = ', ' + clientInfo.address_line2
     const client = {
+      account_number: bankInfo.account_number,
+      account_type: bankInfo.account_type,
+      bank_name: bankInfo.bank_name,
       name: fullName,
       company_name: clientInfo.company_name,
       address_line1: clientInfo.address_line1,
@@ -38,7 +49,7 @@ class GetInvoice extends React.Component {
       country: clientInfo.country_code,
       postal_code: clientInfo.postal_code
     }
-    console.log(client)
+    // console.log(client)
     return client
   }
   getItems = () => {
@@ -71,12 +82,12 @@ class GetInvoice extends React.Component {
   }
 
   generateInvoice = async () => {
-    console.log('generating')
+    // console.log('generating')
 
     const client = await this.getClientInfo()
     const items = await this.getItems()
     const date = await this.getDate()
-    const subtotal =  this.props.order.total + ",00"
+    const subtotal = this.props.order.total + ",00"
 
     const shipping = {
       ...this.props.order.deliveryInfo,
@@ -93,7 +104,7 @@ class GetInvoice extends React.Component {
       chargingDate: chargingDate,
       status: this.props.payment.status
     }
-    console.log('done generating', invoice)
+    // console.log('done generating', invoice)
 
     this.setState({
       invoice: invoice
@@ -104,7 +115,7 @@ class GetInvoice extends React.Component {
     this.generateInvoice()
   }
 
-  render () {
+  render() {
     const fileName = 'cbddy_invoice_' + this.props.order._id + '.pdf'
     return (
       <div className='invoice_container'>
@@ -118,14 +129,14 @@ class GetInvoice extends React.Component {
               loading ? (
                 <img src={loadingSVG} alt='loading' />
               ) : (
-                <GreenButton
-                  variant='contained'
-                  className='single_order_button'
-                  startIcon={<GetAppIcon />}
-                >
-                  Receipt
-                </GreenButton>
-              )
+                  <GreenButton
+                    variant='contained'
+                    className='single_order_button'
+                    startIcon={<GetAppIcon />}
+                  >
+                    Receipt
+                  </GreenButton>
+                )
             }
           </PDFDownloadLink>
         )}

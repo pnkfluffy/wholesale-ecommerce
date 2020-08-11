@@ -7,7 +7,7 @@ const { rejectNonAdmin } = require('../modules/authentication-middleware')
 //getList
 router.get('/', rejectNonAdmin, (req, res) => {
   try {
-    console.log('Review list backend hit');
+    // console.log('Review list backend hit');
     const sortQuery = JSON.parse(req.query.sort)
     const filterQuery = JSON.parse(req.query.filter)
     const rangeQuery = JSON.parse(req.query.range)
@@ -31,12 +31,12 @@ router.get('/', rejectNonAdmin, (req, res) => {
         })
       })
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     res.status(500).send('Error retrieving reviews')
   }
 })
 // router.get("/", rejectNonAdmin, (req, res) => {
-//   console.log("Review List backend hit")
+//   // console.log("Review List backend hit")
 //   const sortQuery = JSON.parse(req.query.sort);
 //   let sort = {};
 //   sort[sortQuery[0]] = sortQuery[1] === "ASC" ? 1 : -1;
@@ -51,14 +51,14 @@ router.get('/', rejectNonAdmin, (req, res) => {
 //       res.json(reviews);
 //     })
 //     .catch((error) => {
-//       console.log(error);
+//       // console.log(error);
 //       res.status(500).send("no users found");
 //     });
 // });
 
 //getOne
 router.get('/:id', rejectNonAdmin, (req, res) => {
-  console.log('getOne hit. Id: ', req.params.id)
+  // console.log('getOne hit. Id: ', req.params.id)
   Review.findOne({ _id: req.params.id })
     .then(review => {
       review = JSON.parse(
@@ -69,7 +69,7 @@ router.get('/:id', rejectNonAdmin, (req, res) => {
       res.json(review)
     })
     .catch(err => {
-      console.log('error: ', err)
+      // console.log('error: ', err)
       res.status(500).send('Review not found.')
     })
 })
@@ -91,7 +91,7 @@ router.get('/:id', rejectNonAdmin, (req, res) => {
 //   newProduct
 //     .save()
 //     .then((product) => res.json(product))
-//     .catch((err) => console.log(err));
+//     .catch((err) => // console.log(err));
 // });
 
 // // @route   POST /admin-products/edit/:id
@@ -101,7 +101,7 @@ router.get('/:id', rejectNonAdmin, (req, res) => {
 //   Product.updateOne({_id: req.user.id}, req.body)
 //   .then((product) => res.json(product))
 //   .catch((error) => {
-//     console.log(error);
+//     // console.log(error);
 //     res.status(500).send("error editing product");
 //   })
 // });
@@ -115,7 +115,7 @@ router.get('/:id', rejectNonAdmin, (req, res) => {
 //     .then((product) => product.remove().then(() => res.status(200).send("Product sucessfully deleted")))
 //     // .then((product) => product.remove().then(() => res.json({ success: true })))
 //     .catch((err) => {
-//       console.log(err);
+//       // console.log(err);
 //       res.status(500).json("Can't delete product");
 //     })
 // });

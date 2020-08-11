@@ -48,10 +48,8 @@ class Settings extends React.Component {
       snackbarMessage: ''
     }
     let params = new URLSearchParams(window.location.href)
-    /*/!*(!) TO GO LIVE
-    const url = 'https://wholesale-portal-testing.herokuapp.com/settings?redirect_flow_id';
-    *!/*/
-    const url = 'http://localhost:3000/settings?redirect_flow_id'
+
+    const url = `${this.props.state.devURI}/settings?redirect_flow_id`
     if (params.has(url)) {
       this.completeSetPayment(params.get(url));
     }
@@ -64,7 +62,7 @@ class Settings extends React.Component {
         .then(res => {
             if (!this.state.props.hasMandate)
               store.dispatch({
-                type: 'CHANGE_MANDATE_STATUS'
+                type: 'YES_MANDATE'
               })
             Swal.fire({
               title: '<span class="swal_title"> SUCCESS',
@@ -105,7 +103,7 @@ class Settings extends React.Component {
   }
 
   showUser = () => {
-    console.log(this.props.state.user)
+    // console.log(this.props.state.user)
   }
 
   clearFields = () => {
@@ -152,7 +150,7 @@ class Settings extends React.Component {
   //       window.location.href = '/'
   //     })
   //     .catch(error => {
-  //       console.log(error.response.data)
+  //       // console.log(error.response.data)
   //       if (error.response && error.response.data) {
   //         Swal.fire({
   //           title: '<span class="swal_title"> ERROR',
@@ -180,7 +178,7 @@ class Settings extends React.Component {
         newPassConfirm: this.state.newPassConfirm
       })
       .then(res => {
-        console.log(res.data)
+        // console.log(res.data)
         this.setState({
           oldPass: '',
           newPass: '',
@@ -207,7 +205,7 @@ class Settings extends React.Component {
         // this.setSnackbar("success", "Your password has been changed, please log in.");
       })
       .catch(error => {
-        console.log(error.response.data)
+        // console.log(error.response.data)
         if (error.response && error.response.data[0]) {
           const errorKey = error.response.data[0]
           const errorMessage = error.response.data[1]

@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
 });
 
 export function Invoice(props) {
-    console.log(props.data);
+    // console.log(props.data);
     const logo = "https://64.media.tumblr.com/ac45c2ec1c2c6512b1c8752f82b0b0c9/849d4b56695a1b67-f2/s1280x1920/24d50a5d50d2ca742f705ceb769ed30a305d3ba3.png"
     if (props.data.shipping)
     {
@@ -149,7 +149,7 @@ export function Invoice(props) {
                             <Text>2124 35th Ave</Text>
                             <Text>Greeley, CO 80634</Text>
                             <Text>Phone: (720)5916284</Text>
-                            <Text>Website: http://cbddy-wholesale.com</Text>
+                            <Text>Website: http://cbddywholesale.com</Text>
                         </View>
                         <View style={styles.text}>
                             <Text style={styles.paymentStatus}>Payment Status: {props.data.status}</Text>
@@ -162,9 +162,9 @@ export function Invoice(props) {
                         <View style={styles.text}>
                             <Text style={styles.title}>Payment Information</Text>
                             <Text>{props.data.client.name}</Text>
-                            <Text>{props.data.client.address_line1}{props.data.client.address_line2}</Text>
-                            <Text>{props.data.client.postal_code}</Text>
-                            <Text>{props.data.client.state}, {props.data.client.city}</Text>
+                            <Text>Account Number {props.data.client.account_number}</Text>
+                            <Text>Account Type {props.data.client.account_type}</Text>
+                            <Text>{props.data.client.bank_name}</Text>
                         </View>
                         <View style={styles.text}>
                             <Text style={styles.title}>Shipping Information</Text>

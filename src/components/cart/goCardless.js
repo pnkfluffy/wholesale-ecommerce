@@ -6,6 +6,7 @@ import loading from '../../resources/images/loadingBig.svg'
 import GCFillInfo from './gcFillInfo'
 import GCPay from './gcPay'
 import GCProductCard from "./gcProductCard";
+import GCPaymentInfo from "./gcPaymentInfo";
 import store from "../../redux/store";
 import Swal from "sweetalert2";
 import {getPriceByQuantity} from "../reuseable/getPriceByQuantity";
@@ -17,32 +18,13 @@ const mapStateToProps = state => ({
 class GoCardless extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {
-      bankInfo: {}
-    }
     this.confirmAccount()
-  }
-
-  componentDidMount() {
-    axios.get('/api/gc/oneBank')
-        .then(res => {
-          this.setState({
-            bankInfo: res.data,
-          })
-          console.log(res.data);
-        })
-        .catch(err => {
-          console.log(err)
-        })
   }
 
   confirmAccount = () => {
     let params = new URLSearchParams(window.location.href)
-    /*(!) TO GO LIVE
-    const url = 'https://wholesale-portal-testing.herokuapp.com/buy?redirect_flow_id';
-    */
-    const url = 'http://localhost:3000/buy?redirect_flow_id'
-    console.log(params.has(url));
+
+    const url = `${this.props.state.devURI}/buy?redirect_flow_id`
     if (params.has(url)) {
       const redirect = params.get(url)
       this.props.history.replace('/buy')
@@ -50,7 +32,7 @@ class GoCardless extends React.Component {
         .post('/api/gc/completeRedirect', {redirect: redirect})
         .then(res => {
           store.dispatch({
-            type: 'CHANGE_MANDATE_STATUS'
+            type: 'YES_MANDATE'
           })
           Swal.fire({
             title: '<span class="swal_title"> SUCCESS',
@@ -107,25 +89,7 @@ class GoCardless extends React.Component {
          }
         })()}
         <div className="cart_products_payment">
-          <div className='gc_info_card'>
-            <div className='order_info_title'>Payment Method</div>
-            <div className='order_info_split'>
-              <div className='order_info_content'>Account Holder: </div>
-              <div className='order_info_content'>{this.state.bankInfo.account_holder_name}</div>
-            </div>
-            <div className='order_info_split'>
-              <div className='order_info_content'>Account Number:</div>
-              <div className='order_info_content'>********{this.state.bankInfo.account_number}</div>
-            </div>
-            <div className='order_info_split'>
-              <div className='order_info_content'>Account Type:</div>
-              <div className='order_info_content'>{this.state.bankInfo.account_type}</div>
-            </div>
-            <div className='order_info_split'>
-              <div className='order_info_content'>Bank Name:</div>
-              <div className='order_info_content'>{this.state.bankInfo.bank_name}</div>
-            </div>
-          </div>
+        {this.props.state.hasMandate ? <GCPaymentInfo />: null}
           {productsList}
         </div>
       </div>

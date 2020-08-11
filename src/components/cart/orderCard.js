@@ -24,10 +24,10 @@ class OrderCard extends React.Component {
         confirmButton: 'swal_confirm_button'
       }
     }).then(res => {
-      console.log(res);
+      // console.log(res);
       if (res.isDismissed) {
         let quantity = this.props.product.quantity;
-        console.log(quantity);
+        // console.log(quantity);
         if (!quantity)
           quantity = 1;
         this.props.dispatch({

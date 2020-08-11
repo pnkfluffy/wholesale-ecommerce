@@ -4,7 +4,8 @@ const Schema = mongoose.Schema
 const OrderSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
-    ref: 'user'
+    ref: 'user',
+    required: true
   },
   products: [
     {
@@ -58,7 +59,11 @@ const OrderSchema = new Schema({
   paymentID: {
     type: 'string',
     default: "",
-  }
+  },
+  bankID: {
+    type: 'string',
+    default: "",
+  },
 })
 
 module.exports = Order = mongoose.model('order', OrderSchema)

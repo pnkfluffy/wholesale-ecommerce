@@ -69,19 +69,19 @@ else {
   app.get('/*', function (req, res) {
     res.sendFile(path.join(__dirname, '../build/index.html'), function (err) {
       if (err) {
-        console.log(err);
+        // console.log(err);
       }
     })
   })
 
 
   server.listen(process.env.PORT || 5000, () => {
-    console.log(`listening on port: ${PORT}`)
+    // console.log(`listening on port: ${PORT}`)
   })
 }
 
 cluster.on('exit', (worker) => {
-  console.log('mayday! mayday! worker', worker.id, ' is no more!')
+  // console.log('mayday! mayday! worker', worker.id, ' is no more!')
   cluster.fork()
 })
 

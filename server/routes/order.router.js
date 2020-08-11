@@ -1,12 +1,10 @@
 const express = require('express')
 const router = express.Router()
-const async = require('async')
 // {!} ADD REJECTUNAUTHENTICATED MIDDLEWARE TO ALL PRIVATE ROUTES
 const {
   rejectUnauthenticated
 } = require('../modules/authentication-middleware')
 const Order = require('../schemas/orderSchema')
-const Product = require('../schemas/productSchema')
 
 // @route   GET /orders/:orderId
 // @desc    Returns the order
@@ -15,7 +13,7 @@ router.get('/oneOrder/:orderId', rejectUnauthenticated, (req, res) => {
   Order.findById({_id: req.params.orderId, user: req.user._id}, { user: 0, paymentID: 0, representative: 0 })
     .then(order => res.json(order))
     .catch(error => {
-      console.log(error)
+      // console.log(error)
       res.status(500).send('order not found')
     })
 })
@@ -25,11 +23,11 @@ router.get('/oneOrder/:orderId', rejectUnauthenticated, (req, res) => {
 // @access  Private
 router.get('/from', rejectUnauthenticated, (req, res) => {
   Order.find({ user: req.user._id }, { user: 0, paymentID: 0, representative: 0 })
-    .then(orders => {
+    .then(orders =>{
         res.json(orders)
     })
     .catch(error => {
-      console.log(error)
+      // console.log(error)
       res.status(500).send('Error finding orders')
     })
 })

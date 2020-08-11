@@ -50,7 +50,7 @@ const uploadProductPhotos = (req, res, next) => {
   })
 
   Promise.all(responseData).then(values => {
-    console.log('success', values);
+    // console.log('success', values);
     req.imageMetaData = values.map(data => {
       return ({
         bucket: data.Bucket || data.bucket,

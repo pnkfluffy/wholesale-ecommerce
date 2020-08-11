@@ -33,6 +33,9 @@ import {
   LongTextInput,
   ReferenceManyField,
   FunctionField,
+  basePath,
+  useListContext,
+  sanitizeListRestProps,
   Typography,
   Filter,
   SearchInput
@@ -40,43 +43,68 @@ import {
 
 export const CommissionList = props => (
   // <ReferenceManyField label={false} reference='admin-users' target='id'>
-    <List
-      aside={<Aside />}
-      filters={<CommissionFilter />}
-      filterDefaultValues={{ commission: true }}
-      bulkActionButtons={false}
-      sort={{ field: 'date', order: 'DESC' }}
-      {...props}
-    >
-      <Datagrid rowClick='show'>
-        <ReferenceField
-          label='User'
-          link='show'
-          source='user'
-          reference='admin-users'
-        >
-          <TextField label='Name' source='name' />
-        </ReferenceField>
+  <List
+    aside={<Aside />}
+    filters={<CommissionFilter />}
+    actions={<ListActions />}
+    filterDefaultValues={{ commission: true }}
+    bulkActionButtons={false}
+    sort={{ field: 'date', order: 'DESC' }}
+    {...props}
+  >
+    <Datagrid rowClick='show'>
+      <ReferenceField
+        label='User'
+        link='show'
+        source='user'
+        reference='admin-users'
+      >
+        <TextField label='Name' source='name' />
+      </ReferenceField>
 
-        <ReferenceField
-          label='Representative'
-          source='representative'
-          reference='admin-users'
-          link='show'
-        >
-          <TextField label='Name' source='name' />
-        </ReferenceField>
-        <NumberField
-          label='Total'
-          source='total'
-          options={{ style: 'currency', currency: 'USD' }}
-        />
-        <DateField label='Date' source='date' />
-        <ShowButton />
-      </Datagrid>
-    </List>
+      <ReferenceField
+        label='Representative'
+        source='representative'
+        reference='admin-users'
+        link='show'
+      >
+        <TextField label='Name' source='name' />
+      </ReferenceField>
+      <NumberField
+        label='Total'
+        source='total'
+        options={{ style: 'currency', currency: 'USD' }}
+      />
+      <DateField label='Date' source='date' />
+      <ShowButton />
+    </Datagrid>
+  </List>
   // </ReferenceManyField>
 )
+
+const ListActions = props => {
+  const { className, exporter, filters, maxResults, ...rest } = props
+  const {
+    basePath,
+    resource,
+    showFilter,
+    displayedFilters,
+    filterValues
+  } = useListContext()
+  return (
+    <TopToolbar className={className} {...sanitizeListRestProps(rest)}>
+      {filters &&
+        React.cloneElement(filters, {
+          resource,
+          showFilter,
+          displayedFilters,
+          filterValues,
+          context: 'button'
+        })}
+      {/* <CreateButton basePath={basePath} /> */}
+    </TopToolbar>
+  )
+}
 
 const CommissionFilter = props => {
   return (
@@ -92,7 +120,7 @@ const CommissionFilter = props => {
 }
 
 const Aside = ({ data, ids }) => {
-  // console.log('aside', data, ids)
+  // // console.log('aside', data, ids)
   return (
     <div style={{ width: 200, margin: '1vw' }}>
       <h1>Customer Spending</h1>

@@ -53,7 +53,7 @@ class GCPay extends React.Component {
     axios
       .get('/api/gc/oneClient')
       .then(res => {
-        console.log(res.data)
+        // console.log(res.data)
         this.setState({
           loading: false,
           ClientFirstName: res.data.given_name,
@@ -66,7 +66,7 @@ class GCPay extends React.Component {
         })
       })
       .catch(err => {
-        console.log(err)
+        // console.log(err)
         this.setState({
           loading: false
         })
@@ -104,7 +104,7 @@ class GCPay extends React.Component {
             window.open(res.data.url, '_self')
           })
           .catch(err => {
-            console.log(err)
+            // console.log(err)
           })
       }
     })
@@ -137,11 +137,11 @@ class GCPay extends React.Component {
       //add order to redux state orders
       let allOrders = this.props.state.orders;
       allOrders.push(res.data.order);
-      console.log(allOrders);
+      // console.log(allOrders);
       store.dispatch({ type: 'ADD_ORDERS', payload: allOrders })
 
       //Clean the cart
-      console.log('collecting payment')
+      // console.log('collecting payment')
       store.dispatch({ type: 'EMPTY_CART', payload: [] })
 
       //Redirect to order page where all the information + receipt are available
@@ -154,14 +154,14 @@ class GCPay extends React.Component {
         }
       })
     }).catch(err => {
-      console.log("error!!")
+      // console.log("error!!")
       if (err.response && err.response.data.errors) {
         this.setState({
           err: err.response.data.errors,
         })
       } else if (err.response && err.response.data === "addr_1") {
         Swal.fire({
-          text: 'ERROR:' + "Something is wrong with your address! Check your ZIP code, address line 1, city and state!" + 'error',
+          text: 'ERROR: ' + "Something is wrong with your address! Check your ZIP code, address line 1, city and state!",
           background: '#1E1F26',
           customClass: {
             confirmButton: 'swal_confirm_button',
@@ -237,7 +237,7 @@ class GCPay extends React.Component {
               value={this.state.ClientAddr1}
               type='text'
               changeField={this.onChange}
-              placeholder=''
+              placeholder='Address Number and Street'
               error={this.state.err.ClientAddr1}
             />
             <InputField
@@ -247,7 +247,7 @@ class GCPay extends React.Component {
               value={this.state.ClientAddr2}
               type='text'
               changeField={this.onChange}
-              placeholder=''
+              placeholder='Apt. Number or PO Box Number'
             />
             <InputField
               widthCSS='gc_input'

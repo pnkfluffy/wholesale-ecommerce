@@ -5,9 +5,9 @@ import dataProvider from './dataProvider'
 const myDataProvider = {
   ...dataProvider,
   create: (resource, params) => {
-    console.log('create intercept')
+    // console.log('create intercept')
     if (resource !== 'admin-products' || !params.data.imageData) {
-      console.log('no images')
+      // console.log('no images')
       params.data.imageData = []
       return dataProvider.create(resource, params)
     }

@@ -23,11 +23,18 @@ import {
   BooleanInput,
   ReferenceField,
   LongTextInput,
-  ReferenceManyField
+  sanitizeListRestProps,
+  useListContext,
 } from 'react-admin'
 
-export const ReviewList = props => (
-  <List {...props} sort={{ field: 'date', order: 'DESC' }} bulkActionButtons={false}>
+
+export const ReviewList = ({ permissions, ...props}) => (
+  <List
+    {...props}
+    actions={<ListActions />}
+    // sort={{ field: 'date', order: 'DESC' }}
+    // bulkActionButtons={false}
+  >
     <Datagrid rowClick='show'>
       <ReferenceField
         link='false'
@@ -49,10 +56,33 @@ export const ReviewList = props => (
       <DateField label='Created' source='date' />
 
       <ShowButton />
-      <DeleteButton />
     </Datagrid>
   </List>
 )
+
+const ListActions = props => {
+  const { className, exporter, filters, maxResults, ...rest } = props
+  const {
+    basePath,
+    resource,
+    showFilter,
+    displayedFilters,
+    filterValues
+  } = useListContext()
+  return (
+    <TopToolbar className={className} {...sanitizeListRestProps(rest)}>
+      {filters &&
+        React.cloneElement(filters, {
+          resource,
+          showFilter,
+          displayedFilters,
+          filterValues,
+          context: 'button'
+        })}
+      {/* <CreateButton basePath={basePath} /> */}
+    </TopToolbar>
+  )
+}
 
 export const ReviewShow = props => (
   <Show actions={<ReviewActions />} {...props}>
@@ -87,4 +117,3 @@ const ReviewActions = ({ permissions, basePath, data, resource }) => (
     {/* Add your custom actions */}
   </TopToolbar>
 )
-

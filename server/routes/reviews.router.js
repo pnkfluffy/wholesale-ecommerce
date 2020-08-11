@@ -16,7 +16,7 @@ router.get('/all', rejectUnauthenticated, (req, res) => {
             res.json(reviews)
         })
         .catch(error => {
-            console.log(error)
+            // console.log(error)
             res.status(500).send('no reviews found')
         })
 })
@@ -28,7 +28,7 @@ router.get('/all', rejectUnauthenticated, (req, res) => {
 //     Order.findById(req.params.reviewId, { user: 0})
 //         .then(review => res.json(review))
 //         .catch(error => {
-//             console.log(error)
+//             // console.log(error)
 //             res.status(500).send('review not found')
 //         })
 // })
@@ -48,7 +48,7 @@ router.get('/from/:page_size/:page_num', rejectUnauthenticated, (req, res) => {
             res.json(reviews)
         })
         .catch(error => {
-            console.log(error)
+            // console.log(error)
             res.status(500).send('Error finding reviews from this id')
         })
 })
@@ -87,11 +87,11 @@ router.post('/newReview/:productID', rejectUnauthenticated, async (req, res) => 
                 res.redirect('/api/reviews/all')
             })
             .catch(err => {
-                console.log(err)
+                // console.log(err)
                 res.status(500).send('error creating review')
             })
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         res.status(500).send('error creating review')
     }
 })
@@ -108,12 +108,12 @@ router.post('/editReview/:reviewID', rejectUnauthenticated, (req, res) => {
             review.updateOne({ review: newReview, stars: newStars })
                 .then(review => res.json(review))
                 .catch(error => {
-                    console.log(error)
+                    // console.log(error)
                     res.status(500).send("Couldn't edit review")
                 })
         })
         .catch(err => {
-            console.log(err);
+            // console.log(err);
             res.status(500).send(`Couldn't edit review`)
         })
 })
@@ -125,7 +125,7 @@ router.delete('/:reviewID', rejectUnauthenticated, (req, res) => {
     Review.findOneAndUpdate({ _id: req.params.reviewID, user: req.user._id }, { deleted: true })
         .then(() => res.json({ success: true }))
         .catch(err => {
-            console.log(err)
+            // console.log(err)
             res.status(500).json("Can't delete review")
         })
 })
@@ -137,7 +137,7 @@ router.delete('/:reviewID', rejectUnauthenticated, (req, res) => {
 //     Order.find({user: req.user._id})
 //         .then(reviews => reviews.remove().then(() => res.json({ success: true })))
 //         .catch(error => {
-//             console.log(error)
+//             // console.log(error)
 //             res.status(500).send("Couldn't delete reviews")
 //         })
 // })

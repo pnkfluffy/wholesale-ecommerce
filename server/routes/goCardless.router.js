@@ -5,7 +5,9 @@ const User = require('../schemas/userSchema')
 const Order = require('../schemas/orderSchema')
 const Product = require('../schemas/productSchema')
 
-const { rejectUnauthenticated } = require('../modules/authentication-middleware')
+const {
+  rejectUnauthenticated
+} = require('../modules/authentication-middleware')
 /*validation*/
 const validateDeliverySizes = require('../validation/deliveryValidation')
 const USPS = require('usps-webtools')
@@ -18,10 +20,12 @@ const { confirmOrderEmail } = require('../modules/nodemailer')
 
 const initializeGoCardless = async () => {
   const allClients = await gocardless(
-    process.env.GC_ACCESS_TOKEN,
-    constants.Environments.Sandbox,
+    process.env.GC_LIVE_TOKEN,
+    constants.Environments.Live,
     { raiseOnIdempotencyConflict: true }
   )
+
+  console.log("all clients", allClients)
 
   return allClients
 }
@@ -36,7 +40,7 @@ router.get('/checkClientID', rejectUnauthenticated, async (req, res) => {
       else res.send(false)
     })
     .catch(err => {
-      console.log(err)
+      // console.log(err)
       res.status(500).send('error getting client ID')
     })
 })
@@ -51,7 +55,7 @@ router.get('/checkClientMandate', rejectUnauthenticated, async (req, res) => {
       else res.send(false)
     })
     .catch(err => {
-      console.log(err)
+      // console.log(err)
       res.status(500).send('error getting client ID')
     })
 })
@@ -70,7 +74,7 @@ router.get('/checkClientMandate', rejectUnauthenticated, async (req, res) => {
 //       customers: customers
 //     })
 //   } catch (error) {
-//     console.log(error)
+//     // console.log(error)
 //     res.status(500).send('error getting clients')
 //   }
 // })
@@ -81,14 +85,15 @@ router.get('/checkClientMandate', rejectUnauthenticated, async (req, res) => {
 router.get('/oneClient', rejectUnauthenticated, async (req, res) => {
   try {
     const activeUser = await User.findById(req.user._id).catch(err => {
-      console.log(err)
+      //console.log(err)
       res.status(500).send("Couldn't find user in db")
     })
 
     const allClients = await gocardless(
-      process.env.GC_ACCESS_TOKEN,
+      process.env.GC_LIVE_TOKEN,
       // Change this to constants.Environments.Live when you're ready to go live
-      constants.Environments.Sandbox
+      constants.Environments.Live,
+      { raiseOnIdempotencyConflict: true }
     )
     const theClient = await allClients.customers.find(activeUser.goCardlessID)
     res.json({
@@ -107,20 +112,20 @@ router.get('/oneClient', rejectUnauthenticated, async (req, res) => {
   }
 })
 
-// @route   GET /gc/oneClient
-// @desc    Returns client by id
+// @route   GET /gc/bankFromUser
+// @desc    Returns bank information from active client by id
 // @access  Private
-router.get('/oneBank', rejectUnauthenticated, async (req, res) => {
+router.get('/bankFromUser', rejectUnauthenticated, async (req, res) => {
     try {
         const activeUser = await User.findById(req.user._id).catch(err => {
             console.log(err)
             res.status(500).send("Couldn't find user in db")
         })
-
         const allClients = await gocardless(
-            process.env.GC_ACCESS_TOKEN,
+            process.env.GC_LIVE_TOKEN,
             // Change this to constants.Environments.Live when you're ready to go live
-            constants.Environments.Sandbox
+            constants.Environments.Live,
+            { raiseOnIdempotencyConflict: true }
         )
         const listBankAccounts = await allClients.customerBankAccounts.list({customer: activeUser.goCardlessID});
         const userBank = listBankAccounts.customer_bank_accounts[0];
@@ -131,76 +136,111 @@ router.get('/oneBank', rejectUnauthenticated, async (req, res) => {
             bank_name: userBank.bank_name,
         })
     } catch (error) {
+        //console.log(error)
+        res.status(500).send('client not found')
+    }
+})
+
+// @route   GET /gc/bankFromOrder
+// @desc    Returns bank information from order
+// @access  Private
+router.get('/bankFromOrder/:orderID', rejectUnauthenticated, async (req, res) => {
+    try {
+        const order = await Order.findById(req.params.orderID).catch(err => {
+            console.log(err)
+            res.status(500).send("Couldn't find order in db")
+        })
+        const allClients = await gocardless(
+            process.env.GC_LIVE_TOKEN,
+            // Change this to constants.Environments.Live when you're ready to go live
+            constants.Environments.Live,
+            { raiseOnIdempotencyConflict: true }
+        )
+        const orderBank = await allClients.customerBankAccounts.find(order.bankID);
+        console.log(orderBank);
+        res.json({
+            account_holder_name: orderBank.account_holder_name,
+            account_number: orderBank.account_number_ending,
+            account_type: orderBank.account_type,
+            bank_name: orderBank.bank_name,
+        })
+    } catch (error) {
         console.log(error)
         res.status(500).send('client not found')
     }
 })
 
-function translatePaymentStatus (status) {
+const translatePaymentStatus = (status) => {
   let translated = {
-                      status: "",
-                      message: ""
-                    }
-
-  switch (status)
-  {
-    case "pending_customer_approval":
-      translated = {
-                      status: "Pending Customer Approval",
-                      message: "You haven't gotten all the signatures to authorise Direct Debits yet."
-                    }
-      break ;
-    case "pending_submission":
-      translated = {
-                      status: "Pending Submission",
-                      message: "Your payment has been created, but not yet submitted to the banks."
-                    }
-      break ;
-    case "submitted":
-      translated = {
-                      status: "Submitted ",
-                      message: "Your payment has been submitted to the bank."
-                    }
-      break ;
-    case "confirmed":
-      translated = {
-                      status: "Confirmed",
-                      message: "Your payment has been confirmed as collected."
-                    }
-      break ;
-    case "paid_out":
-      translated = {
-                      status: "Paid Out",
-                      message: "Your payment was received."
-                    }
-      break ;
-    case "cancelled":
-      translated = {
-                      status: "Cancelled",
-                      message: "Your payment has been cancelled."
-                    }
-      return ;
-    case "customer_approval_denied":
-      translated = {
-                      status: "Customer approval denied",
-                      message: "You have denied approval for the payment."
-                    }
-      break ;
-    case "failed":
-      translated = {
-                      status: "Failed",
-                      message: "Your payment failed to be processed. Note that payments can fail after being confirmed if the failure message is sent late by the banks."
-                    }
-      break ;
-    case "charged_back":
-      translated = {
-                      status: "Charged Back",
-                      message: "You have requested the money back directly to your bank"
-                    }
-      break ;
+    status: '',
+    message: ''
   }
-  console.log(translated)
-  return translated;
+
+  switch (status) {
+    case 'pending_customer_approval':
+      translated = {
+        status: 'Pending Customer Approval',
+        message:
+          "You haven't gotten all the signatures to authorise Direct Debits yet."
+      }
+      break
+    case 'pending_submission':
+      translated = {
+        status: 'Pending Submission',
+        message:
+          'Your payment has been created, but not yet submitted to the banks.'
+      }
+      break
+    case 'submitted':
+      translated = {
+        status: 'Submitted ',
+        message: 'Your payment has been submitted to the bank.'
+      }
+      break
+    case 'confirmed':
+      translated = {
+        status: 'Confirmed',
+        message: 'Your payment has been confirmed as collected.'
+      }
+      break
+    case 'paid_out':
+      translated = {
+        status: 'Paid Out',
+        message: 'Your payment was received.'
+      }
+      break
+    case 'cancelled':
+      translated = {
+        status: 'Cancelled',
+        message: 'Your payment has been cancelled.'
+      }
+      return
+    case 'customer_approval_denied':
+      translated = {
+        status: 'Customer approval denied',
+        message: 'You have denied approval for the payment.'
+      }
+      break
+    case 'failed':
+      translated = {
+        status: 'Failed',
+        message:
+          'Your payment failed to be processed. Note that payments can fail after being confirmed if the failure message is sent late by the banks.'
+      }
+      break
+    case 'charged_back':
+      translated = {
+        status: 'Charged Back',
+        message: 'You have requested the money back directly to your bank'
+      }
+      break
+    default:
+    translated = {
+      status: 'Server Error',
+      message: 'We were not able to get the payment status for this payment.'
+    }
+  }
+  return translated
 }
 
 // @route   GET /gc/payments
@@ -211,10 +251,10 @@ function translatePaymentStatus (status) {
 //     // Initialize the GoCardLess client.
 //     const allClients = await initializeGoCardless()
 //     let payments = await allClients.payments.list()
-//     console.log(payments)
+//     // console.log(payments)
 //     res.send(payments.payments)
 //   } catch (error) {
-//     console.log(error)
+//     // console.log(error)
 //     res.status(500).send('payments not found')
 //   }
 // })
@@ -227,14 +267,17 @@ router.get('/payments/from', rejectUnauthenticated, async (req, res) => {
     const allClients = await initializeGoCardless()
     const paymentsList = await allClients.payments.list()
     const payments = paymentsList.payments
-
     Order.find({ user: req.user._id })
       .then(orders => {
+        // console.log("orders", orders)
         const paidOrders = orders.filter(order => order.paymentID)
         const userPayments = paidOrders.map(order => {
           let payment = payments.find(payment => payment.id === order.paymentID)
-          const status = translatePaymentStatus(payment.status);
-          console.log(status);
+          if (!payment) {
+            console.error("NO PAYMENT FOUND FOR ORDER HISTORY");
+            return null;
+          }
+          const status = translatePaymentStatus(payment.status)
           return {
             amount: payment.amount,
             charge_date: payment.charge_date,
@@ -247,11 +290,11 @@ router.get('/payments/from', rejectUnauthenticated, async (req, res) => {
         res.json(userPayments)
       })
       .catch(error => {
-        console.log(error)
+        // console.log(error)
         res.status(500).send('Error finding orders')
       })
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     res.status(500).send('payments not found')
   }
 })
@@ -259,7 +302,10 @@ router.get('/payments/from', rejectUnauthenticated, async (req, res) => {
 // @route   GET /gc/payments
 // @desc    Returns all payments from user
 // @access  Private
-router.get('/payments/onePayment/:orderID', rejectUnauthenticated, async (req, res) => {
+router.get(
+  '/payments/onePayment/:orderID',
+  rejectUnauthenticated,
+  async (req, res) => {
   try {
     const order = await Order.findById(req.params.orderID).catch(err => {
       console.log(err)
@@ -269,8 +315,7 @@ router.get('/payments/onePayment/:orderID', rejectUnauthenticated, async (req, r
     await allClients.payments
       .find(order.paymentID)
       .then(payment => {
-        const status = payment.status;
-        console.log(status);
+        const status = translatePaymentStatus(payment.status);
         res.json({
           amount: payment.amount,
           charge_date: payment.charge_date,
@@ -281,7 +326,7 @@ router.get('/payments/onePayment/:orderID', rejectUnauthenticated, async (req, r
         })
       })
       .catch(err => {
-        console.log(err)
+        // console.log(err)
         res.status(500).send('payment not found')
       })
   } catch (error) {
@@ -302,7 +347,7 @@ router.post('/addClient', rejectUnauthenticated, async (req, res) => {
   const city = req.body.newClientCity
   const postalCode = req.body.newClientPostalCode
   const success_redirect_url = process.env.DEV_URI + '/' + req.body.redirect
-  
+
   try {
     // Initialize the GoCardLess allClients.
     const allClients = await initializeGoCardless()
@@ -310,9 +355,6 @@ router.post('/addClient', rejectUnauthenticated, async (req, res) => {
     const redirectFlow = await allClients.redirectFlows.create({
       description: 'Cider Barrels',
       session_token: req.user._id.toString(),
-      /*(!) TO GO LIVE
-			success_redirect_url: "https://wholesale-portal-testing.herokuapp.com/cart", // use DEV_URI to get dynamic url
-			 */
       success_redirect_url: success_redirect_url,
 
       prefilled_customer: {
@@ -360,7 +402,7 @@ router.post('/completeRedirect/', rejectUnauthenticated, async (req, res) => {
     //get activeUser from database
     const activeUser = await User.findById(req.user._id).then(user => {
       if (!user) {
-        console.log('no user with this id')
+        // console.log('no user with this id')
         res.status(500).send('no user with this id')
       } else {
         return user
@@ -387,7 +429,7 @@ router.post('/completeRedirect/', rejectUnauthenticated, async (req, res) => {
         })
       )
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     res.status(500).send('error completing client')
   }
 })
@@ -400,16 +442,18 @@ const getTotal = async products => {
   for (i = 0; i < size; i++) {
     const productInfo = await Product.findById(products[i].product)
       .then(info => {
-        if (!info || info.deleted) return ;
+        if (!info || info.deleted) return
         return info
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        // console.log(err)
+      })
     if (productInfo) {
       let price = productInfo.price
       for (let x = 0; x < productInfo.priceTiers.length; x++) {
         if (
-            products[i].quantity >= productInfo.priceTiers[x].quantity &&
-            price > productInfo.priceTiers[x].price
+          products[i].quantity >= productInfo.priceTiers[x].quantity &&
+          price > productInfo.priceTiers[x].price
         ) {
           price = productInfo.priceTiers[x].price
         }
@@ -436,7 +480,7 @@ const getTotal = async products => {
 // @access  Private
 router.post('/collect-payment', rejectUnauthenticated, async (req, res) => {
   try {
-    console.log(req.body);
+    // console.log(req.body)
     //validate delivery input sizes (check if any is empty or if zip is too short or too large)
     const { errors, isValid } = validateDeliverySizes(req.body.delivery)
     if (!isValid) {
@@ -462,32 +506,31 @@ router.post('/collect-payment', rejectUnauthenticated, async (req, res) => {
         },
         async (err, address) => {
           if (err !== null) {
-            console.log(err);
+            // console.log(err)
             res.status(500).send('addr_1')
           } else {
-            const activeUser = await User.findById(req.user._id).catch(err =>
-              console.log(err)
-            )
+            const activeUser = await User.findById(req.user._id).catch(err => {
+              // console.log(err)
+            })
 
             //initialize goCardless
-            /*(!) TO GO LIVE
-                    const allClients =  await gocardless(
-                            process.env.GC_LIVE_TOKEN,
-                            constants.Environments.Live,
-                            { raiseOnIdempotencyConflict: true },
-                        );*/
             const allClients = await gocardless(
-              process.env.GC_ACCESS_TOKEN,
-              constants.Environments.Sandbox,
-              { raiseOnIdempotencyConflict: true }
-            )
+              process.env.GC_LIVE_TOKEN,
+              constants.Environments.Live,
+              { raiseOnIdempotencyConflict: true },
+            );
+            // const allClients = await gocardless(
+            //   process.env.GC_ACCESS_TOKEN,
+            //   constants.Environments.Sandbox,
+            //   { raiseOnIdempotencyConflict: true }
+            // )
 
             //set proper client currency to payment
             //to go live needs to add other currencies
             const theClient = await allClients.customers
               .find(activeUser.goCardlessID)
               .catch(err => {
-                console.log('GC ID NOT FOUND')
+                // console.log('GC ID NOT FOUND')
                 res.status(500).send('GoCardless ID not found')
                 return
               })
@@ -505,14 +548,13 @@ router.post('/collect-payment', rejectUnauthenticated, async (req, res) => {
               })
               .catch(err => {
                 res.status(500).send('We were unable to calculate your total')
-                return;
+                return
               })
             const total = totalInfo.total
             const productsInOrder = totalInfo.productsInOrder
-            if (!productsInOrder[0])
-            {
+            if (!productsInOrder[0]) {
               res.status(500).send('You have no available items in your order')
-              return ;
+              return
             }
 
             //get representative of sale
@@ -520,24 +562,24 @@ router.post('/collect-payment', rejectUnauthenticated, async (req, res) => {
               ? req.user.representative
               : null
 
+            //get bank from this user
+            const listBankAccounts = await allClients.customerBankAccounts.list({customer: activeUser.goCardlessID});
+            const userBank = listBankAccounts.customer_bank_accounts[0];
+            console.log(userBank);
             //create new order in db
             const newOrder = new Order({
               user: req.user._id,
               products: productsInOrder,
               deliveryInfo: req.body.delivery,
               total: total,
-              representative
+              representative,
+              bankID: userBank.id
             })
-            await newOrder.save()
-                          .catch(err => {
-                            console.log(err)
-                            res
-                                .status(500)
-                                .send(
-                                    "Couldn't create new order"
-                                )
-                            return ;
-                          })
+            await newOrder.save().catch(err => {
+              // console.log(err)
+              res.status(500).send("Couldn't create new order")
+              return
+            })
 
             const payment = await allClients.payments
               .create(
@@ -563,7 +605,7 @@ router.post('/collect-payment', rejectUnauthenticated, async (req, res) => {
                     //Clean the cart in db
                     User.updateOne({ _id: req.user._id }, { cart: [] }).catch(
                       err => {
-                        console.log("couldn't clean cart")
+                        // console.log("couldn't clean cart")
                         res
                           .status(500)
                           .send(
@@ -571,15 +613,24 @@ router.post('/collect-payment', rejectUnauthenticated, async (req, res) => {
                           )
                       }
                     )
-                    confirmOrderEmail(req.user, newOrder, payment, theClient)
+                    const status = translatePaymentStatus(payment.status);
+                    const cleanPayment = {
+                        amount: payment.amount,
+                        charge_date: payment.charge_date,
+                        created_at: payment.created_at,
+                        currency: payment.currency,
+                        status: status.status,
+                        statusMessage: status.message
+                    }
+                    confirmOrderEmail(req.user, newOrder, cleanPayment, theClient)
                     //send order and payment information so can redirect to order's page
                     res.json({
                       order: newOrder,
-                      payment: payment
+                      payment: cleanPayment
                     })
                   })
                   .catch(err => {
-                    console.log(`Can't Update Database: ${err}`)
+                    // console.log(`Can't Update Database: ${err}`)
                     res
                       .status(500)
                       .send(
@@ -588,7 +639,7 @@ router.post('/collect-payment', rejectUnauthenticated, async (req, res) => {
                   })
               })
               .catch(err => {
-                console.log(err)
+                // console.log(err)
                 res.status(500).send("Couldn't make payment")
               })
           }
@@ -596,7 +647,7 @@ router.post('/collect-payment', rejectUnauthenticated, async (req, res) => {
       )
     }
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     res.status(500).send('error making payment')
   }
 })
@@ -605,35 +656,39 @@ router.post('/collect-payment', rejectUnauthenticated, async (req, res) => {
 // @desc    Cancel or Retry payment
 // @req		{type: "cancel"} or {type: "retry"}
 // @access  Private
-router.post('/changePayment/:orderID', rejectUnauthenticated, async (req, res) => {
-  try {
-    //check validation
-    const allClients = await initializeGoCardless()
+router.post(
+  '/changePayment/:orderID',
+  rejectUnauthenticated,
+  async (req, res) => {
+    try {
+      //check validation
+      const allClients = await initializeGoCardless()
 
-    //get all the order information from DB
-    const order = await Order.findById(req.params.orderID).then(order => {
-      if (!order) {
-        console.log('order not found')
-        res.status(500).send('no order with this id')
+      //get all the order information from DB
+      const order = await Order.findById(req.params.orderID).then(order => {
+        if (!order) {
+          // console.log('order not found')
+          res.status(500).send('no order with this id')
+        } else {
+          return order
+        }
+      })
+
+      if (req.body.type === 'cancel') {
+        const cancelPayment = await allClients.payments.cancel(order.paymentID)
+        // console.log(`Cancel Payment Status: ${cancelPayment.status}`)
       } else {
-        return order
+        const retryPayment = await allClients.payments.retry(order.paymentID)
+        // console.log(`Retry Payment Status: ${retryPayment.status}`)
       }
-    })
-
-    if (req.body.type === 'cancel') {
-      const cancelPayment = await allClients.payments.cancel(order.paymentID)
-      console.log(`Cancel Payment Status: ${cancelPayment.status}`)
-    } else {
-      const retryPayment = await allClients.payments.retry(order.paymentID)
-      console.log(`Retry Payment Status: ${retryPayment.status}`)
+      res.json({
+        success: true
+      })
+    } catch (error) {
+      // console.log(error)
+      res.status(500).send('error editing payment')
     }
-    res.json({
-      success: true
-    })
-  } catch (error) {
-    console.log(error)
-    res.status(500).send('error editing payment')
   }
-})
+)
 
 module.exports = router

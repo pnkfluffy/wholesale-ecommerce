@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Custom = require('../schemas/customOrderSchema')
+const User = require("../schemas/userSchema")
 const { rejectNonAdmin } = require('../modules/authentication-middleware')
 
 //getList
@@ -50,22 +51,22 @@ router.get('/', rejectNonAdmin, (req, res) => {
   })
   
   //getOne
-//   router.get('/:id', rejectNonAdmin, (req, res) => {
-//     console.log('Order getOne hit. Id: ', req.params.id)
-//     Order.findOne({ _id: req.params.id })
-//       .then(order => {
-//         order = JSON.parse(
-//           JSON.stringify(order)
-//             .split('"_id":')
-//             .join('"id":')
-//         )
-//         res.json(order)
-//       })
-//       .catch(err => {
-//         console.log('error: ', err)
-//         res.status(500).send('user not found.')
-//       })
-//   })
+  router.get('/:id', rejectNonAdmin, (req, res) => {
+    console.log('Order getOne hit. Id: ', req.params.id)
+    Custom.findOne({ _id: req.params.id })
+      .then(order => {
+        order = JSON.parse(
+          JSON.stringify(order)
+            .split('"_id":')
+            .join('"id":')
+        )
+        res.json(order)
+      })
+      .catch(err => {
+        console.log('error: ', err)
+        res.status(500).send('user not found.')
+      })
+  })
   
   // //https://marmelab.com/react-admin/doc/2.8/DataProviders.html
   
@@ -104,30 +105,43 @@ router.get('/', rejectNonAdmin, (req, res) => {
   //   res.status(200).json(updatedUsers);
   // })
   
-  // //create
-  // router.post("/", async (req, res) => {
-  //   User.create(req.body.body)
-  //   .then(newUser => {
-  //     console.log(newUser)
-  //     newUser = JSON.parse(JSON.stringify(newUser).split('"_id":').join('"id":'));
-  //     res.status(200).json(newUser)
-  //   }).catch(err => {
-  //     console.log(err)
-  //     res.status(500).send("Creation failed.")
-  //   })
-  // })
+  //create
+  router.post("/", async (req, res) => {
+    console.log("create req.body: ", req.body)
+    let user = await User.findOne({_id: req.body.user})
+    let renamedProducts = JSON.parse(JSON.stringify(req.body.products).split('"name":').join('"product":'));
+    console.log("renamed products: ", renamedProducts)
+    const newCustom = new Custom({
+      employee: req.user._id,
+      user: req.body.user,
+      name: req.body.name,
+      products: renamedProducts,
+      description: req.body.description,
+      price: req.body.price,
+    })
+    Custom.create(newCustom)
+    .then(newCustomOrder => {
+      // console.log(newCustomOrder)
+      newCustomOrder = JSON.parse(JSON.stringify(newCustomOrder).split('"_id":').join('"id":'));
+      console.log("parsed custom: ", newCustomOrder)
+      res.status(200).json(newCustomOrder)
+    }).catch(err => {
+      console.log(err)
+      res.status(500).send("Creation failed.")
+    })
+  })
   
-  // //delete
-  // router.delete("/:id", async (req, res) => {
-  //   User.deleteOne({_id: req.params.id})
-  //   .then(res => {
-  //     console.log(res)
-  //     res.status(200).send("item deleted")
-  //   }).catch(err => {
-  //     console.log(err)
-  //     res.status(500).send("Deletion failed!")
-  //   })
-  // })
+  //delete
+  router.delete("/:id", async (req, res) => {
+    Custom.deleteOne({id: req.params.id})
+    .then(res => {
+      console.log(res)
+      res.status(200).send("item deleted")
+    }).catch(err => {
+      console.log(err)
+      res.status(500).send("Deletion failed!")
+    })
+  })
   
   // //deleteMany
   // router.delete("/", async (req, res) => {

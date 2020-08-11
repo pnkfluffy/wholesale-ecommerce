@@ -124,13 +124,14 @@ export default {
   },
 
   create: (resource, params) => {
-    console.log("create");
+    console.log("create data: ", params.data);
 
     return httpClient(`/api/${resource}`, {
       method: "POST",
       body: JSON.stringify(params.data),
     }).then(({ json }) => {
       json = { ...params.data, id: json.id }
+      console.log("create response: ", {data: json})
       return { data: json }
     })
   },

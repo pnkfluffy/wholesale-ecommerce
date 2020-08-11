@@ -24,6 +24,7 @@ const adminProductRouter = require('./admin-routes/admin-product.router')
 const adminUserRouter = require('./admin-routes/admin-user.router')
 const adminOrderRouter = require('./admin-routes/admin-order.router')
 const adminReviewRouter = require('./admin-routes/admin-review.router')
+const adminCustomRouter = require('./admin-routes/admin-custom.router')
 
 dotenv.config()
 
@@ -63,6 +64,7 @@ else {
   app.use('/api/admin-users', adminUserRouter)
   app.use('/api/admin-orders', adminOrderRouter)
   app.use('/api/admin-reviews', adminReviewRouter)
+  app.use("/api/admin-customs", adminCustomRouter)
 
   app.get('/*', function (req, res) {
     res.sendFile(path.join(__dirname, '../build/index.html'), function (err) {

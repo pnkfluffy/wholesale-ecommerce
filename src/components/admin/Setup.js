@@ -13,6 +13,7 @@ import {
   ProductEdit,
   ProductCreate
 } from './menuItems/Products'
+import { CustomList, CustomCreate } from "./menuItems/Customs"
 import { OrderList, OrderShow, OrderEdit } from './menuItems/Orders'
 import { ReviewList, ReviewShow } from './menuItems/Reviews'
 import { CommissionList, CommissionShow } from './menuItems/Commission'
@@ -73,6 +74,12 @@ const AdminSetup = () => (
           show={OrderShow}
           edit={OrderEdit}
           icon={OrderIcon}
+        />,
+        <Resource 
+          name="admin-customs"
+          options={{label: "Custom Orders"}}
+          list={CustomList}
+          create={CustomCreate}
         />,
         <Resource
           name='admin-reviews'

@@ -1,4 +1,5 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
+const { string } = require("prop-types");
 const Schema = mongoose.Schema;
 
 const CustomOrderSchema = new Schema({
@@ -7,8 +8,7 @@ const CustomOrderSchema = new Schema({
         ref: "admin"
     },
     user: {
-        type: Schema.Types.ObjectId,
-        ref: "user",
+        type: String,
         required: true
     },
     name: {

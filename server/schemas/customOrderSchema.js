@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const CustomOrderSchema = new Schema({
     employee: {
         type: Schema.Types.ObjectId,
-        ref: "admin"
+        ref: "user"
     },
     user: {
         type: String,
@@ -17,6 +17,9 @@ const CustomOrderSchema = new Schema({
     },
     description: {
       type: String
+    },
+    standardPrice: {
+      type: Number
     },
     price: {
       type: Number

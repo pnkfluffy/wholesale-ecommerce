@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Custom = require('../schemas/customOrderSchema')
 const User = require("../schemas/userSchema")
+const Product = require("../schemas/productSchema")
 const { rejectNonAdmin } = require('../modules/authentication-middleware')
 
 //getList
@@ -110,7 +111,14 @@ router.get('/', rejectNonAdmin, (req, res) => {
     console.log("create req.body: ", req.body)
     let user = await User.findOne({_id: req.body.user})
     let renamedProducts = JSON.parse(JSON.stringify(req.body.products).split('"name":').join('"product":'));
-    console.log("renamed products: ", renamedProducts)
+    let expectedPrice = 0;
+    for(let i = 0; i < renamedProducts.length; i++){
+      let quant = renamedProducts[i].quantity
+      let product = await Product.findById({_id: renamedProducts[i].product})
+      let price = product.price
+      expectedPrice += (price * quant)
+    }
+    console.log("expected price: ", expectedPrice)
     const newCustom = new Custom({
       employee: req.user._id,
       user: req.body.user,
@@ -118,6 +126,7 @@ router.get('/', rejectNonAdmin, (req, res) => {
       products: renamedProducts,
       description: req.body.description,
       price: req.body.price,
+      standardPrice: expectedPrice
     })
     Custom.create(newCustom)
     .then(newCustomOrder => {

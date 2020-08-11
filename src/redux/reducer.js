@@ -146,6 +146,15 @@ const reviews = (state = [], action) => {
   }
 }
 
+const customOrders = (state = [], action) => {
+  switch (action.type) {
+    case 'GET_CUSTOM':
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
 const hasMandate = (state = false, action) => {
   switch (action.type) {
     case 'YES_MANDATE':
@@ -167,5 +176,6 @@ export default combineReducers({
   orders,
   reviews,
   hasMandate,
-  loaded
+  loaded,
+  customOrders
 })

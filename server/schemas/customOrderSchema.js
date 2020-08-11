@@ -12,7 +12,8 @@ const CustomOrderSchema = new Schema({
         required: true
     },
     name: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: "user",
       required: true
     },
     description: {

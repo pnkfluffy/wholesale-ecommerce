@@ -120,7 +120,14 @@ export const getAllOrders = () => {
 }
 
 export const getCustomOrders = () => {
-  return axios.get('/api')
+  return axios.get('/api/orders/custom')
+  .then(res => {
+    store.dispatch({ type: 'GET_CUSTOM', payload: res.data})
+  })
+  .catch(err => {
+    console.log(err);
+    
+  })
 }
 
 export const checkMandate = () => {

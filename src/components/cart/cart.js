@@ -8,6 +8,7 @@ import { getPriceByQuantity } from '../reuseable/getPriceByQuantity'
 import { v4 } from 'uuid'
 import GoCardless from './goCardless'
 import { GreenButton } from '../reuseable/materialButtons'
+import CustomProduct from './customProduct'
 
 const mapStateToProps = state => {
   return {
@@ -66,6 +67,12 @@ class Cart extends React.Component {
       </div>
     ) : null
 
+    const customOrders = this.props.state.customOrders.map((order, index) => {
+      return (
+        <CustomProduct key={index} order={order} />
+      )
+    })
+
     return (
       <div className='cart_page'>
         <div className='cart'>
@@ -79,10 +86,14 @@ class Cart extends React.Component {
             )}
           {checkOutButton}
         </div>
-        
-        <div className="custom_orders">
-          <div className='custom_orders_body'>jaja</div>
-        </div>
+        {this.props.state.customOrders.length > 0 ? (
+          <div className="custom_orders">
+            <div className='custom_subheader'>Custom Orders</div>
+            <div className='custom_orders_body'>
+              {customOrders}
+            </div>
+          </div>
+        ) : null}
       </div>
     )
   }

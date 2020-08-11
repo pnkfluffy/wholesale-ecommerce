@@ -23,7 +23,7 @@ router.get('/oneOrder/:orderId', rejectUnauthenticated, (req, res) => {
 
 router.get('/custom', rejectUnauthenticated, (req, res) => {
   try{
-    Custom.find({user: req.user._id})
+    Custom.find({user: req.user._id, active: true})
     .then(customs => {
       return res.json(customs)
     })

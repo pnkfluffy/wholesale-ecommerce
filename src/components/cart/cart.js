@@ -26,7 +26,7 @@ class Cart extends React.Component {
     })
   }
 
-  render () {
+  render() {
     let total = 0
     let availableProducts = []
     const cartProducts = this.props.state.cart.map((cartProduct, index) => {
@@ -75,9 +75,12 @@ class Cart extends React.Component {
               <div className='cart_products'>{cartProducts}</div>
             </div>
           ) : (
-            <div className="empty_cart"> Your cart is empty! </div>
-          )}
+              <div className="empty_cart"> Your cart is empty! </div>
+            )}
           {checkOutButton}
+        </div>
+        <div className="custom_orders">
+          <div className='custom_orders_body'>jaja</div>
         </div>
       </div>
     )

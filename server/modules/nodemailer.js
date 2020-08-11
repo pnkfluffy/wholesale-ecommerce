@@ -29,9 +29,13 @@ const addCustomOrderToCart = (order, user, employee, products) => {
     html: `
     <html>
       <h5>${employee.name} from CBDDY has made a custom order for you</h5>
-      <h6>Order details</h6>
+      <h5>Order details</h5>
+      <h5>${order.name}</h5>
+      <h5>${order.description}</h5>
       ${productTable}
       <p>An order like this would usually cost $${order.standardPrice}. However, Cbddy is offering it to you for $${order.price}.</p>
+      <p>If you wish to continue proceed to our website where your cart has already been prepared.</p>
+      <p> Login at https://cbddy-wholesale-portal.herokuapp.com </p>
     </html>`
   })
 }
@@ -148,7 +152,7 @@ function customOrderProductsTable (products) {
   for(let i = 0; i < products.length; i++){
     let product = products[i]
     table += (
-      '<tr><td style="border:1px solid #59ba47; font-size: 10px">' + product.quantity + '</td>'+
+      '<tr><td style="border:1px solid #59ba47; font-size: 10px">' + product.quantity + product.units + '</td>'+
       '<td style="border:1px solid #59ba47; font-size: 10px">' + product.name + '</td></tr>'
       )
   }

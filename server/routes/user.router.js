@@ -26,30 +26,8 @@ router.get('/user', rejectUnauthenticated, (req, res) => {
 
 router.get('/wishlist', rejectUnauthenticated, async (req, res) => {
   try {
-    let user = await User.findById(req.user._id).catch(err => {
-      res.status(500).send("couldn't find user")
-      return
-    })
-    let availableProducts = []
-    if (user.wishlist) {
-      const wishlist = user.wishlist
-      for (let i = 0; i < wishlist.length; i++) {
-        await Product.findById(wishlist[i])
-          .then(info => {
-            //  means nothing found
-            if (!info.deleted) {
-              availableProducts.push(wishlist[i])
-            }
-          })
-          .catch(err => {
-            // console.log(err)
-            res.status(500).send("couldn't get wishlist")
-            return
-          })
-      }
-    }
-    res.send(availableProducts)
-    return
+    let user = await User.findById(req.user._id)
+    res.send(user.wishlist)
   } catch (error) {
     // console.log(error)
     res.status(500).send('error in retrieving wishlist')

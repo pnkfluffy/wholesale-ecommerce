@@ -26,7 +26,7 @@ import {
   ReferenceManyField
 } from 'react-admin'
 
-export const ReviewList = props => (
+export const ReviewList = ({ permissions, ...props}) => (
   <List
     {...props}
     actions={<div />}
@@ -54,7 +54,6 @@ export const ReviewList = props => (
       <DateField label='Created' source='date' />
 
       <ShowButton />
-      <DeleteButton />
     </Datagrid>
   </List>
 )

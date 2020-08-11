@@ -119,6 +119,10 @@ export const getAllOrders = () => {
     })
 }
 
+export const getCustomOrders = () => {
+  return axios.get('/api')
+}
+
 export const checkMandate = () => {
   axios
     .get('/api/gc/checkClientMandate')

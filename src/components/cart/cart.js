@@ -79,6 +79,7 @@ class Cart extends React.Component {
             )}
           {checkOutButton}
         </div>
+        
         <div className="custom_orders">
           <div className='custom_orders_body'>jaja</div>
         </div>

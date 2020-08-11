@@ -264,3 +264,7 @@
 .gc_checkout_button:last-child {
   margin-left: 1vw;
 }
+
+.empty_cart {
+  margin-top: 1vh;
+}

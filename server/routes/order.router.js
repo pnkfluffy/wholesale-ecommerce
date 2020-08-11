@@ -1,12 +1,10 @@
 const express = require('express')
 const router = express.Router()
-const async = require('async')
 // {!} ADD REJECTUNAUTHENTICATED MIDDLEWARE TO ALL PRIVATE ROUTES
 const {
   rejectUnauthenticated
 } = require('../modules/authentication-middleware')
 const Order = require('../schemas/orderSchema')
-const Product = require('../schemas/productSchema')
 
 // @route   GET /orders/:orderId
 // @desc    Returns the order

@@ -25,6 +25,8 @@ const initializeGoCardless = async () => {
     { raiseOnIdempotencyConflict: true }
   )
 
+  console.log("all clients", allClients)
+
   return allClients
 }
 
@@ -142,7 +144,7 @@ router.get('/oneBank', rejectUnauthenticated, async (req, res) => {
   }
 })
 
-function translatePaymentStatus(status) {
+const translatePaymentStatus = (status) => {
   let translated = {
     status: '',
     message: ''
@@ -206,8 +208,12 @@ function translatePaymentStatus(status) {
         message: 'You have requested the money back directly to your bank'
       }
       break
+    default: 
+    translated = {
+      status: 'Server Error',
+      message: 'We were not able to get the payment status for this payment.'
+    }
   }
-  // console.log(translated)
   return translated
 }
 
@@ -235,14 +241,17 @@ router.get('/payments/from', rejectUnauthenticated, async (req, res) => {
     const allClients = await initializeGoCardless()
     const paymentsList = await allClients.payments.list()
     const payments = paymentsList.payments
-
     Order.find({ user: req.user._id })
       .then(orders => {
+        // console.log("orders", orders)
         const paidOrders = orders.filter(order => order.paymentID)
         const userPayments = paidOrders.map(order => {
           let payment = payments.find(payment => payment.id === order.paymentID)
+          if (!payment) {
+            console.error("NO PAYMENT FOUND FOR ORDER HISTORY");
+            return null;
+          }
           const status = translatePaymentStatus(payment.status)
-          // console.log(status)
           return {
             amount: payment.amount,
             charge_date: payment.charge_date,
@@ -322,9 +331,6 @@ router.post('/addClient', rejectUnauthenticated, async (req, res) => {
     const redirectFlow = await allClients.redirectFlows.create({
       description: 'Cider Barrels',
       session_token: req.user._id.toString(),
-      /*(!) TO GO LIVE
-			success_redirect_url: "https://wholesale-portal-testing.herokuapp.com/cart", // use DEV_URI to get dynamic url
-			 */
       success_redirect_url: success_redirect_url,
 
       prefilled_customer: {

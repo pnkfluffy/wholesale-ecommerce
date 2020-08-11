@@ -38,11 +38,8 @@ class GoCardless extends React.Component {
 
   confirmAccount = () => {
     let params = new URLSearchParams(window.location.href)
-    /*(!) TO GO LIVE
-    const url = 'https://wholesale-portal-testing.herokuapp.com/buy?redirect_flow_id';
-    */
+
     const url = `${this.props.state.devURI}/buy?redirect_flow_id`
-    // console.log(params.has(url));
     if (params.has(url)) {
       const redirect = params.get(url)
       this.props.history.replace('/buy')

@@ -7,16 +7,16 @@ import shajs from 'sha.js'
 import MailOutlineIcon from '@material-ui/icons/MailOutline'
 import VpnKeyIcon from '@material-ui/icons/VpnKey'
 import { LightGreenButton } from '../reuseable/materialButtons'
-import Snackbar from "@material-ui/core/Snackbar";
-import Alert from "@material-ui/lab/Alert";
-import { classes } from "../reuseable/materialButtons"
+import Snackbar from '@material-ui/core/Snackbar'
+import Alert from '@material-ui/lab/Alert'
+import { classes } from '../reuseable/materialButtons'
 
 const mapStateToProps = state => ({
   state: state.reducer
 })
 
 class Login extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {
@@ -24,17 +24,17 @@ class Login extends React.Component {
       password: '',
       error: false,
       snackbarOpen: false,
-      snackbarSeverity: "success",
-      snackbarMessage: ""
+      snackbarSeverity: 'success',
+      snackbarMessage: ''
     }
   }
 
   handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
+    if (reason === 'clickaway') {
+      return
     }
     this.setState({ snackbarOpen: false })
-  };
+  }
 
   login = event => {
     event.preventDefault()
@@ -49,7 +49,7 @@ class Login extends React.Component {
         window.location.href = '/'
       })
       .catch(err => {
-        this.setSnackbar("error", "Invalid Credentials");
+        this.setSnackbar('error', 'Invalid Credentials')
         // console.log(err)
       })
   }
@@ -59,7 +59,7 @@ class Login extends React.Component {
       snackbarOpen: true,
       snackbarSeverity: severity,
       snackbarMessage: message
-    });
+    })
   }
 
   inputUsername = event => {
@@ -79,7 +79,7 @@ class Login extends React.Component {
     })
   }
 
-  render() {
+  render () {
     return (
       <div className='login'>
         <div className={classes.root}>
@@ -91,7 +91,7 @@ class Login extends React.Component {
           >
             <Alert
               elevation={6}
-              variant="filled"
+              variant='filled'
               onClose={this.handleClose}
               color={this.state.snackbarSeverity}
             >
@@ -143,7 +143,7 @@ class Login extends React.Component {
               placeholder='Password'
               error={this.state.error}
             />
-            <input type="submit" className="no_display" />
+            <input type='submit' className='no_display' />
             <LightGreenButton
               variant='contained'
               className='full'
@@ -152,7 +152,13 @@ class Login extends React.Component {
               LOGIN
             </LightGreenButton>
           </form>
-          <span className="register_text"> want to sign up and buy bulk cbd products? contact our store at 720-591-6284</span>
+          <span className='register_text'>
+            {' '}
+            no account? contact us at{' '}
+            <a className='light_green' href='tel:7205916284'>
+              (720)591-6284
+            </a>
+          </span>
         </div>
         <div className='login_footer sidebar_footer_text'>
           <a className='light_green' href='tel:7205916284'>

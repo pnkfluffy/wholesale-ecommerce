@@ -33,6 +33,9 @@ import {
   LongTextInput,
   ReferenceManyField,
   FunctionField,
+  basePath,
+  useListContext,
+  sanitizeListRestProps,
   Typography,
   Filter,
   SearchInput
@@ -43,7 +46,7 @@ export const CommissionList = props => (
   <List
     aside={<Aside />}
     filters={<CommissionFilter />}
-    actions={<div />}
+    actions={<ListActions />}
     filterDefaultValues={{ commission: true }}
     bulkActionButtons={false}
     sort={{ field: 'date', order: 'DESC' }}
@@ -78,6 +81,30 @@ export const CommissionList = props => (
   </List>
   // </ReferenceManyField>
 )
+
+const ListActions = props => {
+  const { className, exporter, filters, maxResults, ...rest } = props
+  const {
+    basePath,
+    resource,
+    showFilter,
+    displayedFilters,
+    filterValues
+  } = useListContext()
+  return (
+    <TopToolbar className={className} {...sanitizeListRestProps(rest)}>
+      {filters &&
+        React.cloneElement(filters, {
+          resource,
+          showFilter,
+          displayedFilters,
+          filterValues,
+          context: 'button'
+        })}
+      {/* <CreateButton basePath={basePath} /> */}
+    </TopToolbar>
+  )
+}
 
 const CommissionFilter = props => {
   return (

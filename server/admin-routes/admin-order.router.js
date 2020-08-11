@@ -24,12 +24,14 @@ router.get('/', rejectNonAdmin, (req, res) => {
       rangeLimit = rangeQuery[1] - rangeQuery[0] + 1
     }
 
-    if (req.user.isAdmin && filterQuery.commission) {
+    // console.log('filter', filterQuery)
+    if (!req.user.isOwner && filterQuery.commission) {
       filterQuery.representative = req.user._id
+      // console.log('rep', filterQuery, req.user._id)
     }
     delete filterQuery.commission
 
-    console.log('filterquery', filterQuery)
+    // console.log('filterquery', filterQuery)
     Order.find(filterQuery)
       .sort(sort)
       .skip(rangeQuery[0])

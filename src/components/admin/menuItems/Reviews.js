@@ -23,15 +23,17 @@ import {
   BooleanInput,
   ReferenceField,
   LongTextInput,
-  ReferenceManyField
+  sanitizeListRestProps,
+  useListContext,
 } from 'react-admin'
+
 
 export const ReviewList = ({ permissions, ...props}) => (
   <List
     {...props}
-    actions={<></>}
-    sort={{ field: 'date', order: 'DESC' }}
-    bulkActionButtons={false}
+    actions={<ListActions />}
+    // sort={{ field: 'date', order: 'DESC' }}
+    // bulkActionButtons={false}
   >
     <Datagrid rowClick='show'>
       <ReferenceField
@@ -57,6 +59,30 @@ export const ReviewList = ({ permissions, ...props}) => (
     </Datagrid>
   </List>
 )
+
+const ListActions = props => {
+  const { className, exporter, filters, maxResults, ...rest } = props
+  const {
+    basePath,
+    resource,
+    showFilter,
+    displayedFilters,
+    filterValues
+  } = useListContext()
+  return (
+    <TopToolbar className={className} {...sanitizeListRestProps(rest)}>
+      {filters &&
+        React.cloneElement(filters, {
+          resource,
+          showFilter,
+          displayedFilters,
+          filterValues,
+          context: 'button'
+        })}
+      {/* <CreateButton basePath={basePath} /> */}
+    </TopToolbar>
+  )
+}
 
 export const ReviewShow = props => (
   <Show actions={<ReviewActions />} {...props}>

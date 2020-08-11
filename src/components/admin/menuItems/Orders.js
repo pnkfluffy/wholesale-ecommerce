@@ -28,7 +28,10 @@ import {
   DisabledInput,
   BooleanInput,
   LongTextInput,
+  sanitizeListRestProps,
   ReferenceManyField,
+  basePath,
+  useListContext,
   Toolbar,
   SaveButton
 } from 'react-admin'
@@ -36,7 +39,7 @@ import {
 export const OrderList = props => (
   <List
     {...props}
-    actions={<></>}
+    actions={<ListActions />}
     sort={{ field: 'date', order: 'DESC' }}
     bulkActionButtons={false}
   >
@@ -65,6 +68,30 @@ export const OrderList = props => (
     </Datagrid>
   </List>
 )
+
+const ListActions = props => {
+  const { className, exporter, filters, maxResults, ...rest } = props
+  const {
+    basePath,
+    resource,
+    showFilter,
+    displayedFilters,
+    filterValues
+  } = useListContext()
+  return (
+    <TopToolbar className={className} {...sanitizeListRestProps(rest)}>
+      {filters &&
+        React.cloneElement(filters, {
+          resource,
+          showFilter,
+          displayedFilters,
+          filterValues,
+          context: 'button'
+        })}
+      {/* <CreateButton basePath={basePath} /> */}
+    </TopToolbar>
+  )
+}
 
 export const OrderShow = props => (
   <Show actions={<OrderShowActions />} {...props}>

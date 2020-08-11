@@ -237,7 +237,7 @@ class GCPay extends React.Component {
               value={this.state.ClientAddr1}
               type='text'
               changeField={this.onChange}
-              placeholder=''
+              placeholder='Address Number and Street'
               error={this.state.err.ClientAddr1}
             />
             <InputField
@@ -247,7 +247,7 @@ class GCPay extends React.Component {
               value={this.state.ClientAddr2}
               type='text'
               changeField={this.onChange}
-              placeholder=''
+              placeholder='Apt. Number or PO Box Number'
             />
             <InputField
               widthCSS='gc_input'

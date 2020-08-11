@@ -24,6 +24,26 @@ const newUserEmail = user => {
   })
 }
 
+const addCustomOrderToCart = (order, user, employee, products) => {
+  const productTable = customOrderProductsTable(products)
+  transporter.sendMail({
+    from: process.env.NODE_MAILER_USERNAME,
+    to: user.email,
+    subject: "Your custom order from CBDDY",
+    html: `
+    <html>
+      <h5>${employee.name} from CBDDY has made a custom order for you</h5>
+      <h5>Order details</h5>
+      <h5>${order.name}</h5>
+      <h5>${order.description}</h5>
+      ${productTable}
+      <p>An order like this would usually cost $${order.standardPrice}. However, Cbddy is offering it to you for $${order.price}.</p>
+      <p>If you wish to continue proceed to our website where your cart has already been prepared.</p>
+      <p> Login at https://cbddy-wholesale-portal.herokuapp.com </p>
+    </html>`
+  })
+}
+
 const confirmOrderEmail = (user, order, payment, client) => {
   const total = order.total / 100 + ',00'
   const created_at = payment.created_at
@@ -131,9 +151,23 @@ function productsToTable(products) {
   return table
 }
 
+function customOrderProductsTable (products) {
+  let table = '<table style="margin-left:auto;margin-right:auto;"><thead><tr><th style="border:1px solid #59ba47;">Quantity</th><th style="border:1px solid #59ba47;">Product</th></tr></thead><tbody>'
+  for(let i = 0; i < products.length; i++){
+    let product = products[i]
+    table += (
+      '<tr><td style="border:1px solid #59ba47; font-size: 10px">' + product.quantity + product.units + '</td>'+
+      '<td style="border:1px solid #59ba47; font-size: 10px">' + product.name + '</td></tr>'
+      )
+  }
+  table += '</table'
+  return table
+}
+
 module.exports = {
   newUserEmail,
   confirmOrderEmail,
   trackingAddedEmail,
-  passwordChangedEmail
+  passwordChangedEmail,
+  addCustomOrderToCart
 }

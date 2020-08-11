@@ -2,6 +2,8 @@ const express = require('express')
 const router = express.Router()
 const Custom = require('../schemas/customOrderSchema')
 const User = require("../schemas/userSchema")
+const Product = require("../schemas/productSchema")
+const { addCustomOrderToCart } = require("../modules/nodemailer")
 const { rejectNonAdmin } = require('../modules/authentication-middleware')
 
 //getList
@@ -50,6 +52,8 @@ router.get('/', rejectNonAdmin, (req, res) => {
     }
   })
   
+
+  
   //getOne
   router.get('/:id', rejectNonAdmin, (req, res) => {
     console.log('Order getOne hit. Id: ', req.params.id)
@@ -68,6 +72,8 @@ router.get('/', rejectNonAdmin, (req, res) => {
       })
   })
   
+  //get all custom orders for a specific user
+  router.get("/")
   // //https://marmelab.com/react-admin/doc/2.8/DataProviders.html
   
   //update
@@ -110,7 +116,23 @@ router.get('/', rejectNonAdmin, (req, res) => {
     console.log("create req.body: ", req.body)
     let user = await User.findOne({_id: req.body.user})
     let renamedProducts = JSON.parse(JSON.stringify(req.body.products).split('"name":').join('"product":'));
-    console.log("renamed products: ", renamedProducts)
+    let nodemailerProducts = []
+    let expectedPrice = 0;
+    for(let i = 0; i < renamedProducts.length; i++){
+      let product = await Product.findById({_id: renamedProducts[i].product})
+
+      let quant = renamedProducts[i].quantity
+      let price = product.price
+      expectedPrice += (price * quant)
+
+      let nodemailerProduct = {
+        name: product.name,
+        quantity: quant,
+        units: product.metaData.units.unit
+      }
+      nodemailerProducts.push(nodemailerProduct)
+    }
+    console.log("expected price: ", expectedPrice)
     const newCustom = new Custom({
       employee: req.user._id,
       user: req.body.user,
@@ -118,16 +140,14 @@ router.get('/', rejectNonAdmin, (req, res) => {
       products: renamedProducts,
       description: req.body.description,
       price: req.body.price,
+      standardPrice: expectedPrice
     })
     Custom.create(newCustom)
-    .then(newCustomOrder => {
-      // console.log(newCustomOrder)
+    .then(async (newCustomOrder) => {
+      addCustomOrderToCart(newCustomOrder, user, req.user, nodemailerProducts)
       newCustomOrder = JSON.parse(JSON.stringify(newCustomOrder).split('"_id":').join('"id":'));
       console.log("parsed custom: ", newCustomOrder)
       res.status(200).json(newCustomOrder)
-    }).catch(err => {
-      console.log(err)
-      res.status(500).send("Creation failed.")
     })
   })
   

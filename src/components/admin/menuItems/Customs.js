@@ -48,22 +48,63 @@ import {
 } from 'react-admin'
 import { makeStyles } from '@material-ui/core/styles'
 
-export const CustomList = props => (
+export const CustomList = ({permissions, ...props}) => (
     <List {...props} actions={< CustomListActions />}>
       <Datagrid rowClick='show'>
         <ReferenceField label="Customer" source="user" reference="admin-users">
             <TextField source="name"/>
         </ReferenceField>
+        <TextField label="Order Title" source="name"/>
+        <NumberField 
+          label="Price Expected"
+          source="standardPrice"
+          options={{style: 'currency', currency: 'USD'}}
+        />
         <NumberField
-          label='Price'
+          label='Price Quoted'
           source='price'
           options={{ style: 'currency', currency: 'USD' }}
         />
         <DateField label="Date" source="date"/>
-        <DeleteButton />
+        {permissions === 'owner' && <DeleteButton/>}
+        <ShowButton basePath={props.basePath} record={props.data} />
       </Datagrid>
     </List>
 )
+
+export const CustomShow = (props) => (
+  <Show {...props}>
+      <SimpleShowLayout>
+          <TextField label="Order Title" source="name" />
+          <ReferenceField label="Employee" source="employee" reference="admin-users">
+            <TextField source="name"/>
+          </ReferenceField>
+          <ReferenceField label="Customer" source="user" reference="admin-users">
+            <TextField source="name"/>
+          </ReferenceField>
+          <TextField label="Description" source="description"/>
+          <NumberField
+            label='Expected Price'
+            source='standardPrice'
+            options={{ style: 'currency', currency: 'USD' }}
+          />
+          <NumberField
+            label='Price Quoted'
+            source='price'
+            options={{ style: 'currency', currency: 'USD' }}
+          />
+          <ArrayField label="Products" source="products">
+            <Datagrid>
+              <NumberField label='Quantity' source="quantity"/>
+              <ReferenceField label="Product" source="product" reference="admin-products">
+                <TextField source="name"/>
+              </ReferenceField>
+            </Datagrid>
+          </ArrayField>
+          <DateField label="Publication date" source="date" />
+      </SimpleShowLayout>
+  </Show>
+);
 
 export const CustomCreate = props => (
       <Create {...props}>
@@ -98,7 +139,7 @@ export const CustomCreate = props => (
             </SimpleFormIterator>
           </ArrayInput>
           <TextInput
-            options={{ multiLine: true }}
+            // options={{ multiLine: true }}
             label='Description'
             helperText="Detail the products and respective quantities this order will contain"
             source='description'
@@ -114,7 +155,7 @@ export const CustomCreate = props => (
   
 
 //custom comps
-const CustomListActions = props => {
+const CustomListActions = ({permissions, ...props}) => {
     const { className, exporter, filters, maxResults, ...rest } = props
     const {
       resource,
@@ -133,7 +174,7 @@ const CustomListActions = props => {
             filterValues,
             context: 'button'
           })}
-        <DeleteButton basePath={basePath} />
+        {permissions === 'owner' && <DeleteButton basePath={basePath}/>}
         <CreateButton basePath={basePath} />
         {/* <ExportButton
           disabled={total === 0}

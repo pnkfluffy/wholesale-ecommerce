@@ -7,6 +7,8 @@ const {
 } = require('../modules/authentication-middleware')
 const Order = require('../schemas/orderSchema')
 const Product = require('../schemas/productSchema')
+const Custom = require('../schemas/customOrderSchema')
+const { route } = require('../admin-routes/admin-custom.router')
 
 // @route   GET /orders/:orderId
 // @desc    Returns the order
@@ -18,6 +20,18 @@ router.get('/oneOrder/:orderId', rejectUnauthenticated, (req, res) => {
       console.log(error)
       res.status(500).send('order not found')
     })
+})
+
+router.get('/custom', rejectUnauthenticated, (req, res) => {
+  try{
+    Custom.find({user: req.user._id})
+    .then(customs => {
+      return res.json(customs)
+    })
+  }
+  catch{
+    res.status(500).send("Error finding custom orders")
+  }
 })
 
 // @route   GET /orders/from/

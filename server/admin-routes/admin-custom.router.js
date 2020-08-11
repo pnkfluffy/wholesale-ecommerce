@@ -52,6 +52,8 @@ router.get('/', rejectNonAdmin, (req, res) => {
     }
   })
   
+
+  
   //getOne
   router.get('/:id', rejectNonAdmin, (req, res) => {
     console.log('Order getOne hit. Id: ', req.params.id)
@@ -70,6 +72,8 @@ router.get('/', rejectNonAdmin, (req, res) => {
       })
   })
   
+  //get all custom orders for a specific user
+  router.get("/")
   // //https://marmelab.com/react-admin/doc/2.8/DataProviders.html
   
   //update
@@ -144,9 +148,6 @@ router.get('/', rejectNonAdmin, (req, res) => {
       newCustomOrder = JSON.parse(JSON.stringify(newCustomOrder).split('"_id":').join('"id":'));
       console.log("parsed custom: ", newCustomOrder)
       res.status(200).json(newCustomOrder)
-    }).catch(err => {
-      console.log(err)
-      res.status(500).send("Creation failed.")
     })
   })
   

@@ -29,7 +29,7 @@ import {
 export const ReviewList = ({ permissions, ...props}) => (
   <List
     {...props}
-    actions={<div />}
+    actions={<></>}
     sort={{ field: 'date', order: 'DESC' }}
     bulkActionButtons={false}
   >

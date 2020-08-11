@@ -36,7 +36,7 @@ import {
 export const OrderList = props => (
   <List
     {...props}
-    actions={<div />}
+    actions={<></>}
     sort={{ field: 'date', order: 'DESC' }}
     bulkActionButtons={false}
   >

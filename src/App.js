@@ -14,6 +14,7 @@ import Order from "./components/account/orderHistory/order"
 import AdminError404 from './components/error/adminError404'
 import GoCardless from './components/cart/goCardless'
 import Admin from './components/admin/Setup'
+import RedirectToHome from './components/reuseable/redirectHome'
 import { connect } from "react-redux";
 
 
@@ -69,8 +70,8 @@ class App extends React.Component {
             path='/'
             render={props => <Admin history={this.props.history} {...props} />}
           />
-          <Route exact path='/*' >
-            <Redirect to="/" />
+          <Route exact path='/*' component={RedirectToHome}>
+            
           </Route>
         </Switch>
       </Router>

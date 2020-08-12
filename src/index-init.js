@@ -15,6 +15,7 @@ export const initializeAllRequests = async () => {
       await getUserCart()
       await getUserWishlist()
       await getAllOrders()
+      await getCustomOrders()
       await checkMandate()
       store.dispatch({ type: 'APP_LOADED' })
     })

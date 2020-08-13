@@ -156,12 +156,11 @@ export default {
   },
 
   delete: (resource, params) => {
-    // console.log('delete')
-
+    console.log("delete: ", resource, "params: ", params)
     return httpClient(`/api/${resource}/${params.id}`, {
       method: 'DELETE'
     }).then(({ json }) => {
-      // console.log('delete', json)
+      console.log('delete response', json)
       return { data: json }
     })
   },

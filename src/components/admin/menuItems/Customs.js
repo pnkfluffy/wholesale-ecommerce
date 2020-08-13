@@ -48,61 +48,63 @@ import {
 } from 'react-admin'
 import { makeStyles } from '@material-ui/core/styles'
 
-export const CustomList = ({ permissions, ...props }) => (
-  <List {...props} actions={< CustomListActions />} bulkActionButtons={false}>
-    <Datagrid rowClick='show'>
-      <ReferenceField label="Customer" source="user" reference="admin-users">
-        <TextField source="name" />
-      </ReferenceField>
-      <TextField label="Order Title" source="name" />
-      <NumberField
-        label="Price Expected"
-        source="standardPrice"
-        options={{ style: 'currency', currency: 'USD' }}
-      />
-      <NumberField
-        label='Price Quoted'
-        source='price'
-        options={{ style: 'currency', currency: 'USD' }}
-      />
-      <DateField label="Date" source="date" />
-      {permissions === 'owner' && <DeleteButton />}
-      <ShowButton basePath={props.basePath} record={props.data} />
-    </Datagrid>
-  </List>
+export const CustomList = ({permissions, ...props}) => (
+    <List {...props} actions={< CustomListActions />} bulkActionButtons={false}>
+      <Datagrid rowClick='show'>
+        <BooleanField label="active" source="active"/>
+        <ReferenceField label="Customer" source="user" reference="admin-users">
+            <TextField source="name"/>
+        </ReferenceField>
+        <TextField label="Order Title" source="name"/>
+        <NumberField 
+          label="Price Expected"
+          source="standardPrice"
+          options={{style: 'currency', currency: 'USD'}}
+        />
+        <NumberField
+          label='Price Quoted'
+          source='price'
+          options={{ style: 'currency', currency: 'USD' }}
+        />
+        <DateField label="Date" source="date"/>
+        {permissions === 'owner' && <DeleteButton basePath={props.basePath} record={props.data}/>}
+        <ShowButton basePath={props.basePath} record={props.data} />
+      </Datagrid>
+    </List>
 )
 
 export const CustomShow = (props) => (
   <Show {...props}>
-    <SimpleShowLayout>
-      <TextField label="Order Title" source="name" />
-      <ReferenceField label="Employee" source="employee" reference="admin-users">
-        <TextField source="name" />
-      </ReferenceField>
-      <ReferenceField label="Customer" source="user" reference="admin-users">
-        <TextField source="name" />
-      </ReferenceField>
-      <TextField label="Description" source="description" />
-      <NumberField
-        label='Expected Price'
-        source='standardPrice'
-        options={{ style: 'currency', currency: 'USD' }}
-      />
-      <NumberField
-        label='Price Quoted'
-        source='price'
-        options={{ style: 'currency', currency: 'USD' }}
-      />
-      <ArrayField label="Products" source="products">
-        <Datagrid>
-          <NumberField label='Quantity' source="quantity" />
-          <ReferenceField label="Product" source="product" reference="admin-products">
-            <TextField source="name" />
+      <SimpleShowLayout>
+          <BooleanField label="Active" source="active"/>
+          <TextField label="Order Title" source="name" />
+          <ReferenceField label="Employee" source="employee" reference="admin-users">
+            <TextField source="name"/>
           </ReferenceField>
-        </Datagrid>
-      </ArrayField>
-      <DateField label="Publication date" source="date" />
-    </SimpleShowLayout>
+          <ReferenceField label="Customer" source="user" reference="admin-users">
+            <TextField source="name"/>
+          </ReferenceField>
+          <TextField label="Description" source="description"/>
+          <NumberField
+            label='Expected Price'
+            source='standardPrice'
+            options={{ style: 'currency', currency: 'USD' }}
+          />
+          <NumberField
+            label='Price Quoted'
+            source='price'
+            options={{ style: 'currency', currency: 'USD' }}
+          />
+          <ArrayField label="Products" source="products">
+            <Datagrid>
+              <NumberField label='Quantity' source="quantity"/>
+              <ReferenceField label="Product" source="product" reference="admin-products">
+                <TextField source="name"/>
+              </ReferenceField>
+            </Datagrid>
+          </ArrayField>
+          <DateField label="Publication date" source="date" />
+      </SimpleShowLayout>
   </Show>
 );
 

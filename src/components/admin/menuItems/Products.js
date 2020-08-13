@@ -43,6 +43,7 @@ import {
   AutocompleteInput,
   NumberField,
   Toolbar,
+  ReferenceField,
   Filter,
   SaveButton
 } from 'react-admin'
@@ -54,7 +55,7 @@ export const ProductList = ({ permissions, ...props }) => (
     {...props}
     sort={{ field: 'date', order: 'DESC' }}
     bulkActionButtons={false}
-    actions={<ListActions/>}
+    actions={<ListActions />}
   >
     <Datagrid actions={<ListActions />} rowClick='show'>
       <TextField label='Product' source='name' />
@@ -164,9 +165,16 @@ export const ProductShow = props => {
           link='show'
         >
           <Datagrid rowClick='show'>
+            <ReferenceField
+              link='show'
+              label='User'
+              reference='admin-users'
+              source='user'
+            >
+              <TextField source='name' />
+            </ReferenceField>
             <TextField label='Stars' source='stars' />
-            <TextField label='Date' source='date' />
-            <TextField label='User' source='user' />
+            <DateField label='Date' source='date' />
           </Datagrid>
         </ReferenceManyField>
       </SimpleShowLayout>

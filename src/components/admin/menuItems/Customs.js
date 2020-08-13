@@ -51,6 +51,7 @@ import { makeStyles } from '@material-ui/core/styles'
 export const CustomList = ({permissions, ...props}) => (
     <List {...props} actions={< CustomListActions />}>
       <Datagrid rowClick='show'>
+        <BooleanField label="active" source="active"/>
         <ReferenceField label="Customer" source="user" reference="admin-users">
             <TextField source="name"/>
         </ReferenceField>
@@ -66,7 +67,7 @@ export const CustomList = ({permissions, ...props}) => (
           options={{ style: 'currency', currency: 'USD' }}
         />
         <DateField label="Date" source="date"/>
-        {permissions === 'owner' && <DeleteButton/>}
+        {permissions === 'owner' && <DeleteButton basePath={props.basePath} record={props.data}/>}
         <ShowButton basePath={props.basePath} record={props.data} />
       </Datagrid>
     </List>
@@ -75,6 +76,7 @@ export const CustomList = ({permissions, ...props}) => (
 export const CustomShow = (props) => (
   <Show {...props}>
       <SimpleShowLayout>
+          <BooleanField label="Active" source="active"/>
           <TextField label="Order Title" source="name" />
           <ReferenceField label="Employee" source="employee" reference="admin-users">
             <TextField source="name"/>

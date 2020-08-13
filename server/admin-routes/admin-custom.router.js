@@ -64,6 +64,7 @@ router.get('/', rejectNonAdmin, (req, res) => {
             .split('"_id":')
             .join('"id":')
         )
+        console.log("parsed order: ", order)
         res.json(order)
       })
       .catch(err => {
@@ -153,13 +154,20 @@ router.get('/', rejectNonAdmin, (req, res) => {
   
   //delete
   router.delete("/:id", async (req, res) => {
-    Custom.deleteOne({id: req.params.id})
-    .then(res => {
-      console.log(res)
-      res.status(200).send("item deleted")
-    }).catch(err => {
-      console.log(err)
-      res.status(500).send("Deletion failed!")
+    console.log("custom delete hit: ", req.params)
+    Custom.updateOne({ id: req.params.id }, { active: false})
+    .then(customOrder => {
+      customOrder = JSON.parse(
+        JSON.stringify(customOrder)
+        .split('"_id":')
+        .join('"id":')
+        )
+      console.log("customOrder: ", customOrder)
+      res.json(customOrder)
+    })
+    .catch(err => {
+      console.log("err: ", err)
+      res.status(500).send('Deletion failed!')
     })
   })
   

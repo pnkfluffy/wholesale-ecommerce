@@ -121,15 +121,14 @@ const CommissionFilter = props => {
 
 const Aside = ({ data, ids }) => {
   // // console.log('aside', data, ids)
+  let totalSpending = ids.map(id => data[id].total).reduce((orderCost, total) => orderCost + total, 0)
   return (
     <div style={{ width: 200, margin: '1vw' }}>
       <h1>Customer Spending</h1>
       <p>pulled from current list</p>
       <div>
         ${' '}
-        {ids
-          .map(id => data[id].total)
-          .reduce((orderCost, total) => orderCost + total, 0)}
+        {totalSpending.toFixed(2)}
       </div>
     </div>
   )

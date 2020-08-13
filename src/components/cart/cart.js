@@ -69,7 +69,7 @@ class Cart extends React.Component {
       </div>
     ) : null
 
-    const customOrder = this.props.state.customOrder.map((order, index) => {
+    const customOrder = this.props.state.customOrder.products.map((order, index) => {
       return (
         <CustomProduct key={index} order={order} />
       )

@@ -154,6 +154,7 @@ class GCPay extends React.Component {
           order: res.data.order
         }
       })
+      store.dispatch({ type: 'EMPTY_CUSTOM' })
     }).catch(err => {
       // console.log("error!!")
       if (err.response && err.response.data.errors) {

@@ -69,12 +69,6 @@ class Cart extends React.Component {
       </div>
     ) : null
 
-    const customOrder = this.props.state.customOrder.products.map((order, index) => {
-      return (
-        <CustomProduct key={index} order={order} />
-      )
-    })
-
     return (
       <div className='cart_page'>
         <div className='cart'>
@@ -88,11 +82,11 @@ class Cart extends React.Component {
             )}
           {checkOutButton}
         </div>
-        {this.props.state.customOrder.length > 0 ? (
+        {this.props.state.customOrder ? (
           <div className="custom_orders">
             <div className='page_subheader'>Custom Orders</div>
             <div className='custom_orders_body'>
-              {customOrder}
+              <CustomProduct order={this.props.state.customOrder} />
             </div>
           </div>
         ) : null}

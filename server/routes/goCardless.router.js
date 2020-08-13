@@ -117,58 +117,58 @@ router.get('/oneClient', rejectUnauthenticated, async (req, res) => {
 // @desc    Returns bank information from active client by id
 // @access  Private
 router.get('/bankFromUser', rejectUnauthenticated, async (req, res) => {
-    try {
-        const activeUser = await User.findById(req.user._id).catch(err => {
-            console.log(err)
-            res.status(500).send("Couldn't find user in db")
-        })
-        const allClients = await gocardless(
-            process.env.GC_LIVE_TOKEN,
-            // Change this to constants.Environments.Live when you're ready to go live
-            constants.Environments.Live,
-            { raiseOnIdempotencyConflict: true }
-        )
-        const listBankAccounts = await allClients.customerBankAccounts.list({customer: activeUser.goCardlessID});
-        const userBank = listBankAccounts.customer_bank_accounts[0];
-        res.json({
-            account_holder_name: userBank.account_holder_name,
-            account_number: userBank.account_number_ending,
-            account_type: userBank.account_type,
-            bank_name: userBank.bank_name,
-        })
-    } catch (error) {
-        //console.log(error)
-        res.status(500).send('client not found')
-    }
+  try {
+    const activeUser = await User.findById(req.user._id).catch(err => {
+      console.log(err)
+      res.status(500).send("Couldn't find user in db")
+    })
+    const allClients = await gocardless(
+      process.env.GC_LIVE_TOKEN,
+      // Change this to constants.Environments.Live when you're ready to go live
+      constants.Environments.Live,
+      { raiseOnIdempotencyConflict: true }
+    )
+    const listBankAccounts = await allClients.customerBankAccounts.list({ customer: activeUser.goCardlessID });
+    const userBank = listBankAccounts.customer_bank_accounts[0];
+    res.json({
+      account_holder_name: userBank.account_holder_name,
+      account_number: userBank.account_number_ending,
+      account_type: userBank.account_type,
+      bank_name: userBank.bank_name,
+    })
+  } catch (error) {
+    //console.log(error)
+    res.status(500).send('client not found')
+  }
 })
 
 // @route   GET /gc/bankFromOrder
 // @desc    Returns bank information from order
 // @access  Private
 router.get('/bankFromOrder/:orderID', rejectUnauthenticated, async (req, res) => {
-    try {
-        const order = await Order.findById(req.params.orderID).catch(err => {
-            console.log(err)
-            res.status(500).send("Couldn't find order in db")
-        })
-        const allClients = await gocardless(
-            process.env.GC_LIVE_TOKEN,
-            // Change this to constants.Environments.Live when you're ready to go live
-            constants.Environments.Live,
-            { raiseOnIdempotencyConflict: true }
-        )
-        const orderBank = await allClients.customerBankAccounts.find(order.bankID);
-        console.log(orderBank);
-        res.json({
-            account_holder_name: orderBank.account_holder_name,
-            account_number: orderBank.account_number_ending,
-            account_type: orderBank.account_type,
-            bank_name: orderBank.bank_name,
-        })
-    } catch (error) {
-        console.log(error)
-        res.status(500).send('client not found')
-    }
+  try {
+    const order = await Order.findById(req.params.orderID).catch(err => {
+      console.log(err)
+      res.status(500).send("Couldn't find order in db")
+    })
+    const allClients = await gocardless(
+      process.env.GC_LIVE_TOKEN,
+      // Change this to constants.Environments.Live when you're ready to go live
+      constants.Environments.Live,
+      { raiseOnIdempotencyConflict: true }
+    )
+    const orderBank = await allClients.customerBankAccounts.find(order.bankID);
+    console.log(orderBank);
+    res.json({
+      account_holder_name: orderBank.account_holder_name,
+      account_number: orderBank.account_number_ending,
+      account_type: orderBank.account_type,
+      bank_name: orderBank.bank_name,
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500).send('client not found')
+  }
 })
 
 const translatePaymentStatus = (status) => {
@@ -236,10 +236,10 @@ const translatePaymentStatus = (status) => {
       }
       break
     default:
-    translated = {
-      status: 'Server Error',
-      message: 'We were not able to get the payment status for this payment.'
-    }
+      translated = {
+        status: 'Server Error',
+        message: 'We were not able to get the payment status for this payment.'
+      }
   }
   return translated
 }
@@ -307,34 +307,34 @@ router.get(
   '/payments/onePayment/:orderID',
   rejectUnauthenticated,
   async (req, res) => {
-  try {
-    const order = await Order.findById(req.params.orderID).catch(err => {
-      console.log(err)
-      res.status(500).send('order not found')
-    })
-    const allClients = await initializeGoCardless()
-    await allClients.payments
-      .find(order.paymentID)
-      .then(payment => {
-        const status = translatePaymentStatus(payment.status);
-        res.json({
-          amount: payment.amount,
-          charge_date: payment.charge_date,
-          created_at: payment.created_at,
-          currency: payment.currency,
-          status: status.status,
-          statusMessage: status.message
+    try {
+      const order = await Order.findById(req.params.orderID).catch(err => {
+        console.log(err)
+        res.status(500).send('order not found')
+      })
+      const allClients = await initializeGoCardless()
+      await allClients.payments
+        .find(order.paymentID)
+        .then(payment => {
+          const status = translatePaymentStatus(payment.status);
+          res.json({
+            amount: payment.amount,
+            charge_date: payment.charge_date,
+            created_at: payment.created_at,
+            currency: payment.currency,
+            status: status.status,
+            statusMessage: status.message
+          })
         })
-      })
-      .catch(err => {
-        // console.log(err)
-        res.status(500).send('payment not found')
-      })
-  } catch (error) {
-    console.log(error)
-    res.status(500).send('payment not found')
-  }
-})
+        .catch(err => {
+          // console.log(err)
+          res.status(500).send('payment not found')
+        })
+    } catch (error) {
+      console.log(error)
+      res.status(500).send('payment not found')
+    }
+  })
 
 // @route   POST gc/addClient
 // @:id		Active User ID
@@ -564,7 +564,7 @@ router.post('/collect-payment', rejectUnauthenticated, async (req, res) => {
               : null
 
             //get bank from this user
-            const listBankAccounts = await allClients.customerBankAccounts.list({customer: activeUser.goCardlessID});
+            const listBankAccounts = await allClients.customerBankAccounts.list({ customer: activeUser.goCardlessID });
             const userBank = listBankAccounts.customer_bank_accounts[0];
             console.log(userBank);
             //create new order in db
@@ -616,12 +616,12 @@ router.post('/collect-payment', rejectUnauthenticated, async (req, res) => {
                     )
                     const status = translatePaymentStatus(payment.status);
                     const cleanPayment = {
-                        amount: payment.amount,
-                        charge_date: payment.charge_date,
-                        created_at: payment.created_at,
-                        currency: payment.currency,
-                        status: status.status,
-                        statusMessage: status.message
+                      amount: payment.amount,
+                      charge_date: payment.charge_date,
+                      created_at: payment.created_at,
+                      currency: payment.currency,
+                      status: status.status,
+                      statusMessage: status.message
                     }
                     confirmOrderEmail(req.user, newOrder, cleanPayment, theClient)
                     //send order and payment information so can redirect to order's page
@@ -718,98 +718,114 @@ router.post('/collect-custom-payment', rejectUnauthenticated, async (req, res) =
             //do all the math to get total
             //+ check if products are available
             //+ save their information for the future in case they get deleted
-            const customOrder = await Custom.findOne({_id: req.body.customID, user: req.user._id})
-            
+            const customOrder = await Custom.findOne({ _id: req.body.customID, user: req.user._id })
+
             const total = customOrder.price
-            const productsInOrder = customOrder.products
-            if (!productsInOrder[0]) {
-              res.status(500).send('You have no available items in your order')
-              return
-            }
-
-            //get representative of sale
-            const representative = customOrder.employee
-
-            //get bank from this user
-            const listBankAccounts = await allClients.customerBankAccounts.list({customer: activeUser.goCardlessID});
-            const userBank = listBankAccounts.customer_bank_accounts[0];
-            console.log(userBank);
-            //create new order in db
-            const newOrder = new Order({
-              user: req.user._id,
-              products: productsInOrder,
-              deliveryInfo: req.body.delivery,
-              total: total,
-              representative,
-              bankID: userBank.id
+            const productsInOrder = customOrder.products.map(async (product) => {
+              let productInfo = await Product.findOne({ _id: product.product })
+              return {
+                productName: productInfo.name,
+                productQuantity: product.quantity,
+                productPrice: 0,
+                productTotal: 0,
+                productId: productInfo._id,
+              }
             })
-            await newOrder.save().catch(err => {
-              // console.log(err)
-              res.status(500).send("Couldn't create new order")
-              return
-            })
+            Promise.all(productsInOrder)
+              .then(async result => {
 
-            const payment = await allClients.payments
-              .create(
-                {
-                  amount: newOrder.total * 100,
-                  currency: currency,
-                  links: {
-                    //getting the mandate from database
-                    mandate: activeUser.goCardlessMandate
-                  },
-                  metadata: {
-                    invoice_number: '001'
-                  }
-                },
-                //Idempotency-Key is going to be the order _id generated by mongoDB
-                //This guarantees that the order won't be charged twice
-                newOrder._id.toString()
-              )
-              .then(payment => {
-                newOrder
-                  .updateOne({ $set: { paymentID: payment.id } })
-                  .then(async () => {
-                    //Clean the cart in db
-                    User.updateOne({ _id: req.user._id }, { cart: [] }).catch(
-                      err => {
-                        // console.log("couldn't clean cart")
+                if (!result[0]) {
+                  res.status(500).send('You have no available items in your order')
+                  return
+                }
+
+                //get representative of sale
+                const representative = customOrder.employee
+
+                //get bank from this user
+                const listBankAccounts = await allClients.customerBankAccounts.list({ customer: activeUser.goCardlessID });
+                const userBank = listBankAccounts.customer_bank_accounts[0];
+                //create new order in db
+                console.log(result);
+
+                let newOrder = new Order({
+                  user: req.user._id,
+                  products: result,
+                  deliveryInfo: req.body.delivery,
+                  total: total,
+                  representative,
+                  bankID: userBank.id
+                })
+                await newOrder.save().catch(err => {
+                  // console.log(err)
+                  res.status(500).send("Couldn't create new order")
+                  return
+                })
+
+                console.log(newOrder);
+
+                const payment = await allClients.payments
+                  .create(
+                    {
+                      amount: newOrder.total * 100,
+                      currency: currency,
+                      links: {
+                        //getting the mandate from database
+                        mandate: activeUser.goCardlessMandate
+                      },
+                      metadata: {
+                        invoice_number: '001'
+                      }
+                    },
+                    //Idempotency-Key is going to be the order _id generated by mongoDB
+                    //This guarantees that the order won't be charged twice
+                    newOrder._id.toString()
+                  )
+                  .then(payment => {
+                    newOrder
+                      .updateOne({ $set: { paymentID: payment.id } })
+                      .then(async () => {
+                        //Clean the cart in db
+                        User.updateOne({ _id: req.user._id }, { cart: [] }).catch(
+                          err => {
+                            // console.log("couldn't clean cart")
+                            res
+                              .status(500)
+                              .send(
+                                "Couldn't clean your cart, but payment was processed!"
+                              )
+                          }
+                        )
+                        const status = translatePaymentStatus(payment.status);
+                        await Custom.findOneAndUpdate({ _id: req.body.customID, user: req.user._id }, { active: false })
+                        const cleanPayment = {
+                          amount: payment.amount,
+                          charge_date: payment.charge_date,
+                          created_at: payment.created_at,
+                          currency: payment.currency,
+                          status: status.status,
+                          statusMessage: status.message
+                        }
+                        confirmOrderEmail(req.user, newOrder, cleanPayment, theClient)
+                        //send order and payment information so can redirect to order's page
+                        res.json({
+                          order: newOrder,
+                          payment: cleanPayment
+                        })
+                      })
+                      .catch(err => {
+                        console.log(err)
                         res
                           .status(500)
                           .send(
-                            "Couldn't clean your cart, but payment was processed!"
+                            "Your payment is done! But we couldn't connect to our database, contact us"
                           )
-                      }
-                    )
-                    const status = translatePaymentStatus(payment.status);
-                    await Custom.findOneAndUpdate({_id: req.body.customID, user: req.user._id}, {active: false})
-                    const cleanPayment = {
-                        amount: payment.amount,
-                        charge_date: payment.charge_date,
-                        created_at: payment.created_at,
-                        currency: payment.currency,
-                        status: status.status,
-                        statusMessage: status.message
-                    }
-                    confirmOrderEmail(req.user, newOrder, cleanPayment, theClient)
-                    //send order and payment information so can redirect to order's page
-                    res.json({
-                      order: newOrder,
-                      payment: cleanPayment
-                    })
+                      })
                   })
                   .catch(err => {
-                    // console.log(`Can't Update Database: ${err}`)
-                    res
-                      .status(500)
-                      .send(
-                        "Your payment is done! But we couldn't connect to our database, contact us"
-                      )
+                    console.log(err)
+                    res.status(500).send("Couldn't make payment")
                   })
-              })
-              .catch(err => {
-                // console.log(err)
-                res.status(500).send("Couldn't make payment")
               })
           }
         }

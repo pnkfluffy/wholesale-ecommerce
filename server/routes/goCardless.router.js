@@ -215,7 +215,7 @@ const translatePaymentStatus = (status) => {
         status: 'Cancelled',
         message: 'Your payment has been cancelled.'
       }
-      return
+      break
     case 'customer_approval_denied':
       translated = {
         status: 'Customer approval denied',
@@ -279,6 +279,8 @@ router.get('/payments/from', rejectUnauthenticated, async (req, res) => {
             return null;
           }
           const status = translatePaymentStatus(payment.status)
+          console.log(payment.status);
+          
           return {
             amount: payment.amount,
             charge_date: payment.charge_date,
@@ -291,11 +293,11 @@ router.get('/payments/from', rejectUnauthenticated, async (req, res) => {
         res.json(userPayments)
       })
       .catch(error => {
-        // console.log(error)
+        console.log(error)
         res.status(500).send('Error finding orders')
       })
   } catch (error) {
-    // console.log(error)
+    console.log(error)
     res.status(500).send('payments not found')
   }
 })

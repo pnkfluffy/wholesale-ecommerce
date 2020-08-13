@@ -32,8 +32,8 @@ export const ReviewList = ({ permissions, ...props}) => (
   <List
     {...props}
     actions={<ListActions />}
-    // sort={{ field: 'date', order: 'DESC' }}
-    // bulkActionButtons={false}
+    sort={{ field: 'date', order: 'DESC' }}
+    bulkActionButtons={false}
   >
     <Datagrid rowClick='show'>
       <ReferenceField

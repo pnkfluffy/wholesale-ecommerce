@@ -64,7 +64,7 @@ class CustomProduct extends React.Component {
 					style={{ width: "15vw" }}
 					onClick={e => this.checkOut(this.props.order.price, availableProducts)}
 				>
-					ADD TO CART: ${this.props.order.price}
+					CHECKOUT: ${this.props.order.price}
 				</GreenButton>
 			</div >
 		)

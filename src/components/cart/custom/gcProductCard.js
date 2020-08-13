@@ -73,7 +73,7 @@ class GCProductCard extends React.Component {
               <div className="gc_product_card_units">
                 <div>Quantity</div>
                 <div className='product_in_order_card_quantity'>
-                  {product.quantity}
+                  {quantity}
                 </div>
               </div>
             </div>

@@ -123,7 +123,7 @@ export const getAllOrders = () => {
 export const getCustomOrders = () => {
   return axios.get('/api/orders/custom')
   .then(res => {
-    store.dispatch({ type: 'GET_CUSTOM', payload: res.data})
+    store.dispatch({ type: 'GET_CUSTOM', payload: res.data[0]})
   })
   .catch(err => {
     console.log(err);

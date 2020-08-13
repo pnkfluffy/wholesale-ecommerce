@@ -13,6 +13,7 @@ import Product from "./components/product/product";
 import Order from "./components/account/orderHistory/order"
 import AdminError404 from './components/error/adminError404'
 import GoCardless from './components/cart/goCardless'
+import CustomCheckout from './components/cart/custom/goCardless'
 import Admin from './components/admin/Setup'
 import { connect } from "react-redux";
 
@@ -38,6 +39,7 @@ class App extends React.Component {
               <Route path='/account' component={Account} />
               <Route path='/cart' component={Cart} />
               <Route path='/buy' component={GoCardless} />
+              <Route path='/custom-buy' component={CustomCheckout} />
               <Route path='/settings' component={Settings} />
               <Route path='/logout' component={Logout} />
               <Route path='/product/:productID' component={Product} />

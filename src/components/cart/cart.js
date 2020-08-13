@@ -54,6 +54,8 @@ class Cart extends React.Component {
         return <UnavailableOrderCard product={cartProduct} key={v4()} />
       }
     })
+    console.log(availableProducts);
+
 
     const checkOutButton = this.props.state.cart.length ? (
       <div className='checkout_button_container'>
@@ -67,7 +69,7 @@ class Cart extends React.Component {
       </div>
     ) : null
 
-    const customOrders = this.props.state.customOrders.map((order, index) => {
+    const customOrder = this.props.state.customOrder.map((order, index) => {
       return (
         <CustomProduct key={index} order={order} />
       )
@@ -86,11 +88,11 @@ class Cart extends React.Component {
             )}
           {checkOutButton}
         </div>
-        {this.props.state.customOrders.length > 0 ? (
+        {this.props.state.customOrder.length > 0 ? (
           <div className="custom_orders">
-            <div className='custom_subheader'>Custom Orders</div>
+            <div className='page_subheader'>Custom Orders</div>
             <div className='custom_orders_body'>
-              {customOrders}
+              {customOrder}
             </div>
           </div>
         ) : null}

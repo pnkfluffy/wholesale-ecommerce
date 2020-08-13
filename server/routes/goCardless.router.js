@@ -4,6 +4,7 @@ const router = express.Router()
 const User = require('../schemas/userSchema')
 const Order = require('../schemas/orderSchema')
 const Product = require('../schemas/productSchema')
+const Custom = require('../schemas/customOrderSchema')
 
 const {
   rejectUnauthenticated
@@ -614,6 +615,174 @@ router.post('/collect-payment', rejectUnauthenticated, async (req, res) => {
                       }
                     )
                     const status = translatePaymentStatus(payment.status);
+                    const cleanPayment = {
+                        amount: payment.amount,
+                        charge_date: payment.charge_date,
+                        created_at: payment.created_at,
+                        currency: payment.currency,
+                        status: status.status,
+                        statusMessage: status.message
+                    }
+                    confirmOrderEmail(req.user, newOrder, cleanPayment, theClient)
+                    //send order and payment information so can redirect to order's page
+                    res.json({
+                      order: newOrder,
+                      payment: cleanPayment
+                    })
+                  })
+                  .catch(err => {
+                    // console.log(`Can't Update Database: ${err}`)
+                    res
+                      .status(500)
+                      .send(
+                        "Your payment is done! But we couldn't connect to our database, contact us"
+                      )
+                  })
+              })
+              .catch(err => {
+                // console.log(err)
+                res.status(500).send("Couldn't make payment")
+              })
+          }
+        }
+      )
+    }
+  } catch (error) {
+    // console.log(error)
+    res.status(500).send('error making payment')
+  }
+})
+
+router.post('/collect-custom-payment', rejectUnauthenticated, async (req, res) => {
+  try {
+    // console.log(req.body)
+    //validate delivery input sizes (check if any is empty or if zip is too short or too large)
+    const { errors, isValid } = validateDeliverySizes(req.body.delivery)
+    if (!isValid) {
+      res.status(500).json({ errors: errors })
+    } else {
+      const delivery = req.body.delivery
+      const host = 'http://production.shippingapis.com/ShippingAPI.dll'
+      const userName = '314CBDDY8065'
+
+      const usps = new USPS({
+        server: host,
+        userId: userName,
+        ttl: 10000 //TTL in milliseconds for request
+      })
+
+      usps.zipCodeLookup(
+        {
+          street1: delivery.ClientAddr1,
+          street2: delivery.ClientAddr2,
+          city: delivery.city,
+          state: delivery.state,
+          zip: delivery.postal_code
+        },
+        async (err, address) => {
+          if (err !== null) {
+            // console.log(err)
+            res.status(500).send('addr_1')
+          } else {
+            const activeUser = await User.findById(req.user._id).catch(err => {
+              // console.log(err)
+            })
+
+
+            //initialize goCardless
+            const allClients = await gocardless(
+              process.env.GC_LIVE_TOKEN,
+              constants.Environments.Live,
+              { raiseOnIdempotencyConflict: true },
+            );
+            // const allClients = await gocardless(
+            //   process.env.GC_ACCESS_TOKEN,
+            //   constants.Environments.Sandbox,
+            //   { raiseOnIdempotencyConflict: true }
+            // )
+
+            //set proper client currency to payment
+            //to go live needs to add other currencies
+            const theClient = await allClients.customers
+              .find(activeUser.goCardlessID)
+              .catch(err => {
+                // console.log('GC ID NOT FOUND')
+                res.status(500).send('GoCardless ID not found')
+                return
+              })
+            const clientCountry = theClient.country_code
+            let currency
+            if (clientCountry === 'US') currency = 'USD'
+            else if (clientCountry === 'GB') currency = 'GBP'
+
+            //do all the math to get total
+            //+ check if products are available
+            //+ save their information for the future in case they get deleted
+            const customOrder = await Custom.findOne({_id: req.body.customID, user: req.user._id})
+            
+            const total = customOrder.price
+            const productsInOrder = customOrder.products
+            if (!productsInOrder[0]) {
+              res.status(500).send('You have no available items in your order')
+              return
+            }
+
+            //get representative of sale
+            const representative = customOrder.employee
+
+            //get bank from this user
+            const listBankAccounts = await allClients.customerBankAccounts.list({customer: activeUser.goCardlessID});
+            const userBank = listBankAccounts.customer_bank_accounts[0];
+            console.log(userBank);
+            //create new order in db
+            const newOrder = new Order({
+              user: req.user._id,
+              products: productsInOrder,
+              deliveryInfo: req.body.delivery,
+              total: total,
+              representative,
+              bankID: userBank.id
+            })
+            await newOrder.save().catch(err => {
+              // console.log(err)
+              res.status(500).send("Couldn't create new order")
+              return
+            })
+
+            const payment = await allClients.payments
+              .create(
+                {
+                  amount: newOrder.total * 100,
+                  currency: currency,
+                  links: {
+                    //getting the mandate from database
+                    mandate: activeUser.goCardlessMandate
+                  },
+                  metadata: {
+                    invoice_number: '001'
+                  }
+                },
+                //Idempotency-Key is going to be the order _id generated by mongoDB
+                //This guarantees that the order won't be charged twice
+                newOrder._id.toString()
+              )
+              .then(payment => {
+                newOrder
+                  .updateOne({ $set: { paymentID: payment.id } })
+                  .then(async () => {
+                    //Clean the cart in db
+                    User.updateOne({ _id: req.user._id }, { cart: [] }).catch(
+                      err => {
+                        // console.log("couldn't clean cart")
+                        res
+                          .status(500)
+                          .send(
+                            "Couldn't clean your cart, but payment was processed!"
+                          )
+                      }
+                    )
+                    const status = translatePaymentStatus(payment.status);
+                    await Custom.findOneAndUpdate({_id: req.body.customID, user: req.user._id}, {active: false})
                     const cleanPayment = {
                         amount: payment.amount,
                         charge_date: payment.charge_date,

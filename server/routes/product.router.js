@@ -12,7 +12,7 @@ const Product = require('../schemas/productSchema')
 // @desc    Returns all products
 // @access  Private
 router.get('/all', rejectUnauthenticated, (req, res) => {
-  Product.find({draft: false, deleted: false})
+  Product.find({draft: false, deleted: false}, {forUser: 0})
     .then(products => res.json(products))
     .catch(error => {
       // console.log(error)

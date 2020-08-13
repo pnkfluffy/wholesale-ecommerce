@@ -149,7 +149,12 @@ const reviews = (state = [], action) => {
 const customOrder = (state = null, action) => {
   switch (action.type) {
     case 'GET_CUSTOM':
-      return action.payload;
+      if (action.payload) {
+        return action.payload;
+      }
+      else {
+        return state
+      }
     case 'EMPTY_CUSTOM':
       return null
     default:

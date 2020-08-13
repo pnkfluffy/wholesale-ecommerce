@@ -51,8 +51,8 @@ class CustomProduct extends React.Component {
 						<div className='custom_order_card_id'>{this.props.order.description}</div>
 					</div>
 					<div className='custom_order_card_quantities'>
-						<b>was: ${this.props.order.standardPrice}</b>
-						<b>is: ${this.props.order.price}</b>
+						<b>was: ${this.props.order.standardPrice.toFixed(2)}</b>
+						<b>is: ${this.props.order.price.toFixed(2)}</b>
 					</div>
 				</div>
 				<div className="custom_order_products">
@@ -64,7 +64,7 @@ class CustomProduct extends React.Component {
 					style={{ width: "15vw" }}
 					onClick={e => this.checkOut(this.props.order.price, availableProducts)}
 				>
-					CHECKOUT: ${this.props.order.price}
+					CHECKOUT: ${this.props.order.price.toFixed(2)}
 				</GreenButton>
 			</div >
 		)

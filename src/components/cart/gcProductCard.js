@@ -91,7 +91,7 @@ class GCProductCard extends React.Component {
               </div>
               <div className="gc_product_card_units">
                 <div>Total</div>
-                <div className='product_in_order_card_total'>${price}</div>
+                <div className='product_in_order_card_total'>${price.toFixed(2)}</div>
               </div>
             </div>
           </div>

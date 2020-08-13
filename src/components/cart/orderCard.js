@@ -75,7 +75,7 @@ class OrderCard extends React.Component {
               productInfo={product}
               deleteProduct={this.deleteProduct}
             />
-            <b>price: ${this.props.total}</b>
+            <b>price: ${this.props.total.toFixed(2)}</b>
             <div className='remove_from_cart_text' onClick={this.deleteProduct}>
               REMOVE FROM CART
             </div>

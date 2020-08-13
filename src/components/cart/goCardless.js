@@ -75,6 +75,7 @@ class GoCardless extends React.Component {
           quantity: cartProduct.quantity
         }
       }})
+      total.toFixed(2)
 
     const productsList = products.map((product, index) => {
             return <GCProductCard product={product} key={index}/>

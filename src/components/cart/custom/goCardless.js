@@ -76,9 +76,9 @@ class GoCardless extends React.Component {
       <div className='buy'>
         {(() => {
           if (!this.props.state.hasMandate) {
-            return <GCFillInfo total={this.props.state.customOrder.price} />
+            return <GCFillInfo total={this.props.state.customOrder.price.toFixed(2)} />
           } else {
-            return <GCPay total={this.props.state.customOrder.price} />
+            return <GCPay total={this.props.state.customOrder.price.toFixed(2)} />
           }
         })()}
         <div className="cart_products_payment">

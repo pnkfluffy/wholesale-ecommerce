@@ -122,7 +122,7 @@ router.get('/', rejectNonAdmin, (req, res) => {
       let product = await Product.findById({_id: renamedProducts[i].product})
 
       let quant = renamedProducts[i].quantity
-      let price = product.price
+      let price = parseFloat(product.price.toFixed(2))
       expectedPrice += (price * quant)
 
       let nodemailerProduct = {
@@ -139,7 +139,7 @@ router.get('/', rejectNonAdmin, (req, res) => {
       name: req.body.name,
       products: renamedProducts,
       description: req.body.description,
-      price: req.body.price,
+      price: parseFloat(req.body.price.toFixed(2)),
       standardPrice: expectedPrice
     })
     Custom.create(newCustom)
@@ -154,8 +154,7 @@ router.get('/', rejectNonAdmin, (req, res) => {
   //delete
   router.delete("/:id", async (req, res) => {
     Custom.deleteOne({id: req.params.id})
-    .then(res => {
-      console.log(res)
+    .then(response => {
       res.status(200).send("item deleted")
     }).catch(err => {
       console.log(err)

@@ -77,7 +77,7 @@ router.post('/', rejectNonAdmin, uploadProductPhotos, async (req, res) => {
       name: req.body.name,
       category: req.body.category,
       description: req.body.description,
-      price: req.body.price,
+      price: parseFloat(req.body.price.toFixed(2)),
       priceTiers: req.body.priceTiers,
       metaData: req.body.metaData,
       imageData: req.imageMetaData,

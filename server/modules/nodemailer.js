@@ -45,12 +45,12 @@ const addCustomOrderToCart = (order, user, employee, products) => {
 }
 
 const confirmOrderEmail = (user, order, payment, client) => {
-  const total = order.total / 100 + ',00'
+  let total = parseFloat(order.total)
+  total = total.toFixed(2)
   const created_at = payment.created_at
   const charge_date = payment.charge_date
   const addr_2 = client.address_line2 ? client.address_line2 : ''
-  const productsTable = ""
-  //productsToTable(order.products)
+  const productsTable = productsToTable(order.products)
   transporter.sendMail({
     from: process.env.NODE_MAILER_USERNAME,
     to: user.email,

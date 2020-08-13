@@ -50,7 +50,7 @@ class ProductInOrderCard extends React.Component {
                 <div className='product_in_order_card_quantity'>
                   {this.props.product.productQuantity}
                 </div>
-                <div className='product_in_order_card_total'>${this.props.product.productTotal}</div>
+                <div className='product_in_order_card_total'>${this.props.product.productTotal.toFixed(2)}</div>
               </div>
               {this.props.available ? null : <div className="product_in_order_card_not_available">No longer available</div>}
             </div>

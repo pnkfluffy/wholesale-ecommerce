@@ -283,7 +283,7 @@ class GCPay extends React.Component {
               className='gc_checkout_button'
               onClick={e => this.alert_make_payment(e)}
             >
-              Confirm Order: ${this.props.total}
+              Confirm Order: ${this.props.total.toFixed(2)}
             </GreenButton>
           </div>
         </div>

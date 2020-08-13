@@ -38,7 +38,7 @@ class Cart extends React.Component {
           cartProduct.quantity,
           cartProduct.price
         )
-        total += productTotal
+        total += parseFloat(productTotal, 10)
         availableProducts = [
           ...availableProducts,
           {
@@ -64,7 +64,7 @@ class Cart extends React.Component {
           className='checkout_button'
           onClick={e => this.checkOut(total, availableProducts)}
         >
-          CHECK OUT: ${total}
+          CHECK OUT: ${total.toFixed(2)}
         </GreenButton>
       </div>
     ) : null

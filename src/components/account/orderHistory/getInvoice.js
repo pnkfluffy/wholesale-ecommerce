@@ -87,7 +87,7 @@ class GetInvoice extends React.Component {
     const client = await this.getClientInfo()
     const items = await this.getItems()
     const date = await this.getDate()
-    const subtotal = this.props.order.total + ",00"
+    const subtotal = this.props.order.total.toFixed(2)
 
     const shipping = {
       ...this.props.order.deliveryInfo,

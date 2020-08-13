@@ -94,7 +94,7 @@ class Order extends React.Component {
     }
     const payment = this.props.history.location.state.payment
     const order = this.props.history.location.state.order
-    const total = order.total + ".00"
+    const total = order.total.toFixed(2)
     return (
       <div className='order_page'>
         <div className='order'>

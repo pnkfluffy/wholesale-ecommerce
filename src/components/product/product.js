@@ -167,9 +167,11 @@ class Product extends React.Component {
     if (totalPrice > 10000000) {
       totalPrice = 'limit reached'
     }
-    if (!totalPrice) {
+    totalPrice = totalPrice.toFixed(2)
+    if (!totalPrice || totalPrice === 'NaN') {
       totalPrice = ''
     }
+    
     return (
       <div className='product_page'>
         <div className={classes.root}>

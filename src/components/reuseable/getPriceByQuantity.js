@@ -7,5 +7,6 @@ export const getPriceByQuantity = (priceTiers, quantity, basePrice) => {
       unitPrice = priceTiers[i].price
     }
   }
-  return unitPrice * quantity
+  let toFormat = unitPrice * quantity
+  return toFormat
 }

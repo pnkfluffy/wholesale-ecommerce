@@ -35,6 +35,7 @@ router.get('/', rejectNonAdmin, (req, res) => {
     res.status(500).send('Error retrieving reviews')
   }
 })
+
 // router.get("/", rejectNonAdmin, (req, res) => {
 //   // console.log("Review List backend hit")
 //   const sortQuery = JSON.parse(req.query.sort);

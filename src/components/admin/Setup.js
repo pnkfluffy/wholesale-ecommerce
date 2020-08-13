@@ -86,7 +86,7 @@ const AdminSetup = () => (
           name='admin-reviews'
           options={{ label: 'Reviews' }}
           list={ReviewList}
-          // show={ReviewShow}
+          show={ReviewShow}
           icon={ReviewIcon}
         />,
         <Resource

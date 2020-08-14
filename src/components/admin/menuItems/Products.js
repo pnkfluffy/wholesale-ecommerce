@@ -220,11 +220,21 @@ export const ProductCreate = props => {
           label='Description'
           source='description'
         />
-        <NumberInput label='Base Price Per Unit' source='price' />
+        <NumberInput
+          label='Base Price Per Unit'
+          source='price'
+          min='0'
+          max='5000'
+        />
         <ArrayInput label='Price Tiers' source='priceTiers'>
           <SimpleFormIterator>
             <NumberInput label='Quantity' source='quantity' />
-            <NumberInput label='Price per unit (USD)' source='price' />
+            <NumberInput
+              label='Price per unit (USD)'
+              source='price'
+              min='0'
+              max='5000'
+            />
           </SimpleFormIterator>
         </ArrayInput>
         <div className='product_create_metaData'>
@@ -319,12 +329,21 @@ export const ProductEdit = props => {
         />
         <TextInput label='Product Name' source='name' />
         <TextInput multiline label='Description' source='description' />
-        <NumberInput label='Base Price Per Unit' source='price' />
-
+        <NumberInput
+          label='Base Price Per Unit'
+          source='price'
+          min='0'
+          max='5000'
+        />
         <ArrayInput label='Price Tiers' source='priceTiers'>
           <SimpleFormIterator>
             <NumberInput label='Quantity' source='quantity' />
-            <NumberInput label='Price per unit (USD)' source='price' />
+            <NumberInput
+              label='Price per unit (USD)'
+              source='price'
+              min='0'
+              max='5000'
+            />
           </SimpleFormIterator>
         </ArrayInput>
         <div className='product_create_metaData'>

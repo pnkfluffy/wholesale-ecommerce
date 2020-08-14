@@ -151,6 +151,8 @@ export const CustomCreate = props => (
       <NumberInput
         label='Total Price USD'
         source='price'
+        min="0"
+        max="5000"
         helperText="This is the custom quote the owner has decided to give for this order."
       />
     </SimpleForm>

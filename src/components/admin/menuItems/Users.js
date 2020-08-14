@@ -140,6 +140,7 @@ export const UserShow = props => {
           link='show'
         >
           <Datagrid rowClick='show'>
+            <TextField label='Order #' source='id' link='show' />
             <TextField label='Total' source='total' />
             <DateField label='Date' source='date' />
             <TextField label='Product Purchased' source='products.length' />

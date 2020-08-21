@@ -185,6 +185,7 @@ export const ProductShow = props => {
 const productCategories = [
   { id: 'flower', name: 'Flower' },
   { id: 'edibles', name: 'Edibles' },
+  { id: 'tinctures', name: 'Tinctures' },
   { id: 'concentrates', name: 'Concentrates' },
   { id: 'topicals', name: 'Topicals' },
   { id: 'pet_products', name: 'Pet Products' },

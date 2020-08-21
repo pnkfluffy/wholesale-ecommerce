@@ -65,10 +65,11 @@ export const getUserWishlist = () => {
 const categories = [
   'Flower',
   'Edibles',
+  'Tinctures',
   'Concentrates',
   'Topicals',
   'Pet Products',
-  'Accessories'
+  'Accessories',
 ]
 
 const getAllCategories = () => {

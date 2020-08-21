@@ -39,7 +39,7 @@ const addCustomOrderToCart = (order, user, employee, products) => {
       ${productTable}
       <p>An order like this would usually cost $${order.standardPrice}. However, Cbddy is offering it to you for $${order.price}.</p>
       <p>If you wish to continue proceed to our website where your cart has already been prepared.</p>
-      <p> Login at https://cbddy-wholesale-portal.herokuapp.com </p>
+      <p> Login at ${process.env.DEV_URI} </p>
     </html>`
   })
 }

@@ -22,9 +22,8 @@ class Logout extends React.Component {
       }
     }).then(res => {
       if (res.value) {
-        axios.get("/auth/logout").then((res) => {
-          window.location.href = "/";
-        });
+        axios.get("/auth/logout");
+        window.location.href = "/";
       }
       else {
         this.props.history.push('/')

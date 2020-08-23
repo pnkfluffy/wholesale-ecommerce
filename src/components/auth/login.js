@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
+import store from '../../redux/store'
 import logo from '../../resources/images/cbddy_logo_small.png'
 import AuthField from './AuthField'
 import shajs from 'sha.js'
@@ -10,6 +11,7 @@ import { LightGreenButton } from '../reuseable/materialButtons'
 import Snackbar from '@material-ui/core/Snackbar'
 import Alert from '@material-ui/lab/Alert'
 import { classes } from '../reuseable/materialButtons'
+import { initializeAllRequests } from '../../index-init'
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -45,8 +47,11 @@ class Login extends React.Component {
         password: this.state.password
       })
       .then(res => {
-        // console.log(res.status)
-        window.location.href = '/'
+        store.dispatch({
+          type: 'GET_USER',
+          payload: { email: this.state.username, name: 'Test User' }
+        })
+        initializeAllRequests();
       })
       .catch(err => {
         this.setSnackbar('error', 'Invalid Credentials')
@@ -154,7 +159,7 @@ class Login extends React.Component {
           </form>
           <span className='register_text'>
             {' '}
-            see the live site at {' '}
+            see the live site at{' '}
             <a className='light_green' href='https://cbddywholesale.com/'>
               cbddywholesale.com
             </a>

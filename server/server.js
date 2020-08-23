@@ -33,14 +33,24 @@ connectDB()
 const app = express()
 const server = http.createServer(app)
 
-app.use(helmet())
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      frameAncestors: [
+        "'self'",
+        'http://localhost:3000/',
+        'https://simple-breakthrough-portfolio.herokuapp.com/'
+      ]
+    }
+  })
+)
 app.use(cors({ exposedHeaders: 'Content-Range' }))
 app.options('*', cors())
 
 app.use(bodyParser.json({ limit: '50mb' }))
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
 app.use(cookieParser())
-app.use(express.static("build"));
+app.use(express.static('build'))
 // app.use(express.static('src'))
 app.use(sessionMiddleware)
 app.use(passport.initialize())
@@ -51,8 +61,7 @@ if (cluster.isMaster) {
   for (let i = 0; i < cpuCount; i++) {
     cluster.fork()
   }
-}
-else {
+} else {
   app.use('/api/gc', gcRouter)
   app.use('/auth', userRouter)
   app.use('/api/cart', cartRouter)
@@ -64,7 +73,7 @@ else {
   app.use('/api/admin-users', adminUserRouter)
   app.use('/api/admin-orders', adminOrderRouter)
   app.use('/api/admin-reviews', adminReviewRouter)
-  app.use("/api/admin-customs", adminCustomRouter)
+  app.use('/api/admin-customs', adminCustomRouter)
 
   app.get('/*', function (req, res) {
     res.sendFile(path.join(__dirname, '../build/index.html'), function (err) {
@@ -74,15 +83,12 @@ else {
     })
   })
 
-
   server.listen(process.env.PORT || 5000, () => {
     // console.log(`listening on port: ${PORT}`)
   })
 }
 
-cluster.on('exit', (worker) => {
+cluster.on('exit', worker => {
   // console.log('mayday! mayday! worker', worker.id, ' is no more!')
   cluster.fork()
 })
-
-

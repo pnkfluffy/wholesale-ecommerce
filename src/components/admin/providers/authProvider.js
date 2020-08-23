@@ -22,7 +22,7 @@ export default {
       // console.log('nao', res.sig, res.perms)
       localStorage.setItem('sig', res.sig)
       localStorage.setItem('perms', res.perms)
-      window.location.href = '/'
+      // window.location.href = '/'
       return Promise.resolve()
     })
     // .catch(err => {

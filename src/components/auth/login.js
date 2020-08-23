@@ -20,8 +20,8 @@ class Login extends React.Component {
     super(props)
 
     this.state = {
-      username: '',
-      password: '',
+      username: 'simplebreakthroughllc@gmail.com',
+      password: 'Password1',
       error: false,
       snackbarOpen: false,
       snackbarSeverity: 'success',
@@ -154,14 +154,14 @@ class Login extends React.Component {
           </form>
           <span className='register_text'>
             {' '}
-            no account? contact us at{' '}
-            <a className='light_green' href='tel:7205916284'>
-              (720)591-6284
+            see the live site at {' '}
+            <a className='light_green' href='https://cbddywholesale.com/'>
+              cbddywholesale.com
             </a>
           </span>
         </div>
         <div className='login_footer sidebar_footer_text'>
-          <a className='light_green' href='tel:7205916284'>
+          <a className='light_green' href='https://cbddy.com/'>
             customer support
           </a>
           ,{' '}

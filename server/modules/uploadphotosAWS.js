@@ -12,7 +12,7 @@ const storage = multer.memoryStorage({
 
 const uploadProductPhotos = (req, res, next) => {
   multer({ storage }).array('photo')
-  const myBucket = 'cbddy-wholesale-product-photos'
+  const myBucket = 'wholesale-ecommerce'
 
   //  checks if no images
   if (!req.body.imageData || !req.body.imageData.length) {

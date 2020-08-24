@@ -5,24 +5,27 @@ export const initializeAllRequests = async () => {
   // console.log('redux initializing')
   await getAllCategories()
   await getAllProducts()
+  await getURI()
+  await getAllReviews()
+  await getUserCart()
+  await getUserWishlist()
+  await getAllOrders()
+  await getCustomOrders()
+  await checkMandate()
+  store.dispatch({ type: 'APP_LOADED' })
+}
+
+export const initializeLogin = () => {
   axios
-    .get('/auth/user')
-    .then(async res => {
-      //  only fires if user get successfull
-      store.dispatch({ type: 'GET_USER', payload: res.data })
-      await getURI()
-      await getAllReviews()
-      await getUserCart()
-      await getUserWishlist()
-      await getAllOrders()
-      await getCustomOrders()
-      await checkMandate()
-      store.dispatch({ type: 'APP_LOADED' })
-    })
-    .catch(err => {
-      store.dispatch({ type: 'APP_LOADED' })
-      // console.log('not logged in or admin', err)
-    })
+  .get('/auth/user')
+  .then(async res => {
+    //  only fires if user get successfull
+    store.dispatch({ type: 'GET_USER', payload: res.data })
+  })
+  .catch(err => {
+    store.dispatch({ type: 'APP_LOADED' })
+    // console.log('not logged in or admin', err)
+  })
 }
 
 const getURI = () => {

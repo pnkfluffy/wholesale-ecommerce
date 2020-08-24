@@ -11,7 +11,7 @@ import { LightGreenButton } from '../reuseable/materialButtons'
 import Snackbar from '@material-ui/core/Snackbar'
 import Alert from '@material-ui/lab/Alert'
 import { classes } from '../reuseable/materialButtons'
-import { initializeAllRequests } from '../../index-init'
+import { initializeAllRequests, initializeLogin } from '../../index-init'
 
 const mapStateToProps = state => ({
   state: state.reducer
@@ -51,7 +51,8 @@ class Login extends React.Component {
           type: 'GET_USER',
           payload: { email: this.state.username, name: 'Test User' }
         })
-        initializeAllRequests();
+        // initializeAllRequests();
+        initializeLogin();
       })
       .catch(err => {
         this.setSnackbar('error', 'Invalid Credentials')

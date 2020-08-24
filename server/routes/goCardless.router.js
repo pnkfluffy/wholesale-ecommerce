@@ -32,7 +32,7 @@ const initializeGoCardless = async () => {
 // @route   GET /gc/checkClient
 // @desc    Returns all clients
 // @access  Private
-router.get('/checkClientID', rejectUnauthenticated, async (req, res) => {
+router.get('/checkClientID',  async (req, res) => {
   User.findById(req.user._id)
     .then(user => {
       if (user.goCardlessID) res.send(true)
@@ -47,7 +47,7 @@ router.get('/checkClientID', rejectUnauthenticated, async (req, res) => {
 // @route   GET /gc/checkClient
 // @desc    Returns all clients
 // @access  Private
-router.get('/checkClientMandate', rejectUnauthenticated, async (req, res) => {
+router.get('/checkClientMandate',  async (req, res) => {
   User.findById(req.user._id)
     .then(user => {
       if (user.goCardlessMandate) res.send(true)
@@ -81,7 +81,7 @@ router.get('/checkClientMandate', rejectUnauthenticated, async (req, res) => {
 // @route   GET /gc/oneClient
 // @desc    Returns client by id
 // @access  Private
-router.get('/oneClient', rejectUnauthenticated, async (req, res) => {
+router.get('/oneClient',  async (req, res) => {
   try {
     const activeUser = await User.findById(req.user._id).catch(err => {
       //console.log(err)
@@ -114,7 +114,7 @@ router.get('/oneClient', rejectUnauthenticated, async (req, res) => {
 // @route   GET /gc/bankFromUser
 // @desc    Returns bank information from active client by id
 // @access  Private
-router.get('/bankFromUser', rejectUnauthenticated, async (req, res) => {
+router.get('/bankFromUser',  async (req, res) => {
   try {
     const activeUser = await User.findById(req.user._id).catch(err => {
       console.log(err)
@@ -143,7 +143,7 @@ router.get('/bankFromUser', rejectUnauthenticated, async (req, res) => {
 // @route   GET /gc/bankFromOrder
 // @desc    Returns bank information from order
 // @access  Private
-router.get('/bankFromOrder/:orderID', rejectUnauthenticated, async (req, res) => {
+router.get('/bankFromOrder/:orderID',  async (req, res) => {
   try {
     const order = await Order.findById(req.params.orderID).catch(err => {
       console.log(err)
@@ -261,7 +261,7 @@ const translatePaymentStatus = (status) => {
 // @route   GET /gc/payments
 // @desc    Returns all payments from user
 // @access  Private
-router.get('/payments/from', rejectUnauthenticated, async (req, res) => {
+router.get('/payments/from',  async (req, res) => {
   try {
     const allClients = await initializeGoCardless()
     const paymentsList = await allClients.payments.list()
@@ -303,10 +303,7 @@ router.get('/payments/from', rejectUnauthenticated, async (req, res) => {
 // @route   GET /gc/payments
 // @desc    Returns all payments from user
 // @access  Private
-router.get(
-  '/payments/onePayment/:orderID',
-  rejectUnauthenticated,
-  async (req, res) => {
+router.get('/payments/onePayment/:orderID', async (req, res) => {
     try {
       const order = await Order.findById(req.params.orderID).catch(err => {
         console.log(err)
@@ -340,7 +337,7 @@ router.get(
 // @:id		Active User ID
 // @desc    Returns URL to confirm client creation
 // @access  Private
-router.post('/addClient', rejectUnauthenticated, async (req, res) => {
+router.post('/addClient',  async (req, res) => {
   const name = req.body.newClientName
   const lastName = req.body.newClientLastName
   const email = req.body.newClientEmail
@@ -397,7 +394,7 @@ router.post('/addClient', rejectUnauthenticated, async (req, res) => {
 // @:id		Active User ID
 // @desc    Completes the redirect flow from the addUser and adds payment confirmed to database
 // @access  Private
-router.post('/completeRedirect/', rejectUnauthenticated, async (req, res) => {
+router.post('/completeRedirect/',  async (req, res) => {
   try {
     const allClients = await initializeGoCardless()
     //get activeUser from database
@@ -479,7 +476,7 @@ const getTotal = async products => {
 // @desc    Collect Payment of active user
 // @reqBody Delivery Information
 // @access  Private
-router.post('/collect-payment', rejectUnauthenticated, async (req, res) => {
+router.post('/collect-payment',  async (req, res) => {
   try {
     // console.log(req.body)
     //validate delivery input sizes (check if any is empty or if zip is too short or too large)
@@ -653,7 +650,7 @@ router.post('/collect-payment', rejectUnauthenticated, async (req, res) => {
   }
 })
 
-router.post('/collect-custom-payment', rejectUnauthenticated, async (req, res) => {
+router.post('/collect-custom-payment',  async (req, res) => {
   try {
     // console.log(req.body)
     //validate delivery input sizes (check if any is empty or if zip is too short or too large)
@@ -843,7 +840,6 @@ router.post('/collect-custom-payment', rejectUnauthenticated, async (req, res) =
 // @access  Private
 router.post(
   '/changePayment/:orderID',
-  rejectUnauthenticated,
   async (req, res) => {
     try {
       //check validation

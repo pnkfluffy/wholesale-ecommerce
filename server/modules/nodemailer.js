@@ -126,7 +126,6 @@ const passwordChangedEmail = (user) => {
     		</html>`
   })
 }
-
 // order confirm email
 //pass array of products into an html table
 function productsToTable(products) {

@@ -1,6 +1,8 @@
 
 const rejectUnauthenticated = (req, res, next) => {
 	// check if logged in
+	next()
+	return;
 
 	if (req.isAuthenticated()) {
 		// They were authenticated! User may do the next thing

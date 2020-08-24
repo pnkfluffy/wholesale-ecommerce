@@ -89,7 +89,7 @@ router.get('/oneClient',  async (req, res) => {
     })
 
     const allClients = await gocardless(
-      process.env.GC_ACESS_TOKEN,
+      process.env.GC_ACCESS_TOKEN,
       // Change this to constants.Environments.Live when you're ready to go live
       constants.Environments.Sandbox,
       { raiseOnIdempotencyConflict: true }
@@ -121,7 +121,7 @@ router.get('/bankFromUser',  async (req, res) => {
       res.status(500).send("Couldn't find user in db")
     })
     const allClients = await gocardless(
-      process.env.GC_ACESS_TOKEN,
+      process.env.GC_ACCESS_TOKEN,
       // Change this to constants.Environments.Live when you're ready to go live
       constants.Environments.Sandbox,
       { raiseOnIdempotencyConflict: true }

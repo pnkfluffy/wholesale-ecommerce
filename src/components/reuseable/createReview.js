@@ -101,7 +101,7 @@ class CreateReview extends React.Component {
           onChange={this.onChange}
           value={this.state.review}
           rows='3'
-          maxlength={char_limit}
+          maxLength={char_limit}
         ></textarea>
 
         <div className='create_review_bottom'>

@@ -17,6 +17,7 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/login'
 })
 
 router.get('/user', rejectUnauthenticated, (req, res) => {
+
   let user = {
     email: req.user.email,
     name: req.user.name

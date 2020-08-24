@@ -6,9 +6,7 @@ const Order = require('../schemas/orderSchema')
 const Product = require('../schemas/productSchema')
 const Custom = require('../schemas/customOrderSchema')
 
-const {
-  rejectUnauthenticated
-} = require('../modules/authentication-middleware')
+const { rejectUnauthenticated } = require('../modules/authentication-middleware')
 /*validation*/
 const validateDeliverySizes = require('../validation/deliveryValidation')
 const USPS = require('usps-webtools')
@@ -21,8 +19,8 @@ const { confirmOrderEmail } = require('../modules/nodemailer')
 
 const initializeGoCardless = async () => {
   const allClients = await gocardless(
-    process.env.GC_LIVE_TOKEN,
-    constants.Environments.Live,
+    process.env.GC_ACCESS_TOKEN,
+    constants.Environments.Sandbox,
     { raiseOnIdempotencyConflict: true }
   )
 
@@ -91,9 +89,9 @@ router.get('/oneClient', rejectUnauthenticated, async (req, res) => {
     })
 
     const allClients = await gocardless(
-      process.env.GC_LIVE_TOKEN,
+      process.env.GC_ACESS_TOKEN,
       // Change this to constants.Environments.Live when you're ready to go live
-      constants.Environments.Live,
+      constants.Environments.Sandbox,
       { raiseOnIdempotencyConflict: true }
     )
     const theClient = await allClients.customers.find(activeUser.goCardlessID)
@@ -123,9 +121,9 @@ router.get('/bankFromUser', rejectUnauthenticated, async (req, res) => {
       res.status(500).send("Couldn't find user in db")
     })
     const allClients = await gocardless(
-      process.env.GC_LIVE_TOKEN,
+      process.env.GC_ACESS_TOKEN,
       // Change this to constants.Environments.Live when you're ready to go live
-      constants.Environments.Live,
+      constants.Environments.Sandbox,
       { raiseOnIdempotencyConflict: true }
     )
     const listBankAccounts = await allClients.customerBankAccounts.list({ customer: activeUser.goCardlessID });
@@ -152,9 +150,9 @@ router.get('/bankFromOrder/:orderID', rejectUnauthenticated, async (req, res) =>
       res.status(500).send("Couldn't find order in db")
     })
     const allClients = await gocardless(
-      process.env.GC_LIVE_TOKEN,
+      process.env.GC_ACCESS_TOKEN,
       // Change this to constants.Environments.Live when you're ready to go live
-      constants.Environments.Live,
+      constants.Environments.Sandbox,
       { raiseOnIdempotencyConflict: true }
     )
     const orderBank = await allClients.customerBankAccounts.find(order.bankID);
@@ -280,7 +278,7 @@ router.get('/payments/from', rejectUnauthenticated, async (req, res) => {
           }
           const status = translatePaymentStatus(payment.status)
           console.log(payment.status);
-          
+
           return {
             amount: payment.amount,
             charge_date: payment.charge_date,
@@ -518,8 +516,8 @@ router.post('/collect-payment', rejectUnauthenticated, async (req, res) => {
 
             //initialize goCardless
             const allClients = await gocardless(
-              process.env.GC_LIVE_TOKEN,
-              constants.Environments.Live,
+              process.env.GC_ACCESS_TOKEN,
+              constants.Environments.Sandbox,
               { raiseOnIdempotencyConflict: true },
             );
             // const allClients = await gocardless(
@@ -693,8 +691,8 @@ router.post('/collect-custom-payment', rejectUnauthenticated, async (req, res) =
 
             //initialize goCardless
             const allClients = await gocardless(
-              process.env.GC_LIVE_TOKEN,
-              constants.Environments.Live,
+              process.env.GC_ACCESS_TOKEN,
+              constants.Environments.Sandbox,
               { raiseOnIdempotencyConflict: true },
             );
             // const allClients = await gocardless(

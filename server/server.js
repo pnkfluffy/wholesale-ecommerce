@@ -39,7 +39,8 @@ app.use(
       frameAncestors: [
         "'self'",
         'http://localhost:3000/',
-        'https://simple-breakthrough-portfolio.herokuapp.com/'
+        'https://simple-breakthrough-portfolio.herokuapp.com/',
+        'https://jacksonf-portfolio.herokuapp.com/',
       ]
     }
   })

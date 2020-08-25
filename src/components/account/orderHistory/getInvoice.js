@@ -137,7 +137,7 @@ class GetInvoice extends React.Component {
                     Receipt
                   </GreenButton>
                 )
-            }
+            }>
           </PDFDownloadLink>
         )}
       </div>

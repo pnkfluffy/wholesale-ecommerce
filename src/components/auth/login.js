@@ -172,17 +172,17 @@ class Login extends React.Component {
           </span>
         </div>
         <div className='login_footer sidebar_footer_text'>
-          <a className='light_green' href='https://cbddy.com/'>
+          <a className='light_green'>
             customer support
           </a>
           ,{' '}
-          <a className='light_green' href='https://cbddy.com/privacy-policy/'>
+          <a className='light_green'>
             privacy policy
           </a>
           ,{' '}
           <a
             className='light_green'
-            href='https://cbddy.com/terms-and-conditions/'
+            
           >
             terms and conditions
           </a>

@@ -58,25 +58,10 @@ class ChangePayment extends React.Component {
   }
 
   changePayment = () => {
-    axios
-      .post('/api/gc/addClient', {
-        newClientName: '',
-        newClientLastName: '',
-        newClientEmail: '',
-        newClientAddr: '',
-        newClientCity: '',
-        newClientPostalCode: '',
-        redirect: 'settings'
-      })
-      .then(res => {
-        /*set token to finish payment*/
-        const token = res.data.token
-        localStorage.setItem('gc', token)
-        window.open(res.data.url, '_self')
-      })
-      .catch(err => {
-        // console.log(err)
-      })
+    Swal.fire({
+      title: 'This feature is disabled for the demo',
+      background: '#1E1F26'
+    })
   }
 
   render () {

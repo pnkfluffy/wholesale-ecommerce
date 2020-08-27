@@ -91,23 +91,21 @@ class GCPay extends React.Component {
   alert_change_payment = async e => {
     e.preventDefault()
     Swal.fire({
-      title: '<span class="swal_title">Change Payment Method?',
-      showCancelButton: true,
-      confirmButtonColor: '#59BA47',
-      confirmButtonText: 'Yes',
+      title: 'This feature is disabled for the demo',
       background: '#1E1F26'
-    }).then(res => {
-      if (res.value) {
-        axios
-          .post('/api/gc/addClient', this.state)
-          .then(res => {
-            window.open(res.data.url, '_self')
-          })
-          .catch(err => {
-            // console.log(err)
-          })
-      }
     })
+    // .then(res => {
+    //   if (res.value) {
+    //     axios
+    //       .post('/api/gc/addClient', this.state)
+    //       .then(res => {
+    //         window.open(res.data.url, '_self')
+    //       })
+    //       .catch(err => {
+    //         // console.log(err)
+    //       })
+    //   }
+    // })
   }
 
   collectPayment = async e => {

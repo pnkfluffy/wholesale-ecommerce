@@ -52,7 +52,7 @@ class Login extends React.Component {
           payload: { email: this.state.username, name: 'Test User' }
         })
         // initializeAllRequests();
-        initializeLogin();
+        initializeLogin()
       })
       .catch(err => {
         this.setSnackbar('error', 'Invalid Credentials')
@@ -161,7 +161,12 @@ class Login extends React.Component {
           <span className='register_text'>
             {' '}
             see the live site at{' '}
-            <a className='light_green' href='https://cbddywholesale.com/'>
+            <a
+              className='light_green'
+              href='https://cbddywholesale.com/'
+              target='_blank'
+              rel="noopener noreferrer"
+            >
               cbddywholesale.com
             </a>
           </span>

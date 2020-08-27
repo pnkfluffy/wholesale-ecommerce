@@ -42,6 +42,7 @@ app.use(
         'https://simple-breakthrough-portfolio.herokuapp.com/',
         'https://www.simple-breakthrough.com/',
         'https://jacksonf-portfolio.herokuapp.com/',
+        'http://jacksonfelty.com/',
         'https://www.simple-breakthrough.com/',
       ]
     }

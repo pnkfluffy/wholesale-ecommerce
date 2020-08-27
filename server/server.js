@@ -40,8 +40,9 @@ app.use(
         "'self'",
         'http://localhost:3000/',
         'https://simple-breakthrough-portfolio.herokuapp.com/',
+        'https://www.simple-breakthrough.com/',
         'https://jacksonf-portfolio.herokuapp.com/',
-        'https://www.simple-breakthrough.com/'
+        'https://www.simple-breakthrough.com/',
       ]
     }
   })

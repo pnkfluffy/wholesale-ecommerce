@@ -118,7 +118,7 @@ class GetInvoice extends React.Component {
   render() {
     const fileName = 'cbddy_invoice_' + this.props.order._id + '.pdf'
     return (
-      <div className='invoice_container'>
+<div className='invoice_container'>
         {this.state.invoice && (
           <PDFDownloadLink
             className='pdf_download'
@@ -137,7 +137,7 @@ class GetInvoice extends React.Component {
                     Receipt
                   </GreenButton>
                 )
-            }>
+            }
           </PDFDownloadLink>
         )}
       </div>
